@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+	  start-state="validaRolUsuario" parent="parent-flow">	
+	  
+	<var name="mbBandeja" class="mx.ine.acuerdos.mb.MBBandejaCompromisos" />
+	  
+	<!-- Flujos Internos -->
+	
+	<input name="parametro" type="java.lang.String"/>
+	
+	 <!-- Validamos los roles del usuario del lado del MB -->
+ 	 <decision-state id="validaRolUsuario">
+ 		
+		<if test="mbBandeja.validaRoles()" then="validarTitularArea"
+										else="home_view" 		/>
+														
+	</decision-state> 
+	
+	<!-- validamos si es un rol de tipo titular area o de tipo area -->
+	<decision-state id="validarTitularArea">
+		<if test="mbBandeja.esTitularArea()" then="validarAreaUsuario"
+												  		else="listado_view" />
+	</decision-state>
+	
+	<!-- si es titular de area o area, validamos que tenga un area asignada -->
+	<decision-state id="validarAreaUsuario">
+		<if test="mbBandeja.tieneArea()" then="listado_view"
+								  		 else="areaAccesoDenegado" />
+	</decision-state>
+	 
+	<view-state id="listado_view" view="listadoCG.xhtml"> 	
+	
+	  	 <on-entry>  		
+			<evaluate expression="mbBandeja.init(parametro)"></evaluate>
+			<evaluate expression="mbAdmin.setImgsInfografias(mbBandeja.recuperaImgsInfografias())"></evaluate>		  
+ 		 </on-entry>
+ 		
+ 		<transition on="agregaAcuerdo" to="dirNuevoAcuerdo"/> 
+ 		<transition on="agregaPunto"   to="dirAgregaPunto"/>
+ 		<transition on="editaAcuerdo"  to="dirEditaAcuerdo"/>
+ 		<transition on="editaPunto"    to="dirEditaPunto"/>
+ 		<transition on="histPunto"     to="dirHistPunto"/>
+ 		 
+ 	</view-state>
+ 	
+ 	<subflow-state id="dirAgregaPunto" subflow="seguimiento/registro_punto">        
+        <input name="idNumAcuerdo" value="mbBandeja.acuerdoSeleccionado.idNumAcuerdo"/>  
+    </subflow-state>
+    
+    <subflow-state id="dirEditaAcuerdo" subflow="seguimiento/registro_acuerdo/modifica">        
+        <input name="idNumAcuerdo" value="mbBandeja.acuerdoSeleccionado.idNumAcuerdo"/>  
+    </subflow-state>
+    
+     <subflow-state id="dirEditaPunto" subflow="seguimiento/registro_punto/modifica">        
+        <input name="idNumAcuerdo" value="mbBandeja.puntoSeleccionado.id.idNumAcuerdo"/> 
+        <input name="numeralia" value="mbBandeja.puntoSeleccionado.id.numeralia"/> 
+    </subflow-state>
+    
+    <subflow-state id="dirHistPunto" subflow="seguimiento/registro_punto/seguimiento_punto">        
+        <input name="idNumAcuerdo" value="mbBandeja.idNumAcuerdoSeg"/> 
+        <input name="numeralia" value="mbBandeja.numeraliaSeg"/> 
+    </subflow-state>    
+ 	
+ 	<subflow-state id="dirNuevoAcuerdo" subflow="seguimiento/registro_acuerdo">   
+    </subflow-state> 
+    
+   <subflow-state id="home_view" subflow="home">   
+    </subflow-state> 
+    
+    <view-state id="areaAccesoDenegado"        
+			view="externalRedirect:servletRelative:/acceso_denegado"/>
+ 		  
+</flow>

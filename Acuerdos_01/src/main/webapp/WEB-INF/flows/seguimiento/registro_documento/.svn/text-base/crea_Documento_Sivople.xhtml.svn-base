@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sf="http://www.springframework.org/tags/faces"
+				xmlns:sec="http://www.springframework.org/security/tags"
+				template="/templates/template.xhtml">
+				
+	<ui:define name="CONTENT">
+		<style>
+			#form_crea_documento label {
+				font-weight: normal;
+				color: #4E4E4E;
+			}
+			.espaciador {
+				margin-top: 30px;
+				margin-bottom: 30px;
+			}
+			.espaciador-top {
+				margin-top: 20px;
+			}
+			.espaciador-bottom {
+				margin-bottom: 25px;
+			}
+			.espaciador-lg-top {
+				margin-top: 50px;
+			}
+			.asterisco-requerido {
+				color: red;
+			}
+			.asterisco-requerido + label {
+				padding-left: 3px;
+			}
+			.inputsForm {
+				width: 100%;
+			}
+			span.inputsForm {
+				border-bottom: none;
+			}
+			.ui-message.ui-message-error {
+				margin: 5px 0 0 0;
+			}
+			.inputsForm.ui-selectonemenu {
+				border-bottom: none;
+			}
+			.inputsForm.ui-selectonemenu label {
+				border-bottom: 2px solid #d5007f;
+			}
+			.inputsForm.ui-selectonemenu .ui-selectonemenu-trigger {
+				witdh: auto;
+				-webkit-box-sizing: unset;
+				-moz-box-sizing: unset;
+				box-sizing: unset;
+			}
+			.formato-archivo {
+				color: #7f7f7f;
+				font-size: 10px;
+			}
+			#tabla-periodos .inputsForm {
+				width: 95%;
+			}
+		</style>
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12">
+					<p:growl for="growl" autoUpdate="true" redisplay="true" showDetail="true" showSummary="true"/>
+					<ol class="breadcrumb" style="background-color: #FFFFFF;">
+						<li>
+							<a href="${request.contextPath}/app/home"> 
+								<h:outputText value="Home" />
+							</a>
+						</li>
+						<li class="inactive">Seguimiento - Bandeja de Documentos</li>
+						<li class="active">#{messageSource['lbl_registro_documento_titulo']}</li>
+					</ol>
+				</div>
+				<div class="col-xs-12">
+					<h1 class="lblTituloForm robotoRegular">#{messageSource['lbl_registro_documento_titulo']}</h1>
+				</div>
+				<ui:include src="./componentes/_form_documento.xhtml" />
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

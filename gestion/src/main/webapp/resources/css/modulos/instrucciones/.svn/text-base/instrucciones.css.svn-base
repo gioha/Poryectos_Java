@@ -1,0 +1,82 @@
+/*-------------------------------------------------*/
+/* Hoja de Estilos para los Sistemas               */
+/*       	Institucinales                         */
+/*  v1.1.5 Release Date 05 de septiembre de 2014rs   */
+/*-------------------------------------------------*/
+
+/** ******************************* GENERALES ******************************* **/
+
+@media (max-width: 1142px) {
+	h3 {
+		font-size: 22px;
+		padding: 30px 10px 33px 40px !important;
+	}
+}
+
+@media (max-width: 1050px) {
+	h3 {
+		font-size: 18px;
+		padding: 30px 10px 38px 40px !important;
+	}
+}
+
+@media (max-width: 900px) {
+	.tituloConfigHidden {
+		display: none;
+	}
+	h3 {
+		padding: 30px 10px 57px 40px !important;
+	}
+}
+
+/** ******************************* DATATABLE ******************************* **/
+.tablaInformativa.ui-datatable thead th {
+	border-top: 3px solid #26c62f !important;
+}
+
+.tablaInformativa .ui-datatable-header.ui-widget-header {
+	font-size: 12pt;
+}
+
+.tablaAtencion.ui-datatable thead th {
+	border-top: 3px solid #db040c !important;
+}
+
+.tablaAtencion .ui-datatable-header.ui-widget-header {
+	font-size: 12pt;
+}
+
+.ui-datatable .ui-selection-column {
+	border-bottom: none !important;
+}
+
+.ui-datatable .ui-datatable-empty-message {
+	text-align: center;
+	font-size: 15px;
+	font-weight: bold;
+	height: 110px;
+	color: gray;
+}
+
+/*************************** GROWL *********************************/
+div[id="instruccionesAdministracion:mensaje_general_info_container"] > div {
+
+	background: #29abe2 !important;
+}
+
+div[id="instruccionesAdministracion:mensaje_general_advertencia_container"] > div {
+
+	background: #fcee21 !important;
+	color: black; 
+}
+
+div[id="instruccionesAdministracion:mensaje_general_advertencia_container"] > div .ui-growl-item {
+	border-bottom: 2px solid black!important;
+	border-top: 2px solid black!important;
+}
+
+div[id="instruccionesAdministracion:mensaje_general_exito_container"] > div {
+
+	background: #7ac943 !important;
+}
+

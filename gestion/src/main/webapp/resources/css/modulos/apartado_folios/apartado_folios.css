@@ -1,0 +1,85 @@
+/*-------------------------------------------------*/
+/* Hoja de Estilos para el módulo de               */
+/*       	Apartado de documentos		           */
+/*  v1.0 Release Date 29 de Noviembre de 2017      */
+/*-------------------------------------------------*/
+
+/*************************** CLASES NUEVAS *********************************/
+
+.tablaFoliosAp {
+	width: 1010px;
+}
+
+.tablaFoliosAp.ui-datatable thead th {
+	background: none;
+	background-color: #d5007f !important;
+	border-top: none !important;
+	border-bottom: none !important;
+	color: white;
+	font-weight: normal;
+	border: 1px solid white !important;
+}
+
+.tablaFoliosAp .ui-datatable-data {
+	font-size: 12px;
+}
+
+.tablaFoliosAp .ui-column-title {
+	font-size: 12px;
+	padding-right: 5px;
+	font-family: Roboto;
+}
+
+.tablaFoliosAp .ui-filter-column {
+	padding: 18px 10px 13px 10px;
+}
+
+.tablaFoliosAp .ui-filter-column .ui-inputfield {
+	height: 30px;
+}
+
+.tablaFoliosAp.ui-datatable .ui-column-filter {
+	display: inline;
+}
+
+.filaNueva {
+	border: 1px solid #a0005f !important;
+}
+
+.filaNueva .ui-datatable tbody tr {
+	border-style: initial !important;
+}
+
+.ventanaConfirmacion {
+	width: 450px !important;
+}
+
+/*************************** DATATABLE *********************************/
+.ui-datatable .ui-datatable-empty-message {
+	text-align: center;
+	font-size: 15px;
+	font-weight: bold;
+	height: 110px;
+}
+
+/*************************** GROWL *********************************/
+div[id="formApartadoFolios:mensaje_general_info_container"] > div {
+
+	background: #29abe2 !important;
+}
+
+div[id="formApartadoFolios:mensaje_general_advertencia_container"] > div {
+
+	background: #fcee21 !important;
+	color: black; 
+}
+
+div[id="formApartadoFolios:mensaje_general_advertencia_container"] > div .ui-growl-item {
+	border-bottom: 2px solid black!important;
+	border-top: 2px solid black!important;
+}
+
+div[id="formApartadoFolios:mensaje_general_exito_container"] > div {
+
+	background: #7ac943 !important;
+}

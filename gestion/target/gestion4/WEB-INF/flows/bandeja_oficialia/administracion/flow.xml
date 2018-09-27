@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+	start-state="validaRegistroEnGestion" parent="parent-flow">
+
+	<var name="mbBandejaOficialiaComun" class="mx.ine.gestion.mb.MBBandejaOficialiaComun" />
+	<input name="mostrarMensaje" type="int"/>
+
+	<!-- Flujos Internos -->
+	<view-state id="bandeja_view" view="bandeja.xhtml">
+
+		<!--Método que se ejecuta al iniciar -->
+		<on-entry>
+			<evaluate expression="mostrarMensaje != null ? mbBandejaOficialiaComun.setMostrarMensaje(mostrarMensaje): mbBandejaOficialiaComun.setMostrarMensaje(0)"/>
+			<evaluate expression="mbBandejaOficialiaComun.iniciar()" />
+		</on-entry>
+
+		<!-- Llamando el subflujo de clasificación -->
+		<transition on="clasificar" to="clasificarDocumento" />
+
+	</view-state>
+
+	<!-- Validación para revisar que el usuario con el se este accediendo ya 
+		se encuentre registrado en el Organigrama -->
+	<decision-state id="validaRegistroEnGestion">
+
+		<on-entry>
+			<set name="mbAdministrador.menuSelecionado" value="resourceBundle['id_modulo_bandeja_oficialia']" />
+		</on-entry>
+
+		<if test="currentUser.principal.usuarioNoRegistradoEnGestion" then="vsErrorNoRegistrado"
+			else="bandeja_view" />
+
+	</decision-state>
+	
+	<subflow-state id="clasificarDocumento" subflow="oficialia_partes/documentos_electronicos">
+		
+			<input name="dtoBandejaEntrada" value="mbBandejaOficialiaComun.dtBandejaSeleccionados" />
+			
+	</subflow-state>
+
+	<end-state id="back" view="flowRedirect:bandeja/administracion" />
+
+</flow>

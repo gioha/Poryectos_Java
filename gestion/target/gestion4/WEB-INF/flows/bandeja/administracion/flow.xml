@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+	start-state="validaRegistroEnGestion" parent="parent-flow">
+
+	<var name="mbBComun" class="mx.ine.gestion.mb.MBBandejaSeguimiento" />
+	<var name="mbBandejaMenu" class="mx.ine.gestion.mb.MBBandejaMenu" />
+	<var name="mbBEntrada" class="mx.ine.gestion.mb.MBBandejaEntrada" />
+	<var name="mbBorradores" class="mx.ine.gestion.mb.MBBandejaBorradores" />
+	<var name="mbBHistorico" class="mx.ine.gestion.mb.MBBandejaHistorico" />
+	<var name="mbBandejaEnviados" class="mx.ine.gestion.mb.MBBandejaEnviados" />
+	<var name="mbHistorialTurnado" class="mx.ine.gestion.mb.MBHistorialTurnado" />
+	<var name="mbHistorial" class="mx.ine.gestion.mb.MBHistorial" />
+	<var name="mbTurnado" class="mx.ine.gestion.mb.MBTurnado"/>
+	
+	<input name="numeroDocumento" type="java.lang.String" />
+	<input name="tipoCaptura" type="java.lang.String" />
+
+	<!-- Flujos Internos -->
+	<view-state id="bandeja_view" view="bandeja.xhtml">
+
+		<!--Método que se ejecuta al iniciar -->
+		<on-entry>
+			<evaluate expression="numeroDocumento != null ? mbBorradores.setNumeroDocumento(numeroDocumento): mbBorradores.setNumeroDocumento('')"/>
+			<evaluate expression="tipoCaptura != null ? mbBorradores.setTipoCaptura(tipoCaptura): mbBorradores.setTipoCaptura('')"/>
+			<evaluate expression="mbBComun.iniciar()" />
+			<evaluate expression="(tipoCaptura != null and (tipoCaptura == 'M' || tipoCaptura == 'C'))? mbBandejaMenu.iniciar(resourceBundle['vista_borradores']) :  mbBandejaMenu.iniciar(resourceBundle['vista_entrada'])" />
+			<evaluate expression="(tipoCaptura != null and (tipoCaptura == 'M' || tipoCaptura == 'C'))? mbBorradores.iniciar() :  mbBEntrada.iniciar()" />
+			
+			<evaluate expression="mbHistorialTurnado.iniciar()" />
+			<evaluate expression="mbHistorial.iniciar()" />
+			<evaluate expression="mbTurnado.iniciar()"/>
+		</on-entry>
+
+		<!-- Llamando el subflujo de modificación de prueba -->
+		<transition on="modificarPrueba" to="modificarSubFlowPrueba" />
+
+		<!-- Llamando el subflujo de modificación de prueba -->
+		<transition on="modificar" to="modificarSubFlow" />
+		
+		<!-- Llamando el subflujo de modificación de prueba -->
+		<transition on="responder" to="responderSubFlow" />
+		
+		<!-- Llamando el subflujo de modificación de prueba -->
+		<transition on="responderHistorico" to="responderHistoricoSubFlow" />
+
+	</view-state>
+
+	<!-- Validación para revisar que el usuario con el se este accediendo ya 
+		se encuentre registrado en el Organigrama -->
+	<decision-state id="validaRegistroEnGestion">
+
+		<on-entry>
+			<set name="mbAdministrador.menuSelecionado" value="resourceBundle['id_modulo_bandeja']" />
+		</on-entry>
+
+		<if test="currentUser.principal.usuarioNoRegistradoEnGestion" then="vsErrorNoRegistrado"
+			else="bandeja_view" />
+
+	</decision-state>
+
+	<!-- subflow Ejemplo Edición -->
+	<subflow-state id="modificarSubFlowPrueba" subflow="bandeja_edicion">
+
+		<!-- Variable de entrada para el subflujo -->
+		<input name="idDocumento" value="5" />
+
+		<!--transicion(es) permitidas dentro del subflujo -->
+		<transition on="back" to="back" />
+
+	</subflow-state>
+
+	<!-- subflow Edición -->
+	<subflow-state id="modificarSubFlow" subflow="captura_documento/modificacion">
+
+		<input name="idDocumento" value="mbBorradores.dtoBorradorSeleccionado.idDocumento" />
+
+		<transition on="back" to="back" />
+
+	</subflow-state>
+	
+	<!-- subflow Responder Turnado-->
+	<subflow-state id="responderSubFlow" subflow="captura_documento/captura">
+
+		<input name="idDocumentoRespondido" value="mbBEntrada.idDocumentoSeleccionado" />
+		<input name="idHistoricoRecepcion" value="mbBEntrada.idHistoricoRecepcion" />
+		<input name="comentarioRespondido" value="mbBEntrada.filtroResponder.comentario" />
+		<input name="recibido" value="mbBEntrada.recibidoSeleccionado" />
+		<input name="atencion" value="mbBEntrada.atencionSeleccionado" />
+		
+
+		<transition on="back" to="back" />
+
+	</subflow-state>
+	
+	<!-- subflow Responder Turnado-->
+	<subflow-state id="responderHistoricoSubFlow" subflow="captura_documento/captura">
+
+		<input name="idDocumentoRespondido" value="mbBHistorico.idDocumentoSeleccionado" />
+		<input name="idHistoricoRecepcion" value="mbBHistorico.idHistoricoRecepcion" />
+		<input name="comentarioRespondido" value="mbBHistorico.filtroResponder.comentario" />
+		<input name="hrecibido" value="mbBHistorico.recibidoSeleccionado" />
+		<input name="hatencion" value="mbBHistorico.atencionSeleccionado" />
+		
+
+		<transition on="back" to="back" />
+
+	</subflow-state>
+
+	<end-state id="back" view="flowRedirect:bandeja/administracion" />
+
+</flow>

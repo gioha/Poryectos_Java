@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sf="http://www.springframework.org/tags/faces"
+				xmlns:sec="http://www.springframework.org/security/tags" 
+				xmlns:ine="http://ine.mx/ui"
+				template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+		<h:form id="id_cap" styleClass="container" enctype="multipart/form-data">
+			<ui:include src="/templates/acciones.xhtml"/>
+			<ui:include src="../components/mensajes.xhtml" />
+
+			<c:if test="#{empty mbCapturaRP.carga}" >
+				<div class="card">
+					<ui:include src="../components/general.xhtml" />
+				</div>
+			</c:if>
+
+			<c:if test="#{not empty mbCapturaRP.carga}" >
+				<!-- DATOS DE LA CASILLA -->
+				<div class="card">
+					<c:if test="#{not empty mbCapturaRP.carga and not empty mbCapturaRP.carga.casillasCargaIni}" >
+						<!-- GENERAL -->
+						<ui:include src="../components/general.xhtml" />
+						<ui:include src="../components/datosCasilla.xhtml" />
+					</c:if>
+					<c:if test="#{empty mbCapturaRP.carga.casillasCargaIni}" >
+						<ui:include src="../components/avanceCasilla.xhtml" />
+					</c:if>
+				</div>
+
+				<!-- DATOS DEL AVANCE DE LA CASILLA -->
+				<c:if test="#{mbCapturaRP.form.actaValida}" >
+					<div class="card">
+						<ui:include src="../components/avanceCasilla.xhtml" />
+					</div>
+				</c:if>
+
+				<c:if test="#{mbCapturaRP.form.showPanelVotos}" >
+					<!-- VOTOS DE ACTA -->
+					<!-- REGLA: La seccion de votos solo se mostrara cuando el estatus no sea 3-Casilla no instalada
+						        ni 4-Paquete no entregado.
+					-->
+					<div class="card">
+						<ui:include src="../components/votos.xhtml" />
+					</div>
+				</c:if>
+
+				<div class="ui-g" >
+					<div class="ui-g-12 text-center">
+						<!-- BOTON ACEPTAR -->
+						<sec:authorize ifAnyGranted="ROLE_COMPUTOS.CAPTURA.JM, ROLE_COMPUTOS.ADMIN.CAPTURA.OC, ROLE_COMPUTOS.ADMIN.PARAM.CAPTURA.OC">
+							<p:commandButton value="#{messageSource['etiqueta_boton_aceptar']}" 
+											 ajax="true" 
+											 rendered="#{mbCapturaRP.form.actaValida}" 
+											 id="id_btnGuardar" 
+											 process="@form" 
+											 update="@form" 
+											 onstart="PF('progress').block()" 
+											 onsuccess="PF('progress').unblock()" 
+									 		 action="#{mbCapturaRP.guardar}" 
+									 		 onclick="evaluaRequeridos()" />
+	
+							<p:commandButton action="cancelar" 
+											 rendered="#{mbCapturaRP.form.actaValida}"
+											 value="#{messageSource['etiqueta_boton_cancelar']}"
+											 immediate="true" />
+						</sec:authorize>
+					</div>
+				</div>
+			</c:if>
+
+			<!-- BLOCKUI-->
+			<pe:blockUI id="idProgress" target="id_cap" content="blockUIContent"  widgetVar="progress" />
+			<!-- BLOCKUICONTENT -->
+			<h:panelGrid id="blockUIContent" columns="2" style="display:none;"> 
+			    <h:graphicImage library="img" name="loader.gif" width="70"/> 	
+			    <h:outputText value="#{messageSource['mensaje_generales_procesando']}" style="white-space: nowrap;"/> 	
+		    </h:panelGrid>
+
+			<script>
+				function evaluaRequeridos() {
+					$('#id_cap input').each(
+						    function(index){
+						        var input = $(this);
+						        // solo evaluamos los inputText, menos los select´s, lo hice con if anidados por que no soportaba condiciones multiples en un solo if
+						        if(  input.attr('type') == "text" ){
+					        		 	if(   input.attr('id') !== "id_cap:id_demarcacion_focus" ){ 
+						        			if(   input.attr('id') !== "id_cap:id_seccion_focus" ){
+						        				if(   input.attr('id') !== "id_cap:id_casilla_focus" ){
+						        					if(   input.attr('id') !== "id_cap:id_estatusActa_focus" ){ 
+								        				//console.log('Type: ' + input.attr('type') + ' Name: ' + input.attr('name') + ' Value: ' + input.val() + ' id:' + input.attr('id') ); 	
+								        				// evaluamos si el input text de votos esta vacio, si si rompemos el ciclo y en ese primer input vacio identificado ponemos el focus
+							        					if( !input.val() ){
+							        						document.getElementById( input.attr('id') ).focus(); 
+							        						return false; 
+							        					} 
+						        				
+				        				 			}
+						        				}
+						        			}
+					        		 	}	
+						        }
+						    }
+						);
+				}
+			</script>
+		</h:form>
+	</ui:define>
+</ui:composition>

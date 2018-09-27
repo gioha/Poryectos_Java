@@ -1,0 +1,128 @@
+/*-------------------------------------------------*/
+/* Hoja de Estilos para los Sistemas               */
+/*       	Institucinales                         */
+/*  v1.1.5 Release Date 05 de septiembre de 2014rs   */
+/*-------------------------------------------------*/
+
+/** ******************************* GENERALES ******************************* **/
+
+#menu_row {
+	background-color: #999999;
+	left:0px;
+	padding: 0px 0px 4px 0px;
+	position: fixed;
+	margin: 0px;
+	width: 100%;
+}
+
+.menu_div_elemento {
+	float: right;
+	display: inline-block;
+	position: relative;
+}
+
+.menu_div_seleccionable {
+	background-color: #780047;
+	display: none;
+}
+
+.menu_div_no_seleccionable {
+	display: inline-block;
+}
+
+.menu_image {
+	height: 55px;
+	width: 55px;
+}
+
+.menu_imagen_estatica {
+	-webkit-perspective: 400px; /* Chrome, Safari, Opera  */
+	perspective: 400px;
+}
+
+.menu_imagen_hover {
+	-webkit-perspective: 150px; /* Chrome, Safari, Opera  */
+	perspective: 150px;
+	display: none;
+}
+
+.menu_div_seleccionado {
+	display: inline-block;
+	position: relative;
+}
+
+.menu_div_seleccionado .menu_image_seleccionada {
+	transform: translate(0px, 17px);
+}
+
+.menu_oculto {
+	display: none;
+}
+
+@media (max-width: 800px) {
+	.imagenUsuario,
+	.textoUsuario {
+		display: none;
+	}
+}
+
+@media (max-width: 580px) {
+	.nombre-sistema {
+		display: none;
+	}
+}
+
+@media (max-width: 620px) {
+	.menu_div_elemento {
+		display: none;
+	}
+}
+
+@media (min-width: 620px) {
+	.menu_div_elemento_small {
+		display: none;
+	}
+}
+
+@media (max-width: 619px) {
+	.menu_div_elemento_small {
+		display: inline;
+		float: right;
+		padding-top: 5px;
+	}
+}
+
+.botonFolios {
+	background: white !important;
+	color: #d90080 !important;
+	font-weight: bold !important;
+	border: 1px solid #000000;
+	width: 115px;
+	font-size: 12px;
+}
+
+/** ******************************* MENÚ BOTÓN ******************************* **/
+
+.ui-menubutton .ui-button.ui-state-default {
+	height: 30px !important;
+	background-color: #780047 !important;
+}
+
+/** ********************** NÚMEROS DE NOTIFICACIONES ************************* **/
+
+
+.numeroFace {
+  position: absolute !important;
+  top: 2px;
+  right: 2px;
+  background-color: #d4130d !important;
+  color: #fff !important;
+  border-radius: 4px !important;
+  padding: 1px 3px;
+  font: 13px Verdana !important;
+  z-index: 1;
+}
+
+.numeroFaceAbajo {
+  top: 16px !important;
+}

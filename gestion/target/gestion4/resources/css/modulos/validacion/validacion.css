@@ -1,0 +1,56 @@
+/*-------------------------------------------------*/
+/* Hoja de Estilos para los Sistemas               */
+/*       	Institucinales                         */
+/*  v1.1.5 Release Date 05 de septiembre de 2014rs   */
+/*-------------------------------------------------*/
+
+
+/*************************** GROWL *********************************/
+div[id="validacionAdministracion:mensaje_general_info_container"] > div {
+
+	background: #29abe2 !important;
+}
+
+div[id="validacionAdministracion:mensaje_general_advertencia_container"] > div {
+
+	background: #fcee21 !important;
+	color: black; 
+}
+
+div[id="validacionAdministracion:mensaje_general_advertencia_container"] > div .ui-growl-item {
+	border-bottom: 2px solid black!important;
+	border-top: 2px solid black!important;
+}
+
+div[id="validacionAdministracion:mensaje_general_exito_container"] > div {
+
+	background: #7ac943 !important;
+}
+
+.ui-tooltip-content {
+    border: 1.1px solid #ff8000;
+    font-size: 1.1em;
+}
+
+/*************************** DATATABLE *********************************/
+.ui-datatable .ui-datatable-empty-message {
+	text-align: center;
+	font-size: 15px;
+	font-weight: bold;
+	height: 110px;
+}
+
+/*************************** TIMER *********************************/
+
+.ui-timer.ui-widget-header {
+	padding: 0px 0px 5px!important;
+	border: none;
+}
+
+.validacion-leida {
+
+}
+
+.validacion-no-leida {
+	font-weight: bold;
+}

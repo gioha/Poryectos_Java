@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+
+	start-state="validarRolUsuario" parent="parent-flow">
+	<var name="mbConsultaConvocatoria" class="mx.ine.acuerdos.mb.MBConsultaConvocatoria" />
+
+	<decision-state id="validarRolUsuario">
+		<if test="mbConsultaConvocatoria.esRolValido()" then="idConsultaConvocatoria"
+														else="accesoDenegado" />
+	</decision-state>
+
+	<!-- Pantalla de convocatoria -->
+	<view-state id="idConsultaConvocatoria" view="consulta_convocatoria.xhtml">
+		<on-entry>
+			<evaluate expression="mbConsultaConvocatoria.init()"></evaluate>
+		</on-entry>
+	</view-state>
+
+	<view-state id="accesoDenegado"        
+			view="externalRedirect:servletRelative:/acceso_denegado"/>
+
+</flow>

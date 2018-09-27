@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sec="http://www.springframework.org/security/tags">
+	
+	<p:dialog 	id="dialogConfirmacionEliminarEnviado"
+						widgetVar="dialogConfirmacionEliminarEnviado"
+						styleClass="ventanaEmergenteEnvio" header="#{messageSource['mensaje_titulo_eliminar_borrador']}"
+						modal="true"
+						height="100" width="300">
+				
+		<h:outputText value="#{messageSource['mensaje_confirmacion_eliminar_enviado']}"/>
+			
+		<p:commandButton 	actionListener="#{mbBorradores.eliminarBorrador}" value="#{messageSource['etiqueta_boton_aceptar']}"
+							onsuccess="PF('confirmacionEliminarBorrador').hide()"
+							update=":formBorradores:panelIzq, :formBorradores:panelDer, :formBorradores:panelCentro, :formBorradores:mensaje_general_exito" >
+			<f:actionListener binding="#{mbBandejaEnviados.eliminarEnviado()}"/>
+			<f:actionListener binding="#{mbBandejaMenu.consultarMenu()}"/>
+		</p:commandButton>
+
+		<p:commandButton actionListener="#{mbBorradores.cancelarEliminacionBorrador}" value="#{messageSource['etiqueta_boton_cancelar']}" />
+
+	</p:dialog>
+</ui:composition>

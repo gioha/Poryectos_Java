@@ -1,0 +1,25 @@
+.ui-selectonemenu-trigger {
+    width: 29px !important;
+    background-color: floralwhite;
+}
+
+.vistaArea .ui-state-default .ui-icon {
+    background-color: floralwhite;
+    margin-left: 3px;
+    margin-top: 5px;
+}
+
+.vistaArea .ui-state-default {
+    background-color: floralwhite;
+}
+
+.vistaCG .ui-state-default {
+	background-color: floralwhite;
+}
+
+.ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+	background-color: floralwhite;
+}
+.centra-contenido {
+	margin: 0 auto;
+}

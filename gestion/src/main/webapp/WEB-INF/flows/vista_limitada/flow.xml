@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+	  start-state="consultaVista" parent="parent-flow">
+	  
+	<var name="mbConsulta" class="mx.ine.gestion.mb.MBConsultaLimitada" />
+
+	<view-state id="consultaVista" view="vista_limitada.xhtml">
+		
+		<transition on="cambioAGluster" to="glusterVista"/>
+	
+	</view-state>
+	
+	<view-state id="glusterVista" view="vista_gluster.xhtml">
+	
+		<transition on="cambioASQL" to="consultaVista"/>
+	
+	</view-state>
+
+</flow>

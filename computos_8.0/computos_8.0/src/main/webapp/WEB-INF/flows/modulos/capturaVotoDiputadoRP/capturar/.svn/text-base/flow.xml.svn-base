@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+	  start-state="validaModuloAbierto" 
+	  parent="parent-flow">
+
+	<!-- Se quito el rol del OPLE: ROLE_COMPUTOS.ADMIN.EXT.OPLE.JL, ya que este no aplicaba -->
+	<!-- Se volvio agregar el rol del OPLE: ROLE_COMPUTOS.ADMIN.EXT.OPLE.JL -->
+	<secured attributes="ROLE_COMPUTOS.ADMIN.PARAM.CAPTURA.OC, 
+					 	 ROLE_COMPUTOS.ADMIN.CAPTURA.OC, 
+						 ROLE_COMPUTOS.CONSEJERO.OC, 
+						 ROLE_COMPUTOS.CONSULTA.OC, 
+						 ROLE_COMPUTOS.CAU.OC, 
+						 ROLE_COMPUTOS.ADMIN.EXT.OPLE.JL,
+						 ROLE_COMPUTOS.CAPTURA.JL, 
+						 ROLE_COMPUTOS.CONSULTA.JL, 
+						 ROLE_COMPUTOS.CAPTURA.JM, 
+						 ROLE_COMPUTOS.PARTIDO.CONSULTA.JL, 
+						 ROLE_COMPUTOS.PARTIDO.CONSULTA.JM,
+						 ROLE_COMPUTOS.CONSULTA.JM" match="any"/>
+
+	<!-- 
+	<decision-state id="validaVersion">
+		<if test="mbAdmin.validaVersionRolUsuario(mbAdmin.dto.usuario.rolUsuario)" then="validaModuloAbierto" else="vsErrorVersion"/>
+	</decision-state>
+	 -->
+
+	<decision-state id="validaModuloAbierto">
+		<if test="mbCapActaDRP.validaModuloAbierto('4')" then="existenActasXcapturar" else="vsErrorModuloCerrado" />
+	</decision-state>
+
+	<decision-state id="existenActasXcapturar">
+		<on-entry>
+			<evaluate expression="mbCapActaDRP.initCaptura()" />
+			<evaluate expression="mbCapActaDRP.constructorForm()" />
+		</on-entry>
+		<if test="mbCapActaDRP.existeActaPorCapturar()" then="captura" else="consulta" />
+	</decision-state>
+
+	<view-state id="captura" model="mbCapActaDRP" view="captura.xhtml">
+		<on-entry>
+			<evaluate expression="mbAdmin.dto.setIdModulo(4)" />
+			<evaluate expression="mbAdmin.dto.setIdAccion(1)" />
+			<evaluate expression="mbCapActaDRP.inicializaForm()" />
+		</on-entry>
+
+		<transition on="consulta"  to="consulta" >
+			 <set name="flowScope.exitoCaptura" value="mbCapActaDRP.exitoCaptura" />
+		</transition>
+		<transition on="modifica"  to="modifica" />
+		<transition on="cancelar"  to="captura" />
+	</view-state>
+
+	<view-state id="consulta" view="externalRedirect:servletRelative:modulos/capturaVotoDiputadoRP/consultar" />
+
+	<view-state id="modifica" view="externalRedirect:servletRelative:modulos/capturaVotoDiputadoRP/modificar" />
+</flow>

@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Logging-Profile: gestion4-profile
+Build-Jdk: 1.7.0_80
+Built-By: ine
+Created-By: Maven Integration for Eclipse
+

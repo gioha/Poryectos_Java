@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+	  start-state="starter" parent="parent-flow">
+	  
+	  <secured attributes="ROLE_COMPUTOS.ADMIN.PARAM.CAPTURA.OC, 
+						 ROLE_COMPUTOS.ADMIN.CAPTURA.OC, 
+						 ROLE_COMPUTOS.CONSEJERO.OC, 
+						 ROLE_COMPUTOS.CONSULTA.OC, 
+						 ROLE_COMPUTOS.CAU.OC, 
+						 ROLE_COMPUTOS.CAPTURA.JL, 
+						 ROLE_COMPUTOS.CONSULTA.JL, 
+						 ROLE_COMPUTOS.ADMIN.EXT.OPLE.JL,  
+						 ROLE_COMPUTOS.CAPTURA.JM, 
+						 ROLE_COMPUTOS.CONSULTA.JM,
+						 ROLE_COMPUTOS.PARTIDO.CONSULTA.JL, 
+						 ROLE_COMPUTOS.PARTIDO.CONSULTA.JM" match="any"/>
+	  
+	  <var name="constantes" class="mx.ine.computosINE.util.Constantes"/>
+	  
+	<!-- <action-state id="starter">
+	  	<evaluate expression="mbDistGen.init(6)" />
+	  	<transition to="verificarDistribucion"/>
+	  </action-state> -->
+	  
+	  <decision-state id="starter">
+	  <on-entry>
+	  	<evaluate expression="mbDistGen.init(6)" />
+	  </on-entry>
+		  <if test="mbDistGen.distribucionRealizada()" then="consultaDis"
+														else="consultaNoDis" />	
+	</decision-state>
+	
+	<view-state id="consultaDis" view="distribucion.xhtml">
+		<on-entry>
+			<evaluate expression="mbDistGen.setPermiteConsultarDistribucion(true)" />
+			<evaluate expression="mbDistGen.setTipoCandidatura(constantes.GOBERNADOR)" />
+			<evaluate expression="mbAdmin.dto.setIdModulo(11)"></evaluate>
+            <evaluate expression="mbAdmin.dto.setIdAccion(2)"></evaluate>
+		</on-entry>
+		<transition on="consulta" to="consultar" />
+		<transition on="captura" to="capturar" />
+		<transition on="eliminadas" to="starter" />
+		<transition on="noEliminadas" to="starter" />
+	</view-state>
+	
+	<view-state id="consultaNoDis" view="distribucion.xhtml">
+		<on-entry>
+			<evaluate expression="mbDistGen.setPermiteConsultarDistribucion(false)" />
+			<evaluate expression="mbDistGen.setTipoCandidatura(constantes.GOBERNADOR)" />
+			<evaluate expression="mbAdmin.dto.setIdModulo(11)"></evaluate>
+            <evaluate expression="mbAdmin.dto.setIdAccion(2)"></evaluate>
+		</on-entry>
+		<transition on="consulta" to="consultar" />
+		<transition on="captura" to="capturar" />
+		<transition on="eliminadas" to="starter" />
+		<transition on="noEliminadas" to="starter" />
+	</view-state>
+	
+	
+	<view-state id="capturar"
+		view="externalRedirect:servletRelative:/modulos/distribucionGobernador/capturar"/>
+		
+	<view-state id="consultar"
+		view="externalRedirect:servletRelative:/modulos/distribucionGobernador/consultar"/>
+	  
+</flow>

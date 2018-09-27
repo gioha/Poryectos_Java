@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sf="http://www.springframework.org/tags/faces"
+				xmlns:sec="http://www.springframework.org/security/tags"
+				template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+	
+		<h:form id="form_datos_documento" enctype="multipart/form-data" >
+		<h:outputStylesheet library="css" name="modulos/oficialia_partes/oficialia_partes.css" />
+		
+		<h2 style="padding-bottom: 30px;">
+			<h:outputText value="Inicio" style="color: #999999"/>&nbsp;&nbsp;
+			<i class="fa fa-angle-right" aria-hidden="true" style="font-size: 18px; color: #999999"/>&nbsp;&nbsp;
+			<h:outputText value="#{messageSource['etiqueta_captura_documento_migasMenu']}" style="color: #999999"/>&nbsp;&nbsp;
+			<i class="fa fa-angle-right" aria-hidden="true" style="font-size: 18px; color: #999999"/>&nbsp;&nbsp;
+			<h:outputText value="#{messageSource['etiqueta_miga_tipoPantallaCaptura']}" style="font-weight: bold"/>
+		</h2>
+		
+		<p:remoteCommand name="regresar" action="regresarABandeja"/>
+ 		
+		<!-- PANEL PARA LOS MENSAJES DEL GROWL -->
+		<p:outputPanel id="mensajes_generales">
+			<p:growl id="mensaje_general_info" showDetail="true" sticky="true" globalOnly="true" severity="info"/>
+			<p:growl id="mensaje_general_advertencia" widgetVar ="msgWarning" showDetail="true" sticky="true" globalOnly="true" severity="warn"/>
+			<p:growl id="mensaje_general_exito"  showDetail="true" sticky="true" globalOnly="true" severity="fatal"/>
+		</p:outputPanel>
+
+		<div class="container">
+			
+			<h3>
+				<h:outputLabel value="Registro de documentos electrónicos" />
+			</h3>
+		
+			<h4>
+				<h:outputLabel id="infoDoc" value="Folio y carga de documento" />
+			</h4>
+			<h5>
+				Los datos con (<span style="color:red">*</span>) son requeridos
+			</h5>
+			<p:outputPanel id="busquedaPanelUno">
+		
+				<section>
+		
+					<div class="row">
+					
+						<div class="col-md-12">
+						
+							<div class="row">
+							
+								<h:outputLabel id="areaLabel" value="Área:" />
+								&nbsp;<h:outputLabel id="area" value="#{mbOficialiaPartes.dtoBandejaEntrada.dtoAreasDestinatario.descripcion}" style="font-weight: normal;"/>   
+										
+								
+							</div>
+							
+						</div>
+							
+					</div>
+							
+					<div class="row">
+					
+						<div class="col-md-12">
+							
+							<div class="row">
+								<h:outputLabel for="folio" value="Folio apartado de Oficialía" /> 
+							</div>
+							
+							<div class="row">
+								<h:outputLabel id="folio" value="#{mbOficialiaPartes.datosOficialia.folio}" styleClass="shape"/> 
+							</div>
+							
+							<div class="row">
+						
+								<h:outputLabel id="descargar" value="Descargar documento" />
+								
+							</div>
+							
+							<div class="row">
+								
+								<div id="anexo" class="col-xs-1" style="background-color: #e2e2e2;width: auto;height: 30px">
+									
+										<span>
+											<i class="fa fa-paperclip" style="font-size: 18px; color:#000000 !important"/><h:outputText value="&nbsp;" style="text-decoration: none"/>
+											<h:outputText value="#{mbOficialiaPartes.dtoBandejaEntrada.dtoDocumento.noDocumento}.pdf" styleClass="linkAnexos"/>
+										</span>
+									
+									
+									
+								</div>
+																
+								<p:spacer width="10"/>
+			
+							
+								<a href="#{request.contextPath}/filePDF/#{mbOficialiaPartes.rutaGlusterDocumento}#{mbOficialiaPartes.dtoBandejaEntrada.dtoDocumento.idDocumento}_#{mbOficialiaPartes.dtoBandejaEntrada.dtoDocumento.anio}.pdf"
+								download="#{mbOficialiaPartes.dtoBandejaEntrada.dtoDocumento.idDocumento}_#{mbOficialiaPartes.dtoBandejaEntrada.dtoDocumento.anio}.pdf">
+								
+								
+								
+									&#xf019;
+							</a>
+							
+							 
+							
+							
+							</div>
+							
+						</div>
+						
+					</div>
+					
+					<div class="row">
+						
+						<div class="col-md-12">
+							
+							<div class="row botonesAcomodo">
+												
+												<p:commandButton id="botonCancelar"
+																 value="#{messageSource['etiqueta_boton_cancelar']}"
+																 title="#{messageSource['etiqueta_boton_cancelar']}"
+																 update="mensajes_generales"
+																 process="@this"
+																 actionListener="#{mbOficialiaPartes.cancelarClasificarDocumento}"/>   
+										
+								
+							</div>
+							
+						</div>
+							
+					</div>
+		
+				</section>
+				
+				<h4>
+					<h:outputLabel value="Datos del documento" />
+				</h4>
+				<h5>
+				</h5>
+	
+				<section><!-- Seccion de Datos del documento -->
+					
+					<div class="row">
+						
+						<div class="col-md-6">
+							
+							<div class="row">
+							
+								<h:outputLabel id="AsuntoLabel" value="Asunto:" />
+								&nbsp;<h:outputLabel id="Asunto" value="#{mbOficialiaPartes.dtoBandejaEntrada.dtoDocumento.asunto}" style="font-weight: normal;"/>
+								
+							</div>
+							
+							<div class="row">
+						
+							<h:outputLabel id="tipoLabel" value="Tipo de documento:" />
+							&nbsp;<h:outputLabel id="tipo" value="#{mbOficialiaPartes.datosOficialia.tipoDocumento}" style="font-weight: normal;"/>
+							
+							</div>
+				
+							<div class="row">
+								
+									<h:outputLabel id="noDocumentoLabel" value="Número de documento:" />
+									&nbsp;<h:outputLabel id="noDocumento" value="#{mbOficialiaPartes.dtoBandejaEntrada.dtoDocumento.noDocumento}" style="font-weight: normal;"/>
+									
+							</div>
+				
+							
+				
+							<div class="row">
+								
+									<h:outputLabel id="fechaCreacionLabel" value="Fecha del documento:" />
+									&nbsp;<h:outputLabel id="fechaCreacion" value="#{mbOficialiaPartes.dtoBandejaEntrada.dtoDocumento.fechaCreacion}" style="font-weight: normal;"> 
+										<f:convertDateTime pattern="dd/MM/yy " />
+									</h:outputLabel>
+							</div>
+						
+						</div>
+					
+					</div>
+		
+					
+					
+				</section>
+		
+				<h4>
+					<h:outputLabel value="Remitente" />
+				</h4>
+				<h5>
+				</h5>
+		
+				<section><!-- Seccion de Datos del Remitente -->
+				
+				<!-- REMITENTES -->
+						<div class="row">
+							<div class="col-md-12">
+	
+								<p:dataTable id="tablaRemitentes" var="remitentes"
+											 value="#{mbOficialiaPartes.datosOficialia.listaDTORemitentes}" 
+											 emptyMessage="Sin personas Remitentes"
+											 styleClass="listasPersonasElectronico" >
+								    
+								    <p:column>
+								    	<div class="row" style="padding: 0px 0px 0px 0px">
+								    		
+								    		<h:outputText styleClass="ui-treetable-toggler ui-icon ui-icon-bullet ui-c" style="float:left; font-family: Roboto"/>
+											<h:outputText value="#{remitentes.dtoEstructuraAreas.nombreCompleto} " style="font-weight: bold; font-size: 14px; font-family: Roboto" />
+											&nbsp;<h:outputText value="(#{remitentes.dtoEstructuraAreas.area.descripcion})" style="font-size: 14px;"/>
+		        						</div>
+		    						</p:column>
+		    						
+								</p:dataTable>
+	
+							</div>
+
+						</div>
+					
+				</section>
+		
+				<h4>
+					<h:outputLabel value="Destinatario" />
+				</h4>
+				<h5>
+				</h5>
+		
+				<section><!-- Seccion de Datos del Destinatario -->
+					
+					<!-- DESTINATARIOS -->
+						<div class="row">
+							<div class="col-md-12">
+	
+								<p:dataTable id="tablaDestinatarios" var="destinatarios"
+											 value="#{mbOficialiaPartes.datosOficialia.listaDTODestinatarios}" 
+											 emptyMessage="Sin personas destinatarios"
+											 styleClass="listasPersonasElectronico" >
+								    
+								    <p:column>
+								    	<div class="row" style="padding: 0px 0px 0px 0px">
+								    		
+								    		<h:outputText styleClass="ui-treetable-toggler ui-icon ui-icon-bullet ui-c" style="float:left; font-family: Roboto"/>
+											<h:outputText value="#{destinatarios.persona.nombreCompleto} " style="font-weight: bold; font-size: 14px; font-family: Roboto" />
+											&nbsp;<h:outputText value="(#{destinatarios.persona.area.descripcion})" style="font-size: 14px;"/>
+		        						</div>
+		    						</p:column>
+		    						
+								</p:dataTable>
+	
+							</div>
+
+						</div>
+					
+				</section>
+		
+				<h4>
+					<h:outputLabel value="Ccp." />
+				</h4>
+				<h5>
+				</h5>
+				
+				<section><!-- Seccion de Datos del Ccp. -->
+					
+					<!-- CCP -->
+						<div class="row">
+							<div class="col-md-12">
+	
+								<p:dataTable id="tablaCCP" var="ccp"
+											 value="#{mbOficialiaPartes.datosOficialia.listaDTOCcp}" 
+											 emptyMessage="Sin CCP"
+											 styleClass="listasPersonasElectronico" >
+								    
+								    <p:column>
+								    	<div class="row" style="padding: 0px 0px 0px 0px">
+								    		
+								    		
+								    		<h:outputText styleClass="ui-treetable-toggler ui-icon ui-icon-bullet ui-c" style="float:left; font-family: Roboto"/>
+											<h:outputText value="#{ccp.persona.nombreCompleto} " style="font-weight: bold; font-size: 14px; font-family: Roboto" />
+											&nbsp;<h:outputText value="(#{ccp.persona.area.descripcion})" style="font-size: 14px;"/>
+		        						</div>
+		    						</p:column>
+		    						
+								</p:dataTable>
+	
+							</div>
+
+						</div>
+					
+				</section>
+				
+				<h4>
+					<h:outputLabel value="Anexos" />
+				</h4>
+				<h5>
+				</h5>
+		
+				<section><!-- Seccion de Datos del Destinatario -->
+					
+					<!-- CCP -->
+						<div class="row">
+							<div class="col-md-12">
+	
+								<p:dataTable id="tablaAnexos" var="anexo"
+											 value="#{mbOficialiaPartes.datosOficialia.listaDTOAnexos}" 
+											 emptyMessage="Sin Anexos"
+											 styleClass="listasPersonasElectronico"
+											
+											 >
+								    
+								    <p:column  style="table-layout:auto">
+								    	<div class="row">
+								    		
+								    		<i class="fa fa-paperclip" aria-hidden="true" style="font-size: 18px; "/>&nbsp;
+											<h:outputText value="#{anexo.nombreDocAnexo} &nbsp; " style="font-weight: bold; font-size: 14px; font-family: Roboto" />
+											
+		        						</div>
+		    						</p:column>
+		    						
+		    						<p:column >
+								    	<div class="row" style="padding: 0px 0px 0px 0px">
+								    		
+								    		<a	href="#{request.contextPath}/filePDF/#{mbOficialiaPartes.rutaGlusterAnexos}#{anexo.nombreAnexo}"
+											download="#{anexo.nombreAnexo}">&#xf019;</a> 
+											
+		        						</div>
+		    						</p:column>
+		    						
+								</p:dataTable>
+	
+							</div>
+
+						</div>
+					
+				</section>
+		
+				<h4>
+					<h:outputLabel value="Datos de recepción" />
+				</h4>
+				<h5>
+				</h5>
+		
+				<section><!-- Seccion de Datos de recepción -->
+					
+					<div class="row">
+					
+						<div class="col-md-6">
+						
+							<div class="row">
+							
+								<h:outputLabel id="fechaRecepcionLabel" value="Fecha de recepción:" />
+								&nbsp;<h:outputLabel id="fechaRecepcion" value="#{mbOficialiaPartes.dtoBandejaEntrada.fechaRecepcion}" style="font-weight:normal"> 
+								<f:convertDateTime pattern="dd/MM/yy " />
+								</h:outputLabel>
+								
+							</div>
+							
+							<div class="row">
+						
+								<h:outputLabel id="horaRecepcionLabel" value="Hora de recepción:" />
+								&nbsp;<h:outputLabel id="horaRecepcion" value="#{mbOficialiaPartes.dtoBandejaEntrada.fechaRecepcion}" style="font-weight:normal"> 
+									<f:convertDateTime pattern="hh:mm aa" />
+									</h:outputLabel>
+						
+							</div>
+							
+						</div>
+						
+					</div>
+					
+				</section>
+					
+				<h4>
+					<h:outputLabel value="Clasificación archivística" />
+				</h4>
+				<h5>
+					Los datos con (<span style="color:red">*</span>) son requeridos
+				</h5>
+		
+				<section><!-- Seccion de Datos del Destinatario -->
+					 
+				<div class="row">
+							
+					<div class="col-md-12">
+								
+						<div class="row">
+							
+							<h:outputLabel for="seccionOpcion" value="Sección" />
+						
+						</div>
+								
+						<div class="row">
+														
+							<p:selectOneMenu id="seccionOpcion" value="#{mbOficialiaPartes.seccionSeleccionada}" autoWidth="false" style="width:50%" 
+											 required="true" requiredMessage="#{messageSource['mensaje_general_campoRequerido']}">
+														
+								<p:ajax event="change" update="seccionCategoria" process="@this" listener="#{mbOficialiaPartes.consultarCategoria}" />
+														
+								<f:selectItem itemValue="0" itemLabel = "#{messageSource['mensaje_general_selecciona']}" />
+								<f:selectItems value="#{mbOficialiaPartes.listaDTOSecciones}" var="entidad" 
+											itemValue="#{entidad.idSeccion}"
+											itemLabel="#{entidad.numeroSeccion} #{entidad.descripcion}" />
+		
+							</p:selectOneMenu>
+		
+						</div>
+						
+					</div>
+					
+				</div>
+				
+				<div class="row"/>
+				<div class="row"/>
+				
+				<div class="row">
+							
+					<div class="col-md-12">
+								
+						<div class="row">
+							<h:outputLabel for="seccionCategoria" value="Categoría" />
+						</div>
+								
+						<div class="row">
+								
+							<p:selectOneMenu id="seccionCategoria" value="#{mbOficialiaPartes.categoriaSeleccionada}" autoWidth="false" style="width:50%"
+											 required="true" requiredMessage="#{messageSource['mensaje_general_campoRequerido']}">
+
+								<p:ajax event="change" process="@this" />			
+														
+								<f:selectItem itemValue="0" itemLabel = "#{messageSource['mensaje_general_selecciona']}" />
+								<f:selectItems value="#{mbOficialiaPartes.listaDTOCategorias}" var="entidad" 
+												itemValue="#{entidad.idCategoria}"
+												itemLabel="#{entidad.numeroCategoria} #{entidad.descripcion}" />
+
+							</p:selectOneMenu>
+		
+						</div>
+								
+					</div>
+							
+				</div>
+				
+				<div class="row"/>
+				<div class="row"/>
+				
+				<div class="row">
+							
+					<div class="col-md-12">
+								
+						<div class="row botonesAcomodo">
+								
+								<p:commandButton id="botonAceptar" styleClass = "smallButton"  
+												 value="#{messageSource['etiqueta_boton_aceptar']}"
+												 title="#{messageSource['etiqueta_boton_aceptar']}"
+												 update="mensajes_generales"
+												 process="@this"
+												 actionListener="#{mbOficialiaPartes.clasificarDocumento}"/>
+
+						</div>
+								
+					</div>
+							
+				</div>
+					
+			</section>
+				
+		</p:outputPanel>
+				
+	</div>
+
+	<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+		closable="false" resizable="false" showHeader="false">
+		<p:graphicImage name="/img/estructura/loader.gif" />
+	</p:dialog>
+
+	<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+	</h:form>
+
+	</ui:define>
+
+</ui:composition>

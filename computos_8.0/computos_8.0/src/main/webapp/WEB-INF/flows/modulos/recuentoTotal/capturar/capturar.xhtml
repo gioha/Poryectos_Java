@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:deceyec="http://ine.mx/ui" template="/templates/template.xhtml">
+	
+	<ui:define name="CONTENT">
+		<!-- LAS ETIQUETAS SE ENCUENTRAN EN APPLICATIONRESOURCES.PROPERTIES -->
+		<!-- BLOCKUI-->
+		<pe:blockUI id="progress" target="forma" content="blockUIContent"
+			widgetVar="progress" />
+		<!-- BLOCKUICONTENT -->
+		<h:panelGrid id="blockUIContent" columns="2" style="display:none;">
+			<h:graphicImage library="img" name="loader.gif" width="70" />
+			<h:outputText value="#{messageSource['mensaje_generales_procesando']}"
+				style="white-space: nowrap;" />
+		</h:panelGrid>
+		<script type="text/javascript">
+			  function handleResponse(xhr, status, args) {
+			    if (args.validationFailed) {
+			      window.scrollTo(0, 0);
+			    }
+			  }
+			  $( "body" ).click(function( event ) {
+				  event.target.focus();
+			  });
+	    </script>
+		<!-- FORM -->
+		<h:form id="forma" styleClass="container">
+			<!-- MENSAJES -->
+			<p:messages for="mensajesError" autoUpdate="false" closable="true" />
+			<p:messages for="mensajesAdvertencia" autoUpdate="false" closable="true"/>
+			<p:growl for="mensajesInfo" sticky="false" life="5000"/>
+			<!-- FIN MENSAJES -->
+			<!-- CARD TITULO -->
+			<div class="card">
+				<h1>#{messageSource['etiqueta_recuento_total_titulo']}</h1>
+				<p>#{messageSource['etiqueta_generales_requerido_0']}<span class="requerido"/>#{messageSource['etiqueta_generales_requerido_2']}
+				</p>
+				<div class="ui-g">
+					<!-- COMBO CANDIDATURA -->
+					<div class="ui-g-12 ui-md-12 ui-ld-12">
+			        	<label class="requerido">#{messageSource['etiqueta_recuento_total_candidatura']}</label>
+			        </div>
+			        <div class="ui-g-12 ui-md-6 ui-ld-6">
+			        	<p:selectOneMenu id="candidatura" value="#{mbModulo.dto.idCandidatura}"
+			        					 required="true"
+										 requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+										 validator="#{mbModulo.dto.validateCandidatura}">
+							<f:selectItem itemLabel="#{messageSource['etiqueta_generales_selecciona']}" itemValue="-1"/>
+							<f:selectItems value="#{mbModulo.dto.listaCandidaturas}"
+										   var="candidatura" 
+										   itemLabel="#{candidatura.nombreCortoTipoCandidatura}"
+										   itemValue="#{candidatura.idTipoCandidatura}" />
+							<p:ajax event="change" update="forma" 
+									listener="#{mbModulo.seleccionaCandidatura()}"
+			            			onstart="PF('progress').block()" onsuccess="PF('progress').unblock()"/>
+						</p:selectOneMenu>
+						<p:message id="msjcandidatura" for="candidatura" display="text"/>
+    					<p:messages id="msjscandidatura" for="msjscandidatura1" autoUpdate="true" />
+			        </div>
+					<!-- FIN COMBO CANDIDATURA -->
+					<!-- MOSTRAR COMBO MUNICIPIO CUANDO ES REGIDURIA -->
+					<c:if test="#{not empty mbModulo.dto.candidatura and mbModulo.dto.candidatura.idTipoCandidatura 
+									eq constantes.getConstante('ID_TIPO_CAND_REGIDURIA_MR')}">
+						<!-- COMBO MUNICIPIO -->
+						<div class="ui-g-12 ui-md-12 ui-ld-12">
+				        	<label class="requerido">#{messageSource['etiqueta_sistema_municipio']}</label>
+				        </div>
+				        <div class="ui-g-12 ui-md-6 ui-ld-6">
+							<p:selectOneMenu id="municipio" value="#{mbModulo.dto.idMunicipio}"
+				        					 required="true"
+											 requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+											 validator="#{mbModulo.dto.validateMunicipio}">
+								<f:selectItem itemLabel="#{messageSource['etiqueta_generales_selecciona']}" itemValue="-1"/>
+								<f:selectItems value="#{mbModulo.dto.listaMunicipio}"
+											   var="municipio" 
+											   itemLabel="#{municipio.id} - #{municipio.nombre}"
+											   itemValue="#{municipio.id}" />
+								<p:ajax event="change" update="forma" 
+										listener="#{mbModulo.seleccionaMunicipio()}"
+				            			onstart="PF('progress').block()" onsuccess="PF('progress').unblock()"/>
+							</p:selectOneMenu>
+							<p:message id="msjmunicipio" for="municipio" display="text"/>
+	    					<p:messages id="msjsmunicipio" for="msjsmunicipio1" autoUpdate="true" />
+	    				</div>
+						<!-- FIN COMBO MUNICIPIO -->
+					</c:if>
+					<!-- MOSTARR TABLA DE GEOGRAFÍA SI LA LISTA NO ESTA VACIA -->
+					<c:if test="#{not empty mbModulo.dto.candidatura and not empty mbModulo.dto.listaGeografia and mbModulo.dto.idCandidatura ne constantes.getConstante('ID_TIPO_CAND_GOBERNADOR')}">
+						<!-- NOTA -->
+						<div class="ui-messages ui-widget" aria-live="polite">
+					        <div class="ui-messages-info ui-corner-all">
+					            <span class="ui-messages-info-icon"></span>
+					            <ul>
+					                <li>
+					                    <span class="ui-messages-info-detail">#{messageSource['mensaje_recuento_total_nota_con_recuento']}</span>
+					                </li>
+					            </ul>
+					        </div>
+					    </div>
+						<!-- TABLA GEOGRAFIA -->
+						<div class="ui-g-12 ui-md-12 ui-ld-12">
+							<p:dataTable id="graografia" tableStyle="table-layout: auto;"
+										 value="#{mbModulo.dto.listaGeografia}" var="geo"
+										 selection="#{mbModulo.dto.listaGeografiaSelect}" rowKey="#{geo.id}"
+										 disabledSelection="#{geo.conRecuento}"
+										 paginator="true" rows="10" currentPageReportTemplate="({currentPage} de {totalPages})"
+								 		 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								 		 emptyMessage="#{messageSource['validacion_mensaje_generales_no_datos']}">
+								<p:ajax event="rowSelectCheckbox" update="forma" 
+										onstart="PF('progress').block()" onsuccess="PF('progress').unblock()"/>
+				        		<p:ajax event="rowUnselectCheckbox" update="forma" 
+				        				onstart="PF('progress').block()" onsuccess="PF('progress').unblock()"/>
+				        		<p:ajax event="toggleSelect" update="forma" listener="#{mbModulo.seleccionaTodo()}"
+				        				onstart="PF('progress').block()" onsuccess="PF('progress').unblock()"/>
+								<f:facet name="header">
+						            <h:outputText value="#{mbModulo.dto.tituloTabla}"/>
+						        </f:facet>
+						        <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+						        <p:column headerText="#{messageSource['etiqueta_recuento_total_id']}">
+						            <h:outputText value="#{geo.id}" />
+						        </p:column>
+						        <p:column headerText="#{messageSource['etiqueta_recuento_total_nombre']}">
+						            <h:outputText value="#{geo.nombre}" />
+						        </p:column>
+							</p:dataTable>
+						</div>
+					</c:if>
+				</div>
+			</div>
+			<!-- BOTONES -->
+			<div class="ui-g">
+			    <div class="center-block">
+			    	<p:commandButton value="#{messageSource['etiqueta_boton_aceptar']}"
+			        			     style="margin-bottom:10px;"
+			        			     onclick="PF('dialogoA').show()"
+			        			     disabled="#{empty mbModulo.dto.listaGeografiaSelect}">
+			        </p:commandButton>
+			        <p:commandButton value="#{messageSource['etiqueta_boton_cancelar']}" 
+			        				 action="cancelar" immediate="true" process="@this"
+			        				 disabled="#{empty mbModulo.dto.candidatura}"/>
+			    </div>
+			    <!-- DIALOGO A -->
+			    <p:confirmDialog showEffect="fade" hideEffect="fade" width="450"
+			    				 header="#{messageSource['etiqueta_recuento_total_dialogo_header']}"
+			    				 message="#{messageSource['etiqueta_recuento_total_dialogo_a']}"
+			    				 widgetVar="dialogoA" >
+		            <p:commandButton value="#{messageSource['etiqueta_boton_aceptar']}" 
+		            				 styleClass="ui-confirmdialog-yes" icon="ui-icon-check" 
+		            				 onclick="PF('dialogoB').show()"/>
+		            <p:commandButton value="#{messageSource['etiqueta_boton_cancelar']}" 
+		            			     styleClass="ui-confirmdialog-no " icon="ui-icon-close" 
+		            			     onclick="PF('dialogoA').hide()"/>
+		        </p:confirmDialog>
+		        <!-- DIALOGO B -->
+    			<p:confirmDialog showEffect="fade" hideEffect="fade" width="450"
+			    				 header="#{messageSource['etiqueta_recuento_total_dialogo_header']}"
+			    				 message="#{messageSource['etiqueta_recuento_total_dialogo_b']}"
+			    				 widgetVar="dialogoB">
+		            <p:commandButton value="#{messageSource['etiqueta_boton_aceptar']}" 
+		            				 styleClass="ui-confirmdialog-yes" icon="ui-icon-check" 
+		            				 oncomplete="PF('dialogoA').hide();PF('dialogoB').hide()"
+		            				 action="#{mbModulo.guardar()}"
+		            				 update="forma"/>
+		            <p:commandButton value="#{messageSource['etiqueta_boton_cancelar']}" 
+		            			     styleClass="ui-confirmdialog-no " icon="ui-icon-close" 
+		            			     onclick="PF('dialogoA').hide();PF('dialogoB').hide()"/>
+		        </p:confirmDialog>
+			</div>
+			<!-- FIN BOTONES -->
+		</h:form>
+	</ui:define>
+</ui:composition>

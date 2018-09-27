@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sec="http://www.springframework.org/security/tags">
+
+	<p:dialog 	id="dialogVerAnexosHistorico" widgetVar="dialogVerAnexosHistorico" 
+				styleClass="dialog_anexos"
+				modal="true"
+				height="340" width="600">
+
+		<p:outputPanel id="panelAnexosHistorico">
+
+			<div class="container">
+				
+				<h4 class="titulo_anexos">#{messageSource['mensaje_anexos']}</h4>
+				
+				<div class="row">
+				
+					<p:dataTable 	id="tablaAnexosHistorico" styleClass="tabla_anexos"
+									value="#{mbBHistorico.listaAnexos}"
+									var="anexo"
+									emptyMessage="#{messageSource['mensaje_tabla_sin_anexos']}" scrollable="true" >		
+	
+							<p:column headerText="#{messageSource['mensaje_descripcion_anexos']}">
+								<h:outputText value="&#xf1c1; " />
+								<a	href="#{request.contextPath}/filePDF/#{mbBComun.rutaGlusterAnexos}#{anexo.nombreAnexo}"	
+									target="_blank" class="link_anexo">
+									<h:outputText value="#{anexo.nombreDocAnexo}" />
+								</a>
+							</p:column>
+	
+							<p:column headerText="#{messageSource['mensaje_descargar_anexos']}" style="text-align:center;">
+								<a	href="#{request.contextPath}/filePDF/#{mbBComun.rutaGlusterAnexos}#{anexo.nombreAnexo}"
+									download="#{anexo.nombreDocAnexo}" class="icon_anexo">
+									&#xf019;
+								</a>
+							</p:column>
+	
+					</p:dataTable>
+					
+				</div>
+
+			</div>
+			
+		</p:outputPanel>
+	</p:dialog>
+</ui:composition>

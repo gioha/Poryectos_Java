@@ -1,0 +1,72 @@
+/*-------------------------------------------------*/
+/* Hoja de Estilos para el inicio del sistema      */
+/*  v1.1.5 Release Date 02 de octubre de 2017      */
+/*-------------------------------------------------*/
+
+.contenedorLogin {
+	width: 1006px;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: white;
+	margin-top: 4%;
+	height: 95%;
+	min-height: 470px;
+}
+
+.tituloInicio {
+	font-size: 24px;
+	color: #d6007e;
+}
+
+.vinieta {
+	font-size: 25px;
+	color: #d6007e;
+}
+
+.texto {
+	font-size: 20px;
+}
+
+#main {
+	top: 0px;
+}
+
+#flecha1 {
+	animation-delay: 0s !important;
+}
+
+#flecha2 {
+	animation-delay: 2s !important;
+}
+
+#flecha3 {
+	animation-delay: 4s !important;
+}
+
+#flecha4 {
+	animation-delay: 6s !important;
+}
+
+#flecha5 {
+	animation-delay: 8s !important;
+}
+
+#tarea1 {
+	animation-delay: 1s !important;
+}
+
+#tarea2 {
+	animation-delay: 3s !important;
+}
+
+#tarea3 {
+	animation-delay: 5s !important;
+}
+
+#tarea4 {
+	animation-delay: 7s !important;
+}
+
+#tarea5 {
+	animation-delay: 9s !important;
+}

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+	start-state="moduloInicio">
+
+	<secured attributes="ROLE_COMPUTOS.ADMIN.PARAM.CAPTURA.OC, 
+						 ROLE_COMPUTOS.ADMIN.CAPTURA.OC, 
+						 ROLE_COMPUTOS.CONSEJERO.OC, 
+						 ROLE_COMPUTOS.CONSULTA.OC, 
+						 ROLE_COMPUTOS.CAU.OC, 
+						 ROLE_COMPUTOS.CAPTURA.JL, 
+						 ROLE_COMPUTOS.CONSULTA.JL, 
+						 ROLE_COMPUTOS.ADMIN.EXT.OPLE.JL,  
+						 ROLE_COMPUTOS.CAPTURA.JM, 
+						 ROLE_COMPUTOS.PARTIDO.CONSULTA.JL, 
+						 ROLE_COMPUTOS.PARTIDO.CONSULTA.JM,
+						 ROLE_COMPUTOS.CONSULTA.JM" match="any"/>
+						 
+	<var name="constantes" class="mx.ine.computosINE.util.Constantes"/>
+
+	<view-state id="moduloInicio" view="capturar.xhtml">
+		<on-entry>
+			<evaluate expression="mbGeneradorActa.setTipoActa(constantes.AYUNTAMIENTO)" />
+			<evaluate expression="mbGeneradorActa.setActaEstatal(false)" />
+			<evaluate expression="mbGeneradorActa.initCapturar()" />
+			
+			<evaluate expression="mbAdmin.dto.setIdModulo(18)"></evaluate>
+            <evaluate expression="mbAdmin.dto.setIdAccion(1)"></evaluate>
+            
+		</on-entry>
+		<transition on="consulta" to="consultar" />
+		<transition on="modifica" to="modificar" />
+	</view-state>
+	
+	<view-state id="consultar"
+		view="externalRedirect:servletRelative:/modulos/generacionActaAyuntamiento/consultar"/>
+	<view-state id="modificar"
+		view="externalRedirect:servletRelative:/modulos/generacionActaAyuntamiento/modificar" />
+
+
+</flow>

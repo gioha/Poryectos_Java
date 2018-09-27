@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sf="http://www.springframework.org/tags/faces"
+				xmlns:sec="http://www.springframework.org/security/tags"
+				template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+		<h:form>
+			<h:outputStylesheet library="css" name="estilosSegPunto.css" />
+	
+			<div class="container">
+				<div class="row">
+					<div class="col-xs-12">
+						<!-- #################### COMIENZA CAMINO DE MIGAJAS #################### -->
+						<ol class="breadcrumb">
+							<li>
+								<a href="${request.contextPath}/app/home"> 
+									<h:outputText value="#{messageSource['lbl_home']}" />
+								</a>
+							</li>
+							<li>
+								<a href="${request.contextPath}/app/seguimiento/bandeja_cg"> 
+									<h:outputText value="#{messageSource['lbl_bandeja']}" />
+								</a>
+							</li>
+							<li class="active">#{messageSource['lbl_title_consult_seguim_puntoCSP']}</li>
+						</ol>
+						<!-- #################### TERMINA CAMINO DE MIGAJAS #################### -->
+					</div>
+					<div class="col-xs-12">
+						<!-- #################### ENCABEZADO DE LA VISTA #################### -->
+						<div class="lblTituloForm" id="divTitle">
+							<span>#{messageSource['lbl_title_consult_seguim_puntoCSP']}</span>
+						</div>
+					</div>
+					<div class="col-xs-12">
+						<!-- #################### COMIENZA INFORMACIÓN RELATIVA #################### -->
+						<div style="margin-top: 25px; font-size: 18px; color: #d50080;">
+							<h:outputLabel>#{messageSource['lbl_info_relativaCSP']}</h:outputLabel>
+						</div>
+			
+						<div>
+							<p style="height: 3px; background-color: darkgray;"></p>
+						</div>
+			
+						<!-- <div>
+							<h:outputLabel>Punto:&nbsp;&nbsp;</h:outputLabel>
+							<h:outputText value="#{mbSeguimientoPuntos.getHelpSegPunto().getPunto().getNumeraliaTexto()}" />
+						</div> -->
+			
+						<div>
+							<c:if test="#{mbSeguimientoPuntos.getHelpSegPunto().getAcuerdo().getIdTipoDocumento() eq 1}">
+								<h:outputLabel>#{messageSource['lbl_num_acuerdoCSP']}:&nbsp;&nbsp;</h:outputLabel>
+							</c:if>
+							<c:if test="#{mbSeguimientoPuntos.getHelpSegPunto().getAcuerdo().getIdTipoDocumento() eq 6}">
+								<h:outputLabel>#{messageSource['lbl_num_resolucionCSP']}:&nbsp;&nbsp;</h:outputLabel>
+							</c:if>
+							<h:outputText value="#{mbSeguimientoPuntos.getHelpSegPunto().getAcuerdo().getIdNumAcuerdo()}" />
+						</div>
+			
+						<div style="text-align: justify;">
+							<c:if test="#{mbSeguimientoPuntos.getHelpSegPunto().getAcuerdo().getIdTipoDocumento() eq 1}">
+								<h:outputLabel>#{messageSource['lbl_nom_acuerdoCSP']}:&nbsp;&nbsp;</h:outputLabel>
+							</c:if>
+							<c:if test="#{mbSeguimientoPuntos.getHelpSegPunto().getAcuerdo().getIdTipoDocumento() eq 6}">
+								<h:outputLabel>#{messageSource['lbl_nom_resolucionCSP']}:&nbsp;&nbsp;</h:outputLabel>
+							</c:if>
+							<h:outputText value="#{mbSeguimientoPuntos.getHelpSegPunto().getAcuerdo().getNombre()}" />
+						</div>
+			
+						<div style="text-align: justify;">
+							<c:if test="#{mbSeguimientoPuntos.getHelpSegPunto().getAcuerdo().getIdTipoDocumento() eq 1}">
+								<h:outputLabel>Punto de Acuerdo:&nbsp;&nbsp;</h:outputLabel>
+							</c:if>
+							<c:if test="#{mbSeguimientoPuntos.getHelpSegPunto().getAcuerdo().getIdTipoDocumento() eq 6}">
+								<h:outputLabel>Punto Resolutivo:&nbsp;&nbsp;</h:outputLabel>
+							</c:if>
+							<h:outputText value="#{mbSeguimientoPuntos.getHelpSegPunto().getPunto().getTextoPunto()}" />
+						</div>
+			
+						<div>
+							<h:outputLabel>#{messageSource['lbl_clasificacionCSP']}:&nbsp;&nbsp;</h:outputLabel>
+							<h:outputText value="#{mbSeguimientoPuntos.getHelpSegPunto().getClasificacion().getDescripcion()}" />
+						</div>
+			
+						<div>
+							<h:outputLabel>#{messageSource['lbl_involuc_notificacionCSP']}:&nbsp;&nbsp;</h:outputLabel>
+							<c:if test="#{mbSeguimientoPuntos.getHelpSegPunto().getPunto().getNotificacion() eq 1}">
+								<h:outputText value="Sí" />
+							</c:if>
+							<c:if test="#{mbSeguimientoPuntos.getHelpSegPunto().getPunto().getNotificacion() eq 0}">
+								<h:outputText value="No" />
+							</c:if>
+						</div>
+			
+						<div>
+							<h:outputLabel>#{messageSource['lbl_responsablesCSP']}:</h:outputLabel>
+						</div>
+		
+						<!-- #################### ÁRBOL DE RESPONSABLES #################### -->
+						<div style="margin-left: 20px;">
+							<p:tree var="arbolResponsables" value="#{mbSeguimientoPuntos.helpSegPunto.arbolResponsables}"
+									style="width: 100%; border: none;"
+									styleClass="vistaArea">
+								<p:treeNode>
+									<h:outputText value="#{arbolResponsables}" />
+								</p:treeNode>
+							</p:tree>
+			
+							<!-- 
+							<c:forEach items="#{mbSeguimientoPuntos.helpSegPunto.areasInvolucPunto}" var="areaInvoluc">
+								<i class="fa fa-chevron-right" style="margin-left: 5px; font-size: 13px;" />
+								<h:outputLabel value="#{areaInvoluc.descripcion}" style="margin-left: 5px;" />
+								<br/>
+									<c:forEach items="#{mbSeguimientoPuntos.helpSegPunto.resposInvolucPunto}" var="responsInvoluc">
+										<c:if test="#{areaInvoluc.id.idArea eq responsInvoluc.idArea}">
+											<i class="fa fa-circle"  style="margin-left: 80px; font-size: 8px;" />
+											<h:outputLabel value="#{responsInvoluc.nombre} #{responsInvoluc.apellidos}"
+														   style="margin-left: 5px;" />
+												<h:outputText value=" (#{responsInvoluc.puesto})" />
+											<br/>
+										</c:if>
+									</c:forEach>
+							</c:forEach>
+							 -->
+						</div>
+						<!-- #################### TERMINA INFORMACIÓN RELATIVA #################### -->
+					</div>
+					<div class="col-xs-12">
+						<!-- #################### COMIENZA REPORTAR AVANCE #################### -->
+						<p:outputPanel rendered="#{mbSeguimientoPuntos.esRolCaptura()}">
+							<c:if test="#{mbSeguimientoPuntos.helpSegPunto.tiposMovimiento.size() > 0}">
+								<div style="margin-top: 25px; font-size: 18px; color: #d50080;">
+									<h:outputLabel>#{messageSource['lbl_report_avanceCSP']}</h:outputLabel>
+								</div>
+								
+								<div>
+									<p style="height: 3px; background-color: darkgray;"></p>
+								</div>
+								<div class="lblNotas text-right" style="font-size: 12px;">
+										<span>Los campos con (</span>
+										<span style="color: #d50080;">*</span>
+										<span>) son requeridos</span>
+									</div>
+								<div class="espaciador-top">
+									<div style="width:220px;" class="centra-contenido">
+										<div>
+											<h:outputText value="#{messageSource['etiqueta_simbolo_asterisco']}"
+												  style="color: #d50080;; font-size: 17px;" />
+											<h:outputText value="&nbsp;#{messageSource['lbl_accion_realizarCSP']}" 
+														  style="font-size: 15px;" />
+										</div>
+									<!-- #################### MENÚ DE MOVIMIENTOS POSIBLES #################### -->
+										<p:selectOneMenu id="tiposMovimiento"
+														 value="#{mbSeguimientoPuntos.helpSegPunto.tipoMovimiento}"
+														 requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+														 required="true"
+														 styleClass="inputsForm vistaArea"
+														 style="width:220px; font-size: 13px; margin-bottom: 15px;"
+														 onchange="setTimeout(function() { $('[id$=msgtiposMovimiento]').hide(1000); }, 500);"
+														 >
+							                <f:selectItem itemLabel="#{messageSource['lbl_select_opcionCSP']}"
+												          itemValue="" />
+					           				<f:selectItems 	value="#{mbSeguimientoPuntos.helpSegPunto.tiposMovimiento}" 
+						                      				var="tipoMovimiento" 
+					                      					itemValue="#{tipoMovimiento.idTipoMovimiento}" 
+						                      				itemLabel="#{tipoMovimiento.descTipoMovimiento}"/>
+										</p:selectOneMenu>
+		
+		<!-- 
+										<c:if test="#{mbSeguimientoPuntos.helpSegPunto.tiposMovimiento.size() eq 1}">
+											<p:selectBooleanCheckbox value="#{mbSeguimientoPuntos.helpSegPunto.cerrarPunto}"
+																	 style="margin-left: 20px;">
+												<p:ajax listener="#{mbSeguimientoPuntos.activarDesactivarCheck(mbSeguimientoPuntos.helpSegPunto)}" />
+											</p:selectBooleanCheckbox>
+			
+											<h:outputText value="#{messageSource['lbl_movimiento_cierreCSP']}" 
+														  style="font-size: 14px; margin-left: 5px;" />
+										</c:if>
+		 -->
+		 								<div>
+											<p:messages id="msgtiposMovimiento" for="tiposMovimiento" autoUpdate="true" closable="false" />
+										</div>
+									</div>
+									<div class="centra-contenido" style="width: 607px;">
+										<div>
+												<h:outputText value="#{messageSource['etiqueta_simbolo_asterisco']}"
+															  style="color: #d50080;; font-size: 17px;" />
+												<h:outputText value="&nbsp;#{messageSource['lbl_desc_movimientoCSP']}" 
+															  style="font-size: 15px;" />
+										</div>
+										<!-- #################### DESCRIPCIÓN DEL MOVIMIENTO #################### -->		
+										<p:inputTextarea id="descMovimiento"
+														 value="#{mbSeguimientoPuntos.helpSegPunto.descMovimiento}"
+														 placeholder="#{messageSource['lbl_escribe_descCSP']}"
+														 rows="3"
+														 cols="100"
+														 autoResize="false"
+														 style="font-size: 13px; width: 607px;"
+														 styleClass="inputsForm"
+														 required="true"
+														 counterTemplate="{0} caracteres faltantes"
+														 counter="charsFaltantes"
+														 requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+														 validatorMessage="#{messageSource['mensaje_valida_nom_acuerdo']}"
+														 onblur="this.value=verificarPalabras(this.value); setTimeout(function() { $('[id$=msgDescMovimiento]').hide(1000); }, 500);"
+														 maxlength="380"
+														 >
+											<!-- <p:keyFilter regEx="/[0-9A-Za-zÑñáéíóúÁÉÍÓÚüÜ',:;. ]/" preventPaste="false" />
+					   						<f:validateRegex pattern="^([0-9A-Za-zÑñáéíóúÁÉÍÓÚüÜ',:;. ]*)|([+-]?)$" /> -->
+											<f:validateLength maximum="380" />
+											<!-- <f:validateLength minimum="1" /> -->
+										</p:inputTextarea>
+										<div class="lblNotas" style="font-size: 12px;">
+											<h:outputText id="charsFaltantes" />
+										</div>
+									  	<div>
+											<p:messages id="msgDescMovimiento" for="descMovimiento" autoUpdate="true" closable="false" />
+										</div>
+									</div>
+									
+								</div>
+							</c:if>
+						</p:outputPanel>
+						<!-- #################### TERMINA REPORTAR AVANCE #################### -->
+					</div>
+					<div class="col-xs-12">
+						<!-- #################### COMIENZA SEGUIMIENTO DEL PUNTO #################### -->
+						<div style="margin-top: 25px; font-size: 18px; color: #d50080;">
+							<h:outputLabel>#{messageSource['lbl_seguimientoCSP']}</h:outputLabel>
+						</div>
+						<!-- margin: -43px 0px 30px 0px; -->
+						<div style="text-align: -webkit-right;">
+							<div style=" width: 125px; text-align: center;
+										 border-style: solid; border-width: 3px;
+										 border-color: darkgray; border-radius: 6px 6px 0px 0px;
+										 padding: 3px 5px 2px 0px;
+										 bottom: 32px;
+										 height: 35px;
+										 position: relative;
+										 float: right;">
+								<h:graphicImage id="idSemaforo" library="img/seguimientoPunto"
+												name="#{mbSeguimientoPuntos.getDescSemaforo(mbSeguimientoPuntos.helpSegPunto.accionesSegPunto.get(0))}.png" />
+								<p:tooltip for="idSemaforo" value="#{mbSeguimientoPuntos.getDescEstatus(mbSeguimientoPuntos.helpSegPunto.accionesSegPunto.get(0).id.idEstatusPunto)}" trackMouse="true" />
+								<h:outputText value="&nbsp;#{mbSeguimientoPuntos.getDescEstatus(mbSeguimientoPuntos.helpSegPunto.accionesSegPunto.get(0).id.idEstatusPunto)}" />
+		<!-- 
+								<h:outputText value="&nbsp;#{mbSeguimientoPuntos.getDescEstatus(mbSeguimientoPuntos.helpSegPunto.accionesSegPunto.get(0).id.idEstatusPunto).substring(0,
+															 mbSeguimientoPuntos.getDescEstatus(mbSeguimientoPuntos.helpSegPunto.accionesSegPunto.get(0).id.idEstatusPunto).length()-5)}" />
+		 -->
+							</div>
+						</div>
+						<div>
+							<p style="height: 3px; background-color: darkgray;"></p>
+						</div>
+						<!-- #################### TABLA DE SEGUIMIENTO A NIVEL DE ÁREA #################### -->
+					    <p:dataTable styleClass="tabla vistaArea" style="text-align: center; margin-top: 35px;"
+					    			 var="seguimiento" value="#{mbSeguimientoPuntos.helpSegPunto.accionesSegPunto}"
+					    			 scrollable="true" emptyMessage="No hay movimientos">
+					        <p:column headerText="#{messageSource['lbl_fechaCSP']}"
+					        		  style="width: 12%;">
+								<h:outputText value="#{seguimiento.id.fechaMovimiento}">
+					            	<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+								</h:outputText>	
+					        </p:column>
+					        <p:column headerText="#{messageSource['lbl_accion_realizadaCSP']}"
+					        		  style="width: 25.5%;">
+					            <h:outputText value="#{mbSeguimientoPuntos.getDescEstatus(seguimiento.id.idEstatusPunto)}" />
+		<!-- 
+					            <div style="position: absolute; display: #{(seguimiento.id.idEstatusPunto eq 1) and (seguimiento.tipoMovimiento eq 2) ? 'inline' : 'none'};">
+									<h:outputText value="&nbsp;&nbsp;*&nbsp;#{messageSource['lbl_por_confirmarCSP']}"
+												  style="color: crimson; font-size: 12px;" />
+								</div>
+								<div style="position: absolute; display: #{(seguimiento.id.idEstatusPunto eq 3) and (seguimiento.tipoMovimiento eq 2) ? 'inline' : 'none'};">
+									<h:outputText value="&nbsp;&nbsp;*&nbsp;#{messageSource['lbl_confirmadoCSP']}"
+												  style="color: limegreen; font-size: 12px;" />
+								</div>
+								<div style="position: absolute; display: #{(seguimiento.id.idEstatusPunto eq 4) and (seguimiento.tipoMovimiento eq 0) ? 'inline' : 'none'};">
+									<h:outputText value="&nbsp;&nbsp;*&nbsp;#{messageSource['lbl_por_confirmarCSP']}"
+												  style="color: crimson; font-size: 12px;" />
+								</div>
+		 -->
+					        </p:column>
+					        <p:column headerText="#{messageSource['lbl_usuarioCSP']}"
+					        		  style="width: 22.5%;">
+					            <h:outputText value="#{seguimiento.usuario}" />
+					        </p:column>
+					        <p:column headerText="#{messageSource['lbl_descripcionCSP']}"
+					        		  style="width: 40%;">
+					            <h:outputText value="#{seguimiento.descripcion}" />
+					        </p:column>
+					    </p:dataTable>
+						<!-- #################### TERMINA SEGUIMIENTO DEL PUNTO #################### -->
+					</div>
+					<div class="col-xs-12">
+						<div style="text-align: center; margin-top: 30px;">
+							<p:commandButton value="#{messageSource['etiqueta_boton_cancelar']}"
+						    			 	 action="btnRegresar"
+					    			 		 immediate="true"
+						    			 	 styleClass="btnAC robotoBold" />
+						    <c:if test="#{mbSeguimientoPuntos.helpSegPunto.tiposMovimiento.size() > 0}">
+						    	<p:commandButton value="#{messageSource['etiqueta_boton_aceptar']}"
+						    			 		 action="#{mbSeguimientoPuntos.insertarMovimiento()}"
+						    			 		 style="margin-left: 20px;"
+						    			 		 styleClass="btnAC robotoBold"
+						    			 		 rendered="#{mbSeguimientoPuntos.esRolCaptura()}" />
+					    	</c:if>
+						</div> 
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+		<h:outputScript library="js" name="verificaPalabras.js" />
+
+	</ui:define>
+
+</ui:composition>

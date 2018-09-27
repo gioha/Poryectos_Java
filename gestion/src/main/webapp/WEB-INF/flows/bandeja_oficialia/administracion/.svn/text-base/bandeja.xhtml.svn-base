@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+
+		<h:outputStylesheet name="bandeja_oficialia.css" library="css/modulos/bandeja_oficialia" />
+
+		<div id="contenedor_bandeja" class="container">
+		
+			<h:form id="formBorradores" onkeypress="if (window.event.which == 13 ) {return false;}" >
+			
+				<!-- Growl para los avisos del usuario-->
+				<p:growl id="mensaje_general_info" showDetail="true" sticky="true"
+					globalOnly="true" severity="info" />
+
+				<p:growl id="mensaje_general_advertencia" showDetail="true"
+					sticky="true" globalOnly="true" severity="warn" />
+
+				<p:growl id="mensaje_general_exito" showDetail="true" sticky="true"
+					globalOnly="true" severity="fatal" />
+
+				<!-- DIALOG PARA MOSTRAR LA CARGA -->
+				<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+						  closable="false" resizable="false" showHeader="false">
+
+					<p:graphicImage name="/img/estructura/loader.gif" />
+
+				</p:dialog>
+
+				<p:ajaxStatus onstart="PF('statusDialog').show()" 
+							  onsuccess="PF('statusDialog').hide()"
+							  onerror="PF('statusDialog').hide()"/>
+							  
+							  <h3 id="titulo_bandeja">Bandeja de Entrada</h3>
+			
+			<ui:include src="timer.xhtml" />
+				
+				<!-- CUERPO DE LA BANDEJA -->
+				<pe:layout fullPage="false" style="height:100%;">  
+		            
+		            <!-- BANDEJA IZQUIERDA -->
+		            <pe:layoutPane id="layout_izq" position="west" 
+		            			   closable="false" size="15%">  
+		            	
+		            	<f:facet name="header">  
+			            	<h:outputText value="Oficialía de Partes"/>  
+			            </f:facet>
+			            
+		            	<p:outputPanel id="panelIzq">
+			                
+								<ui:include src="menu_bandeja_areas.xhtml" />
+					
+			            </p:outputPanel>
+		                
+		            </pe:layoutPane> 
+
+					<!-- BANDEJA CENTRO-->
+		            <pe:layoutPane id="layout_centro" position="center" 
+		            			   styleClass="c_layout_centro" >
+
+		                <p:outputPanel id="panelCentro">
+							
+								<ui:include src="buscador.xhtml" />
+		
+								<ui:include src="pestanas_enviados_areas.xhtml" />
+		
+								<ui:include src="lista_enviados_areas.xhtml"  />
+							 
+						</p:outputPanel>
+
+		            </pe:layoutPane>
+
+					<!-- BANDEJA DERECHA-->
+		            <pe:layoutPane id="layout_der" position="east" 
+		            			   closable="false" size="40%" minSize="500"> 
+
+		                <p:outputPanel id="panelDer" >
+		                
+				           <c:if test="#{mbBandejaOficialiaComun.dtBandejaSeleccionados ne null}">
+					           <ui:include src="acciones_enviados_areas.xhtml" />
+			
+								<ui:include src="previo_enviado_areas.xhtml" />
+							</c:if>
+
+						</p:outputPanel>
+		                
+		            </pe:layoutPane>
+
+		        </pe:layout>
+	
+				<!-- Dialog para Anexos-->
+				<ui:include src="lista_anexos_enviados_areas.xhtml" />
+				<ui:include src="previo_apliado_areas.xhtml" />
+
+			</h:form>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

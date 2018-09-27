@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sec="http://www.springframework.org/security/tags">
+	
+	<div id="row_lista_bandeja" class="row">
+ 		
+ 		<div id="col_lista_borradores" class="col-xs-12">
+			
+			 <p:dataTable id="tablaEnviados" styleClass="tabla_borradores"
+						 var="enviado" value="#{mbBandejaOficialiaEnviados.listaBandejaOficialia}"
+						 rows="10" paginator="true" paginatorPosition="top"
+						 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						 selectionMode="single"
+						 selection="#{mbBandejaOficialiaEnviados.dtoBandejaOficialiaSeleccionados}"
+						 rowKey="#{enviado.idDocumento}"
+						 emptyMessage="No se han enviado Documentos">
+						
+				<p:column styleClass="columna_icono" style="width:42px;">
+				
+					<h:graphicImage name="bo_negro.png" library="img/bandeja"
+						class="pull-center img-responsive" />
+
+				</p:column>
+				
+				<p:column styleClass="columna_borradores">
+
+					<span class="tabla_siglas" >
+						<h:outputText value="Agregar remitente - #{enviado.dtoDocumento.noDocumento} " />
+						 
+						 <i class="#{enviado.dtoDocumento.tipoCaptura eq 3 ? 'fa fa-paperclip':'sin_adjunto' }" aria-hidden="true"></i><br />
+					</span>
+					<span><h:outputText value="#{enviado.dtoDocumento.asunto}" /></span>
+					
+
+				</p:column>
+
+				<p:column styleClass="columna_borradores" style="text-align: right">
+
+					
+
+				</p:column>
+
+				<p:column styleClass="columna_borradores">
+
+					<h:outputText value="#{enviado.fechaHora}">
+						<f:convertDateTime pattern="dd/MM/yyyy hh:mm" />
+					</h:outputText>
+
+				</p:column>
+				<p:column styleClass="columna_borradores" style="width:80px">
+				
+					<p:menuButton value="Acciones" styleClass="menu_acciones">
+			
+							<p:menuitem value="Eliminar Enviado" />
+								<!-- actionListener="#{mbBandejaOficialia.mostrarEnviarValidar}"
+								disabled="#{borrador.numEnviadoFirma ne 0 or borrador.numEnviadoValidacion ne 0}"
+								update=":formBorradores:dialog_enviar_fv" /> -->
+					</p:menuButton>
+				</p:column>
+
+			</p:dataTable> 
+			
+
+		</div>
+			 
+	</div>
+</ui:composition>

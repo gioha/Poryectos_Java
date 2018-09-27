@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sec="http://www.springframework.org/security/tags">
+
+	<p:dialog 	id="dialogConfirmacionConcluido" widgetVar="dialogConfirmacionConcluido" 
+				styleClass="dialog_anexos" closable="false"
+				modal="true"
+				height="340" width="600">
+
+		<p:outputPanel id="panelConfirmacionConcluido">
+		
+			<c:if test="#{mbBandejaMenu.menuBandejaSeleccionado eq messageSource['vista_entrada'] and mbBEntrada.indicaSeleccionado ne null}">
+				<h:outputText value="#{messageSource['mensaje_confirmacion_concluir_documento']}"/> 
+				<br/>
+				<p:commandButton 	value="#{messageSource['etiqueta_boton_aceptar']}"
+									actionListener="#{mbBEntrada.confirmarConcluirDocumento}"
+									update=":formBorradores:dialogConfirmacionConcluido, :formBorradores:panelCentro,mensaje_general_info,mensaje_general_advertencia,mensaje_general_exito"/>
+
+				<p:commandButton 	value="#{messageSource['etiqueta_boton_cancelar']}"
+									actionListener="#{mbBEntrada.anularConcluirDocumento}" 
+									update=":formBorradores:dialogRegistrarAtencion, :formBorradores:dialogConfirmacionConcluido, :formBorradores:panelCentro,mensaje_general_info,mensaje_general_advertencia,mensaje_general_exito"/>
+			</c:if>
+			
+			<c:if test="#{mbBandejaMenu.menuBandejaSeleccionado eq messageSource['vista_historico'] and mbBHistorico.indicaSeleccionado ne null}">
+				<h:outputText value="#{messageSource['mensaje_confirmacion_concluir_documento']}"/> 
+				<br/>
+				<p:commandButton 	value="#{messageSource['etiqueta_boton_aceptar']}"
+									actionListener="#{mbBHistorico.confirmarConcluirDocumento}"
+									update=":formBorradores:dialogConfirmacionConcluido, :formBorradores:panelCentro,mensaje_general_info,mensaje_general_advertencia,mensaje_general_exito"/>
+
+				<p:commandButton 	value="#{messageSource['etiqueta_boton_cancelar']}"
+									actionListener="#{mbBHistorico.anularConcluirDocumento}" 
+									update=":formBorradores:dialogRegistrarAtencion, :formBorradores:dialogConfirmacionConcluido, :formBorradores:panelCentro,mensaje_general_info,mensaje_general_advertencia,mensaje_general_exito"/>
+			</c:if>
+			
+		</p:outputPanel>
+	</p:dialog>
+</ui:composition>

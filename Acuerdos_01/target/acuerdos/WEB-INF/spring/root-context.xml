@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns="http://www.springframework.org/schema/beans"
+	   xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+		
+	<!-- Definición de beans en la aplicación -->
+	<import resource="SpringBeans.xml"/>
+	<!-- Definición de inicio de Seguridad -->
+	<import resource="SpringSecurity.xml"/>
+	<!-- Definición de inicio de Flow -->
+	<import resource="SpringWebFlow.xml"/>
+	<!-- Definición de inicio de Persistencia -->
+	<import resource="SpringPersistent.xml"/>
+</beans>

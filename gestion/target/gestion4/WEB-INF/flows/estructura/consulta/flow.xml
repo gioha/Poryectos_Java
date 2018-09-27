@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+	  start-state="consulta_estructura" parent="parent-flow">
+	  
+	<secured attributes="ROLE_GESTION4.ADMIN.OC,ROLE_GESTION4.ADMIN_AREA.OC,ROLE_GESTION4.CONSULTA_CAU.OC" match="any"/>
+	<var name="mbEstructura" class="mx.ine.gestion.mb.MBEstructura"/>
+	  	
+  	<!-- Pantalla de captura de estructura-->
+	<view-state id="consulta_estructura" view="consulta_estructura.xhtml">
+		<on-entry>
+			<evaluate expression='mbEstructura.inicializar("consulta")'/>			
+			<set name="mbAdministrador.menuSelecionado" value="resourceBundle['id_modulo_organigrama']"/>
+		</on-entry>
+	</view-state>
+</flow>

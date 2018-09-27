@@ -1,0 +1,826 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sf="http://www.springframework.org/tags/faces"
+				xmlns:sec="http://www.springframework.org/security/tags"
+				template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+		<h:outputStylesheet library="css" name="estilosConvocatoria.css" />
+		<style>
+			.inputsForm {
+				width: 100%;
+			}
+			.inputsForm.reducido {
+				width: 60%;
+			}
+			span.inputsForm > input {
+				width: 55%;
+			}
+			span.inputsForm > button {
+				width: 5%;
+			}
+			.lblInputs {
+				margin-bottom: 5px;
+			}
+			.lblInputs > img {
+				margin-left: 10px;
+			}
+			.contenedor-ayuda-imagen > img {
+				margin-left: 10px;
+			}
+			.ui-chkbox .ui-chkbox-box, .ui-selectoneradio label, .ui-selectoneradio div {
+			    margin-right: 10px;
+			}
+			.ui-growl {
+				top: 140px;
+			}
+		</style>
+
+<!-- 
+		<h:form>
+			#################### MODAL DE BOTÓN ACEPTAR ELIMINACIÓN DE PUNTO ####################
+			<p:dialog id="idDialogEliminarPunto" widgetVar="muestraDialogEliminar" modal="true"
+					  position="center" showEffect="fade" hideEffect="fade"  closeOnEscape="true"
+					  closable="false" draggable="false" resizable="false"
+					  style="border-radius: 10px;"
+					  >
+
+				<div style="text-align: center; padding: 5px 20px 0px 25px;">
+					<h:outputText value="¿Estás seguro que quieres eliminar el" />
+					<br />
+					<h:outputText value="Punto del Orden del Día?" />
+				</div>
+
+				<div style="text-align: center; margin: 25px 25px 25px 0px; padding-left: 25px;">
+					<p:commandButton value="#{messageSource['etiqueta_boton_cancelar']}"
+									 onclick="PF('muestraDialogEliminar').hide()"
+									 style="font-family: 'robotoBold' font-size: 12px !important;
+									 		background: #ffffff; color: #932c60;
+									 		border: 1px; border-style: solid; width: 95px; height: 30px;
+									 		margin-right: 15px;"
+					    			 styleClass="btnAC robotoBold" />
+					<p:commandButton value="#{messageSource['etiqueta_boton_aceptar']}"
+									 onclick="PF('muestraDialogEliminar').hide()"
+									 action="#{mbConvocatoria.eliminarPuntoConvoc(mbConvocatoria.helpConvocatoria.ordenModificable)}"
+									 update=":idFormConvocatoria:idOrdenDelDia"
+									 style="font-family: 'robotoBold' font-size: 12px !important;
+											background: #932c60; color: #ffffff;
+											border: 0px; width: 95px; height: 30px;"
+							 		 styleClass="btnAC robotoBold" />
+				</div>
+			</p:dialog>
+		</h:form>
+
+		<h:form id="idModalAgregarPunto">
+			#################### MODAL DE BOTÓN DE AGREGAR PUNTO ####################
+			<p:dialog id="dialogAgregarPunto" widgetVar="muestraDialogAgregar" modal="true"
+					  position="center" showEffect="fade" hideEffect="fade"  closeOnEscape="true"
+					  closable="false" draggable="false" resizable="false"
+					  style="padding: 2px 12px 19px 12px;"
+					  >
+				<div style="border-style: solid; border-color: darkgray; border-width: 3px; border-radius: 15px; padding: 15px 40px 30px 40px;">
+					<h:outputText class="lblTituloForm" value="#{messageSource['lbl_agregar_puntoCCC']}" />
+					<p:commandLink oncomplete="PF('muestraDialogAgregar').hide()"
+				  		   		   action="#{mbConvocatoria.limpiarDialog}"
+							   	   update="dialogAgregarPunto"
+								   style="position: absolute; margin-left: 500px; margin-top: 10px;">
+						<h:graphicImage name="cerrar_cons.png" library="img/convocatoria" />	
+					</p:commandLink>
+
+					<div>
+						<p style="position: absolute; width: 813px; height: 25px; margin-left: -43px; margin-top: 10px; background-color: #932c60;"></p>
+					</div>
+
+					<div style="margin-top: 60px; font-size: 16px;">
+						<h:outputText value="#{messageSource['etiqueta_simbolo_asterisco']}"
+									  style="color: #d50080;; font-size: 17px;" />
+						<h:outputLabel>&nbsp;#{messageSource['lbl_desc_puntoCCC']}</h:outputLabel>
+					</div>
+
+					<p:inputTextarea id="idDescPunto"
+									 value="#{mbConvocatoria.helpConvocatoria.descPunto}"
+									 placeholder="#{messageSource['lbl_ingresa_descCSP']}"
+									 rows="3"
+									 cols="100"
+									 autoResize="false"
+									 style="background-color: white; font-size: 14px; color: #4e4e4e; border-bottom: 2px solid #d5007f;"
+									 styleClass="inputsForm"
+									 required="true"
+									 counterTemplate="{0} caracteres faltantes"
+									 counter="idCharsFaltantesP"
+									 requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+									 validatorMessage="#{messageSource['mensaje_valida_nom_acuerdo']}"
+									 maxlength="1480"
+									 onblur="this.value=verificarPalabras(this.value); setTimeout(function() { $('[id$=msgDescPunto]').hide(1000); }, 500);"
+									 >
+						<p:keyFilter regEx="/[0-9A-Za-zÑñáéíóúÁÉÍÓÚüÜ',:;. ]/" preventPaste="false" />
+   						<f:validateRegex pattern="^([0-9A-Za-zÑñáéíóúÁÉÍÓÚüÜ',:;. ]*)|([+-]?)$" />
+						<f:validateLength maximum="1480" />
+						<f:validateLength minimum="1" />
+					</p:inputTextarea>
+
+					<div class="lblNotas">
+						<h:outputText id="idCharsFaltantesP" />
+						<span style="margin-left: 453px;">Los campos con (</span>
+						<span style="color: #d50080;">*</span>
+						<span>) son requeridos</span>
+					</div>
+
+					<div class="row">
+						<div class="col-md-9">
+							<p:messages id="msgDescPunto" for="idDescPunto" autoUpdate="true" closable="false" />
+						</div>
+					</div>
+
+					<div style="text-align: center; margin-top: 15px;">
+						<p:commandButton value="#{messageSource['etiqueta_boton_aceptar']}"
+										 action="#{mbConvocatoria.agregarPuntoConvoc(mbConvocatoria.helpConvocatoria)}"
+										 update=":idFormConvocatoria:idOrdenDelDia :idModalAgregarPunto:idDescPunto"
+										 style="font-family: 'robotoBold' font-size: 12px !important;
+												background: #932c60; color: #ffffff;
+												border: 0px; width: 95px; height: 30px;"
+								 		 styleClass="btnAC robotoBold" />
+					</div>
+				</div>
+			</p:dialog>
+		</h:form>
+ -->
+
+		<div class="container">
+			<h:form id="idFormConvocatoria">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:growl id="idGrowlInsert" showDetail="false" severity="info, warn"/>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<!-- #################### COMIENZA CAMINO DE MIGAJAS #################### -->
+						<ol class="breadcrumb">
+							<li>
+								<a href="${request.contextPath}/app/home"> 
+									<h:outputText value="#{messageSource['lbl_home']}" />
+								</a>
+							</li>
+							<li class="active">#{messageSource['lbl_sesionCCC']}</li>
+							<li class="active">#{messageSource['lbl_convocatoriaCCC']} - #{messageSource['lbl_capturarCCC']}</li>
+						</ol>
+					</div>
+					<div class="col-xs-12">
+						<!-- #################### ENCABEZADO DE LA VISTA #################### -->
+						<div class="lblTituloForm">
+							<span>#{messageSource['lbl_convocatoriaCCC']}</span>
+						</div>
+					</div>
+					<div class="col-xs-12">
+						<div style="text-align: right; font-size: 25px; color: #932C60;">
+							<div style="display: inline-block; padding-right: 50px;">
+								<h:outputText style="cursor: context-menu;" value="#{messageSource['lbl_capturarCCC']}" />
+								<p style="height: 4px; margin-bottom: -1px; background-color: darkslategray;"></p>
+							</div>
+							<div style="display: inline-block; padding-right: 50px;">
+							    <a href="${request.contextPath}/app/sesiones/convocatoria/consulta"
+							       style="color: #932C60; text-decoration: none;"> 
+									<h:outputText value="#{messageSource['lbl_consultarCCC']}" />
+								</a>
+							</div>
+						</div>
+						<div>
+							<p style="height: 3px; background-color: darkgray;"></p>
+						</div>
+					</div>
+					<div class="col-xs-12">
+						<div class="lblNotas text-right" style="font-size: 12px;">
+							<span style="margin-left: 465px;">Los campos con (</span>
+							<span style="color: #d50080;">*</span>
+							<span>) son requeridos</span>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-md-6 espaciador-top">
+						<!-- #################### MENÚ DE TIPO DE SESIÓN #################### -->
+						<div>
+							<h:outputText value="#{messageSource['etiqueta_simbolo_asterisco']}"
+										  style="color: #d50080;; font-size: 17px;" />
+							<h:outputText value="&nbsp;#{messageSource['lbl_tipo_sesionCCC']}" 
+										  style="font-size: 15px;" />
+						</div>
+						<p:selectOneMenu id="idTiposSesion"
+										 value="#{mbConvocatoria.helpConvocatoria.tipoSesion}"
+										 requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+										 required="true"
+										 styleClass="inputsForm reducido"
+										 style="font-size: 13px;"
+										 onchange="setTimeout(function() { $('[id$=msgTiposSesion]').hide(1000); }, 500);"
+										 >
+							<f:selectItem itemLabel="#{messageSource['lbl_selecciona_opcionCCC']}"
+										  itemValue="" />
+							<f:selectItems 	value="#{mbConvocatoria.helpConvocatoria.tiposDeSesiones}" 
+											var="tipoSesion" 
+											itemValue="#{tipoSesion.idTipoSesion}" 
+											itemLabel="#{tipoSesion.descripcion}"/>
+						</p:selectOneMenu>
+						<div style="width: 75%;">
+							<div class="row">
+								<div class="col-md-9">
+									<p:messages id="msgTiposSesion" for="idTiposSesion" autoUpdate="true" closable="false" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- #################### CAMPO LUGAR #################### -->
+					<div class="col-xs-12 col-md-6 espaciador-top">
+						<div>
+							<h:outputText value="#{messageSource['etiqueta_simbolo_asterisco']}"
+										  style="color: #d50080;; font-size: 17px;" />
+							<h:outputText value="&nbsp;#{messageSource['lbl_lugarCCC']}" 
+										  style="font-size: 15px;" />
+						</div>
+		
+						<p:selectOneRadio value="#{mbConvocatoria.helpConvocatoria.lugarConvoc}" styleClass="lblInputs"
+										  style="margin-top: -25px; margin-left: 65px; cursor: pointer;">
+							<f:selectItem itemLabel="&nbsp;&nbsp;#{messageSource['lbl_consejo_generalCCC']}" itemValue="Consejo general" selected="true"/>
+							<f:selectItem itemLabel="&nbsp;&nbsp;#{messageSource['lbl_otroCCC']}" itemValue="Otro"/>
+							<p:ajax update="idPanelDescLugar"
+									event="change"/>
+						</p:selectOneRadio>
+		
+						<p:outputPanel id="idPanelDescLugar">
+							<c:if test="#{mbConvocatoria.helpConvocatoria.lugarConvoc eq 'Otro'}">
+								<p:inputTextarea id="idDescLugar"
+												 value="#{mbConvocatoria.helpConvocatoria.descLugar}"
+												 placeholder="#{messageSource['lbl_ingresa_direccionCC']}"
+												 rows="1"
+												 cols="33"
+												 autoResize="false"
+												 style="font-size: 13px;"
+												 styleClass="inputsForm"
+												 required="true"
+												 counterTemplate="{0} caracteres faltantes"
+												 counter="idCharsFaltantesL"
+												 requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+												 validatorMessage="#{messageSource['mensaje_valida_nom_acuerdo']}"
+												 maxlength="80"
+												 onblur="this.value=verificarPalabras(this.value); setTimeout(function() { $('[id$=msgDescLugar]').hide(1000); }, 500);"
+												 >
+									<f:validateLength maximum="80" />
+									<!-- <f:validateLength minimum="4" /> -->
+								</p:inputTextarea>
+			
+								<div class="lblNotas" style="font-size: 12px;">
+									<h:outputText id="idCharsFaltantesL" />
+								</div>
+		
+								<div style="width: 100%;">
+									<div class="row">
+									  	<div class="col-md-9">
+											<p:messages id="msgDescLugar" for="idDescLugar" autoUpdate="true" closable="false" />
+										</div>
+									</div>
+								</div>
+							</c:if>
+						</p:outputPanel>
+					</div>
+					<div class="clearfix"></div>
+					<div class="col-xs-12 col-md-6 espaciador-top">
+						<!-- #################### CAMPO FECHA DE SESIÓN #################### -->
+						<div>
+							<h:outputText value="#{messageSource['etiqueta_simbolo_asterisco']}"
+										  style="color: #d50080;; font-size: 17px;" />
+							<h:outputText value="&nbsp;#{messageSource['lbl_fecha_sesionCCC']}" 
+										  style="font-size: 15px;" />
+						</div>
+						<p:calendar id="idFechaSesion"
+									locale="es"
+									navigator="true"
+						         	mindate="#{mbConvocatoria.helpConvocatoria.fechaFormato}"
+						         	minDate="#{mbConvocatoria.helpConvocatoria.fechaFormato}"
+						        	value="#{mbConvocatoria.helpConvocatoria.fechaSesion}"
+						        	showOn="button"
+						        	size="25"
+						        	required="true"
+						        	styleClass="inputsForm"
+						        	pattern="dd/MM/yyyy"
+						        	readonlyInput="true"
+								    style="font-size: small;"
+								    placeholder="#{messageSource['txt_fondo_calendario']}"
+								    requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+								    onblur="setTimeout(function() { $('[id$=msjFechasSesion]').hide(1000); }, 500);"
+								    />
+						<div style="width: 75%;">
+							<div class="row">
+								<div class="col-md-9">
+									<p:messages id="msjFechasSesion" for="idFechaSesion" autoUpdate="true" closable="false" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-md-6 espaciador-top">
+						<!-- #################### CAMPO HORA #################### -->
+						<div>
+							<div>
+								<h:outputText value="#{messageSource['etiqueta_simbolo_asterisco']}"
+											  style="color: #d50080;; font-size: 17px;" />
+								<h:outputText value="&nbsp;#{messageSource['lbl_horaCCC']}" 
+											  style="font-size: 15px;" />
+							</div>
+							<p:calendar id="idHoraSesion"
+										styleClass="inputsForm"
+										placeholder="#{messageSource['lbl_hora_sesionCCC']}"
+										locale="es"
+										value="#{mbConvocatoria.helpConvocatoria.horaSesion}"
+										pattern="HH:mm"
+										size="15"
+							        	required="true"
+							        	requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+							        	readonlyInput="true"
+										timeOnly="true"
+										onblur="setTimeout(function() { $('[id$=msgHoraSesion]').hide(1000); }, 500);" />
+			
+							<div style="width: 75%;">
+								<div class="row">
+									<div class="col-md-9">
+										<p:messages id="msgHoraSesion" for="idHoraSesion" autoUpdate="true" closable="false" />
+									</div>
+								</div>
+							</div>
+			
+		<!-- 
+							<p:inputText id="idHoraHora"
+										 value="#{mbConvocatoria.helpConvocatoria.asuntoRelevante}"
+										 placeholder="00"
+										 maxlength="2"
+										 size="1"
+										 styleClass="inputsForm"
+										 required="true"
+										 requiredMessage="#{messageSource['lbl_requerido']}"
+										 >
+								<p:keyFilter regEx="/[0-9]/" />
+							</p:inputText>
+			
+							<h:outputText value="&nbsp;&nbsp;:&nbsp;&nbsp;"
+										  style="font-size: 18px;" />
+			
+							<p:inputText id="idHoraMinuto"
+										 value="#{mbConvocatoria.helpConvocatoria.asuntoRelevante}"
+										 placeholder="00"
+										 maxlength="2"
+										 size="1"
+										 styleClass="inputsForm"
+										 required="true"
+										 requiredMessage="#{messageSource['lbl_requerido']}"
+										 >
+								<p:keyFilter regEx="/[0-9]/" />
+							</p:inputText>
+			
+							<div style="width: 50%;">
+								<div class="row">
+								  	<div class="col-md-9">
+										<p:messages for="idHoraHora" autoUpdate="true" closable="false" />
+									</div>
+								</div>
+							</div>
+			
+							<div style="width: 50%;">
+								<div class="row">
+								  	<div class="col-md-9">
+										<p:messages for="idHoraMinuto" autoUpdate="true" closable="false" />
+									</div>
+								</div>
+							</div>
+		 -->
+						</div>
+					</div>
+
+					<div class="clearfix"></div>
+					<c:if test="#{mbConvocatoria.esRolComision()}">
+						<div class="col-xs-12 col-md-6 espaciador-top">
+							<!-- #################### CAMPO NÚMERO DE SESIÓN #################### -->
+							<div>
+								<h:outputText value="#{messageSource['etiqueta_simbolo_asterisco']}"
+											  style="color: #d50080;; font-size: 17px;" />
+								<h:outputText value="&nbsp;#{messageSource['lbl_numero_sesionCCC']}" 
+											  style="font-size: 15px;" />
+							</div>
+							<p:inputText id="idNumSesion"
+										 value="#{mbConvocatoria.helpConvocatoria.numSesion}"
+										 placeholder="00"
+										 maxlength="2"
+										 size="15"
+										 styleClass="inputsForm"
+										 required="true"
+										 requiredMessage="#{messageSource['lbl_requerido']}"
+										 onblur="setTimeout(function() { $('[id$=msgNumSesion]').hide(1000); }, 500);"
+										 >
+								<p:keyFilter regEx="/[0-9]/" />
+								<p:ajax event="blur"
+										listener="#{mbConvocatoria.validarNumSesion()}"
+										update="idValorNumSesion" />
+							</p:inputText>
+							<div style="margin-top: 5px; font-size: 12px; color: darkgray;">
+								<h:outputLabel id="idValorNumSesion" value="#{mbConvocatoria.helpConvocatoria.descNumSesion}" />
+							</div>
+							<div style="width: 75%;">
+								<div class="row">
+								  	<div class="col-md-9">
+										<p:messages id="msgNumSesion" for="idNumSesion" autoUpdate="true" closable="false" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</c:if>
+					<c:if test="#{mbConvocatoria.esRolComision()}">
+						<div class="col-xs-12 col-md-6 espaciador-top">
+							<!-- #################### CAMPO CARÁCTER #################### -->
+							<div>
+								<div style="margin-top: 15px;">
+									<h:outputText value="#{messageSource['etiqueta_simbolo_asterisco']}"
+												  style="color: #d50080;; font-size: 17px;" />
+									<h:outputText value="&nbsp;#{messageSource['lbl_caracterCCC']}" 
+												  style="font-size: 15px;" />
+								</div>
+					
+								<p:selectOneMenu id="idCaracter"
+												 value="#{mbConvocatoria.helpConvocatoria.caracter}"
+												 requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+												 required="true"
+												 styleClass="inputsForm"
+												 style="width:220px; font-size: 13px;"
+												 onchange="setTimeout(function() { $('[id$=msgCaracter]').hide(1000); }, 500);"
+												 >
+									
+									<f:selectItem itemLabel="#{messageSource['lbl_selecciona_opcionCCC']}"
+												  itemValue="" />
+									<f:selectItem itemLabel="Público"
+												  itemValue="PUBLICO" />
+									<f:selectItem itemLabel="Privado"
+												  itemValue="PRIVADO" />
+								</p:selectOneMenu>
+				
+								<div style="width: 125%;">
+									<div class="row">
+										<div class="col-md-9">
+											<p:messages id="msgCaracter" for="idCaracter" autoUpdate="true" closable="false" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</c:if>
+					<div class="col-xs-12 espaciador-top">
+						<!-- #################### DESCRIPCIÓN DEL ASUNTO #################### -->
+						<div>
+							<div>
+								<h:outputText value="&nbsp;#{messageSource['lbl_asunto_relevanteCCC']}" 
+											  style="font-size: 15px;" />
+							</div>
+			
+							<p:inputTextarea id="idDescAsuntoRel"
+											 value="#{mbConvocatoria.helpConvocatoria.asuntoRelevante}"
+											 placeholder="#{messageSource['lbl_escribe_asuntoCCC']}"
+											 rows="4"
+											 cols="150"
+											 autoResize="false"
+											 style="font-size: 13px;"
+											 styleClass="inputsForm"
+											 counterTemplate="{0} caracteres faltantes"
+											 counter="idCharsFaltantesA"
+											 maxlength="280"
+											 onblur="this.value=verificarPalabras(this.value);"
+											 >
+								<!-- <p:keyFilter regEx="/[0-9A-Za-zÑñáéíóúÁÉÍÓÚüÜ',:;. ]/" preventPaste="false" />
+								<f:validateRegex pattern="^([0-9A-Za-zÑñáéíóúÁÉÍÓÚüÜ',:;. ]*)|([+-]?)$" /> -->
+								<f:validateLength maximum="280" />
+								<!-- <f:validateLength minimum="4" /> -->
+							</p:inputTextarea>
+				
+							<div class="lblNotas" style="font-size: 12px;">
+								<h:outputText id="idCharsFaltantesA" />
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 espaciador-top">
+						<!-- #################### COMIENZA DESTINATARIOS #################### -->
+						<div style="font-size: 18px; color: #932C60;">
+							<h:outputLabel>#{messageSource['lbl_destinatariosCCC']}</h:outputLabel>
+						</div>
+			
+						<div>
+							<p style="height: 3px; background-color: darkgray;"></p>
+						</div>
+		
+		<!-- 
+						<div style="margin-top: 7px; margin-left: 25px;">
+							<p:selectBooleanCheckbox value="#{mbConvocatoria.helpConvocatoria.comisionConjunta}">
+								<p:ajax listener="#{mbConvocatoria.activarDesactivarCheck(mbConvocatoria.helpConvocatoria.comisionConjunta)}"
+										update=":idFormConvocatoria:idPanelComisionConjunta"/>
+							</p:selectBooleanCheckbox>
+							<h:outputText value="Comisión conjunta"
+										  style="font-size: 14px; margin-left: 10px;" />
+			
+							<p:outputPanel id="idPanelComisionConjunta">
+								<c:if test="#{mbConvocatoria.helpConvocatoria.comisionConjunta}">
+									<p:dataTable value="#{mbConvocatoria.helpConvocatoria.listaComisiones}"
+												 var="listaComisiones"
+								            	 selection="#{mbConvocatoria.helpConvocatoria.comSeleccionadas}"
+								            	 rowKey="#{listaComisiones.idComision}"
+												 styleClass="claseConvocatoria"
+												 style="margin-top: 10px; width: 80%;"
+								            	 scrollable="true" scrollHeight="300"
+								            	 emptyMessage="No se han encontrado comisiones"
+								            	 >
+										<p:ajax event="rowSelectCheckbox"
+												listener="#{mbConvocatoria.seleccionarComision}"
+												update=":idFormConvocatoria:idPanelArbolC"/>
+										<p:ajax event="rowUnselectCheckbox"
+												listener="#{mbConvocatoria.noSeleccionarComision}"
+												update=":idFormConvocatoria:idPanelArbolC"/>
+										<p:ajax event="rowSelect"
+												listener="#{mbConvocatoria.seleccionarFila}"
+												update=":idFormConvocatoria:idPanelArbolC"/>
+										<p:column selectionMode="multiple"
+												  style="width: 5%; text-align: center;" />
+									    <p:column style="width: 95%;">
+									        <h:outputText value="#{listaComisiones.nomComision}" />
+									    </p:column>
+									</p:dataTable>
+								</c:if>
+							</p:outputPanel>
+						</div>
+		 -->
+					</div>
+					<div class="col-xs-12 espaciador-xs-top">
+						<!-- #################### ÁRBOL DE COMISIONES #################### -->
+						<p:outputPanel id="idPanelArbolC">
+							<div style="margin-left: 25px; margin-top: 5px;">
+								<p:tree var="arbolComisiones" value="#{mbConvocatoria.helpConvocatoria.arbolComisiones}"
+										style="width: 100%; border: none;">
+									<p:treeNode>
+										<h:outputText value="#{arbolComisiones}" />
+									</p:treeNode>
+								</p:tree>
+							</div>
+						</p:outputPanel>
+						<!-- #################### TERMINA DESTINATARIOS #################### -->
+					</div>
+					<div class="col-xs-12 espaciador-top">
+						<!-- #################### COMIENZA ORDEN DEL DÍA #################### -->
+						<div style="font-size: 18px; color: #932C60;" class="contenedor-ayuda-imagen">
+							<h:outputLabel>#{messageSource['lbl_orden_del_diaCCC']}</h:outputLabel>
+<!-- 
+							<h:graphicImage id="idAyudaOrden" name="ayuda.png" library="img/convocatoria"
+											style="width: 17px;" />
+							<p:tooltip for="idAyudaOrden">
+								<h:outputText value="Puedes ordenar los Puntos del Orden del día,
+												     dando clic sobre ellos y arrastrarlos hacia
+													 arriba o hacia abajo" />
+								<p:graphicImage name="img/convocatoria/ayuda.png" />
+							</p:tooltip>
+ -->
+						</div>
+			
+						<div>
+							<p style="height: 3px; background-color: darkgray;"></p>
+						</div>
+					</div>
+
+					<div class="clearfix"></div>
+					<div class="col-xs-12 col-md-6 espaciador-top">
+						<!-- #################### CAMPO ADJUNTAR PDF #################### -->
+						<div>
+							<h:outputLabel>#{messageSource['lbl_adjuntar_ordenCCC']}</h:outputLabel>
+						</div>
+						<div id="contenedor-adjuntar-archivo">
+							<p:fileUpload label="#{messageSource['lbl_sel_archivo']}"
+										  style = "width: 250px;"
+										  fileUploadListener="#{mbConvocatoria.precargarPDF}"
+										  required="true"
+										  multiple="false"
+										  dragDropSupport="false"
+										  mode="advanced"
+										  auto="true"
+										  update=":idFormConvocatoria:idPanelNomArch :idFormConvocatoria:idPanelMsgError :idFormConvocatoria:idPanelAuxFile"
+										  invalidSizeMessage="#{messageSource['lbl_tam_arc_no_valido']}"
+										  invalidFileMessage="#{messageSource['lbl_archivo_no_valido']}"
+										  onstart = "start();"
+										  oncomplete="stop(); setTimeout(function() { $('[id$=idPanelMsgError]').hide(1000); }, 1500);"
+										  >
+							</p:fileUpload>
+
+							<h:outputText value="Tamaño máximo de archivo 30MB, formato PDF"
+										  style="font-size: 11px;" />
+
+							<p:outputPanel id="idPanelNomArch" style="text-align: left;">
+								<h:outputText value="#{mbConvocatoria.helpConvocatoria.nomArch}"
+											  style="font-size: 11px;" />
+							</p:outputPanel>
+
+							<p:outputPanel id="idPanelMsgError" style="text-align: left;">
+								<c:if test="#{mbConvocatoria.helpConvocatoria.nomArch eq ''}">
+									<h:outputText required="true"
+												  value="El  tamaño del archivo debe ser menor a 30 MB"
+												  rendered="#{mbConvocatoria.helpConvocatoria.esTamNoPermitido}"
+												  style="font-size: 14px; color: #B1251E;"/>
+									<br />
+									<h:outputText required="true"
+												  value="Tipo de archivo inválido, agrega uno en formato PDF"
+												  rendered="#{mbConvocatoria.helpConvocatoria.esExtNoPermitida}"
+												  style="font-size: 14px; color: #B1251E;"/>
+								</c:if>
+							</p:outputPanel>
+
+							<p:outputPanel id="idPanelAuxFile">
+								<p:inputText id="idAuxFile" required="true"
+											 value="#{mbConvocatoria.helpConvocatoria.nomArch}"
+											 requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+											 style="display: none;"
+											 >
+								</p:inputText>
+							</p:outputPanel>
+	
+							<div style="width: 58%;">
+								<div class="row">
+									<div style="font-size: 18px;" class="col-md-9">
+										<p:messages id="msgAuxFile" for="idAuxFile" autoUpdate="true" closable="false" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-xs-12 col-md-6 espaciador-top">
+						<!-- #################### CAMPO ADJUNTAR ZIP #################### -->
+						<div>
+							<h:outputLabel>#{messageSource['lbl_adjuntar_documentCCC']}</h:outputLabel>
+						</div>
+						<div id="contenedor-adjuntar-zip">
+							<p:fileUpload label="#{messageSource['lbl_seleccionar_zipCCC']}"
+										  style = "width: 250px;"
+										  fileUploadListener="#{mbConvocatoria.precargarZIP}"
+										  multiple="false"
+										  dragDropSupport="false"
+										  mode="advanced"
+										  auto="true"
+										  update=":idFormConvocatoria:idPanelNombreZIP :idFormConvocatoria:idPanelMsgErrorZIP"
+										  invalidSizeMessage="#{messageSource['lbl_tam_arc_no_valido']}"
+										  invalidFileMessage="#{messageSource['lbl_archivo_no_valido']}"
+										  onstart = "start();"
+										  oncomplete="stop(); setTimeout(function() { $('[id$=idPanelMsgErrorZIP]').hide(1000); }, 1500);"
+										  >
+							</p:fileUpload>
+
+							<h:outputText value="Tamaño máximo de archivo 400MB, formato ZIP"
+										  style="font-size: 11px;" />
+
+							<p:outputPanel id="idPanelNombreZIP" style="text-align: left;">
+								<h:outputText value="#{mbConvocatoria.helpConvocatoria.nombreZIP}"
+											  style="font-size: 11px;" />
+							</p:outputPanel>
+
+							<p:outputPanel id="idPanelMsgErrorZIP" style="text-align: left;">
+								<c:if test="#{mbConvocatoria.helpConvocatoria.nombreZIP eq ''}">
+									<h:outputText required="true"
+												  value="El  tamaño del archivo debe ser menor a 400 MB"
+												  rendered="#{mbConvocatoria.helpConvocatoria.esTamNoPermitidoZIP}"
+												  style="font-size: 14px; color: #B1251E;"/>
+									<br />
+									<h:outputText required="true"
+												  value="Tipo de archivo inválido, agrega uno en formato ZIP"
+												  rendered="#{mbConvocatoria.helpConvocatoria.esExtNoPermitidaZIP}"
+												  style="font-size: 14px; color: #B1251E;"/>
+								</c:if>
+							</p:outputPanel>
+						</div>
+					</div>
+
+<!-- 
+						<div class="espaciador-lg-top">
+							#################### ENCABEZADO DE TABLA ####################
+							<div style="background-color: #932C60; width: 100%; height: 45px;">
+								<span style="float: left; font-size: 25px; color: #FFFFFF; margin-left: 30px; margin-top: 5px;">
+									<h:outputText value="#{messageSource['lbl_puntosCCC']}" />
+								</span>
+								<span style="float: right; margin-right: 30px; margin-top: 9px;">
+									<p:commandLink  id="idAgregarPunto"
+													immediate="true"
+													type="button"
+													onclick="PF('muestraDialogAgregar').show();">
+										<h:graphicImage  name="btn_agregar.png"
+														 library="img/convocatoria"
+														 onmouseover="src='#{request.contextPath}/app/javax.faces.resource/btn_agregar_hover.png?ln=img/convocatoria'"
+														 onmouseout="src='#{request.contextPath}/app/javax.faces.resource/btn_agregar.png?ln=img/convocatoria'" />
+									</p:commandLink>
+									<p:tooltip for="idAgregarPunto" value="#{messageSource['lbl_agregar_puntoCCC']}" trackMouse="true" />
+								</span>
+							</div>
+
+							#################### TABLA DE ORDEN DEL DÍA ####################
+						    <p:dataTable id="idOrdenDelDia"
+						    			 styleClass="claseConvocatoria" style="width: 100%; text-align: center;"
+						    			 var="ordenDelDia" value="#{mbConvocatoria.helpConvocatoria.ordenDelDia}"
+						    			 scrollable="true" emptyMessage="No hay puntos a tratar" draggableRows="true">
+						        <p:ajax event="rowReorder"
+						        		listener="#{mbConvocatoria.moverPuntoConvoc}"
+										update=":idFormConvocatoria:idOrdenDelDia"/>
+						        <p:column style="width: 7.5%; font-size: 28px; color: #1b7986;">
+						            <h:outputText value="#{ordenDelDia.id.numPunto}" />
+						        </p:column>
+						        <p:column style="width: 85%;">
+						            <h:outputText value="#{ordenDelDia.descripcionPunto}" />
+						        </p:column>
+						        <p:column style="width: 7.5%;">
+									<p:commandLink  id="idEliminarPunto"
+													action="#{mbConvocatoria.helpConvocatoria.setOrdenModificable(ordenDelDia)}"
+													immediate="true"
+													type="button"
+													onclick="PF('muestraDialogEliminar').show();">
+										<h:graphicImage  name="btn_eliminar.png"
+														 library="img/convocatoria"
+														 onmouseover="src='#{request.contextPath}/app/javax.faces.resource/btn_eliminar_hover.png?ln=img/convocatoria'"
+														 onmouseout="src='#{request.contextPath}/app/javax.faces.resource/btn_eliminar.png?ln=img/convocatoria'" />	
+									</p:commandLink>
+									<p:tooltip for="idEliminarPunto" value="#{messageSource['lbl_eliminar_puntoCCC']}" trackMouse="true" />
+						        </p:column>
+						    </p:dataTable>
+						</div>
+						#################### TERMINA ORDEN DEL DÍA ####################
+ -->
+
+					<div class="col-xs-12 espaciador-top">
+						<div class="text-center">
+					    	<p:commandButton value="#{messageSource['etiqueta_boton_aceptar']}"
+							   			 	 action="#{mbConvocatoria.agregarConvocatoria}"
+							   			 	 actionListener="#{mbConvocatoria.agregarDocumentosAdjuntos}"
+							   			 	 update="idGrowlInsert"
+							   			 	 styleClass="btnAC robotoBold" />
+						</div>
+					</div>
+				</div>
+
+			</h:form>
+		</div>
+
+		<h:outputScript library="js" name="verificaPalabras.js" />
+		<script>
+	        PrimeFaces.locales['es'] = {
+	                closeText: 'Cerrar',
+	                prevText: 'Anterior',
+	                nextText: 'Siguiente',
+	                monthNames: ['Enero','Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+	                monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+	                dayNames: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
+	                dayNamesShort: ['Dom','Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+	                dayNamesMin: ['D','L','M','M','J','V','S'],
+	                weekHeader: 'Semana',
+	                firstDay: 1,
+	                isRTL: false,
+	                showMonthAfterYear: false,
+	                yearSuffix: '',
+	                timeOnlyTitle: 'Sólo hora',
+	                timeText: 'Tiempo',
+	                hourText: 'Hora',
+	                minuteText: 'Minuto',
+	                secondText: 'Segundo',
+	                currentText: 'Fecha actual',
+	                ampm: false,
+	                month: 'Mes',
+	                week: 'Semana',
+	                day: 'Día',
+	                allDayText : 'Todo el día'
+        };
+
+	        function start() {
+				PF('statusDialog').show();
+			};
+
+			function stop() {
+				PF('statusDialog').hide();
+				$('.extracto-texto-punto').each(function() {
+					var texto = $(this).text();
+					console.log(texto);
+					var arregloTexto = texto.split('.-');
+					console.log(arregloTexto);
+					$(this).text(arregloTexto[0])
+					$(this).after(' .- ' + arregloTexto[1]);
+				});
+			}
+        </script>
+		<p:dialog modal="true" widgetVar="statusDialog" header="Cargando..."
+				  draggable="false" closable="false" resizable="false">
+			<p:graphicImage name="/img/loader.gif"/>
+		</p:dialog>
+	</ui:define>
+
+</ui:composition>

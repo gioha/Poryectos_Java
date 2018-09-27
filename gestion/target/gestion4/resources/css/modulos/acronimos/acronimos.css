@@ -1,0 +1,269 @@
+/*-------------------------------------------------*/
+/* Hoja de Estilos para los Sistemas               */
+/*       	Institucionales                         */
+/*  v1.1.5 Release Date 05 de septiembre de 2014rs   
+
+/** ******************************* GENERALES ******************************* **/
+
+@media (max-width: 1142px) {
+	h3 {
+		font-size: 22px;
+		padding: 30px 10px 33px 40px !important;
+	}
+}
+
+@media (max-width: 1050px) {
+	h3 {
+		font-size: 18px;
+		padding: 30px 10px 38px 40px !important;
+	}
+}
+
+@media (max-width: 900px) {
+	.tituloConfigHidden {
+		display: none;
+	}
+	h3 {
+		padding: 30px 10px 57px 40px !important;
+	}
+}
+
+/** ******************************* ESPECIALES ******************************* **/
+
+.tablaAcronimos {
+	width: 1010px;
+}
+
+.tablaAcronimos.ui-datatable thead th {
+	background: none;
+	background-color: #d5007f !important;
+	border-top: none !important;
+	border-bottom: none !important;
+	color: white;
+	font-weight: normal;
+	border: 1px solid white !important;
+}
+
+.tablaAcronimos .ui-datatable-data {
+	font-size: 12px;
+}
+
+.tablaAcronimos .ui-column-title {
+	font-size: 12px;
+	padding-right: 5px;
+	font-family: Roboto;
+}
+
+.tablaAcronimos .ui-filter-column {
+	padding: 18px 10px 13px 10px;
+}
+
+.tablaAcronimos .ui-filter-column .ui-inputfield {
+	height: 30px;
+}
+
+.tablaAcronimos .ui-filter-column .ui-selectonemenu-trigger {
+	border: none;
+	background: white;
+}
+
+
+.tablaAcronimos.ui-datatable .ui-column-customfilter .ui-selectonemenu {
+	display: table-cell;
+}
+
+.tablaAcronimos.ui-datatable .ui-column-customfilter,
+.tablaAcronimos.ui-datatable .ui-column-filter {
+	display: inline;
+}
+
+.ventanaVisualizarAcr.ui-dialog .ui-dialog-content {
+	padding: 0px !important;
+}
+
+.ventanaEdicionAcr {
+	border: 1px solid #333333;
+}
+
+.ventanaEdicionAcr.ui-dialog .ui-dialog-content {
+	padding: 0px !important;
+}
+
+.ventanaEdicionAcr .ui-selectonemenu .ui-selectonemenu-trigger {
+	width: 30px !important;
+	padding-top: 6px !important;
+}
+
+.ventanaEdicionAcr .ui-selectonemenu-trigger .ui-icon {
+	background-image: none;
+	text-indent: initial;
+	overflow: initial;
+	font-weight: normal;
+	width: 25px;
+	height: 23px;
+}
+
+.ventanaEdicionAcr .ui-selectonemenu-trigger .ui-icon:before {
+	content: "\F107" !important;
+	font-size: 30px;
+	color: #6f6f6e;
+}
+
+.ventanaEdicionAcr .ui-selectonemenu-trigger.ui-state-error,
+.ventanaEdicionAcr .ui-selectonemenu-trigger,
+.ventanaEdicionAcr .ui-selectonemenu {
+	background: none;
+}
+
+.ventanaEdicionAcr .ui-selectonemenu-trigger.ui-state-error,
+.ventanaEdicionAcr .ui-selectonemenu-trigger {
+	border: none;
+}
+
+.ventanaEdicionAcr .ui-selectonemenu-trigger.ui-state-default.ui-state-hover,
+.ventanaEdicionAcr .ui-selectonemenu.ui-state-default.ui-state-hover,
+.ventanaEdicionAcr .ui-selectonemenu.ui-state-focus,
+.ventanaEdicionAcr .ui-selectonemenu-trigger.ui-state-focus {
+	box-shadow: none !important;
+}
+
+.ventanaEdicionAcr .ui-selectonemenu.ui-state-focus,
+.ventanaEdicionAcr .ui-selectonemenu.ui-state-default.ui-state-hover {
+	border: 1px solid #000000;
+}
+
+.ventanaEdicionAcr .ui-selectonemenu.ui-state-error {
+	border: 1px solid #a8a8a8;
+	border-bottom: 3px solid #ff0000;
+}
+
+.ventanaEdicionAcr .ui-selectonemenu-item.ui-state-highlight {
+	background: #a8a8a8;
+	text-shadow: none;
+}
+
+.ventanaEdicionAcr .ui-selectonemenu-item.ui-state-hover {
+	background: #cccccc;
+	border: none;
+	box-shadow: none;
+}
+
+.ventanaEdicionAcr .ui-selectonemenu-items,
+.ventanaEdicionAcr .ui-selectonemenu-item {
+	border-radius: 0px;
+}
+
+.ventanaEdicionAcr .ui-selectonemenu-panel {
+	box-shadow: none !important;
+}
+
+/*************************** GROWL *********************************/
+div[id="formAcronimos:mensaje_general_info_container"] > div {
+
+	background: #29abe2 !important;
+}
+
+div[id="formAcronimos:mensaje_general_advertencia_container"] > div {
+
+	background: #fcee21 !important;
+	color: black; 
+}
+
+div[id="formAcronimos:mensaje_general_advertencia_container"] > div .ui-growl-item {
+	border-bottom: 2px solid black!important;
+	border-top: 2px solid black!important;
+}
+
+div[id="formAcronimos:mensaje_general_exito_container"] > div {
+
+	background: #7ac943 !important;
+}
+
+
+/*************************** DRAG **********************************/
+
+.caja-drag-texto-1, .caja-drag-separador-1 {
+	font-size: 0.8em !important;
+	background-color: #ffffff;
+    text-align: center;
+    border: 1.8px solid #9f9f9f;
+    font-size: 0.8em;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+.caja-drag-separador-1 {
+    padding: 5px;
+}
+
+.caja-drag-separador-1 input, .caja-drag-separador-2 input {
+	width: 100%;
+    max-width: 25px;
+}
+
+.caja-drag-texto-2, .caja-drag-separador-2 {
+	font-size: 0.8em !important;
+	background-color: #f1f1f1;
+    text-align: center;
+    border: 2px solid #780047;
+    font-size: 0.8em;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.caja-drag-separador-2 {
+    padding: 5px;
+}
+
+.caja-drag-grande {	
+	padding-left: 10%;
+    padding-right: 3%;
+}
+
+.drag-activo {
+	background-color: #d5007f !important;
+}
+
+/*************************** DROP **********************************/
+
+.caja-drop-texto-1, .caja-drop-separador-1{
+	min-height: 40px;
+    text-align: center;
+	background-color: #e0e0e0;
+    font-size: 0.8em;
+}
+
+.caja-drop-texto-2, .caja-drop-separador-2 {
+    text-align: center;
+    border: 1.8px dashed grey;
+    font-size: 0.8em;
+    /*padding-bottom: 10px;
+    padding-top: 10px;*/
+    height: 45px;
+    background-color: #ffffff;
+}
+
+.caja-drop-grande {
+	padding-left: 8%;
+	background-color: #d3d3d3;
+	padding-bottom: 10px;
+    padding-top: 10px;
+    margin-top: 30px;
+}
+
+.ui-datatable thead th {
+	border-top: none !important;	
+}
+
+.link-accion.ui-commandlink  {
+	color: #706f6f;
+	text-decoration: none;
+}
+
+.link-accion:hover {
+	color: #d6007e;
+}
+
+/* Estilos aplicados por Miguel Ortiz */
+.tablaAcronimos.ui-datatable .ui-column-filter {
+    width: 146px;
+}

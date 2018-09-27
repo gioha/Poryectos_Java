@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sec="http://www.springframework.org/security/tags">
+
+	<p:dialog 	id="dialogResponder" widgetVar="dialogResponder" 
+				styleClass="dialog_anexos dialog_responder"
+				modal="true"
+				height="400" width="660">
+	<p:ajax event="close" listener="#{mbBEntrada.limpiarDialogResponder}"
+				update=":formBorradores:dialogResponder" />
+				
+		<p:outputPanel id="panelResponder">
+			
+				<div id="container_responder" class="container" >
+					<div class="row">
+						<h3 class="titulo_anexos">Responder documento</h3>
+						<hr />
+						<p class="instrucciones">Puedes responder el documento con un comentario, creando un nuevo documento y/o adjuntando un archivo pdf.</p>
+					</div>
+					
+					<!-- Vista para la bandeja de Entrada -->
+					<c:if test="#{mbBandejaMenu.menuBandejaSeleccionado eq messageSource['vista_entrada'] and mbBEntrada.indicaSeleccionado ne null}">
+						<div class="row">
+							<p class="label_comentario">Comentario</p>
+							<p:inputTextarea styleClass="responder_comentario" value="#{mbBEntrada.filtroResponder.comentario}"/>
+						</div>
+						
+						<div class="row">
+							<p:outputPanel id="panelAdjunto">
+								<div class="col-xs-12">
+									<p:fileUpload 	fileUploadListener="#{mbBEntrada.adjuntarDocumento}"  
+													
+													process="nombreFile" update=":formBorradores:panelAdjunto, :formBorradores:mensaje_general_info, :formBorradores:mensaje_general_advertencia, :formBorradores:mensaje_general_exito" sizeLimit="50000000"
+													label="Adjuntar archivo" styleClass="boton" auto="true" />
+									<p:commandLink value="Responder con nuevo documento" action="responder"/>
+								</div>
+								<div class="col-xs-12">
+									<h:outputText id="lblmenAdjunto" value="Formatos validos: *.pdf con el tamaño de hasta 50MB" styleClass="instruccionesRedaccion"/>
+								</div>
+								<div class="col-xs-12">
+									<h:outputLabel 	value="&#xf0c6; #{mbBEntrada.nombreOriginalAdjunto}" 
+															id="nombreFile"
+															rendered="#{mbBEntrada.nombreOriginalAdjunto != null and !mbBEntrada.nombreOriginalAdjunto.isEmpty()}"
+															styleClass="nombre-archivo"/>
+								</div>
+							</p:outputPanel>
+						</div>
+						<div class="row">
+							<hr class="hr-thin" />
+							<div class="col-xs-12 text-center">
+								<p:commandButton 	value="Responder" styleClass="ui-priority-primary" 
+									actionListener="#{mbBEntrada.responderTurnado}" 
+									update=":formBorradores:panelCentro, :formBorradores:mensaje_general_info, :formBorradores:mensaje_general_advertencia, :formBorradores:mensaje_general_exito"/>
+							</div>
+						</div>
+					</c:if>
+					
+					<!-- Vista para la bandeja de Historico -->
+					<c:if test="#{mbBandejaMenu.menuBandejaSeleccionado eq messageSource['vista_historico'] and mbBHistorico.indicaSeleccionado ne null}">
+						<div class="row">
+							<p class="label_comentario">Comentario</p>
+							<p:inputTextarea styleClass="responder_comentario" value="#{mbBHistorico.filtroResponder.comentario}"/>
+						</div>
+						
+						<div class="row">
+								<p:outputPanel id="panelAdjunto">
+									<div class="col-xs-12">
+										<p:fileUpload 	fileUploadListener="#{mbBHistorico.adjuntarDocumento}" 
+														process="@this" update="formBorradores:panelAdjunto, :formBorradores:mensaje_general_info, :formBorradores:mensaje_general_advertencia, :formBorradores:mensaje_general_exito" sizeLimit="50000000"
+														label="Adjuntar archivo" styleClass="boton" auto="true" />
+														
+										<p:commandLink value="Responder con nuevo documento" action="responderHistorico"/>
+									</div>	
+									
+									<div class="col-xs-12">
+										<h:outputText id="lblmenAdjunto" value="Formatos validos: *.pdf con el tamaño de hasta 50MB" styleClass="instruccionesRedaccion"/>
+									</div>	
+									
+									<div class="col-xs-12">
+										<h:outputLabel 	value="&#xf0c6; #{mbBHistorico.nombreOriginalAdjunto}" 
+														id="nombreFile"
+														rendered="#{mbBHistorico.nombreOriginalAdjunto != null and !mbBHistorico.nombreOriginalAdjunto.isEmpty()}" 
+														styleClass="nombre-archivo"/>
+									</div>
+										
+								</p:outputPanel>
+							
+						</div>
+							
+						<div class="row">
+							<hr class="hr-thin" />
+							<div class="col-xs-12 text-center">
+								<p:commandButton 	value="Responder" styleClass="ui-priority-primary" 
+									actionListener="#{mbBHistorico.responderTurnado}" 
+									update=" :formBorradores:panelCentro, :formBorradores:mensaje_general_info, :formBorradores:mensaje_general_advertencia, :formBorradores:mensaje_general_exito"/>
+							</div>
+						</div>
+					</c:if>
+					
+				</div>
+		</p:outputPanel>
+	</p:dialog>
+</ui:composition>

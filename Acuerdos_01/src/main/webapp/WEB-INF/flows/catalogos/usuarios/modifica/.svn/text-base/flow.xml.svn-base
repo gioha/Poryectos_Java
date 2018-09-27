@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/webflow
+                          http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+    start-state="valida-rol-permitido" parent="parent-flow">
+    <var name="mbCatalogoUsuarios" class="mx.ine.acuerdos.mb.MBCatalogoUsuarios" />
+    <decision-state id="valida-rol-permitido">
+		<if test="mbCatalogoUsuarios.esRolPermitido()" then="valida-rol-solo-consulta" else="home_view" />
+	</decision-state> 
+	<decision-state id="valida-rol-solo-consulta">
+        <if test="mbCatalogoUsuarios.esRolSoloConsulta()" then="consulta-usuario" else="valida-titular-area-sin-registro" />
+    </decision-state>
+	<decision-state id="valida-titular-area-sin-registro">
+        <if test="mbCatalogoUsuarios.titularAreaSinRegistro()" then="captura-usuario" else="modifica-usuario" />
+    </decision-state>
+    <view-state id="modifica-usuario" view="modifica_usuario.xhtml">
+    	<on-entry>
+			<evaluate expression="mbCatalogoUsuarios.init()"></evaluate>
+		</on-entry>
+    </view-state>
+    <subflow-state id="home_view" subflow="home"></subflow-state>
+    <view-state id="consulta-usuario" view="externalRedirect:servletRelative:/catalogos/usuarios/consulta"/>
+    <view-state id="captura-usuario" view="externalRedirect:servletRelative:/catalogos/usuarios/captura"/>
+</flow>

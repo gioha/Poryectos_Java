@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:ine="http://ine.mx/ui" xmlns:deceyec="http://ine.mx/ui"
+	template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+
+		<h:form id="formReportes" styleClass="container">
+
+
+			<pe:blockUI id="progress" target="formReportes"
+				content="blockUIContent" widgetVar="progress" />
+			<h:panelGrid id="blockUIContent" columns="2" style="display:none;">
+				<h:graphicImage library="img" name="loader.gif" width="70" />
+				<h:outputText value="Procesando" style="white-space: nowrap;" />
+
+			</h:panelGrid>
+			<p:growl id="growl" for="growl" autoUpdate="true" showDetail="true"
+				showSummary="true" redisplay="true" sticky="false" />
+
+			<div class="ui-g">
+				<div class="ui-g-12">
+					<div class="card columnaCardPrincipal">
+						<div class="ui-g">
+							<div class="ui-g-12 ui-md-12">
+								<b>Centro de Reportes</b>
+							</div>
+							<div class="ui-g-12">
+								<div class="boxSearchReporte">
+									<p:inputText id="busqueda1"
+										value="#{mbReportes.form.palabraBusqueda}"
+										styleClass="inputSearchReportes">
+										<p:ajax event="change" update="formReportes"
+											listener="#{mbReportes.busquedaConPalabra(mbReportes.form.palabraBusqueda)}" />
+									</p:inputText>
+									<span class="ui-icon ui-icon-search iconSearchReporte" />
+								</div>
+							</div>
+						
+							<c:set var="countMenu" value="0" />
+									<c:if test="#{mbReportes.listMenuReportes.size() ne null}">
+										<c:forEach items="#{mbReportes.listMenuReportes}" var="menucount">
+											<c:if test="#{menucount.nombreMenu eq 'Listados' or menucount.nombreMenu eq 'C&eacute;dulas'}">
+												<c:set var="countMenu" value="${countMenu+1}" />
+											</c:if>
+										</c:forEach>
+									</c:if>
+
+							<div style="width: 80%; margin: auto;">
+								<c:if test="#{mbReportes.listMenuReportes.size() ne null and countMenu ne 0}">
+
+									<div class="ui-g-12 ui-md-2 ui-lg-2">
+										<p:commandLink align="center" oncomplete="location.reload();"
+											styleClass="#{mbReportes.form.idSubMenu eq 0 and mbReportes.form.idMenu eq 0 ?'linkReportesActivo':'linkReportes'}"
+											value="Todas"
+											actionListener="#{mbReportes.busquedaConMenu(0,0,'Todas')}">
+										</p:commandLink>
+									</div>
+									<c:forEach items="#{mbReportes.listMenuReportes}" var="menu">
+										<div class="ui-g-12 ui-md-3 ui-lg-2">
+											<p:commandLink align="center" oncomplete="location.reload();"
+												styleClass="#{mbReportes.form.idSubMenu eq menu.idSubMenu and mbReportes.form.idMenu eq menu.idMenu ?'linkReportesActivo':'linkReportes'}"
+												value="#{menu.nombreSubMenu}"
+												actionListener="#{mbReportes.busquedaConMenu(menu.idMenu,menu.idSubMenu,menu.nombreSubMenu)}">
+											</p:commandLink>
+										</div>
+									</c:forEach>
+
+								</c:if>
+							</div>
+							<c:if
+								test="#{mbReportes.form.mensaje ne null and mbReportes.form.palabraBusqueda ne ''}">
+								<div class="ui-g-12 ui-md-4 ui-md-offset-3">
+									#{mbReportes.form.mensaje}</div>
+							</c:if>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<c:set var="countListados" value="0" />
+			<div class="ui-g">
+				<div class="ui-g-12 ui-md-6 ">
+					<div class="card">
+						<div class="ui-g">
+							<div class="ui-g-12">
+								<b>Listados <c:if
+										test="#{mbReportes.form.palabraBusqueda ne null and mbReportes.form.palabraBusqueda ne ''}">- #{mbReportes.form.palabraBusqueda}
+									</c:if>
+								</b>
+							</div>
+
+							<c:if test="#{mbReportes.listMenuReportes.size() ne null}">
+								<p:panelMenu styleClass="panelmenulReportes">
+									<c:forEach items="#{mbReportes.listMenuReportes}"
+										var="SubMenus">
+										<c:if test="#{SubMenus.nombreMenu eq 'Listados'}">
+
+											<c:if
+												test="#{(mbReportes.form.idMenu eq 0 and mbReportes.form.idSubMenu eq 0) or (SubMenus.idMenu eq mbReportes.form.idMenu and SubMenus.idSubMenu eq mbReportes.form.idSubMenu)}">
+
+												<p:submenu label="#{SubMenus.nombreSubMenu}" expanded="true">
+													<c:forEach items="#{SubMenus.listModulos}" var="modulos">
+														<p:menuitem target="_blank" url="#{modulos.urlModulo}">
+															<span> #{modulos.nombreModulo}</span>
+															<c:if
+																test="#{modulos.claveModulo ne null}">
+																<span class="cleveModulos">&nbsp;-&nbsp;
+																	#{modulos.claveModulo}</span>
+															</c:if>
+														</p:menuitem>
+													</c:forEach>
+												</p:submenu>
+												<c:set var="countListados" value="${countListados+1}" />
+											</c:if>
+
+										</c:if>
+									</c:forEach>
+								</p:panelMenu>
+							</c:if>
+
+							<c:if
+								test="#{mbReportes.listMenuReportes.size() eq null or countListados eq 0}">
+								<p>No hay datos</p>
+							</c:if>
+
+							<c:set var="countListados" value="0" />
+
+						</div>
+					</div>
+				</div>
+
+				<c:set var="countCedulas" value="0" />
+				<div class="ui-g-12 ui-md-6 ">
+					<div class="card">
+						<div class="ui-g">
+							<div class="ui-g-12">
+								<b>C&eacute;dulas <c:if
+										test="#{mbReportes.form.palabraBusqueda ne null and mbReportes.form.palabraBusqueda ne ''}">- #{mbReportes.form.palabraBusqueda}
+									</c:if>
+								</b>
+							</div>
+							<c:if test="#{mbReportes.listMenuReportes.size() ne null}">
+								<p:panelMenu styleClass="panelmenulReportes">
+									<c:forEach items="#{mbReportes.listMenuReportes}"
+										var="SubMenus">
+										<c:if test="#{SubMenus.nombreMenu eq 'C&eacute;dulas'}">
+
+											<c:if
+												test="#{(mbReportes.form.idMenu eq 0 and mbReportes.form.idSubMenu eq 0) or (SubMenus.idMenu eq mbReportes.form.idMenu and SubMenus.idSubMenu eq mbReportes.form.idSubMenu)}">
+
+												<p:submenu label="#{SubMenus.nombreSubMenu}" expanded="true">
+													<c:forEach items="#{SubMenus.listModulos}" var="modulos">
+														<p:menuitem target="_blank" url="#{modulos.urlModulo}">
+															<span> #{modulos.nombreModulo}</span>
+															<c:if
+																test="#{modulos.claveModulo ne null}">
+																<span class="cleveModulos">&nbsp;-&nbsp;
+																	#{modulos.claveModulo}</span>
+															</c:if>
+														</p:menuitem>
+													</c:forEach>
+												</p:submenu>
+												<c:set var="countCedulas" value="${countCedulas+1}" />
+											</c:if>
+
+										</c:if>
+									</c:forEach>
+								</p:panelMenu>
+
+							</c:if>
+
+							<c:if
+								test="#{mbReportes.listMenuReportes.size() eq null or countCedulas eq 0}">
+								<p>No hay datos</p>
+							</c:if>
+
+							<c:set var="countCedulas" value="0" />
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

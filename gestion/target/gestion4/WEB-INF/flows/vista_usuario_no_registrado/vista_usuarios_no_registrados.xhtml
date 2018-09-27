@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:sf="http://www.springframework.org/tags/faces"
+				template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+		
+		<!-- Estilos propios para la pantalla -->
+		<h:outputStylesheet library="css" name="modulos/error/error.css" />
+		
+		<div class="containerError">
+		
+			<div class="contenedorMensajeError">
+				
+				<h:form>
+					
+					<div class="col-md-4">
+						
+						<p:graphicImage library="img" name="warning.png" width="150"/>
+					
+					</div>
+					
+					<div class="col-md-8">
+						
+						<div class="row">
+							
+							<div class="col-md-11 tituloDescripcionError">
+								
+								<span style="color: #a0005f">ACCESO</span> <span>DENEGADO</span>
+							
+							</div>
+							
+							<div class="col-md-1"/>
+						
+						</div>
+						
+						<div class="row">
+						
+							<div class="col-md-11" style="padding-left: 0px; padding-top: 10px;">
+
+								<c:choose>
+									
+									<!-- CUANDO SU ÁREA NOOOOO ESTA REGISTRADA -->
+									<c:when test="#{!mbUsuarioNoReg.info.tienePosibleArea}">
+										
+										<span>
+											
+											El área a la que perteneces ( #{SPRING_SECURITY_CONTEXT.authentication.principal.nombreAreaLDAP} ) aun no ha sido dada de alta dentro del sistema de gestión,
+											debes esperar a que el encargado de tu área lo haga el cual usualmente es designado por el titular o alguien de su personal directo.
+											
+										</span>
+									
+									</c:when>
+									
+									<!-- CUANDO SU ÁREA ESTA REGISTRADA -->
+									<c:when test="#{mbUsuarioNoReg.info.tienePosibleArea}">
+											
+										<c:choose>
+											
+											<!-- CUANDO ESA ÁREA TIENE ADMINISTRADOR -->
+											<c:when test="#{mbUsuarioNoReg.info.tieneAdministradoresArea}">
+												
+												Sin registro existente en ' #{SPRING_SECURITY_CONTEXT.authentication.principal.nombreAreaLDAP} ', contacta al o los administradores:
+												
+												
+												<p:dataList value="#{mbUsuarioNoReg.info.listaAdministradoresArea}" var="administradorArea" type="ordered" >
+													
+													<i class="fa fa-circle" aria-hidden="true" style="font-size: 12px;"/>
+													#{administradorArea.nombreCompleto}
+												
+												</p:dataList>
+												
+											
+											</c:when>
+
+											<!-- CUANDO ESA ÁREA NO TIENE ADMINISTRADOR -->
+											<c:when test="#{!mbUsuarioNoReg.info.tieneAdministradoresArea}">
+												
+												Aun no has sido registrado en el sistema para el área ' #{SPRING_SECURITY_CONTEXT.authentication.principal.nombreAreaLDAP} ' dentro del sistema de gestión,
+												puedes ponerte en contacto con el titular de tu área ( #{mbUsuarioNoReg.info.titular.nombreCompleto} )
+												<c:if test="#{!mbUsuarioNoReg.info.listaCorresponsablesTitular.isEmpty()}">
+													o con alguno de sus corresponsables:
+													
+													<p:dataList value="#{mbUsuarioNoReg.info.listaCorresponsablesTitular}" var="corresponsables" type="ordered" >
+													
+														<i class="fa fa-circle" aria-hidden="true" style="font-size: 12px;"/>
+														#{corresponsables.nombreCompleto}
+													
+													</p:dataList>
+												
+												</c:if>	
+											
+											</c:when>
+										
+										</c:choose>	
+									
+									</c:when>
+									
+								</c:choose>
+							
+							</div>
+							
+							<div class="col-md-1"/>
+						
+						</div>
+					
+					</div>
+				
+				</h:form>
+			
+			</div>
+		
+		</div>
+		
+	</ui:define>
+
+</ui:composition>

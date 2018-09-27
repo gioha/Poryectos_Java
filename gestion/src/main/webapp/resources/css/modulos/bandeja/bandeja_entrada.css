@@ -1,0 +1,231 @@
+.ui-accordion-content.ui-helper-reset.ui-widget-content{
+	padding: 0px;
+}
+
+/** ******************************* RADIO BOTÓN CONCLUIDO******************************* **/
+.radio_registar_concluido .ui-radiobutton-box.ui-state-default{
+	background: none;
+	border: 1px solid #00983A !important;
+}
+
+.radio_registar_concluido .ui-radiobutton-box.ui-state-default.ui-state-hover{
+	box-shadow: none;
+	border: 2px solid #00983A !important;
+}
+
+.radio_registar_concluido .ui-radiobutton-box.ui-state-default.ui-state-active {
+	border: 1px solid #00983A !important;
+}
+
+/** ******************************* RADIO BOTÓN RECHAZAR******************************* **/
+.radio_registar_rechazado .ui-radiobutton-box.ui-state-default{
+	background: none;
+	border: 1px solid #706F6F !important;
+}
+
+.radio_registar_rechazado .ui-radiobutton-box.ui-state-default.ui-state-hover{
+	box-shadow: none;
+	border: 2px solid #706F6F !important;
+}
+
+.radio_registar_rechazado .ui-radiobutton-box.ui-state-default.ui-state-active {
+	border: 1px solid #706F6F !important;
+}
+
+/** ******************************* RADIO BOTÓN REASIGNAR******************************* **/
+.radio_registar_reasignado .ui-radiobutton-box.ui-state-default{
+	background: none;
+	border: 1px solid #82368C !important;
+}
+
+.radio_registar_reasignado .ui-radiobutton-box.ui-state-default.ui-state-hover{
+	box-shadow: none;
+	border: 2px solid #82368C !important;
+}
+
+.radio_registar_reasignado .ui-radiobutton-box.ui-state-default.ui-state-active {
+	border: 1px solid #82368C !important;
+}
+
+/** ******************************* RADIO BOTÓN ATENDIENDO******************************* **/
+.radio_registar_atencion .ui-radiobutton-box.ui-state-default{
+	background: none;
+	border: 1px solid #FFDE00 !important;
+}
+
+.radio_registar_atencion .ui-radiobutton-box.ui-state-default.ui-state-hover{
+	box-shadow: none;
+	border: 2px solid #FFDE00 !important;
+}
+
+.radio_registar_atencion .ui-radiobutton-box.ui-state-default.ui-state-active {
+	border: 1px solid #FFDE00 !important;
+}
+
+/** ******************************* RADIO BOTÓN EN ESPERA******************************* **/
+.radio_registar_enespera .ui-radiobutton-box.ui-state-default{
+	background: none;
+	border: 1px solid #EA5B0C !important;
+}
+
+.radio_registar_enespera .ui-radiobutton-box.ui-state-default.ui-state-hover{
+	box-shadow: none;
+	border: 2px solid #EA5B0C !important;
+}
+
+.radio_registar_enespera .ui-radiobutton-box.ui-state-default.ui-state-active {
+	border: 1px solid #EA5B0C !important;
+}
+
+/* .ui-radiobutton-box.ui-state-default{
+	background: none;
+	border: 2px solid blue !important;
+}
+
+.ui-radiobutton-box.ui-state-default.ui-state-hover {
+	box-shadow: none;
+	border: 1px solid blue !important;
+}, 
+
+.ui-radiobutton-box.ui-state-default.ui-state-active{
+	border: 2px solid blue !important;
+}  */
+
+/*****Acordion ******/
+div.ui-accordion.ui-widget.ui-helper-reset.ui-hidden-container{
+    margin-top: 15px;
+}
+
+/* .ui-accordion.ui-widget.ui-helper-reset.ui-hidden-container .ui-state-default
+,.ui-accordion.ui-widget.ui-helper-reset.ui-hidden-container .ui-widget-content .ui-state-default
+, .ui-accordion.ui-widget.ui-helper-reset.ui-hidden-container .ui-widget-header .ui-state-default {
+	background: none !important;
+} */
+
+h3.ui-accordion-header.ui-helper-reset.ui-state-default.ui-corner-top.ui-state-active,
+h3.ui-accordion-header.ui-helper-reset.ui-state-default.ui-corner-top.ui-state-active.ui-state-hover{
+	background-color: rgb(226,226,226,1) !important;
+	border: none !important;
+}
+
+h3.ui-accordion-header.ui-helper-reset.ui-state-default.ui-corner-all{
+	background-color: rgb(226,226,226,1) !important;
+	border: none !important;
+}
+
+div.ui-datatable-tablewrapper{
+	border-bottom: none !important;
+	margin-bottom: 10px;
+}
+span.ui-icon.ui-icon-triangle-1-e{
+	
+}
+
+.ui-icon {
+    -moz-border-radius: 0px !important;
+    -webkit-border-radius: 0px !important;
+    border-radius: 0px !important;
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+}
+/*****Acordion ******/
+h3{
+	color: #D5007F;
+	font-family: Roboto;
+	font-size: 16px;
+	margin: 0px;
+	padding: 0px;
+	margin-left: 10px;
+}
+
+hr{
+	border-top: 4px solid #D5007F; 
+	height: 1px;
+	margin-top: 10px;
+	margin-bottom: 0px;
+}
+
+p.instrucciones{
+	color:#999999;
+	font-family: Roboto;
+	font-size: 9px;
+	margin-left: 20px;
+}
+
+/***** DIALOG RESOPNDER******/
+#container_responder .row{
+	margin:0px;
+}
+
+#container_responder{
+	padding: 0px;
+}
+
+#container_responder p.instrucciones{
+	color:black;
+	font-family: Roboto;
+	font-size: 11px;
+	margin-left: 10px;
+}
+
+div.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-shadow.ui-hidden-container.ui-draggable.ui-resizable.dialog_anexos.dialog_responder div.ui-outputpanel.ui-widget{
+	border:none !important;
+}
+
+
+
+.responder_comentario{
+	height:130px !important;
+	width: 99%;
+}
+#container_responder .ui-fileupload-buttonbar.ui-widget-header.ui-corner-top{
+	padding: 0px !important;
+}
+
+#container_responder .ui-button-icon-left.ui-icon.ui-c.ui-icon-plusthick{
+	display: none;
+}
+
+.label_comentario{
+	color:black;
+	font-family: Roboto;
+	font-size: 11px;
+	font-weight: bold;
+	margin: 0px;
+}
+
+.ui-fileupload-buttonbar.ui-widget-header.ui-corner-top{
+	border:none !important;
+}
+
+.ui-fileupload-content.ui-widget-content.ui-corner-bottom{
+	border:none !important;
+}
+#container_responder .ui-fileupload-content.ui-widget-content.ui-corner-bottom{
+	display: none;
+}
+
+.row_boton_file{
+	
+}
+
+/***** INSTRUCCIONES******/
+.titulo_instrucciones{
+	font-family: Roboto;
+	font-size: 11px;
+}
+
+.titulo_atencion{
+	color: #DB040C;
+}
+
+.titulo_info{
+	color:#26C62F;
+}
+
+.instrucciones{
+	font-family: Roboto;
+	font-size: 10px;	
+}

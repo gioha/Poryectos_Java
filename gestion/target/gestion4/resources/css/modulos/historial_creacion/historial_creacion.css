@@ -1,0 +1,56 @@
+/*-------------------------------------------------*/
+/* Hoja de Estilos para la ventana de historial    */
+/*       	de creacón de documento                */
+/*  v1.1.5 Release Date 08 de enero de 2018        */
+/*-------------------------------------------------*/
+
+.historialCreacionVentana.ui-dialog .ui-dialog-content{
+	padding: 0px 5px 0px 5px !important;
+}
+
+.historialCreacionVentana .ui-datatable-header.ui-widget-header {
+	color: #a0005f !important;
+	font-size: 13pt !important;
+	padding: 5px 10px 5px!important;
+}
+
+.historialCreacionVentana .ui-datatable-scrollable-header thead th {
+	border-bottom: none !important;
+}
+
+.historialCreacionVentana .ui-datatable-scrollable-header {
+	border-top: 3px solid #a0005f !important;
+}
+
+.historialCreacionVentana .ui-datatable thead th {
+	border-top: none !important;
+}
+
+.historialCreacionVentana .ui-dialog-titlebar-icon.ui-dialog-titlebar-close.ui-corner-all {
+	margin: 0px -12px;
+}
+
+.historialCreacionVentana .ui-datatable-scrollable .ui-paginator.ui-paginator-bottom {
+	border-top: 1px solid #a0005f !important;
+}
+
+.historialCreacionVentana .ui-paginator-bottom {
+	border-bottom: 1px solid #a0005f !important;
+}
+
+.historialCreacionVentana .ui-widget-header .ui-datatable-scrollable-footer {
+	padding: 0px;
+}
+
+form section {
+	padding: 0px 40px 0px;
+}
+
+.historialCreacionVentana.ui-shadow {
+	box-shadow: none;
+	border: 1px solid #a0005f;
+}
+
+.historialCreacionVentana .ui-datatable-odd {
+	background-color: white;
+}

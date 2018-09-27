@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:ine="http://www.ine.mx/ui" xmlns:deceyec="http://ine.mx/ui">
+
+	<div class="ui-g">
+
+		<!--  -->
+		<!--  VISTA CAPTURAR  -->
+		<!--  -->
+		<p:outputPanel id="panelRepCapMod" styleClass="ui-g-12"
+			rendered="#{mbGeneradorActa.isRendered(mbGeneradorActa.accionCapturar) or mbGeneradorActa.isRendered(mbGeneradorActa.accionModificar)}">
+
+			<!-- Titulo de Representantes de partido politicos, para candidaturas: RP -->
+			<c:if
+				test="#{mbGeneradoActa.tipoCandidatura.getIdTipoCandidatura.intValue() == 8 or mbGeneradoActa.tipoCandidatura.getIdTipoCandidatura.intValue() == 16}">
+				<h2 style="padding: 15px 0px;">#{messageSource['etiqueta_subtitulo_representantes_partidos_acta_computos_rp']}</h2>
+			</c:if>
+
+			<!-- Titulo de Representantes de partido politicos, para los demás tipos de candidaturas -->
+			<c:if
+				test="#{mbGeneradoActa.tipoCandidatura.getIdTipoCandidatura.intValue() != 8 or mbGeneradoActa.tipoCandidatura.getIdTipoCandidatura.intValue() != 16}">
+				<h2 style="padding: 15px 0px;">#{messageSource['etiqueta_subtitulo_representantes_partidos_acta_computos']}</h2>
+			</c:if>
+
+			<!--- Mensaje de información de apellidos-->
+			<div class="ui-messages ui-widget" aria-live="polite">
+				<div class="ui-messages-info ui-corner-all">
+					<a href="#" class="ui-messages-close"
+						onclick="$(this).parent().slideUp();return false;"> </a> <span
+						class="ui-messages-info-icon"></span>
+					<ul>
+						<li><span class="ui-messages-info-detail">#{messageSource['validacion_mensaje_generales_minimo_un_apellidos']}</span></li>
+					</ul>
+				</div>
+			</div>
+
+
+			<c:forEach items="#{mbGeneradorActa.datos.representantes}"
+				var="representante">
+
+
+				<div class="ui-g-12 ui-md-12 ui-lg-12" style="margin: 10px 0px;">
+
+					<!-- Imagen y nombre de partido politico -->
+					<c:if test="#{representante.tipoAsociacion.intValue() == 1}">
+						<p:graphicImage value="#{mbGeneradorActa.imagen}" width="45"
+							cache="false" style="display:inline-block; vertical-align:middle">
+							<f:param name="emblema"
+								value="#{representante.emblemaAsociacion}" />
+						</p:graphicImage>
+
+						<b
+							style="display: inline-block; vertical-align: middle; padding: 10px; font-size: 14px"><p:outputLabel
+								value="#{representante.nombreAsociacion}" /></b>
+					</c:if>
+
+					<!-- Nombre sí es Candidato Independiente -->
+					<c:if test="#{representante.tipoAsociacion.intValue() == 4}">
+
+						<b style="font-size: 14px"><p:outputLabel
+								value="#{representante.nombreAsociacion}" /></b>
+
+					</c:if>
+
+
+
+				</div>
+
+
+				<!-- Nombre representante -->
+<!-- 				<c:if -->
+<!-- 					test="#{mbGeneradorActa.isRendered(mbGeneradorActa.accionCapturar)}"> -->
+<!-- 					<div class="ui-g-12 ui-md-12 ui-lg-3"> -->
+<!-- 						<div class=" md-inputfield"> -->
+<!-- 							<p:inputText -->
+<!-- 								id="informacionRepresentanteNombreCap#{representante.idAsociacion}" -->
+<!-- 								value="#{representante.nombre}" -->
+<!-- 								validatorMessage="#{messageSource['validacion_mensajes_generales_caracteresValidos_nombre']}" -->
+<!-- 								required="#{(representante.aPaterno != null and representante.aPaterno ne '') or (representante.aMaterno != null and representante.aMaterno ne '')}" -->
+<!-- 								requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}" -->
+<!-- 								onblur="this.value=this.value.toUpperCase().trim();" -->
+<!-- 								onkeypress="if (event.keyCode == 13) { return false; }" -->
+<!-- 								maxlength="50"> -->
+<!-- 								<f:validateRegex -->
+<!-- 									pattern="#{messageSource['validacion_expresion_generales_caracteresValidos_nombre']}" /> -->
+<!-- 								<p:ajax event="keyup" -->
+<!-- 									update="mensajeRepresentanteNombreCap#{representante.idAsociacion} informacionRepresentanteRolCap#{representante.idAsociacion}" /> -->
+<!-- 								<pe:keyFilter -->
+<!-- 									regEx="#{messageSource['validacion_expresion_generales_caracteresValidos_nombre_filtro']}" -->
+<!-- 									preventPaste="false" /> -->
+
+<!-- 							</p:inputText> -->
+<!-- 							<p:outputLabel value="Nombre" -->
+<!-- 								for="informacionRepresentanteNombreCap#{representante.idAsociacion}" /> -->
+<!-- 						</div> -->
+
+<!-- 						<p:messages -->
+<!-- 							id="mensajeRepresentanteNombreCap#{representante.idAsociacion}" -->
+<!-- 							for="informacionRepresentanteNombreCap#{representante.idAsociacion}" /> -->
+<!-- 					</div> -->
+<!-- 				</c:if> -->
+
+
+
+				<!-- Nombre representante -->
+<!-- 				<c:if -->
+<!-- 					test="#{mbGeneradorActa.isRendered(mbGeneradorActa.accionModificar)}"> -->
+					<div class="ui-g-12 ui-md-12 ui-lg-3">
+						<div class=" md-inputfield">
+							<p:inputText
+								id="informacionRepresentanteNombreCap#{representante.idAsociacion}"
+								value="#{representante.nombre}"
+								validatorMessage="#{messageSource['validacion_mensajes_generales_caracteresValidos_nombre']}"
+								onblur="this.value=this.value.toUpperCase().trim();"
+								onkeypress="if (event.keyCode == 13) { return false; }"
+								maxlength="50">
+								<f:validateRegex
+									pattern="#{messageSource['validacion_expresion_generales_caracteresValidos_nombre']}" />
+								<p:ajax event="keyup"
+									update="mensajeRepresentanteNombreCap#{representante.idAsociacion} informacionRepresentanteRolCap#{representante.idAsociacion}" />
+								<pe:keyFilter
+									regEx="#{messageSource['validacion_expresion_generales_caracteresValidos_nombre_filtro']}"
+									preventPaste="false" />
+
+							</p:inputText>
+							<p:outputLabel value="Nombre"
+								for="informacionRepresentanteNombreCap#{representante.idAsociacion}" />
+						</div>
+
+						<p:messages
+							id="mensajeRepresentanteNombreCap#{representante.idAsociacion}"
+							for="informacionRepresentanteNombreCap#{representante.idAsociacion}" />
+					</div>
+<!-- 				</c:if> -->
+
+
+
+
+
+				<!-- Apellido paterno representante -->
+<!-- 				<C:IF -->
+<!-- 					TEST="#{MBGENERADORACTA.ISRENDERED(MBGENERADORACTA.ACCIONCAPTURAR)}"> -->
+<!-- 					<DIV CLASS="UI-G-12 UI-MD-12 UI-LG-3"> -->
+<!-- 						<DIV CLASS=" MD-INPUTFIELD"> -->
+<!-- 							<P:INPUTTEXT -->
+<!-- 								ID="INFORMACIONREPRESENTANTEAPATERNOCAP#{REPRESENTANTE.IDASOCIACION}" -->
+<!-- 								VALUE="#{REPRESENTANTE.APATERNO}" -->
+<!-- 								VALIDATORMESSAGE="#{MESSAGESOURCE['VALIDACION_MENSAJES_GENERALES_CARACTERESVALIDOS_NOMBRE']}" -->
+<!-- 								REQUIRED="#{REPRESENTANTE.AMATERNO == NULL AND (REPRESENTANTE.NOMBRE != NULL AND REPRESENTANTE.NOMBRE NE '')}" -->
+<!-- 								REQUIREDMESSAGE="#{MESSAGESOURCE['VALIDACION_MENSAJES_GENERALES_DATO_REQUERIDO']}" -->
+<!-- 								ONBLUR="THIS.VALUE=THIS.VALUE.TOUPPERCASE().TRIM();" -->
+<!-- 								ONKEYPRESS="IF (EVENT.KEYCODE == 13) { RETURN FALSE; }" -->
+<!-- 								MAXLENGTH="50"> -->
+<!-- 								<F:VALIDATEREGEX -->
+<!-- 									PATTERN="#{MESSAGESOURCE['VALIDACION_EXPRESION_GENERALES_CARACTERESVALIDOS_NOMBRE']}" /> -->
+<!-- 								<P:AJAX EVENT="KEYUP" -->
+<!-- 									UPDATE="MENSAJEREPRESENTANTEAPATERNOCAP#{REPRESENTANTE.IDASOCIACION}" /> -->
+<!-- 								<PE:KEYFILTER -->
+<!-- 									REGEX="#{MESSAGESOURCE['VALIDACION_EXPRESION_GENERALES_CARACTERESVALIDOS_NOMBRE_FILTRO']}" -->
+<!-- 									PREVENTPASTE="FALSE" /> -->
+<!-- 							</P:INPUTTEXT> -->
+<!-- 							<P:OUTPUTLABEL VALUE="APELLIDO PATERNO" -->
+<!-- 								FOR="INFORMACIONREPRESENTANTEAPATERNOCAP#{REPRESENTANTE.IDASOCIACION}" /> -->
+<!-- 						</DIV> -->
+
+<!-- 						<P:MESSAGES -->
+<!-- 							ID="MENSAJEREPRESENTANTEAPATERNOCAP#{REPRESENTANTE.IDASOCIACION}" -->
+<!-- 							FOR="INFORMACIONREPRESENTANTEAPATERNOCAP#{REPRESENTANTE.IDASOCIACION}" /> -->
+<!-- 					</DIV> -->
+<!-- 				</C:IF> -->
+
+
+				<!-- Apellido paterno representante -->
+<!-- 				<c:if -->
+<!-- 					test="#{mbGeneradorActa.isRendered(mbGeneradorActa.accionModificar)}"> -->
+					<div class="ui-g-12 ui-md-12 ui-lg-3">
+						<div class=" md-inputfield">
+							<p:inputText
+								id="informacionRepresentanteAPaternoCap#{representante.idAsociacion}"
+								value="#{representante.aPaterno}"
+								validatorMessage="#{messageSource['validacion_mensajes_generales_caracteresValidos_nombre']}"
+								onblur="this.value=this.value.toUpperCase().trim();"
+								onkeypress="if (event.keyCode == 13) { return false; }"
+								maxlength="50">
+								<f:validateRegex
+									pattern="#{messageSource['validacion_expresion_generales_caracteresValidos_nombre']}" />
+								<p:ajax event="keyup"
+									update="mensajeRepresentanteAPaternoCap#{representante.idAsociacion} mensajeRepresentanteAMaternoCap#{representante.idAsociacion}" />
+								<pe:keyFilter
+									regEx="#{messageSource['validacion_expresion_generales_caracteresValidos_nombre_filtro']}"
+									preventPaste="false" />
+							</p:inputText>
+							<p:outputLabel value="Apellido paterno"
+								for="informacionRepresentanteAPaternoCap#{representante.idAsociacion}" />
+						</div>
+
+						<p:messages
+							id="mensajeRepresentanteAPaternoCap#{representante.idAsociacion}"
+							for="informacionRepresentanteAPaternoCap#{representante.idAsociacion}" />
+					</div>
+<!-- 				</c:if> -->
+
+
+
+				<!-- Apellido materno representante -->
+<!-- 				<c:if -->
+<!-- 					test="#{mbGeneradorActa.isRendered(mbGeneradorActa.accionCapturar)}"> -->
+<!-- 					<div class="ui-g-12 ui-md-12 ui-lg-3"> -->
+<!-- 						<div class=" md-inputfield"> -->
+<!-- 							<p:inputText -->
+<!-- 								id="informacionRepresentanteAMaternoCap#{representante.idAsociacion}" -->
+<!-- 								value="#{representante.aMaterno}" -->
+<!-- 								validatorMessage="#{messageSource['validacion_mensajes_generales_caracteresValidos_nombre']}" -->
+<!-- 								required="#{representante.aPaterno == null and (representante.nombre != null and representante.nombre ne '')}" -->
+<!-- 								requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}" -->
+<!-- 								onblur="this.value=this.value.toUpperCase().trim();" -->
+<!-- 								onkeypress="if (event.keyCode == 13) { return false; }" -->
+<!-- 								maxlength="50"> -->
+<!-- 								<f:validateRegex -->
+<!-- 									pattern="#{messageSource['validacion_expresion_generales_caracteresValidos_nombre']}" /> -->
+<!-- 								<p:ajax event="keyup" -->
+<!-- 									update="mensajeRepresentanteAMaternoCap#{representante.idAsociacion}" /> -->
+<!-- 								<pe:keyFilter -->
+<!-- 									regEx="#{messageSource['validacion_expresion_generales_caracteresValidos_nombre_filtro']}" -->
+<!-- 									preventPaste="false" /> -->
+<!-- 							</p:inputText> -->
+<!-- 							<p:outputLabel value="Apellido materno" -->
+<!-- 								for="informacionRepresentanteAMaternoCap#{representante.idAsociacion}" /> -->
+<!-- 						</div> -->
+
+<!-- 						<p:messages -->
+<!-- 							id="mensajeRepresentanteAMaternoCap#{representante.idAsociacion}" -->
+<!-- 							for="informacionRepresentanteAMaternoCap#{representante.idAsociacion}" /> -->
+<!-- 					</div> -->
+<!-- 				</c:if> -->
+
+
+				<!-- Apellido materno representante -->
+<!-- 				<c:if -->
+<!-- 					test="#{mbGeneradorActa.isRendered(mbGeneradorActa.accionModificar)}"> -->
+					<div class="ui-g-12 ui-md-12 ui-lg-3">
+						<div class=" md-inputfield">
+							<p:inputText
+								id="informacionRepresentanteAMaternoCap#{representante.idAsociacion}"
+								value="#{representante.aMaterno}"
+								validatorMessage="#{messageSource['validacion_mensajes_generales_caracteresValidos_nombre']}"
+								onblur="this.value=this.value.toUpperCase().trim();"
+								onkeypress="if (event.keyCode == 13) { return false; }"
+								maxlength="50">
+								<f:validateRegex
+									pattern="#{messageSource['validacion_expresion_generales_caracteresValidos_nombre']}" />
+								<p:ajax event="keyup"
+									update="mensajeRepresentanteAMaternoCap#{representante.idAsociacion} mensajeRepresentanteAPaternoCap#{representante.idAsociacion}" />
+								<pe:keyFilter
+									regEx="#{messageSource['validacion_expresion_generales_caracteresValidos_nombre_filtro']}"
+									preventPaste="false" />
+							</p:inputText>
+							<p:outputLabel value="Apellido materno"
+								for="informacionRepresentanteAMaternoCap#{representante.idAsociacion}" />
+						</div>
+
+						<p:messages
+							id="mensajeRepresentanteAMaternoCap#{representante.idAsociacion}"
+							for="informacionRepresentanteAMaternoCap#{representante.idAsociacion}" />
+					</div>
+<!-- 				</c:if> -->
+
+
+				<!-- Calidad representante: Titular/Suplente -->
+<!-- 				<c:if -->
+<!-- 					test="#{mbGeneradorActa.isRendered(mbGeneradorActa.accionCapturar)}"> -->
+<!-- 					<div class="ui-g-12 ui-md-12 ui-lg-3"> -->
+<!-- 						<div class=" md-selectfield"> -->
+<!-- 							<p:outputLabel -->
+<!-- 								for="informacionRepresentanteRolCap#{representante.idAsociacion}" -->
+<!-- 								value="Calidad" /> -->
+
+<!-- 							<p:selectOneMenu -->
+<!-- 								id="informacionRepresentanteRolCap#{representante.idAsociacion}" -->
+<!-- 								value="#{representante.calidad}" -->
+<!-- 								required="#{representante.nombre != null and representante.nombre ne ''}" -->
+<!-- 								requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"> -->
+
+<!-- 								<f:selectItem itemLabel="Selecciona" itemValue="" /> -->
+<!-- 								<f:selectItem itemLabel="Propietario" itemValue="P" /> -->
+<!-- 								<f:selectItem itemLabel="Suplente" itemValue="S" /> -->
+
+<!-- 								<p:ajax event="change" -->
+<!-- 									update="mensajeRepresentanteCalidadCap#{representante.idAsociacion}" /> -->
+<!-- 							</p:selectOneMenu> -->
+
+<!-- 						</div> -->
+
+<!-- 						<p:messages -->
+<!-- 							id="mensajeRepresentanteCalidadCap#{representante.idAsociacion}" -->
+<!-- 							for="informacionRepresentanteRolCap#{representante.idAsociacion}" /> -->
+<!-- 					</div> -->
+<!-- 					<div class="divider" /> -->
+<!-- 				</c:if> -->
+				
+				
+				<!-- Calidad representante: Titular/Suplente -->
+<!-- 				<c:if -->
+<!-- 					test="#{mbGeneradorActa.isRendered(mbGeneradorActa.accionModificar)}"> -->
+					<div class="ui-g-12 ui-md-12 ui-lg-3">
+						<div class=" md-selectfield">
+							<p:outputLabel
+								for="informacionRepresentanteRolCap#{representante.idAsociacion}"
+								value="Calidad" />
+
+							<p:selectOneMenu
+								id="informacionRepresentanteRolCap#{representante.idAsociacion}"
+								value="#{representante.calidad}">
+
+								<f:selectItem itemLabel="Selecciona" itemValue="" />
+								<f:selectItem itemLabel="Propietario" itemValue="P" />
+								<f:selectItem itemLabel="Suplente" itemValue="S" />
+
+								<p:ajax event="change"
+									update="mensajeRepresentanteCalidadCap#{representante.idAsociacion}" />
+							</p:selectOneMenu>
+
+						</div>
+
+						<p:messages
+							id="mensajeRepresentanteCalidadCap#{representante.idAsociacion}"
+							for="informacionRepresentanteRolCap#{representante.idAsociacion}" />
+					</div>
+					<div class="divider" />
+<!-- 				</c:if> -->
+
+			</c:forEach>
+
+		</p:outputPanel>
+
+
+
+	</div>
+
+</ui:composition>

@@ -1,0 +1,975 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sec="http://www.springframework.org/security/tags"
+				template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+		<h:outputStylesheet name="reportes_oficialia.css" library="css/modulos/reportes_oficialia" />
+
+	<div id="contenedor_reportes_of" class="container">
+		<h:form id="formReportesOf" onkeypress="if(window.event.which == 13) {return false;}" enctype="multipart/form-data">
+
+			<!-- GROWLS -->
+			<p:growl id="mensaje_general_info" 		  showDetail="true" sticky="true" globalOnly="true" severity="info" />
+			<p:growl id="mensaje_general_advertencia" showDetail="true" sticky="true" globalOnly="true" severity="warn" />
+			<p:growl id="mensaje_general_exito"		  showDetail="true" sticky="true" globalOnly="true" severity="fatal" />
+
+			<div class="row espaciador-row">
+				<div class="col-md-12">
+					<!-- CABECERA DE LA VISTA -->
+					<h1>Reportes</h1>
+					<br /><br />
+					<h3>Búsqueda de Documento</h3>
+					<hr />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<p class="instrucciones">Seleccione los criterios de búsqueda que requiera</p>
+				</div>
+			</div>
+
+			<!-- COMIENZA CAPTURA DE FILTROS DE REPORTE -->
+			<div class="row espaciador-row">
+				<div class="col-sm-12">
+					<h:outputLabel for="idTipoFiltroFolio" value="Tipo de filtrado" />
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-12">
+			        <p:selectOneRadio id="idTipoFiltroFolio"
+			        				  value="#{mbReportesOf.filtrosReportesOf.conFiltroFolios}"
+			        				  styleClass="estilo-radio-btn">
+			            <f:selectItem itemLabel="Por coincidencia" itemValue="false" />
+			            <f:selectItem itemLabel="Por rango de folios" itemValue="true" />
+			            <p:ajax event="change" update="idFolioOficialia idFolioInicial idFolioFinal idSelectAcron idSelectAnio" />
+			        </p:selectOneRadio>
+				</div>
+			</div>
+
+			<div class="row espaciador-row">
+				<div class="col-sm-3" style="padding-right: 6px;">
+					<h:outputLabel for="idFolioOficialia" value="Folio Oficialia" />
+				</div>
+
+				<div class="col-sm-2 reajuste_acronimo">
+					<h:outputLabel for="idSelectAcron" value="Acrónimo" />
+				</div>
+
+				<div class="col-sm-2" style="padding-left: 0px">
+					<h:outputLabel for="idFolioInicial" value="Rango de folios" />
+				</div>
+
+				<div class="col-sm-1 reajuste_anio">
+					<h:outputLabel for="idSelectAnio" value="Año" />
+				</div>
+
+				<div class="col-sm-4">
+					<h:outputLabel for="idNumeroDocumento" value="Número de documento" />
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-3" style="padding-right: 6px;">
+					<p:inputText id="idFolioOficialia" styleClass="expans-horiz-100"
+								 placeholder="Capture el folio de oficialia"
+								 value="#{mbReportesOf.filtrosReportesOf.folioOficialia}"
+								 disabled="#{mbReportesOf.filtrosReportesOf.conFiltroFolios}"
+								 maxlength="30" onkeyup="this.value=validarCaracterEspecial(this.value).toUpperCase();">
+						<pe:keyFilter regEx="#{messageSource['regex_documento_folio']}" />
+					</p:inputText>
+				</div>
+
+				<div class="col-sm-2 reajuste_acronimo">
+					<p:selectOneMenu id="idSelectAcron" styleClass="expans-horiz-75"
+									 value="#{mbReportesOf.filtrosReportesOf.acronimoFolio}"
+									 disabled="#{mbReportesOf.filtrosReportesOf.conFiltroFolios eq false}">
+						<f:selectItem itemValue="" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+						<f:selectItems value="#{mbReportesOf.filtrosReportesOf.catalogoAcronimosFolios}" var="acronimo"
+									   itemValue="#{acronimo}"
+									   itemLabel="#{acronimo}" />
+					</p:selectOneMenu>
+				</div>
+
+				<div class="col-sm-1" style="padding-left: 0px">
+					<p:inputText id="idFolioInicial" size="4" placeholder="0000" style="width: 50px;"
+								 value="#{mbReportesOf.filtrosReportesOf.folioDe}"
+								 disabled="#{mbReportesOf.filtrosReportesOf.conFiltroFolios eq false}"
+								 onkeyup="this.value=validarCaracterEspecial(this.value);">
+						<pe:keyFilter regEx="#{messageSource['regex_solo_numeros']}" />
+					</p:inputText>
+					&nbsp;
+					<h:outputLabel for="idFolioFinal" value="a" />
+					&nbsp;
+				</div>
+
+				<div class="col-sm-1">
+					<p:inputText id="idFolioFinal" size="4" placeholder="9999" style="margin-left: -40px; width: 50px;"
+								 value="#{mbReportesOf.filtrosReportesOf.folioA}"
+								 disabled="#{mbReportesOf.filtrosReportesOf.conFiltroFolios eq false}"
+								 onkeyup="this.value=validarCaracterEspecial(this.value);">
+						<pe:keyFilter regEx="#{messageSource['regex_solo_numeros']}" />
+					</p:inputText>
+				</div>
+
+				<div class="col-sm-1 reajuste_anio">
+					<p:selectOneMenu id="idSelectAnio" styleClass="expans-horiz-75"
+									 value="#{mbReportesOf.filtrosReportesOf.anioFolio}"
+									 disabled="#{mbReportesOf.filtrosReportesOf.conFiltroFolios eq false}">
+						<f:selectItem itemValue="" itemLabel="Año" />
+						<f:selectItems value="#{mbReportesOf.filtrosReportesOf.catalogoAniosFolios}" var="anio"
+									   itemValue="#{anio}"
+									   itemLabel="#{anio}" />
+					</p:selectOneMenu>
+				</div>
+
+				<div class="col-sm-4">
+					<p:inputText id="idNumeroDocumento" styleClass="expans-horiz-75" placeholder="Capture el número de documento"
+								 value="#{mbReportesOf.filtrosReportesOf.numeroDocumento}"
+								 maxlength="60" onkeyup="this.value=validarCaracterEspecial(this.value).toUpperCase();">
+						<pe:keyFilter regEx="#{messageSource['regex_documento_folio']}" />
+					</p:inputText>
+				</div>
+			</div>
+
+			<div class="row espaciador-row">
+				<div class="col-sm-8">
+					<h:outputLabel for="idAreaAsunto" value="Asunto" />
+				</div>
+
+				<div class="col-sm-4">
+					<h:outputLabel for="idCopiasConocimiento" value="Copias de Conocimiento" />
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-8">
+					<p:inputTextarea id="idAreaAsunto" style="width: 94.5%" placeholder="Escriba el asunto del documento"
+									 value="#{mbReportesOf.filtrosReportesOf.asunto}"
+									 onkeyup="this.value=validarCaracterEspecial(this.value);">
+						<pe:keyFilter regEx="#{messageSource['regex_numeros_letras_espacios']}" />
+					</p:inputTextarea>
+				</div>
+
+				<div class="col-sm-4">
+					<p:selectOneMenu id="idCopiasConocimiento" styleClass="expans-horiz-50"
+									 value="#{mbReportesOf.filtrosReportesOf.copiasConocimiento}">
+						<f:selectItem itemValue="Ambos" itemLabel="Todos" />
+						<f:selectItem itemValue="Si" itemLabel="Con copias" />
+						<f:selectItem itemValue="No" itemLabel="Sin copias" />
+					</p:selectOneMenu>
+				</div>
+			</div>
+
+			<div class="row espaciador-row">
+				<div class="col-sm-4">
+					<h:outputLabel for="idFechaInicial" value="Fecha inicial de registro" />
+				</div>
+
+				<div class="col-sm-4">
+					<h:outputLabel for="idFechaFinal" value="Fecha final de registro" />
+				</div>
+
+				<div class="col-sm-4">
+					<h:outputLabel for="idSelectOrdenacion" value="Ordenar por" />
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-4">
+        							<p:calendar id="idFechaInicial" value="#{mbReportesOf.filtrosReportesOf.fechaInicial}"
+        										maxdate="#{mbReportesOf.fechaFormat}"
+        										locale="es" navigator="true" pattern="dd/MMMM/yyyy" />
+				</div>
+
+				<div class="col-sm-4">
+        							<p:calendar id="idFechaFinal" value="#{mbReportesOf.filtrosReportesOf.fechaFinal}"
+        										maxdate="#{mbReportesOf.fechaFormat}"
+        										locale="es" navigator="true" pattern="dd/MMMM/yyyy" />
+				</div>
+<!-- 
+				<div class="col-sm-4">
+					<p:inputTextarea id="idDiaI" rows="1" cols="5" placeholder="01"
+									 value="#{mbReportesOf.filtrosReportesOf.diaInicial}"
+									 styleClass="expans-fecha" maxlength="2"
+									 onkeyup="this.value=validarCaracterEspecial(this.value);">
+						<pe:keyFilter regEx="#{messageSource['regex_solo_numeros']}" />
+					</p:inputTextarea>
+					&nbsp;
+					<p:selectOneMenu id="idSelectMesI" styleClass="expans-fecha-mes"
+									 value="#{mbReportesOf.filtrosReportesOf.mesInicial}">
+						<f:selectItem itemValue="" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+						<f:selectItems value="#{mbReportesOf.filtrosReportesOf.catalogoMeses}" var="mes"
+									   itemValue="#{mes.idMes}"
+									   itemLabel="#{mes.descMes}" />
+					</p:selectOneMenu>
+					&nbsp;
+					<p:inputTextarea id="idAnioI" rows="1" cols="5" placeholder="2000"
+									 value="#{mbReportesOf.filtrosReportesOf.anioInicial}"
+									 styleClass="expans-fecha" maxlength="4"
+									 onkeyup="this.value=validarCaracterEspecial(this.value);">
+						<pe:keyFilter regEx="#{messageSource['regex_solo_numeros']}" />
+					</p:inputTextarea>
+				</div>
+
+				<div class="col-sm-4">
+					<p:inputTextarea id="idDiaF" rows="1" cols="5" placeholder="01"
+									 value="#{mbReportesOf.filtrosReportesOf.diaFinal}"
+									 styleClass="expans-fecha" maxlength="2"
+									 onkeyup="this.value=validarCaracterEspecial(this.value);">
+						<pe:keyFilter regEx="#{messageSource['regex_solo_numeros']}" />
+					</p:inputTextarea>
+					&nbsp;
+					<p:selectOneMenu id="idSelectMesF" styleClass="expans-fecha-mes"
+									 value="#{mbReportesOf.filtrosReportesOf.mesFinal}">
+						<f:selectItem itemValue="" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+						<f:selectItems value="#{mbReportesOf.filtrosReportesOf.catalogoMeses}" var="mes"
+									   itemValue="#{mes.idMes}"
+									   itemLabel="#{mes.descMes}" />
+					</p:selectOneMenu>
+					&nbsp;
+					<p:inputTextarea id="idAnioF" rows="1" cols="5" placeholder="2000"
+									 value="#{mbReportesOf.filtrosReportesOf.anioFinal}"
+									 styleClass="expans-fecha" maxlength="4"
+									 onkeyup="this.value=validarCaracterEspecial(this.value);">
+						<pe:keyFilter regEx="#{messageSource['regex_solo_numeros']}" />
+					</p:inputTextarea>
+				</div>
+ -->
+
+				<div class="col-sm-4">
+					<p:selectOneMenu id="idSelectOrdenacion" styleClass="expans-horiz-75"
+									 value="#{mbReportesOf.filtrosReportesOf.parametroOrden}">
+						<f:selectItem itemValue="" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+						<f:selectItems value="#{mbReportesOf.filtrosReportesOf.catalogoOrdenacion}" var="parametroOrden"
+									   itemValue="#{parametroOrden}"
+									   itemLabel="#{parametroOrden}" />
+					</p:selectOneMenu>
+				</div>
+			</div>
+
+			<div class="row espaciador-row">
+				<div class="col-sm-4">
+					<h:outputLabel for="idSelectTipoDocumento" value="Tipo de documento" />
+				</div>
+
+				<div class="col-sm-4">
+					<h:outputLabel for="idSelectSeccion" value="Sección" />
+				</div>
+
+				<div class="col-sm-4">
+					<h:outputLabel for="idSelectCategoria" value="Categoria" />
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-4">
+					<p:selectOneMenu id="idSelectTipoDocumento" styleClass="expans-horiz-75"
+									 value="#{mbReportesOf.filtrosReportesOf.idTipoDocumento}">
+						<f:selectItem itemValue="" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+						<f:selectItems value="#{mbReportesOf.filtrosReportesOf.catalogoTiposDoc}" var="tipoDocumeno"
+									   itemValue="#{tipoDocumeno.idTipoDocumento}"
+									   itemLabel="#{tipoDocumeno.descripcion}" />
+					</p:selectOneMenu>
+				</div>
+
+				<div class="col-sm-4">
+					<p:selectOneMenu id="idSelectSeccion" styleClass="expans-horiz-75"
+									 value="#{mbReportesOf.filtrosReportesOf.idSeccion}">
+						<f:selectItem itemValue="" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+						<f:selectItems value="#{mbReportesOf.filtrosReportesOf.catalogoSecciones}" var="seccion"
+									   itemValue="#{seccion.idSeccion}"
+									   itemLabel="#{seccion.numeroSeccion} #{seccion.descripcion}" />
+						<p:ajax listener="#{mbReportesOf.recuperarCategorias}"
+								update="idSelectCategoria"/>
+					</p:selectOneMenu>
+				</div>
+
+				<div class="col-sm-4">
+					<p:selectOneMenu id="idSelectCategoria" styleClass="expans-horiz-75"
+									 value="#{mbReportesOf.filtrosReportesOf.idCategoria}"
+									 disabled="#{mbReportesOf.filtrosReportesOf.idSeccion eq 0}">
+						<f:selectItem itemValue="" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+						<f:selectItems value="#{mbReportesOf.filtrosReportesOf.catalogoCategorias}" var="categoria"
+									   itemValue="#{categoria.idCategoria}"
+									   itemLabel="#{categoria.numeroCategoria} #{categoria.descripcion}" />
+					</p:selectOneMenu>
+				</div>
+			</div>
+			<!-- TERMINA CAPTURA DE FILTROS DE REPORTE -->
+
+			<!-- COMIENZA BÚSQUEDA DE REMITENTE (S) -->
+			<h3 class="espaciador-h3">Remitente</h3>
+			<hr />
+			<div class="row">
+				<div class="col-sm-12">
+					<p class="instrucciones">Ingrese datos en cualquiera de los campos</p>
+				</div>
+			</div>
+
+			<p:outputPanel id="idPanelRemitente">
+				<div class="row">
+					<div class="col-sm-4">
+						<h:outputLabel for="idTipoR" value="Tipo" />
+					</div>
+	
+					<div class="col-sm-8" />
+				</div>
+	
+				<div class="row">
+					<div class="col-sm-4">
+				        <p:selectOneRadio id="idTipoR" value="#{mbReportesOf.filtrosReportesOf.tipoRemitente}">
+				            <f:selectItem itemLabel="Interno" itemValue="Interno" />
+				            <f:selectItem itemLabel="Externo" itemValue="Externo" />
+				            <p:ajax event="change" update="idPanelRemitente" />
+				        </p:selectOneRadio>
+					</div>
+	
+					<div class="col-sm-8" />
+				</div>
+	
+				<p:outputPanel id="idPanelRemitenteInt" rendered="#{not mbReportesOf.esRemitenteExterno()}">
+					<div class="row espaciador-row">
+						<div class="col-sm-5">
+							<h:outputLabel for="idInputNombreR" value="Nombre (s)" />
+						</div>
+	
+						<div class="col-sm-1" />
+		
+						<div class="col-sm-5">
+							<h:outputLabel for="idInputApellidoR" value="Apellidos" />
+						</div>
+	
+						<div class="col-sm-1" />
+					</div>
+	
+					<div class="row">
+						<div class="col-sm-5">
+							<p:inputText id="idInputNombreR" value="#{mbReportesOf.filtrosReportesOf.nombreRemitente}"
+										 styleClass="expans-horiz-100" maxlength="50"
+										 onkeyup="this.value=validarCaracterEspecial(this.value);">
+								<pe:keyFilter regEx="#{messageSource['regex_letras_espacios']}" />
+							</p:inputText>
+						</div>
+	
+						<div class="col-sm-1" />
+		
+						<div class="col-sm-5">
+							<p:inputText id="idInputApellidoR" value="#{mbReportesOf.filtrosReportesOf.apellidoRemitente}"
+										 styleClass="expans-horiz-100" maxlength="50"
+										 onkeyup="this.value=validarCaracterEspecial(this.value);">
+								<pe:keyFilter regEx="#{messageSource['regex_letras_espacios']}" />
+							</p:inputText>
+						</div>
+	
+						<div class="col-sm-1" />
+					</div>
+	
+					<div class="row espaciador-row">
+						<div class="col-sm-5">
+							<h:outputLabel for="idSelectTipoAreaR" value="Tipo de área" />
+						</div>
+	
+						<div class="col-sm-1" />
+	
+						<div class="col-sm-5">
+							<h:outputLabel for="idSelectEntidadR" value="Entidad" />
+						</div>
+	
+						<div class="col-sm-1" />
+					</div>
+	
+					<div class="row">
+						<div class="col-sm-5">
+							<p:selectOneMenu id="idSelectTipoAreaR" value="#{mbReportesOf.filtrosReportesOf.idTipoAreaRemitente}"
+											 styleClass="expans-horiz-100">
+								<f:selectItem itemValue="" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+								<f:selectItems value="#{mbReportesOf.filtrosReportesOf.catalogoTiposArea}" var="tipoAreaR"
+											   itemValue="#{tipoAreaR.idTipoArea}"
+											   itemLabel="#{tipoAreaR.descripcion}" />
+								<p:ajax listener="#{mbReportesOf.recuperarEntidadesAreas('Remitente')}"
+										update="idSelectEntidadR idSelectAreaR"/>
+							</p:selectOneMenu>
+						</div>
+	
+						<div class="col-sm-1" />
+	
+						<div class="col-sm-5">
+							<p:selectOneMenu id="idSelectEntidadR" value="#{mbReportesOf.filtrosReportesOf.idEntidadRemitente}"
+							 				 styleClass="expans-horiz-100" disabled="#{mbReportesOf.filtrosReportesOf.idTipoAreaRemitente ne 2}">
+								<f:selectItem itemValue="" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+								<f:selectItems value="#{mbReportesOf.filtrosReportesOf.entidadesRemitente}" var="entidadR"
+											   itemValue="#{entidadR.idEstado}"
+											   itemLabel="#{entidadR.nombreEstado}" />
+								<p:ajax listener="#{mbReportesOf.recuperarAreas('Remitente')}"
+										update="idSelectAreaR"/>
+							</p:selectOneMenu>
+						</div>
+	
+						<div class="col-sm-1" />
+					</div>
+	
+					<div class="row espaciador-row">
+						<div class="col-sm-5">
+							<h:outputLabel for="idSelectAreaR" value="Área" />
+						</div>
+	
+						<div class="col-sm-7" />
+					</div>
+	
+					<div class="row">
+						<div class="col-sm-5">
+							<p:selectOneMenu id="idSelectAreaR" value="#{mbReportesOf.filtrosReportesOf.idAreaRemitente}"
+											 styleClass="expans-horiz-100">
+								<f:selectItem itemLabel="#{messageSource['mensaje_general_selecciona']}" itemValue="" noSelectionOption="true" />
+								<f:selectItems value="#{mbReportesOf.filtrosReportesOf.areasRemitente}" var="areaR" 
+											   itemValue="#{areaR.idArea}" 
+											   itemLabel="#{areaR.descripcion}" />
+							</p:selectOneMenu>
+						</div>
+	
+						<div class="col-sm-7" />
+					</div>
+	
+					<div class="row centrar-componente espaciador-row">
+						<div class="col-sm-12 espaciador-row">
+							<p:commandButton value="Buscar"
+											 process="idPanelRemitenteInt"
+											 action="#{mbReportesOf.recuperarPersonas('Remitente')}"
+											 update="mensaje_general_advertencia mensaje_general_info idDialogPersonasEncontradas" />
+						</div>
+					</div>
+				</p:outputPanel>
+	
+				<p:outputPanel id="idPanelRemitenteExt" rendered="#{mbReportesOf.esRemitenteExterno()}">
+					<div class="row">
+						<div class="col-md-5">
+							<div class="row">
+								<h:outputLabel for="nombreExterno" value="Nombre" />
+							</div>
+	
+							<div class="row">
+								<p:inputText id="nombreExterno" value="#{mbReportesOf.filtrosReportesOf.nombreRemitenteExt}"
+											 style="width: 100%;"
+											 onkeyup="this.value=validarCaracterEspecial(this.value);">
+									<pe:keyFilter regEx="#{messageSource['regex_letras_espacios']}" />
+								</p:inputText>
+							</div>
+						</div>
+	
+						<div class="col-md-1"/>
+	
+						<div class="col-md-5">
+							<div class="row">
+								<h:outputLabel for="dependenciaExterno" value="Dependencia" />
+							</div>
+	
+							<div class="row">
+								<p:inputText id="dependenciaExterno" value="#{mbReportesOf.filtrosReportesOf.dependenciaRemitenteExt}"
+											 style="width: 100%;"
+											 onkeyup="this.value=validarCaracterEspecial(this.value);">
+									<pe:keyFilter regEx="#{messageSource['regex_numeros_letras_espacios']}" />
+								</p:inputText>
+							</div>
+						</div>
+					</div>
+					<br />
+	
+					<div class="row">
+						<div class="col-md-12 botonesAcomodo">
+								<p:commandButton value="Buscar"
+												 process="@this idPanelRemitenteExt"
+												 update="dialogRemitentesExtEncontrados mensaje_general_advertencia mensaje_general_info"
+												 action="#{mbReportesOf.recuperarRemitentesExt}" />
+						</div>
+					</div>
+				</p:outputPanel>
+	
+				<div class="row espaciador-row">
+					<div class="col-md-12">
+						<p:dataTable id="idTablaEncontradosR" var="remitente"
+									 value="#{mbReportesOf.filtrosReportesOf.remitentes}"
+									 emptyMessage="">
+	
+						    <p:column>
+						    	<div class="row">
+									<h:outputText styleClass="ui-treetable-toggler ui-icon ui-icon-bullet ui-c fuente-default"
+												  style="float: left;" />
+									<h:outputText value="#{remitente.nombreCompleto}"
+												  styleClass="fuente-default"
+												  style="font-weight: bold;" />
+	       						</div>
+								<div class="row">
+			        				&nbsp;&nbsp;&nbsp;&nbsp;
+			        				<h:outputText value="#{remitente.puesto}" />
+	       						</div>
+	   						</p:column>
+	
+							<p:column>
+	   						 	<p:commandLink action="#{mbReportesOf.filtrosReportesOf.setDetallePersona(remitente)}"
+	   						 				   update="formReportesOf:idDialogDetallePersona"
+	   						 				   oncomplete="PF('dialogDetallePersona').show();">
+	   						 		<i class="fa fa-search" />
+	   						 		<h:outputText value="&nbsp;Detalle" styleClass="decoracion_links" />
+	   						 	</p:commandLink>
+	       						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	       						<p:commandLink action="#{mbReportesOf.eliminarPersona('Remitente', remitente)}"
+	       									   update="idTablaEncontradosR">
+	       							<i class="fa fa-user-times" />
+	       							<h:outputText value="&nbsp;Eliminar" styleClass="decoracion_links" />
+	       						</p:commandLink>
+	   						 </p:column>
+						</p:dataTable>
+					</div>
+				</div>
+	
+				<div class="row">
+					<div class="col-md-12">
+						<p:dataTable id="idTablaRemitentesExt" styleClass="personasEncontradas"
+									 var="remitenteExt"
+									 value="#{mbReportesOf.filtrosReportesOf.remitentesExtAgregados}"
+									 emptyMessage="" >
+	
+							<p:column>
+						    	<div class="row" style="padding: 3px 0px 0px 0px;">
+						    		<h:outputText styleClass="ui-treetable-toggler ui-icon ui-icon-bullet ui-c"
+						    					  style="float: left; font-family: Roboto;" />
+									<h:outputText value="#{remitenteExt.nombreRemitente}"
+												  style="font-weight: bold; font-size: 13px; font-family: Roboto;" />
+	       						</div>
+	
+	      						<div class="row" style="padding: 0px 0px 3px 0px;">
+	       							&nbsp;&nbsp;&nbsp;&nbsp;
+	       							<h:outputText value="#{remitenteExt.dependencia}" style="font-size: 13px;" />
+	       						</div>
+	   						</p:column>
+	
+	   						 <p:column>
+	   						 	<p:commandLink action="#{mbReportesOf.filtrosReportesOf.setRemitenteExt(remitenteExt)}"
+	   						 				   process="@this" update="formReportesOf:idDetallePersonaExt"
+	   						 				   oncomplete="PF('dialogPersonaExt').show();" styleClass="linksPersonasEncontradas">
+	   						 		<i class="fa fa-search" />
+	   						 		&nbsp;
+	   						 		<h:outputText value="Detalle" style="text-decoration: underline;" />
+	   						 	</p:commandLink>
+	       						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	       						<p:commandLink action="#{mbReportesOf.eliminarRemitenteExt(remitenteExt)}"
+	       									   update="idTablaRemitentesExt" process="@this"
+	       									   styleClass="linksPersonasEncontradas">
+	       							<i class="fa fa-user-times" />
+	       							&nbsp;
+	       							<h:outputText value="Eliminar" style="text-decoration: underline;" />
+	       						</p:commandLink>
+	   						 </p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</p:outputPanel>
+			<!-- TERMINA BÚSQUEDA DE REMITENTE (S) -->
+
+			<!-- COMIENZA BÚSQUEDA DE DESTINATARIO (S) -->
+			<p:outputPanel id="idPanelDestinatario">
+				<h3 class="espaciador-h3">Destinatario</h3>
+				<hr />
+				<div class="row">
+					<div class="col-sm-12">
+						<p class="instrucciones">Ingrese datos en cualquiera de los campos</p>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-sm-5">
+						<h:outputLabel for="idInputNombreD" value="Nombre (s)" />
+					</div>
+
+					<div class="col-sm-1" />
+
+					<div class="col-sm-5">
+						<h:outputLabel for="idInputApellidoD" value="Apellidos" />
+					</div>
+
+					<div class="col-sm-1" />
+				</div>
+
+				<div class="row">
+					<div class="col-sm-5">
+						<p:inputText id="idInputNombreD" value="#{mbReportesOf.filtrosReportesOf.nombreDestinatario}"
+									 styleClass="expans-horiz-100" maxlength="50"
+									 onkeyup="this.value=validarCaracterEspecial(this.value);">
+							<pe:keyFilter regEx="#{messageSource['regex_letras_espacios']}" />
+						</p:inputText>
+					</div>
+
+					<div class="col-sm-1" />
+
+					<div class="col-sm-5">
+						<p:inputText id="idInputApellidoD" value="#{mbReportesOf.filtrosReportesOf.apellidoDestinatario}"
+									 styleClass="expans-horiz-100" maxlength="50"
+									 onkeyup="this.value=validarCaracterEspecial(this.value);">
+							<pe:keyFilter regEx="#{messageSource['regex_letras_espacios']}" />
+						</p:inputText>
+					</div>
+
+					<div class="col-sm-1" />
+				</div>
+<!-- 
+				<div class="row espaciador-row">
+					<div class="col-sm-5">
+						<h:outputLabel for="idSelectTipoAreaD" value="Tipo de área" />
+					</div>
+
+					<div class="col-sm-1" />
+
+					<div class="col-sm-5">
+						<h:outputLabel for="idSelectEntidadD" value="Entidad" />
+					</div>
+
+					<div class="col-sm-1" />
+				</div>
+
+				<div class="row">
+					<div class="col-sm-5">
+						<p:selectOneMenu id="idSelectTipoAreaD" value="#{mbReportesOf.filtrosReportesOf.idTipoAreaDestinatario}"
+										 styleClass="expans-horiz-100">
+							<f:selectItem itemValue="" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+							<f:selectItems value="#{mbReportesOf.filtrosReportesOf.catalogoTiposArea}" var="tipoAreaD"
+										   itemValue="#{tipoAreaD.idTipoArea}"
+										   itemLabel="#{tipoAreaD.descripcion}" />
+							<p:ajax listener="#{mbReportesOf.recuperarEntidadesAreas('Destinatario')}"
+									update="idSelectEntidadD idSelectAreaD"/>
+						</p:selectOneMenu>
+					</div>
+
+					<div class="col-sm-1" />
+
+					<div class="col-sm-5">
+						Se habilita la lista de entidades para el caso en que se hayan elegido Órganos Desconcentrados (ID - 2)
+						<p:selectOneMenu id="idSelectEntidadD" value="#{mbReportesOf.filtrosReportesOf.idEntidadDestinatario}"
+						 				 styleClass="expans-horiz-100" disabled="#{mbReportesOf.filtrosReportesOf.idTipoAreaDestinatario ne 2}">
+							<f:selectItem itemValue="" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+							<f:selectItems value="#{mbReportesOf.filtrosReportesOf.entidadesDestinatario}" var="entidadD"
+										   itemValue="#{entidadD.idEstado}"
+										   itemLabel="#{entidadD.nombreEstado}" />
+							<p:ajax listener="#{mbReportesOf.recuperarAreas('Destinatario')}"
+									update="idSelectAreaD"/>
+						</p:selectOneMenu>
+
+					<div class="col-sm-1" />
+					</div>
+				</div>
+ -->
+				<div class="row espaciador-row">
+					<div class="col-sm-5">
+						<h:outputLabel for="idSelectAreaD" value="Área" />
+					</div>
+
+					<div class="col-sm-7" />
+				</div>
+
+				<div class="row">
+					<div class="col-sm-5">
+						<p:selectOneMenu id="idSelectAreaD" value="#{mbReportesOf.filtrosReportesOf.idAreaDestinatario}"
+										 styleClass="expans-horiz-100">
+							<f:selectItem itemLabel="#{messageSource['mensaje_general_selecciona']}" itemValue="" noSelectionOption="true" />
+							<f:selectItems  value="#{mbReportesOf.filtrosReportesOf.areasDestinatario}" var="areaD" 
+											itemValue="#{areaD.idArea}" 
+											itemLabel="#{areaD.descripcion}" />
+						</p:selectOneMenu>
+					</div>
+
+					<div class="col-sm7" />
+				</div>
+
+				<div class="row centrar-componente espaciador-row">
+					<div class="col-sm-12 espaciador-row">
+						<p:commandButton value="Buscar"
+										 process="idPanelDestinatario"
+										 action="#{mbReportesOf.recuperarPersonas('Destinatario')}"
+										 update="mensaje_general_advertencia mensaje_general_info idDialogPersonasEncontradas" />
+					</div>
+				</div>
+
+				<div class="row espaciador-row">
+					<div class="col-md-12">
+						<p:dataTable id="idTablaEncontradosD" var="destinatario"
+									 value="#{mbReportesOf.filtrosReportesOf.destinatarios}"
+									 emptyMessage="">
+
+						    <p:column>
+						    	<div class="row">
+									<h:outputText styleClass="ui-treetable-toggler ui-icon ui-icon-bullet ui-c fuente-default"
+												  style="float:left;" />
+									<h:outputText value="#{destinatario.nombreCompleto}"
+												  styleClass="fuente-default"
+												  style="font-weight: bold;" />
+        						</div>
+								<div class="row">
+			        				&nbsp;&nbsp;&nbsp;&nbsp;
+			        				<h:outputText value="#{destinatario.puesto}" />
+        						</div>
+    						</p:column>
+
+							<p:column>
+	   						 	<p:commandLink action="#{mbReportesOf.filtrosReportesOf.setDetallePersona(destinatario)}"
+	   						 				   update="formReportesOf:idDialogDetallePersona"
+	   						 				   oncomplete="PF('dialogDetallePersona').show();">
+	   						 		<i class="fa fa-search" />
+	   						 		<h:outputText value="&nbsp;Detalle" styleClass="decoracion_links" />
+	   						 	</p:commandLink>
+	       						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        						<p:commandLink action="#{mbReportesOf.eliminarPersona('Destinatario', destinatario)}"
+        									   update="idTablaEncontradosD">
+        							<i class="fa fa-user-times" />
+        							<h:outputText value="&nbsp;Eliminar" styleClass="decoracion_links" />
+        						</p:commandLink>
+    						 </p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</p:outputPanel>
+			<!-- TERMINA BÚSQUEDA DE DESTINATARIO (S) -->
+
+			<!-- COMIENZA SELECCIÓN DE FILTROS DEL REPORTE -->
+			<p:outputPanel id="idPanelSeleccionFiltros">
+				<h3 class="espaciador-h3">Creación de Reporte</h3>
+				<hr />
+				<div class="row">
+					<div class="col-sm-12">
+						<p class="instrucciones">Seleccione los campos que desee se desplieguen en el reporte</p>
+					</div>
+				</div>
+
+				<div class="row espaciador-row">
+					<div class="col-sm-4 filtros-predef">
+						<p:selectManyCheckbox id="idSelectFiltrosPredef" value="#{mbReportesOf.filtrosReportesOf.filtrosPredefSel}"
+											  layout="responsive" columns="1" disabled="true">
+							<f:selectItems value="#{mbReportesOf.filtrosReportesOf.filtrosPredefinidos}" var="filtroPredef"
+										   itemLabel="#{filtroFiltroPredef}" itemValue="#{filtroPredef}" />
+						</p:selectManyCheckbox>
+					</div>
+
+					<div class="col-sm-6 filtros-seleccion">
+						<p:selectManyCheckbox id="idSelectFiltros" value="#{mbReportesOf.filtrosReportesOf.filtrosSeleccionados}"
+											  layout="responsive" columns="2">
+							<f:selectItems value="#{mbReportesOf.filtrosReportesOf.catalogoFiltrosReporte}" var="filtro"
+										   itemLabel="#{filtro}" itemValue="#{filtro}" />
+								<p:ajax listener="#{mbReportesOf.actualizarChecks}"
+										update="idSelectFiltros" />
+						</p:selectManyCheckbox>
+					</div>
+
+					<div class="col-sm-2" />
+				</div>
+
+				<div class="row espaciador-row">
+					<div class="col-sm-12 centrar-componente" style="margin-bottom: 75px;">
+						<p:commandButton value="Aceptar"
+										 action="#{mbReportesOf.recuperarReporte}"
+										 update="mensaje_general_advertencia" />
+					</div>
+				</div>
+			</p:outputPanel>
+			<!-- TERMINA SELECCIÓN DE FILTROS DEL REPORTE -->
+
+			<!-- MODAL DE CONSULTA Y SELECCIÓN DE PERSONAS - REMITENTE(S) O DESTINATARIO(S) -->
+			<p:dialog id="idDialogPersonasEncontradas" widgetVar="dialogPersonasEncontradas"
+					  modal="true" resizable="false" styleClass="ventanaPersonaBusqueda"
+					  closable="false">
+
+				<p:dataTable id="idTablaPersonasEncontradas" var="persona" paginator="true" rows="10"
+							 selection="#{mbReportesOf.filtrosReportesOf.personasSeleccionadas}"
+							 value="#{mbReportesOf.filtrosReportesOf.personasEncontradas}"
+							 rowKey="#{persona.idPersona}"
+							 scrollable="true" paginatorPosition="bottom">
+
+					<f:facet name="header">
+						#{mbReportesOf.filtrosReportesOf.tipoBusqueda}
+						<hr class="separador-dialog" />
+					</f:facet>
+
+					<p:column selectionMode="multiple" styleClass="tabla-checks" />
+
+					<p:column headerText="Nombre">
+						<h:outputText value="#{persona.nombre}" />
+					</p:column>
+
+					<p:column headerText="Apellidos">
+						<h:outputText value="#{persona.apellidos}" />
+					</p:column>
+
+					<p:column headerText="Puesto">
+						<h:outputText value="#{persona.puesto}" />
+					</p:column>
+
+					<p:column headerText="Área">
+						<h:outputText value="#{persona.area.descripcion}" />
+					</p:column>
+				</p:dataTable>
+
+				<div class="row">
+					<div class="col-md-12 botonesAcomodo">
+						<p:commandButton value="Cancelar" type="button"
+										 actionListener="#{mbReportesOf.limpiarCampos}"
+										 onclick="PF('dialogPersonasEncontradas').hide();" />
+						&nbsp;
+						<p:commandButton value="Agregar"
+										 process="idDialogPersonasEncontradas"
+										 update="idTablaEncontradosR idPanelRemitenteInt idPanelDestinatario mensaje_general_advertencia"
+										 actionListener="#{mbReportesOf.agregarPersonas}" />
+					</div>
+				</div>
+			</p:dialog>
+
+			<!-- MODAL DE REMITENTES EXTERNOS -->
+			<p:dialog id="dialogRemitentesExtEncontrados" widgetVar="dialogRemitentesExtEncontrados"
+					  modal="true" resizable="false" styleClass="ventanaPersonaBusqueda">
+				<p:outputPanel id="panelRemitentesExtEncontrados">
+
+					<div class="row">
+						<p:dataTable id="tablaRemitentesExtEncontrados" var="persona" paginator="true" rows="10"
+									 selection="#{mbReportesOf.filtrosReportesOf.remitentesExtSeleccionados}"
+									 value="#{mbReportesOf.filtrosReportesOf.remitentesExtEncontrados}"
+									 rowKey="#{persona.idRemitente}"
+									 scrollable="true" paginatorPosition="bottom">
+
+							<f:facet name="header">
+						        Remitente externo
+						    </f:facet>
+
+							<p:column selectionMode="multiple" style="width: 35px; text-align: center;" />
+
+							<p:column headerText="Nombre">
+								<h:outputText value="#{persona.nombreRemitente}" />
+							</p:column>
+
+							<p:column headerText="Dependencia">
+								<h:outputText value="#{persona.dependencia}" />
+							</p:column>
+						</p:dataTable>
+					</div>
+
+					<div class="row">
+						<div class="col-md-12 botonesAcomodo">
+							<p:commandButton value="Cancelar" type="button"
+											 onclick="PF('dialogRemitentesExtEncontrados').hide();" />
+							&nbsp;	
+							<p:commandButton value="Agregar"
+												 process="@this panelRemitentesExtEncontrados"
+												 update="idPanelRemitente idPanelRemitenteExt mensaje_general_info mensaje_general_advertencia"
+												 actionListener="#{mbReportesOf.agregarRemitenteExt}" />
+						</div>
+					</div>
+				</p:outputPanel>
+			</p:dialog>
+
+			<!-- MODAL DE CONSULTA DE DETALLE DE PERSONAS - REMITENTE(S) O DESTINATARIO(S) -->
+			<p:dialog id="idDialogDetallePersona" widgetVar="dialogDetallePersona" modal="true" styleClass="detallePersona">
+				<div class="row tituloDetalle">
+					Datos funcionario
+				</div>
+
+				<div class="row">
+					<div class="col-md-5">
+						<div class="row">
+							<c:if test="#{mbReportesOf.filtrosReportesOf.detallePersona.genero eq 'H'}">
+								<h:graphicImage styleClass="expans-horiz-100" name="#{messageSource['ruta_imagen_hombre']}" />
+							</c:if>
+							<c:if test="#{mbReportesOf.filtrosReportesOf.detallePersona.genero eq 'M'}">
+								<h:graphicImage styleClass="expans-horiz-100" name="#{messageSource['ruta_imagen_mujer']}" />
+							</c:if>
+							<c:if test="#{empty mbReportesOf.filtrosReportesOf.detallePersona.genero}">
+								<h:graphicImage styleClass="expans-horiz-100" name="#{messageSource['ruta_imagen_generica']}" />
+							</c:if>
+						</div>
+					</div>
+
+					<div class="col-md-7">
+						<div class="row">
+							<h:outputText styleClass="titulo-detalle"
+										  value="#{mbReportesOf.filtrosReportesOf.detallePersona.tratamiento != null ? mbReportesOf.filtrosReportesOf.detallePersona.tratamiento : ''} #{mbReportesOf.filtrosReportesOf.detallePersona.nombreCompleto}" />
+						</div>
+						<div class="row">
+							<h:outputText styleClass="titulo-campo" value="Puesto o cargo" />
+						</div>
+						<div class="row">
+							<h:outputText styleClass="contenido-campo" value="#{mbReportesOf.filtrosReportesOf.detallePersona.puesto}" />
+						</div>
+						<div class="row">
+							<h:outputText styleClass="titulo-campo" value="Área de adscripción" />
+						</div>
+						<div class="row">
+							<h:outputText styleClass="contenido-campo" value="#{mbReportesOf.filtrosReportesOf.detallePersona.area.descripcion}" />
+						</div>
+						<div class="row">
+							<h:outputText styleClass="titulo-campo" value="Correo electrónico" />
+						</div>
+						<div class="row">
+							<h:outputText styleClass="contenido-campo" value="#{mbReportesOf.filtrosReportesOf.detallePersona.cuentaLDAP}@ine.mx" />
+						</div>
+						<div class="row">
+							<h:outputText styleClass="titulo-campo" value="Extensión" />
+						</div>
+						<div class="row">
+							<h:outputText styleClass="contenido-campo" value="#{mbReportesOf.filtrosReportesOf.detallePersona.extensionTel != null ? mbReportesOf.filtrosReportesOf.detallePersona.extensionTel : 'Sin extensión'}" />
+						</div>
+					</div>
+				</div>
+			</p:dialog>
+
+			<!-- MODAL DE DETALLE DE PERSONAS EXTERNAS -->
+			<p:dialog id="idDetallePersonaExt" widgetVar="dialogPersonaExt" modal="true" styleClass="detallePersona" resizable="false">
+				<div class="row tituloDetalle">
+					Datos de la persona
+				</div>
+
+				<div class="row">
+					<div class="col-md-5">
+						<div class="row">
+							<h:graphicImage style="width: 100%;" name="#{messageSource['ruta_imagen_generica']}" />
+						</div>
+					</div>
+
+					<div class="col-md-7">
+						<div class="row" style="margin-bottom: 10px; font-weight: bold; color: #d5007f;">
+							<h:outputText value="#{mbReportesOf.filtrosReportesOf.remitenteExt.nombreRemitente}"/>
+						</div>
+						<div class="row" style="font-weight: bold;">
+							<h:outputText value="Dependencia"/>
+						</div>
+						<div class="row" style="margin-bottom: 10px;">
+							<h:outputText value="#{mbReportesOf.filtrosReportesOf.remitenteExt.dependencia}"/>
+						</div>
+					</div>
+				</div>
+			</p:dialog>
+				
+		</h:form>
+
+		<script type="text/javascript">
+			function validarCaracterEspecial(cadena) {
+				if(cadena != "") {
+					cadena = cadena.replace(/¬/g, "");
+					cadena = cadena.replace(/\^/g, "");
+					cadena = cadena.replace(/`/g, "");
+					cadena = cadena.replace(/~/g, "");
+					cadena = cadena.replace(/\\/g, "");
+					cadena = cadena.replace(/@/g, "");
+					return cadena;
+				} else {
+					return "";
+				}
+			}
+		</script>
+	</div>
+
+	</ui:define>
+</ui:composition>

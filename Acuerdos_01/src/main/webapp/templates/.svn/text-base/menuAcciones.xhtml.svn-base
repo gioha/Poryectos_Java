@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:component xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ine="http://www.ine.mx/custom/tags"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pu="http://primefaces.org/ultima">
+	<c:if test="#{SPRING_SECURITY_CONTEXT != null}">
+
+
+		<style type="text/css">
+/*  @media only screen and (min-width:768px){
+				.navbar{
+					background:#473E4C;
+					border: none;
+					height:40px;
+					text-align: center;				
+			        font-size: 20px;
+			        margin-top:72px;		
+				}		
+				.dropdown-menu{		
+					 border-color:#473E4C;
+					 margin-top: -1px;
+					 border-radius: 0px;					
+			         font-size: 16px;		 
+					 -webkit-box-shadow: -5px 7px 10px -6px #474647; 		 
+				}		
+				.nav>li>a, .dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover, .dropdown-menu>li>a, .dropdown-menu>li{
+					 text-align: center;
+					 border-bottom: 3px solid transparent;
+					 line-height: 17px; 
+				}
+				.nav>li>a:focus, .nav>li>a:hover,.nav .open>a, .nav .open>a:focus, .nav .open>a:hover, .dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover{
+				 	 border-bottom: 3px solid transparent;
+				  	 background: none;
+				}
+				.navbar a, .dropdown-menu>li>a, .dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover, .navbar-toggle{
+					 color: #fff;		 
+				}
+				.dropdown-menu>li>a, .dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover, .navbar-toggle{
+					 color: #473E4C;
+				}
+				.dropdown-menu{
+				     -webkit-box-shadow: none;
+				     box-shadow:none;
+				}
+				.nav li:hover:nth-child(8n+1){
+				  	 border-bottom: #932C60 2px solid;
+				}
+				.nav li.active:nth-child(8n+1){
+				 	 border-bottom: #932C60 8px solid;
+				}
+				.nav li:hover:nth-child(8n+2){
+				 	 border-bottom: #932C60 2px solid;
+				}
+				.nav li.active:nth-child(8n+2){
+				 	 border-bottom: #932C60 8px solid;
+				}
+				.nav li:hover:nth-child(8n+3){
+				  	 border-bottom: #932C60 2px solid;
+				}
+				.nav li.active:nth-child(8n+3){
+				 	 border-bottom: #932C60 8px solid;
+				}
+				.nav li:hover:nth-child(8n+4){
+					 border-bottom: #932C60 2px solid;
+				}
+				.nav li.active:nth-child(8n+4){
+				 	 border-bottom: #932C60 8px solid;
+				}				
+				.navbar-toggle .icon-bar{
+				    color: #473E4C;
+				    background: #fff;
+				}	
+			
+			}
+		 @media only screen and (max-width:767px){
+			    .navbar, .dropdown-menu{
+					background:#473E4C;
+					border: none;					
+		        	font-size: 14px;
+		        	margin-top:72px; 
+				
+				}				
+				.nav>li>a, .dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover, .dropdown-menu>li>a, .dropdown-menu>li{
+				 	 border-bottom: 3px solid transparent;
+				}
+				.nav>li>a:focus, .nav>li>a:hover,.nav .open>a, .nav .open>a:focus, .nav .open>a:hover, .dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover{
+					border-bottom: 3px solid transparent;
+					background: none;
+				}
+				.navbar a, .dropdown-menu>li>a, .dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover, .navbar-toggle{
+				 	color: #fff;
+				}
+				.dropdown-menu{
+				    -webkit-box-shadow: none;
+				    box-shadow:none;
+				}			
+				.nav li.active:nth-child(8n+1){
+				    border-bottom: #932C60 5px solid;
+				}				
+				.nav li.active:nth-child(8n+2){
+				    border-bottom: #932C60 5px solid;
+				}				
+				.nav li.active:nth-child(8n+3){
+				    border-bottom: #932C60 5px solid;
+				}				
+				.nav li.active:nth-child(8n+4){
+				    border-bottom: #932C60 5px solid;
+				}				
+				.navbar-toggle .icon-bar{
+				    color: #fff;
+				    background: #fff;
+				}				
+									
+			}	 */
+</style>
+
+		<!-- Declaración del menú, poblado por el servicio web -->
+		<h:form>
+			<!-- <div class="navbar-wrapper" id="menuSuper">
+    <div class="container-fluid">
+        <nav class="navbar navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    </button>
+	##################################### INFOGRAFIAS  #####################################                
+                <div class="navbar-brand">
+
+						<c:if test="#{mbAdmin.imgsInfografias != null}">
+						
+							<h:outputLink id="openDialogLink" value="javascript:void(0)" onclick="PF('dlg').show();">
+					        	<h:graphicImage name="ayuda.png" library="img" class="img-responsive" height="25px" width="25px" />
+					        </h:outputLink>
+
+						<h:form id="infoRegAc">
+				        
+							 <p:dialog id="picture" widgetVar="dlg" header="" resizable="false" modal="true" showEffect="clip" hideEffect="clip">
+		
+								 <h:outputStylesheet>
+							        .ui-panelgrid, .ui-panelgrid td, .ui-panelgrid tr, .ui-panelgrid tbody tr td
+							        {
+							            border: none !important;
+							            border-style: none !important;
+							            border-width: 0px !important;
+							        }
+							    </h:outputStylesheet>
+						    
+								<p:panelGrid columns="3">
+									<p:column colspan="2" >
+										<p:commandButton type="button" onclick="PF('switcher').previous();" icon="ui-icon-circle-triangle-w" id="prev"/>
+									</p:column>
+									<p:column colspan="2" >
+										<p:imageSwitch effect="wipe" widgetVar="switcher" id="manuelSwitcher" slideshowAuto="false" >
+											    <ui:repeat value="#{mbAdmin.imgsInfografias}" var="image" id="manuelSwitcherImages">
+											        <p:graphicImage name="img/infografias/#{image}" id="image"/>
+											    </ui:repeat>
+										</p:imageSwitch>
+									</p:column>
+									<p:column colspan="2" >
+										<p:commandButton type="button" onclick="PF('switcher').next();"	icon="ui-icon-circle-triangle-e" id="next"/>
+									</p:column>
+								</p:panelGrid>
+		
+								</p:dialog>
+							
+						</h:form>
+						
+						</c:if>
+				</div>
+				
+                </div>
+                
+	##################################### MENU ACCIONES #####################################                
+             <div id="navbar" class="navbar-collapse collapse">
+                    <div class="row">	
+                    		                   
+						<c:forEach items="#{mbAdmin.menuHeaderAcuerdos}" var="accion" varStatus="indexVar">
+							 
+							Solo acoplamos el class del div por cuestiones del largo de la palabra que contendra
+							<c:if test="#{ accion.idMenu eq 1 or  accion.idMenu eq 5 }">						
+								<div  class="col-md-2 col-sm-2 col-lg-2" > 
+									<div  id="menuAcciones">
+										<ul class="nav navbar-nav">	
+																											
+											<li class="dropdown">								
+											     <a href="#{request.contextPath}#{accion.submenus.get(0).modulos.get(0).acciones.get(0).url}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">#{accion.descripcion}</a>															    
+										     		<ul class="dropdown-menu">	
+										     			 <c:forEach items="#{accion.subMenu}" var="hijo" varStatus="indexVar">															     					
+															<li style="height:40px; ">																				  
+														 		<a href="#{request.contextPath}#{hijo.urlModulo}" class="dropdown-toggle" role="button" aria-haspopup="true" aria-expanded="true">#{hijo.accionDescrip}</a>
+															</li>
+														</c:forEach>																
+													</ul>														 									 										
+											</li>	
+																																											
+										</ul>
+									</div>																					
+					 			</div>	
+							</c:if>	 
+							
+							Solo acoplamos el class del div por cuestiones del largo de la palabra que contendra
+							<c:if test="#{ accion.idMenu eq 2 }">						
+								<div  class="col-md-4 col-sm-4 col-lg-4" > 
+									<div  id="menuAcciones">
+										<ul class="nav navbar-nav">	
+																											
+											<li class="dropdown">								
+											     <a href="#{request.contextPath}#{accion.submenus.get(0).modulos.get(0).acciones.get(0).url}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">#{accion.descripcion}</a>															    									 										
+											</li>	
+																																											
+										</ul>
+									</div>																					
+					 			</div>	
+							</c:if> 
+							
+							Solo acoplamos el class del div por cuestiones del largo de la palabra que contendra
+							<c:if test="#{ accion.idMenu eq 4 }">						
+								<div  class="col-md-3 col-sm-3 col-lg-3" > 
+									<div  id="menuAcciones">
+										<ul class="nav navbar-nav">	
+																											
+											<li class="dropdown">								
+											     <a href="#{request.contextPath}#{accion.submenus.get(0).modulos.get(0).acciones.get(0).url}" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">#{accion.descripcion}</a>															    														 									 										
+											</li>	
+																																											
+										</ul>
+									</div>																					
+					 			</div>	
+							</c:if> 
+							  						 
+						</c:forEach> 	
+									 
+                    </div>                  
+		        </div>
+            </div>
+        </nav>
+    </div>
+</div> -->
+
+
+<style>
+	.navbar {
+		margin-top: 72px;
+		background: #473E4C;
+		border-color: #473E4C;
+		border-radius: 0;
+		font-size: 20px;
+		z-index: 99;
+	}
+	.navbar-default .navbar-nav > li > a {
+		color: #ffffff;
+	}
+	.navbar-default .navbar-nav > li > a:hover,
+	.navbar-default .navbar-nav > li > a:focus {
+		color: #ffffff;
+	}
+	.navbar-default .navbar-nav > li > div {
+	    height: 7px;
+	    background-color: transparent;
+	    position: absolute;
+	    bottom: -4px;
+	    width: 100%;
+	}
+	.navbar-default .navbar-nav > li:hover > div {
+	    background-color: #932C60;
+	}
+	@media only screen and (max-width: 992px) {
+		.navbar {
+			font-size: 14px;
+		}
+	}
+	/* .navbar-default .navbar-nav > li:hover {
+	 	 border-bottom: #932C60 8px solid;
+	} */
+	/* .navbar{
+					background:#473E4C;
+					border: none;
+					height:40px;
+					text-align: center;				
+			        font-size: 20px;
+			        margin-top:72px;		
+				}		 */
+</style>
+
+
+			<nav id="menuSuper" class="navbar navbar-default navbar-fixed-top">
+				<div class="container">
+					<!-- Brand and toggle get grouped for better mobile display -->
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle collapsed"
+							data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+							aria-expanded="false">
+							<span class="sr-only">Toggle navigation</span> <span
+								class="icon-bar"></span> <span class="icon-bar"></span> <span
+								class="icon-bar"></span>
+						</button>
+						<c:if test="#{mbAdmin.imgsInfografias != null}">
+							<h:outputLink id="openDialogLink" value="javascript:void(0)"
+								onclick="PF('dlg').show();" styleClass="navbar-brand">
+								<h:graphicImage name="ayuda.png" library="img"
+									class="img-responsive" height="25px" width="25px" />
+							</h:outputLink>
+						</c:if>
+					</div>
+	
+					<!-- Collect the nav links, forms, and other content for toggling -->
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						<ul class="nav navbar-nav navbar-left">
+							<c:forEach items="#{mbAdmin.menuHeaderAcuerdos}" var="accion" varStatus="indexVar">
+								<c:if test="#{ accion.idMenu eq 1 }">
+									<li>
+										<a href="#{request.contextPath}#{accion.submenus.get(0).modulos.get(0).acciones.get(0).url}">
+											#{accion.descripcion}
+										</a>
+										<div></div>
+									</li>
+									<li>
+										<div></div>
+									</li>
+								</c:if>
+								<c:if test="#{ accion.idMenu eq 2 }">
+									<li>
+										<a href="#{request.contextPath}#{accion.submenus.get(0).modulos.get(0).acciones.get(0).url}">
+											#{accion.descripcion}
+										</a>
+										<div></div>
+									</li>
+									<li>
+										<div></div>
+									</li>
+								</c:if>
+								<c:if test="#{ accion.idMenu eq 4 }">
+									<li>
+										<a href="#{request.contextPath}#{accion.submenus.get(0).modulos.get(0).acciones.get(0).url}">
+											#{accion.descripcion}
+										</a>
+										<div></div>
+									</li>
+									<li>
+										<div></div>
+									</li>
+								</c:if>
+								<c:if test="#{ accion.idMenu eq 5 }">
+									<li>
+										<a href="#{request.contextPath}#{accion.submenus.get(0).modulos.get(0).acciones.get(0).url}">
+											#{accion.descripcion}
+										</a>
+										<div></div>
+									</li>									
+								</c:if>
+							</c:forEach>
+						</ul>
+						<ul class="nav navbar-nav navbar-right">
+							<li>								
+								<a href="${request.contextPath}/#{mbAdmin.recuperaRutaVideo}" target="_blank">
+									<h:graphicImage name="video.png" library="img"
+										class="img-responsive" height="21px" width="21px" />
+								</a>
+							</li>
+						</ul>
+					</div><!-- /.navbar-collapse -->
+				</div><!-- /.container-fluid -->
+			</nav>
+		</h:form>
+		<c:if test="#{mbAdmin.imgsInfografias != null}">
+			<h:form id="infoRegAc">
+				<p:dialog id="picture" widgetVar="dlg" header=""
+					resizable="false" modal="true" showEffect="clip"
+					hideEffect="clip">
+	
+					<h:outputStylesheet>
+				        .ui-panelgrid, .ui-panelgrid td, .ui-panelgrid tr, .ui-panelgrid tbody tr td
+				        {
+				            border: none !important;
+				            border-style: none !important;
+				            border-width: 0px !important;
+				        }
+				    </h:outputStylesheet>
+	
+					<p:panelGrid columns="3">
+						<p:column colspan="2">
+							<p:commandButton type="button"
+								onclick="PF('switcher').previous();"
+								icon="ui-icon-circle-triangle-w" id="prev" />
+						</p:column>
+						<p:column colspan="2">
+							<p:imageSwitch effect="wipe" widgetVar="switcher"
+								id="manuelSwitcher" slideshowAuto="false">
+								<ui:repeat value="#{mbAdmin.imgsInfografias}" var="image"
+									id="manuelSwitcherImages">
+									<p:graphicImage name="img/infografias/#{image}" id="image" />
+								</ui:repeat>
+							</p:imageSwitch>
+						</p:column>
+						<p:column colspan="2">
+							<p:commandButton type="button"
+								onclick="PF('switcher').next();"
+								icon="ui-icon-circle-triangle-e" id="next" />
+						</p:column>
+					</p:panelGrid>
+				</p:dialog>
+			</h:form>
+		</c:if>
+	</c:if>
+</ui:component>

@@ -1,0 +1,232 @@
+.lblTituloForm {
+	font-size: 36px;
+}
+.tabs-catalogo > div {
+	display: inline-block;
+	font-size: 18px;
+	padding: 0 50px;
+}
+.tabs-catalogo > div.activo {
+	border-bottom: 8px solid #473E4C;
+}
+.tabs-catalogo > div a {
+	color: #932C60;
+	font-size: 1.3em;
+}
+.tabs-catalogo > div a:hover {
+	text-decoration: none;
+	color: #932C60;
+}
+.tabs-catalogo > div a:focus {
+	text-decoration: none;
+	color: #932C60;
+	outline: none;
+}
+.tabs-catalogo > hr {
+	position: relative;
+	top: -25px;
+	z-index: -1;
+	border-top: 4px solid #B8B8B8;
+}
+.subtitulo > h4 {
+	color: #932C60;
+	font-size: 20px;
+	font-weight: bold;
+}
+.subtitulo > hr {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border-top: 2px solid #B0B0B0;
+}
+form label {
+	font-weight: normal;
+	color: #4E4E4E;
+}
+.espaciador {
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+.espaciador-top {
+	margin-top: 30px;
+}
+.espaciador-bottom {
+	margin-bottom: 30px;
+}
+.espaciador-lg-top {
+	margin-top: 50px;
+}
+.espaciador-xs-top {
+	margin-top: 15px;
+}
+.asterisco-requerido {
+	color: red;
+}
+.asterisco-requerido + label {
+	padding-left: 3px;
+}
+.inputsForm {
+	width: 60%;
+}
+span.inputsForm {
+	border-bottom: none;
+}
+.ui-message.ui-message-error {
+	margin: 5px 0 0 0;
+}
+.label-responsable {
+	font-weight: normal;
+	margin-left: 5px;
+}
+.label-bold {
+	font-weight: bold;
+}
+.ui-chkbox .ui-chkbox-box, .ui-selectoneradio label, .ui-selectoneradio div {
+    margin-right: 10px;
+}
+.esconde {
+	display: none;
+}
+.radio-column {
+	width: 36px;
+}
+.label-busqueda {
+	font-weight: normal;
+	color: #4E4E4E;
+	display: inline-block;
+}
+.label-busqueda.label-warning {
+	color: #FFFFFF;
+}
+.clear-label-busqueda {
+	color: #4E4E4E !important;
+	background-color: transparent;
+	transition-duration: .2s;
+}
+.reduce-espaciado {
+	margin-top: 0 !important;
+}
+.ui-dialog-content {
+    padding: 0 .7em .8em .7em;
+}
+.ui-dialog-titlebar {
+    padding: 0 .4em .4em 1em;
+}
+.acciones-modal {
+	margin-top: 25px;
+	margin-bottom: 25px;
+}
+.acciones-modal > form, #acciones-modal > button {
+	display: inline-block;
+}
+.acciones-modal > button {
+	color: #932C60 !important;
+	border-color: #932C60 !important;
+	border-width: 2px !important;
+}
+.acciones-modal > form > button > span {
+	padding: .3em 1.3em !important;
+	box-shadow: none !important;
+	border-width: 2px !important;
+	border-color: #932C60 !important;
+	background-color: #932C60 !important;
+	color: #ffffff !important;
+}
+.ui-dialog {
+    border-radius: 10px;
+    border: 2px solid #B0B0B0;
+}
+.ui-widget-header {
+	background: #ffffff;
+}
+.ui-datatable tr.ui-datatable-even:hover, .ui-datatable tr.ui-datatable-odd:hover {
+    background: #EFD3EB;
+    border: hidden;	
+    box-shadow: none;		    
+}
+.ui-paginator-pages > .ui-paginator-page.ui-state-active {
+	background: #932c60;
+	color: #ffffff;
+	box-shadow: none;
+}
+/*  Animación cargando.  */
+.spinner {
+  margin: 10px auto;
+  width: 80px;
+  height: 55px;
+  text-align: center;
+  font-size: 16px;
+  color: #7F7F7F;
+}
+
+.spinner > div {
+  background-color: #932C60;
+  height: 100%;
+  width: 10px;
+  display: inline-block;
+  
+  -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+  animation: sk-stretchdelay 1.2s infinite ease-in-out;
+}
+
+.spinner .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+
+.spinner .rect3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+.spinner .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+.spinner .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+
+@-webkit-keyframes sk-stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
+  20% { -webkit-transform: scaleY(1.0) }
+}
+
+@keyframes sk-stretchdelay {
+  0%, 40%, 100% { 
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% { 
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}
+.shake-it {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+.ui-dialog .ui-dialog-titlebar-close {
+	background-color: transparent;
+	box-shadow: none;
+	border-color: #ffffff;
+}

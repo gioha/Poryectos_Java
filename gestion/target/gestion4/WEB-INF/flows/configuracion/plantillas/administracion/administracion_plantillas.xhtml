@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sf="http://www.springframework.org/tags/faces"
+				xmlns:sec="http://www.springframework.org/security/tags"
+				template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+		<h:outputStylesheet library="css" name="modulos/plantillas/plantillas.css" />
+
+		<!-- DIALOG PARA MOSTRAR LA CARGA -->
+		<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+			<p:graphicImage name="/img/estructura/loader.gif" />
+		</p:dialog>
+
+		<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" onerror="PF('statusDialog').hide()" />
+
+		<h:form id="form_plantillas" enctype="multipart/form-data">			
+			<p:growl id="mensaje_general_info" showDetail="true" sticky="true" globalOnly="true" severity="info" />
+			<p:growl id="mensaje_general_advertencia" showDetail="true" sticky="true" globalOnly="true" severity="warn" />
+			<p:growl id="mensaje_general_exito" showDetail="true" sticky="true" globalOnly="true" severity="fatal" />
+
+			<div class="container">
+				<h2 style="padding-bottom: 30px;">
+					<h:outputText value="Inicio" style="color: #999999" />&nbsp;&nbsp;
+					<i class="fa fa-angle-right" aria-hidden="true" style="font-size: 18px; color: #999999" />&nbsp;&nbsp;
+					<h:outputText value="#{messageSource['etiqueta_configuracion_migasMenu']}" style="color: #999999" />&nbsp;&nbsp;
+					<i class="fa fa-angle-right" aria-hidden="true" style="font-size: 18px; color: #999999" />&nbsp;&nbsp;
+					<h:outputText value="#{messageSource['etiqueta_plantillas_migasTipoPantalla']}" style="font-weight: bold" />
+				</h2>
+
+				<div class="row rowTituloPestanias">
+					<div class="col-xs-3 columnTituloPestanias" style="width: 19%; border: .5px solid white">
+						<h3 class="h3TituloPestania">
+							<h:outputText value="Configuración" styleClass="tituloConfigHidden" />
+						</h3>
+					</div>
+
+					<div class="col-xs-9 columnPestanias" style="width: 81%">
+						<div class="row"
+							style="height: 51px !important; width: 95.8%; border-bottom: 3px solid #a0005f;">
+
+							<div class="col-md-2 columnDerechaUltimaPestania" style="width: 141px;">
+								<span class="pestaniaInactiva">
+									<p:link value="Corresponsable" href="/app/configuracion/corresponsal/captura"
+											style="color: white; font-weight: bold; text-decoration: none;" />
+								</span>
+							</div>
+
+							<div class="col-md-2 columnIzquierdaPestania" style="width: 93px; padding-right: 1px !important; padding-top: 20px;">
+								<span class="pestaniaActiva">
+									<p:link value="Plantillas" href="/app/configuracion/plantillas/administracion"
+											style="color: white; font-weight: bold; text-decoration: none;" />
+								</span>
+							</div>
+
+							<div class="col-md-2 columnIzquierdaPestania" style="width: 132px;">
+								<span class="pestaniaInactiva">
+									<p:link value="#{messageSource['etiqueta_instrucciones_tituloModulo']}"
+											href="/app/configuracion/instrucciones/administracion"
+											style="color: white; font-weight: bold; text-decoration: none;" />
+								</span>
+							</div>
+
+							<c:if test="#{sec:areAnyGranted('ROLE_GESTION4.ADMIN.OC, ROLE_GESTION4.ADMIN_AREA.OC')}">
+								<div class="col-md-2 columnIzquierdaPestania" style="width: 106px;">
+									<span class="pestaniaInactiva">
+										<p:link value="Acrónimos" href="/app/configuracion/acronimos/administracion"
+												style="color: white; font-weight: bold; text-decoration: none;" />
+									</span>
+								</div>
+							</c:if>
+
+							<c:if test="#{sec:areAnyGranted('ROLE_GESTION4.OFICIALIA.OC, ROLE_GESTION4.ADMIN.OC, ROLE_GESTION4.CONSULTA_CAU.OC')}">
+								<div class="col-md-2 columnIzquierdaPestania" style="width: 175px; padding-top: 20px;">
+									<span class="pestaniaInactiva">
+										<p:link value="Remitentes externos"
+												href="/app/configuracion_oficialia/remitentes_ext/administracion"
+												style="color: white; font-weight: bold; text-decoration: none;" />
+									</span>
+								</div>
+							</c:if>
+						</div>
+
+						<div class="row" style="height: 36px; !important;" />
+					</div>
+				</div>
+
+				<h4>
+					<h:outputLabel value="#{messageSource['etiqueta_crear_plantillas']}" />
+				</h4>
+				<h5>
+					Los datos con (<span style="color: red">*</span>) son requeridos
+				</h5>
+
+				<!-- Seccion de Crear Plantillas -->
+				<section>
+					<p:outputPanel id="panelFiltros">
+						<div class="row">
+							<div class="col-md-3">
+								<span style="color: red">*</span>
+								<p:outputLabel value="#{messageSource['etiqueta_tipo_documento'] }" style="padding-right: 10px;" />
+							</div>
+							
+							<div class="col-md-9" />
+						</div>
+
+						<div class="row" style="padding-bottom: 20px">
+							<div class="col-md-3">
+								<p:selectOneMenu id="comboTipoDocumento" required="true" styleClass="expans-horiz-100"
+												 value="#{mbPlantilla.filtros.idTipoDocumentoSeleccionado}"
+												 requiredMessage="#{messageSource['mensajes_generales_dato_requerido']}">
+
+									<f:selectItem itemValue="#{null}" noSelectionOption="true" itemDisabled="true"
+												  itemLabel="#{messageSource['etiqueta_generales_selecciona']}" />
+									<f:selectItems value="#{mbPlantilla.filtros.tipoDocumentos}"
+												   var="tipoDocumento"
+												   itemValue="#{tipoDocumento.idTipoDocumento}"
+												   itemLabel="#{tipoDocumento.descripcion}" />
+
+									<p:ajax listener="#{mbPlantilla.comboTipoDocumentoSeleccionado()}" update="comboTipoDocumento msgTipoDocumento comboAcronimo" />
+	            				</p:selectOneMenu>
+
+								<p:message id="msgTipoDocumento" for="comboTipoDocumento" />
+							</div>
+
+							<div class="col-md-9" />
+						</div>
+
+						<div class="row">
+							<div class="col-md-3">
+								<span style="color: red">*</span>
+								<p:outputLabel value="#{messageSource['etiqueta_acronimo']}" style="padding-right: 10px;" />
+							</div>
+
+							<div class="col-md-9" />
+						</div>
+
+						<div class="row" style="padding-bottom: 20px">
+							<div class="col-md-3">
+								<p:selectOneMenu id="comboAcronimo" required="true" styleClass="expans-horiz-100"
+												 value="#{mbPlantilla.filtros.acronimoSeleccionado}"
+												 converter="selectOneMenuConverter"
+												 requiredMessage="#{messageSource['mensajes_generales_dato_requerido']}"
+												 disabled="#{mbPlantilla.filtros.idTipoDocumentoSeleccionado == null}">
+	
+									<f:selectItem itemValue="#{null}" itemDisabled="true" noSelectionOption="true" itemLabel="#{messageSource['etiqueta_generales_selecciona']}" />
+									<f:selectItems value="#{mbPlantilla.filtros.acronimos}" var="acronimo" itemValue="#{acronimo}" itemLabel="#{acronimo.descripcion}" />
+	
+									<p:ajax process="@this" update="comboAcronimo msgAcronimo" />
+	            				</p:selectOneMenu>
+	
+								<p:message id="msgAcronimo" for="comboAcronimo" />
+							</div>
+
+							<div class="col-md-9" />
+						</div>
+		
+						<div class="row">
+							<div class="col-md-3">
+								<span style="color: red">*</span>
+								<h:outputLabel id="LabelNombreP" value="#{messageSource['etiqueta_nombre_plantilla']}" />
+							</div>
+
+							<div class="col-md-9" />
+						</div>
+
+						<div class="row" style="padding-bottom: 20px">
+							<div class="col-md-3">
+								<p:inputText id="comboNombrePlantilla" required="true" styleClass="expans-horiz-100"
+											 value="#{mbPlantilla.filtros.nombrePlantilla}"
+											 maxlength="30"
+											 requiredMessage="#{messageSource['mensajes_generales_dato_requerido']}"
+											 validatorMessage="El campo únicamente recibe letras y números">
+
+									<p:ajax event="blur" process="@this" update="comboNombrePlantilla msgNombrePlantilla" />
+									<pe:keyFilter regEx="#{messageSource['regex_letras_numeros']}" />
+								</p:inputText>
+
+								<p:message id="msgNombrePlantilla" for="comboNombrePlantilla" />
+							</div>
+
+							<div class="col-md-9" />
+						</div>
+
+						<div class="row botonesAcomodo">
+							<div class="col-md-12">
+								<p:commandButton value="#{messageSource['etiqueta_boton_capturar']}"
+												 actionListener="#{mbPlantilla.capturarPlantilla}"
+												 update="panelFiltros mensaje_general_advertencia"
+												 disabled="#{mbPlantilla.filtros.visualizarElementosPosCaptura}" />
+
+								<p:remoteCommand name="creaHyperLink" action="#{mbPlantilla.abrirWordTemporal}" update="mensaje_general_advertencia" />
+							</div>
+						</div>
+
+						<p:outputPanel id="panelPostCaptura" rendered="#{mbPlantilla.filtros.visualizarElementosPosCaptura}">
+							<div class="row" style="padding-top: 50px;">
+								<div class="col-md-3">
+									<h:outputLabel value="&#xf1c2; #{mbPlantilla.filtros.nombrePlantilla}.docx"
+												   style="font-family: Roboto, FontAwesome; font-size: 13px; color:#d5007f;" />
+								</div>
+
+								<div class="col-md-3">
+									<p:link href="#{mbPlantilla.filtros.hyperLinkDocumentoTmp}" styleClass="linkEditar" rendered="#{!mbCapturaDoc.pantalla.esBlanco}">
+										<i class="fa fa-pencil" />&nbsp;<h:outputText value="Editar" style="text-decoration: underline;" />
+									</p:link>
+								</div>
+
+								<div class="col-md-6" />
+							</div>
+
+							<div class="row botonesAcomodo">
+								<div class="col-md-12">
+									<p:commandButton value="#{messageSource['etiqueta_boton_cancelar']}"
+													 actionListener="#{mbPlantilla.cancelarAgregarPlantilla}"
+													 immediate="true"
+													 update="panelFiltros" />
+									&nbsp;
+									<p:commandButton value="#{messageSource['etiqueta_boton_agregar']}"
+													 actionListener="#{mbPlantilla.agregarPlantilla}"
+													 immediate="true"
+													 update="@form" />
+								</div>
+							</div>
+						</p:outputPanel>
+
+					</p:outputPanel>
+				</section>
+
+				<!-- ******************************** Lista de plantillas creadas **********************************  -->
+				<h4>
+					<h:outputLabel value="#{messageSource['etiqueta_lista_plantillas_creadas']}" />
+				</h4>
+				<h5>
+					Los recuadros blancos sirven para filtrar la información de las plantillas que requieres consultar
+				</h5>
+
+				<section>
+					<center>
+						<p:dataTable id="tabla_plantillas" var="plantilla"
+									 style="border: none !important;"		
+									 value="#{mbPlantilla.listaPlantillas}"
+									 rowIndexVar="rowId"
+									 rowKey="#{mbPlantilla.idPlantilla}#{mbPlantilla.idArea}#{mbPlantilla.tipoArea}#{mbPlantilla.idTipoDocumento}#{mbPlantilla.idAcronimo}#{mbPlantilla.idPersona}"
+									 rows="10" styleClass="tablaPlantillas"
+									 paginator="true" lazy="true"
+									 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+									 paginatorPosition="bottom"
+									 emptyMessage="#{messageSource['etiqueta_tabla_vacia_plantillas']}">
+
+							<p:column headerText="Tipo de Documento" filterBy="#{plantilla.tipoDocumento.descripcion}" filterStyle="width: 140px;">
+								<h:outputText value="#{plantilla.tipoDocumento.descripcion}" />
+							</p:column>
+
+							<p:column headerText="Acrónimo" filterBy="#{plantilla.acronimo.descripcion}" filterStyle="width: 140px;">
+								<h:outputText value="#{plantilla.acronimo.descripcion}" />
+							</p:column>
+
+							<p:column headerText="#{messageSource['etiqueta_plantillas_header_nombre_documento']}" filterBy="#{plantilla.nombrePlantilla}" filterStyle="width: 140px;">
+								<h:outputText value="#{plantilla.nombrePlantilla}" />
+							</p:column>
+
+							<p:column headerText="#{messageSource['etiqueta_plantillas_header_editar']}" style="text-align: center; width: 67px;">
+								<p:commandLink action="#{mbPlantilla.editarPlantilla(plantilla)}"
+											   styleClass="linksPersonasEncontradas" process="@this" update="@form">
+									<i class="fa fa-pencil" aria-hidden="true" style="color: #d5007f; font-size: 16px;" />
+								</p:commandLink>
+							</p:column>
+
+							<p:column headerText="#{messageSource['etiqueta_plantillas_header_eliminar']}" style="text-align: center; width: 72px;">
+								<p:commandLink action="#{mbPlantilla.eliminarPlantilla(plantilla)}"
+											   styleClass="linksPersonasEncontradas" process="@this" update="@form">
+									<i class="fa fa-times" aria-hidden="true" style="color: #d5007f; font-size: 16px;" />
+
+									<p:confirm message = "¿Estás seguro que deseas eliminar la plantilla?" />
+								</p:commandLink>
+							</p:column>
+						</p:dataTable>
+					</center>
+				</section>
+			</div>
+
+			<!-- DIALOG PARA CONFIRMACIÓN GENERAL -->
+			<p:confirmDialog global="true" styleClass="ventanaConfirmacion">
+				<p:commandButton value="#{messageSource['etiqueta_boton_no']}" styleClass="ui-confirmdialog-no" type="button" />
+				<p:commandButton value="#{messageSource['etiqueta_boton_si']}" styleClass="ui-confirmdialog-yes" type="button" style="background-color: white !important; color: #d5007f !important; border: 1px solid #d5007f !important;"/>
+			</p:confirmDialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

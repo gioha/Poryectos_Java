@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:ine="http://www.ine.mx/ui" xmlns:deceyec="http://ine.mx/ui">
+
+	<div class="ui-g">
+
+		<!-- ****************************************************************************************************** -->
+		<!-- **************************************** VISTA CAPTURAR ********************************************** -->
+		<!-- ****************************************************************************************************** -->
+		<p:outputPanel styleClass="ui-g-12">
+
+			<h2>#{messageSource['etiqueta_subtitulo_informacion_adicional_acta_computos']}</h2>
+
+			<!-- ******************************* BOLETAS SOBRANTES **************************************************** -->
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:outputLabel id="labelBoletasCap"
+					value="#{messageSource['etiqueta_boletas_sobrantes_acta_computos']}"
+					for="boletasSobrantesCap" />
+			</div>
+			
+			<div class="ui-g-12 ui-md-6 ui-lg-3">
+				<p:inputText id="boletasSobrantesCap" required="true"
+					requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}">
+
+					<p:ajax event="blur" update="mensajeBoletasSobrantesCap" />
+
+					<f:validator validatorId="entero" />
+				</p:inputText>
+
+				<p:message for="boletasSobrantesCap" id="mensajeBoletasSobrantesCap" />
+
+			</div>
+
+			
+			
+			
+
+			<!-- ******************** PERSONAS QUE VOTARON DE ACUERDO A LA LISTA NOMINAL ****************************** -->
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:outputLabel id="labelListadoNominalCap"
+					value="#{messageSource['etiqueta_personas_votaron_acta_computos']}"
+					for="listadoNominalCap" />
+			</div>
+
+			
+			
+
+			<div class="ui-g-12 ui-md-6 ui-lg-3">
+				<p:inputText id="listadoNominalCap" required="true"
+					requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}">
+
+					<p:ajax event="blur" update="mensajeListadoNominalCap" />
+
+					<f:validator validatorId="entero" />
+				</p:inputText>
+
+				<p:message for="listadoNominalCap" id="mensajeListadoNominalCap" />
+
+			</div>
+
+			
+			
+			
+
+			<!-- *********************************** REPRESENTANTES LISTA NOMINAL ************************************* -->
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:outputLabel id="labelRepresentantesCap"
+					value="#{messageSource['etiqueta_representantes_votaron_no_lista_nominal_acta_computos']}"
+					for="repCICap" />
+			</div>
+			
+			
+			<div class="ui-g-12 ui-md-6 ui-lg-3">
+				<p:inputText id="repCICap" required="true"
+					requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}">
+
+					<p:ajax event="blur" update="mensajeRepCICap" />
+
+					<f:validator validatorId="entero" />
+				</p:inputText>
+
+				<p:message for="repCICap" id="mensajeRepCICap" />
+
+			</div>
+
+			
+			
+			
+
+			<!-- *************** TOTAL DE VOTOS VALIDOS Y NULOS QUE SE ENCUENTRAN EN LOS SOBRANTES ******************** -->
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:outputLabel id="labelTotalCap"
+					value="#{messageSource['etiqueta_total_votos_sobrantes_acta_computos']}"
+					for="totalVotosCap" />
+			</div>
+			
+			
+			<div class="ui-g-12 ui-md-6 ui-lg-3">
+				<p:inputText id="totalVotosCap" required="true"
+					requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}">
+
+					<p:ajax event="blur" update="mensajeTotalVotosCap" />
+
+					<f:validator validatorId="entero" />
+				</p:inputText>
+
+				<p:message for="totalVotosCap" id="mensajeTotalVotosCap" />
+
+			</div>
+
+			
+			
+			
+
+			<!-- *********** ¿COINCIDIÓ EL TOTAL DE VOTOS VÁLIDOS Y NULOS DE LA SUMA DE PERSONAS...? ****************** -->
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:outputLabel id="labelTotalCoinCap"
+					value="#{messageSource['etiqueta_coincide_total_votos_acta_computos']}"
+					for="totalVotosCoincidenCap" />
+			</div>
+			
+			
+			<div class="ui-g-12 ui-md-6 ui-lg-3">
+				<p:inputText id="totalVotosCoincidenCap" required="true"
+					requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}">
+
+					<p:ajax event="blur" update="mensajeTotalVotosCoincidenCap" />
+
+				</p:inputText>
+
+				<p:message for="totalVotosCoincidenCap"
+					id="mensajeTotalVotosCoincidenCap" />
+
+			</div>
+
+			
+			
+			
+
+			<!-- ************** ¿COINCIDIÓ EL TOTAL DE VOTOS VÁLIDOS Y NULOS QUE SE ENCUENTRAN...? ******************** -->
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:outputLabel id="labelTotalCSCap"
+					value="#{messageSource['etiqueta_coincide_total_votos_sobres_acta_computos']}"
+					for="totalVotosCoincidenSobresCap" />
+			</div>
+			
+			
+
+			<div class="ui-g-12 ui-md-6 ui-lg-3">
+				<p:inputText id="totalVotosCoincidenSobresCap" required="true"
+					requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}">
+
+					<p:ajax event="blur" update="mensajeTotalVotosCoincidenSobresCap" />
+
+				</p:inputText>
+
+				<p:message for="totalVotosCoincidenSobresCap"
+					id="mensajeTotalVotosCoincidenSobresCap" />
+
+			</div>
+
+		</p:outputPanel>
+
+
+		<!-- ****************************************************************************************************** -->
+		<!-- **************************************** VISTA CONSULTAR ********************************************* -->
+		<!-- ****************************************************************************************************** -->
+		<p:outputPanel styleClass="ui-g-12" rendered="">
+			<h2>#{messageSource['etiqueta_subtitulo_informacion_adicional_acta_computos']}</h2>
+
+			<!-- ******************************* BOLETAS SOBRANTES **************************************************** -->
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:outputLabel id="labelBoletasCon"
+					value="#{messageSource['etiqueta_boletas_sobrantes_acta_computos']}"
+					for="boletasSobrantesCon" />
+			</div>
+			
+			<div class="ui-g-12 ui-md-6 ui-lg-3">
+				<p:outputLabel id="boletasSobrantesCon" value="13"
+					style="font-weight: bold; font-size: 18px;" />
+			</div>
+
+			
+			
+			
+
+			<!-- ******************** PERSONAS QUE VOTARON DE ACUERDO A LA LISTA NOMINAL ****************************** -->
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:outputLabel id="labelListaNominalCon"
+					value="#{messageSource['etiqueta_personas_votaron_acta_computos']}"
+					for="listadoNominalCon" />
+			</div>
+
+			
+			
+
+			<div class="ui-g-12 ui-md-6 ui-lg-3">
+				<p:outputLabel id="listadoNominalCon" value="12"
+					style="font-weight: bold; font-size: 18px;"  />
+
+			</div>
+
+			
+			
+			
+
+			<!-- *********************************** REPRESENTANTES LISTA NOMINAL ************************************* -->
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:outputLabel id="labelRepresentantesCon"
+					value="#{messageSource['etiqueta_representantes_votaron_no_lista_nominal_acta_computos']}"
+					for="repCICon" />
+			</div>
+			
+			
+			<div class="ui-g-12 ui-md-6 ui-lg-3">
+				<p:outputLabel id="repCICon" value="123"
+					style="font-weight: bold; font-size: 18px;"  />
+			</div>
+
+			
+			
+			
+
+			<!-- *************** TOTAL DE VOTOS VALIDOS Y NULOS QUE SE ENCUENTRAN EN LOS SOBRANTES ******************** -->
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:outputLabel id="labelTotalCon"
+					value="#{messageSource['etiqueta_total_votos_sobrantes_acta_computos']}"
+					for="totalVotosCon" />
+			</div>
+			
+			
+			<div class="ui-g-12 ui-md-6 ui-lg-3">
+				<p:outputLabel id="totalVotosCon" value="123"
+					style="font-weight: bold; font-size: 18px;"  />
+
+			</div>
+
+			
+			
+			
+
+			<!-- *********** ¿COINCIDIÓ EL TOTAL DE VOTOS VÁLIDOS Y NULOS DE LA SUMA DE PERSONAS...? ****************** -->
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:outputLabel id="labelTotalCoiCon"
+					value="#{messageSource['etiqueta_coincide_total_votos_acta_computos']}"
+					for="totalVotosCoincidenCon" />
+			</div>
+			
+			
+			<div class="ui-g-12 ui-md-6 ui-lg-3">
+				<p:outputLabel id="totalVotosCoincidenCon" value="Si"
+					style="font-weight: bold; font-size: 18px;"  />
+
+			</div>
+
+			
+			
+			
+
+			<!-- ************** ¿COINCIDIÓ EL TOTAL DE VOTOS VÁLIDOS Y NULOS QUE SE ENCUENTRAN...? ******************** -->
+			<div class="ui-g-12 ui-md-12 ui-lg-12">
+				<p:outputLabel id="labelTotalCSCon"
+					value="#{messageSource['etiqueta_coincide_total_votos_sobres_acta_computos']}"
+					for="totalVotosCoincidenSobresCon" />
+			</div>
+			
+			
+
+			<div class="ui-g-12 ui-md-6 ui-lg-3">
+				<p:outputLabel id="totalVotosCoincidenSobresCon" value="Si"
+					style="font-weight: bold; font-size: 18px;"  />
+			</div>
+
+
+		</p:outputPanel>
+
+	</div>
+
+</ui:composition>

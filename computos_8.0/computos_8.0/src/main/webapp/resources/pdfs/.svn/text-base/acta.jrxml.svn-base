@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="acta" pageWidth="594" pageHeight="842" columnWidth="554" leftMargin="20" rightMargin="20" topMargin="28" bottomMargin="28">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="com.jasperassistant.designer.HGuides" value="0,185,229,362,461,655,780"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="P_PATH_LOGO1" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_PATH_LOGO2" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_TITULO_ACTA" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_NOMBRE_ESTADO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_NOTA" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_SUBREPORTE_UBICACION" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false"/>
+	<parameter name="P_DATA_SUBREPORTE_UBICACION" class="net.sf.jasperreports.engine.JRDataSource" isForPrompting="false"/>
+	<parameter name="P_SUBREPORT_PARAMS_UBICACION" class="java.util.Map" isForPrompting="false"/>
+	<parameter name="P_SUBREPORTE_DESCRIPCION" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false"/>
+	<parameter name="P_DATA_SUBREPORTE_DESCRIPCION" class="net.sf.jasperreports.engine.JRDataSource" isForPrompting="false"/>
+	<parameter name="P_SUBREPORT_PARAMS_DESCRIPCION" class="java.util.Map" isForPrompting="false"/>
+	<parameter name="P_SUBREPORTE_RESULTADOS_TOTALES" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false"/>
+	<parameter name="P_DATA_SUBREPORTE_RESULTADOS_TOTALES" class="net.sf.jasperreports.engine.JRDataSource" isForPrompting="false"/>
+	<parameter name="P_SUBREPORT_PARAMS_RESULTADOS_TOTALES" class="java.util.Map" isForPrompting="false"/>
+	<parameter name="P_SUBREPORTE_RESULTADOS_PARTIDO_HORIZONTAL" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false"/>
+	<parameter name="P_DATA_SUBREPORTE_RESULTADOS_PARTIDO_HORIZONTAL" class="net.sf.jasperreports.engine.JRDataSource" isForPrompting="false"/>
+	<parameter name="P_SUBREPORT_PARAMS_RESULTADOS_PARTIDO_HORIZONTAL" class="java.util.Map" isForPrompting="false"/>
+	<parameter name="P_SUBREPORTE_RESULTADOS_PARTIDO_VERTICAL" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false"/>
+	<parameter name="P_DATA_SUBREPORTE_RESULTADOS_PARTIDO_VERTICAL" class="net.sf.jasperreports.engine.JRDataSource" isForPrompting="false"/>
+	<parameter name="P_SUBREPORT_PARAMS_RESULTADOS_PARTIDO_VERTICAL" class="java.util.Map" isForPrompting="false"/>
+	<parameter name="P_SUBREPORTE_RESULTADOS_CANDIDATO" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false"/>
+	<parameter name="P_DATA_SUBREPORTE_RESULTADOS_CANDIDATO" class="net.sf.jasperreports.engine.JRDataSource" isForPrompting="false"/>
+	<parameter name="P_SUBREPORT_PARAMS_RESULTADOS_CANDIDATO" class="java.util.Map" isForPrompting="false"/>
+	<parameter name="P_SUBREPORTE_CONSEJEROS" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false"/>
+	<parameter name="P_DATA_SUBREPORTE_CONSEJEROS" class="net.sf.jasperreports.engine.JRDataSource" isForPrompting="false"/>
+	<parameter name="P_SUBREPORT_PARAMS_CONSEJEROS" class="java.util.Map" isForPrompting="false"/>
+	<parameter name="P_SUBREPORTE_REPRESENTANTES" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false"/>
+	<parameter name="P_DATA_SUBREPORTE_REPRESENTANTES" class="net.sf.jasperreports.engine.JRDataSource" isForPrompting="false"/>
+	<parameter name="P_SUBREPORT_PARAMS_REPRESENTANTES" class="java.util.Map" isForPrompting="false"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="64">
+			<image>
+				<reportElement key="image-1" x="0" y="0" width="99" height="38"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{P_PATH_LOGO1}]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" stretchType="RelativeToTallestObject" x="99" y="0" width="356" height="64"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_TITULO_ACTA} + "\n" + $P{P_NOMBRE_ESTADO}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Right">
+				<reportElement key="image-1" x="455" y="0" width="99" height="38"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{P_PATH_LOGO2}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<printWhenExpression><![CDATA[$P{P_SUBREPORTE_UBICACION}!=null]]></printWhenExpression>
+			<subreport isUsingCache="true">
+				<reportElement key="subreport-1" x="0" y="0" width="554" height="20">
+					<printWhenExpression><![CDATA[new Boolean( $P{P_SUBREPORTE_UBICACION}!=null )]]></printWhenExpression>
+				</reportElement>
+				<parametersMapExpression><![CDATA[$P{P_SUBREPORT_PARAMS_UBICACION}]]></parametersMapExpression>
+				<dataSourceExpression><![CDATA[$P{P_DATA_SUBREPORTE_UBICACION}]]></dataSourceExpression>
+				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{P_SUBREPORTE_UBICACION}]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$P{P_SUBREPORTE_DESCRIPCION}!=null]]></printWhenExpression>
+			<subreport isUsingCache="true">
+				<reportElement key="subreport-2" x="0" y="0" width="554" height="20">
+					<printWhenExpression><![CDATA[new Boolean( $P{P_SUBREPORTE_DESCRIPCION}!=null )]]></printWhenExpression>
+				</reportElement>
+				<parametersMapExpression><![CDATA[$P{P_SUBREPORT_PARAMS_DESCRIPCION}]]></parametersMapExpression>
+				<dataSourceExpression><![CDATA[$P{P_DATA_SUBREPORTE_DESCRIPCION}]]></dataSourceExpression>
+				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{P_SUBREPORTE_DESCRIPCION}]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$P{P_SUBREPORTE_RESULTADOS_TOTALES}!=null]]></printWhenExpression>
+			<subreport isUsingCache="true">
+				<reportElement key="subreport-3" x="0" y="0" width="554" height="20">
+					<printWhenExpression><![CDATA[new Boolean( $P{P_SUBREPORTE_RESULTADOS_TOTALES}!=null )]]></printWhenExpression>
+				</reportElement>
+				<parametersMapExpression><![CDATA[$P{P_SUBREPORT_PARAMS_RESULTADOS_TOTALES}]]></parametersMapExpression>
+				<dataSourceExpression><![CDATA[$P{P_DATA_SUBREPORTE_RESULTADOS_TOTALES}]]></dataSourceExpression>
+				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{P_SUBREPORTE_RESULTADOS_TOTALES}]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$P{P_SUBREPORTE_RESULTADOS_PARTIDO_HORIZONTAL}!=null]]></printWhenExpression>
+			<subreport isUsingCache="true">
+				<reportElement key="subreport-4" x="0" y="0" width="554" height="20">
+					<printWhenExpression><![CDATA[new Boolean( $P{P_SUBREPORTE_RESULTADOS_PARTIDO_HORIZONTAL}!=null )]]></printWhenExpression>
+				</reportElement>
+				<parametersMapExpression><![CDATA[$P{P_SUBREPORT_PARAMS_RESULTADOS_PARTIDO_HORIZONTAL}]]></parametersMapExpression>
+				<dataSourceExpression><![CDATA[$P{P_DATA_SUBREPORTE_RESULTADOS_PARTIDO_HORIZONTAL}]]></dataSourceExpression>
+				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{P_SUBREPORTE_RESULTADOS_PARTIDO_HORIZONTAL}]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$P{P_SUBREPORTE_RESULTADOS_PARTIDO_VERTICAL}!=null]]></printWhenExpression>
+			<subreport isUsingCache="true">
+				<reportElement key="subreport-5" x="0" y="0" width="554" height="20">
+					<printWhenExpression><![CDATA[new Boolean( $P{P_SUBREPORTE_RESULTADOS_PARTIDO_VERTICAL}!=null )]]></printWhenExpression>
+				</reportElement>
+				<parametersMapExpression><![CDATA[$P{P_SUBREPORT_PARAMS_RESULTADOS_PARTIDO_VERTICAL}]]></parametersMapExpression>
+				<dataSourceExpression><![CDATA[$P{P_DATA_SUBREPORTE_RESULTADOS_PARTIDO_VERTICAL}]]></dataSourceExpression>
+				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{P_SUBREPORTE_RESULTADOS_PARTIDO_VERTICAL}]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$P{P_SUBREPORTE_RESULTADOS_CANDIDATO}!=null]]></printWhenExpression>
+			<subreport isUsingCache="true">
+				<reportElement key="subreport-6" x="0" y="0" width="554" height="20">
+					<printWhenExpression><![CDATA[new Boolean( $P{P_SUBREPORTE_RESULTADOS_CANDIDATO}!=null )]]></printWhenExpression>
+				</reportElement>
+				<parametersMapExpression><![CDATA[$P{P_SUBREPORT_PARAMS_RESULTADOS_CANDIDATO}]]></parametersMapExpression>
+				<dataSourceExpression><![CDATA[$P{P_DATA_SUBREPORTE_RESULTADOS_CANDIDATO}]]></dataSourceExpression>
+				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{P_SUBREPORTE_RESULTADOS_CANDIDATO}]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$P{P_SUBREPORTE_CONSEJEROS}!=null]]></printWhenExpression>
+			<subreport isUsingCache="true">
+				<reportElement key="subreport-7" x="0" y="0" width="554" height="20">
+					<printWhenExpression><![CDATA[new Boolean( $P{P_SUBREPORTE_CONSEJEROS}!=null )]]></printWhenExpression>
+				</reportElement>
+				<parametersMapExpression><![CDATA[$P{P_SUBREPORT_PARAMS_CONSEJEROS}]]></parametersMapExpression>
+				<dataSourceExpression><![CDATA[$P{P_DATA_SUBREPORTE_CONSEJEROS}]]></dataSourceExpression>
+				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{P_SUBREPORTE_CONSEJEROS}]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$P{P_SUBREPORTE_REPRESENTANTES}!=null]]></printWhenExpression>
+			<subreport isUsingCache="true">
+				<reportElement key="subreport-8" x="0" y="0" width="554" height="20">
+					<printWhenExpression><![CDATA[new Boolean( $P{P_SUBREPORTE_REPRESENTANTES}!=null )]]></printWhenExpression>
+				</reportElement>
+				<parametersMapExpression><![CDATA[$P{P_SUBREPORT_PARAMS_REPRESENTANTES}]]></parametersMapExpression>
+				<dataSourceExpression><![CDATA[$P{P_DATA_SUBREPORTE_REPRESENTANTES}]]></dataSourceExpression>
+				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{P_SUBREPORTE_REPRESENTANTES}]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band height="15">
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" stretchType="RelativeToTallestObject" x="0" y="0" width="554" height="15"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="Arial" size="6" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_NOTA}==null? "": $P{P_NOTA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

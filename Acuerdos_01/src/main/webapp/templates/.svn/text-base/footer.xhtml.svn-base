@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+
+<ui:composition>
+
+
+		<!--   INICIO FOOTER   -->
+	<footer>
+	
+	<c:if test="#{SPRING_SECURITY_CONTEXT == null}">
+		<div id="footer_contenedor_gris">	
+			<!-- class="#{SPRING_SECURITY_CONTEXT == null? 'container-full' : 'footer_contenedor_gris_oculto'}"> -->
+	
+			<div id="footer_row_link" class="row text-center robotolight">
+	
+				<h:outputLink id="footer_link_cau" value="http://cau.ife.org.mx/"
+					target="_blank">
+					<span>CAU</span>
+				</h:outputLink>
+	
+				<span id="footer_linea_gris">|</span>
+	
+				<h:outputLink id="footer_link_datos"
+					value="https://intranet.ife.org.mx/unicom/DiS/SSW/sistemas/AvisoProteccionDatos.html"
+					target="_blank">
+					<span>Protección de datos</span>
+				</h:outputLink>
+	
+			</div>
+	
+			<div id="footer_row_compatibilidad" class="row text-center robotolight">
+	
+				<span>Acuerdos INE versión 1.0.0 Compatibilidad óptima con <h:outputLink
+						value="https://www.google.com/chrome/browser/privacy/eula_text.html"
+						target="_blank"> 
+						<span>Google Chrome </span>
+					</h:outputLink> © Derechos Reservados, Instituto Nacional Electoral 
+				</span>
+				
+			</div>
+		</div>
+ 	</c:if> 
+
+	<div id="footer_contenedor_negro" class="container-full">
+
+		<div class="container">
+			<div class="row">
+		
+				<div id="footer_div_imagen" class="col-xs-6 col-sm-9 col-md-4">
+					<h:graphicImage name="LogoINEFoo.png" 
+						 styleClass="" library="img"
+						class="img-responsive" />
+						<div></div>
+						<div>© INE México 2017.</div>
+				</div>
+	
+				<!-- <div id="footer_linea_blanca" class="col-xs-1 footer_div_negro_texto">
+					<span>|</span>
+				</div> -->
+	
+				<!-- <div class="col-xs-3 footer_div_negro_texto robotoRegular">
+					<span>© INE México 2017.</span>
+				</div> -->
+	
+				
+				<div class="col-xs-4 col-sm-4 col-md-4 hidden-xs hidden-sm footer_div_negro_texto robotoRegular">
+					<p><font color="#000000">Desarrollo 1.11.87 1402181830</font></p>
+				</div>
+					
+				<div class="col-xs-6 col-sm-4 col-md-4 footer_div_negro_texto text-right robotoRegular">
+					<span>Versión del sistema 1.0.0</span>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+
+	</footer>
+	<!--   FIN FOOTER   -->
+	
+	
+</ui:composition>
+</html>

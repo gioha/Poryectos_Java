@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+	  start-state="home_view" parent="parent-flow">
+	  
+	  <secured attributes="ROLE_COMPUTOS.ADMIN.PARAM.CAPTURA.OC, 
+						 ROLE_COMPUTOS.ADMIN.CAPTURA.OC, 
+						 ROLE_COMPUTOS.CONSEJERO.OC, 
+						 ROLE_COMPUTOS.CONSULTA.OC, 
+						 ROLE_COMPUTOS.CAU.OC, 
+						 ROLE_COMPUTOS.CAPTURA.JL, 
+						 ROLE_COMPUTOS.CONSULTA.JL, 
+						 ROLE_COMPUTOS.ADMIN.EXT.OPLE.JL,  
+						 ROLE_COMPUTOS.CAPTURA.JM, 
+						 ROLE_COMPUTOS.CONSULTA.JM,
+						 ROLE_COMPUTOS.PARTIDO.CONSULTA.JL, 
+						 ROLE_COMPUTOS.PARTIDO.CONSULTA.JM" match="any"/>
+	  
+	  <var name="constantes" class="mx.ine.computosINE.util.Constantes"/>
+	
+	<action-state id="home_view">
+	  	<evaluate expression="mbDistGen.init(7)" />
+	  	<transition to="distribuir"/>
+	</action-state>
+	
+	<view-state id="distribuir" view="distribucion.xhtml">
+		<on-entry>
+			<evaluate expression="mbDistGen.setPermiteConsultarDistribucion(true)" />
+			<evaluate expression="mbDist.setTipoCandidatura(constantes.DIPUTADO_MR)" />
+			<evaluate expression="mbAdmin.dto.setIdModulo(9)"></evaluate>
+            <evaluate expression="mbAdmin.dto.setIdAccion(2)"></evaluate>
+		</on-entry>
+		<transition on="consulta" to="consultar" />
+		<transition on="captura" to="capturar" />
+		<transition on="eliminadas" to="home_view" />
+		<transition on="noEliminadas" to="home_view" />
+	</view-state>
+
+	
+	<view-state id="consultar"
+		view="externalRedirect:servletRelative:/modulos/distribucionDiputadoMR/consultar"/>
+		
+	<view-state id="capturar"
+		view="externalRedirect:servletRelative:/modulos/distribucionDiputadoMR/capturar"/>
+	  
+</flow>

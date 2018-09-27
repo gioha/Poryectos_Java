@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+	  start-state="validaRolUsuario" parent="parent-flow">
+	  
+	 <var name="mbReporteSeguimiento" class="mx.ine.acuerdos.mb.MBSeguimiento"/>
+	 
+	 <!-- Validamos los roles del usuario del lado del MB -->
+	 <decision-state id="validaRolUsuario">
+		
+		<if test="mbReporteSeguimiento.validaRoles()"  then="validarTitularArea"
+													   else="home_view" 		/>			
+	 </decision-state> 
+	 
+ 	<!-- validamos si es un rol de tipo titular area o de tipo area -->
+	<decision-state id="validarTitularArea">
+		<if test="mbReporteSeguimiento.esTitularArea()" then="validarAreaUsuario"
+												  		else="inicio" />
+	</decision-state>
+	 
+ 	<!-- si es titular de area o area, validamos que tenga un area asignada -->
+	<decision-state id="validarAreaUsuario">
+		<if test="mbReporteSeguimiento.tieneArea()" then="inicio"
+								  		 			else="areaAccesoDenegado" />
+	</decision-state>
+	 
+	 <view-state id="inicio" view="reportes_home.xhtml">
+	 	
+	 </view-state>
+
+	<view-state id="home_view"        
+			view="externalRedirect:servletRelative:/home"/>
+			
+	<view-state id="areaAccesoDenegado"        
+			view="externalRedirect:servletRelative:/acceso_denegado"/>
+
+	  
+</flow>

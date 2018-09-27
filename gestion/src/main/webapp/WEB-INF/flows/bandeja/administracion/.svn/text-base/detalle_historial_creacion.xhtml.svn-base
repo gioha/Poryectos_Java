@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sec="http://www.springframework.org/security/tags">
+	
+	<h:outputStylesheet library="css" name="modulos/historial_creacion/historial_creacion.css" />
+
+	<!-- <div class="row">
+				<div class="col-md-12"> -->
+					<!-- <p:commandLink actionListener="#{mbBorradores.mostrarDialogComentarios}" 
+								   update=":formBorradores:dialog_revisar_comentarios, :formBorradores:panelDer" 
+								   style="color: #E30613; text-decoration: none; float: right; font-size: 13px; font-weight: bold">
+					   
+					   <i class="fa fa-commenting" aria-hidden="true"/>&nbsp;<h:outputText value="#{messageSource['mensaje_todos_comentarios']}" style="text-decoration: underline"/>
+					   
+					</p:commandLink> -->
+
+					<p:dataTable id="tabla-historial" var="historial" paginator="true"
+						 scrollHeight="320" widgetVar="tabla-historial"
+						 rows="5" paginatorPosition="bottom"
+						 value="#{mbHistorial.listaHistorial}"
+						 emptyMessage="No hay nada en historial" scrollable="true"
+						 style="font-size: 12px;">
+				
+						<!-- <f:facet name="header">
+					       #{messageSource['etiqueta_historial_titulo']}
+					    </f:facet> -->
+
+						<p:column headerText="#{messageSource['etiqueta_descripcion']}">
+
+				            <p:outputPanel rendered="#{historial.dtoEstatus.idEstatus.intValue() == 7 and historial.dtoComentario ne null}">
+				            	<h:outputText  value="Documento regresado con&nbsp;"/>
+				            	<p:commandLink value="comentario" style="color: red; font-weight: bold;"
+				            				   actionListener="#{mbHistorial.mostrarComentarioHistorial(historial.dtoComentario)}"
+				            				    />
+											   <!-- update="formBorradores:dialogHistorialComentario" /> -->	
+				            	<h:outputText  value="&nbsp;por"/>				            	
+				            </p:outputPanel>
+
+				           	<p:outputPanel rendered="#{historial.dtoEstatus.idEstatus.intValue() == 9 and historial.dtoComentario ne null}">
+				            	<h:outputText  value="Documento regresado con&nbsp;"/>
+				            	<p:commandLink value="comentarios" style="color: red; font-weight: bold;"
+							            	   actionListener="#{mbHistorial.mostrarComentarioHistorial(historial.dtoComentario)}"
+							            	   />
+											   <!-- update="formBorradores:dialogHistorialComentario" /> -->
+				            	<h:outputText  value="&nbsp;y modificado por"/>	 
+				            </p:outputPanel>
+
+				            <p:outputPanel rendered="#{historial.dtoEstatus.idEstatus.intValue() == 13}">
+				            	<h:outputText  value="Documento&nbsp;"/>
+				            	<p:commandLink value="comentado" style="color: red; font-weight: bold;"
+				            				   actionListener="#{mbHistorial.mostrarComentarioHistorial(historial.dtoComentario)}"
+				            				   />
+											   <!-- update="formBorradores:dialogHistorialComentario" /> -->		
+				            	<h:outputText  value="&nbsp;y enviado por"/>				            	
+				            </p:outputPanel>
+
+				            <p:outputPanel rendered="#{historial.dtoEstatus.idEstatus.intValue() == 14}">
+				            	<h:outputText  value="Documento modificado,&nbsp;"/>
+				            	<p:commandLink value="comentado" style="color: red; font-weight: bold;"
+				            				   actionListener="#{mbHistorial.mostrarComentarioHistorial(historial.dtoComentario)}"
+				            				   />
+											   <!-- update="formBorradores:dialogHistorialComentario" /> -->		
+				            	<h:outputText  value="&nbsp;y enviado por"/>			            	
+				            </p:outputPanel>
+
+				           	<h:outputText value="#{historial.dtoEstatus.descripcion}"
+				           				  rendered="#{historial.dtoEstatus.idEstatus.intValue() != 7 and historial.dtoEstatus.idEstatus.intValue() != 9
+				           				  and historial.dtoEstatus.idEstatus.intValue() != 13 and historial.dtoEstatus.idEstatus.intValue() != 14 }"/>
+						</p:column>
+						
+						<p:column headerText="#{messageSource['etiqueta_nombre']}" style="width: 140px;text-align: center">
+							<h:outputText style="font-size:10px;" value="#{historial.dtoPersona.nombreCompleto}" />
+						</p:column>
+
+						<p:column headerText="#{messageSource['etiqueta_fecha']}" style="width: 130px; text-align:center;" >
+							<h:outputText value="#{historial.fechaHora}" >
+								<f:convertDateTime pattern="dd/MM/yy hh:mm aa" />
+							</h:outputText>
+						</p:column>
+					
+					</p:dataTable>
+			<!-- 	</div>
+			</div> -->	
+</ui:composition>

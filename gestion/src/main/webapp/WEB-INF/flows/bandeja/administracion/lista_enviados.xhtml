@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sec="http://www.springframework.org/security/tags">
+	
+	<div id="row_lista_bandeja" class="row">
+ 		
+ 		<div id="col_lista_borradores" class="col-xs-12">
+ 		
+ 			<h:outputScript library="js" name="contextMenu.js" />
+			
+			 <p:dataTable id="tablaEnviados" styleClass="tabla_bandeja"
+						 var="enviado" value="#{mbBandejaEnviados.listaEnviados}"
+						 rows="10" paginator="true" paginatorPosition="top"
+						 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						 selectionMode="single"
+						 selection="#{mbBandejaEnviados.enviadoSeleccionado}"
+						 rowKey="#{enviado.idDocumento}"
+						 emptyMessage="#{messageSource['mensaje_tabla_borradores_vacia']}">
+
+				<p:ajax event="rowSelect" listener="#{mbBandejaEnviados.seleccionarEnviado}"
+						update=":formBorradores:panelDer, :formBorradores:panelCentro, :formBorradores:panelIzq, menu_formulario" />
+				
+				<p:ajax event="contextMenu" listener="#{mbBandejaEnviados.seleccionarEnviado}"
+						update="formBorradores:menuAcciones, :formBorradores:panelDer, :formBorradores:panelCentro, :formBorradores:panelIzq, menu_formulario" oncomplete="PF('menuAcciones').show(currentEvent);"/>
+						
+				<p:column styleClass="#{enviado.noLeido eq messageSource['constante_documento_noLeido'] ? 'columna_franja_nuevo_noleidos':'columna_franja_nuevo'}" ></p:column>
+				
+				<p:column styleClass="columna_icono">
+				
+					<h:graphicImage rendered="#{enviado.numEnviadoValidacion eq 0 and enviado.numEnviadoFirma ne 0 and enviado.dtoDocumento.tipoCaptura ne 3}" 
+									name="bo_valida.png" library="img/bandeja" class="pull-center img-responsive" />
+						
+					<h:graphicImage rendered="#{enviado.numEnviadoFirma eq 0 and enviado.dtoDocumento.tipoCaptura ne 3}" name="bo_firma.png" library="img/bandeja"
+									class="pull-center img-responsive" />
+						
+					<h:graphicImage rendered="#{( (enviado.numEnviadoValidacion ne 0  ) and (enviado.numEnviadoFirma ne 0) and (enviado.dtoDocumento.tipoCaptura ne 3) ) }" 
+									name="bo_negro.png" library="img/bandeja"
+									class="pull-center img-responsive" />
+						
+					<h:graphicImage rendered="#{enviado.dtoDocumento.tipoCaptura eq 3}" name="iconos_adjunto.png" library="img/bandeja"
+									class="pull-center img-responsive" />
+
+				</p:column>
+				
+				<p:column styleClass="#{enviado.noLeido eq messageSource['constante_documento_noLeido'] ? 'columna_bandeja_noleido':'columna_bandeja'}" >
+
+					<span class="tabla_siglas" >
+						<h:outputText value="#{enviado.dtoDocumento.noDocumento}" />
+						 
+						 <i class="#{enviado.dtoDocumento.contieneAnexos eq 1 ? 'fa fa-paperclip':'sin_adjunto' }" aria-hidden="true"></i><br />
+					</span>
+					
+					<span class="asunto">
+						<h:outputText value="#{enviado.dtoDocumento.asunto}" />
+					</span>
+					<!-- <br/><h:outputText value="#{enviado.dtoDocumento.idDocumento}" /> -->
+					
+				</p:column>
+
+				<p:column styleClass="columna_borradores" ></p:column>
+
+				<p:column styleClass="#{borrador.noLeido eq messageSource['constante_documento_noLeido'] ? 'columna_bandeja_noleido columna_fecha':'columna_bandeja columna_fecha'}" >
+
+					<h:outputText value="#{enviado.dtoDocumento.fechaCreacion}">
+						<f:convertDateTime pattern="dd/MM/yy " />
+					</h:outputText>
+					
+					<h:outputText value="#{enviado.dtoDocumento.fechaCreacion}">
+						<f:convertDateTime pattern="hh:mm aa" />
+					</h:outputText>
+
+				</p:column>
+
+			</p:dataTable>
+			
+			<p:contextMenu id="menuAcciones" widgetVar="menuAcciones" for="tablaEnviados">
+	        		<p:menuitem value="Eliminar Enviado" actionListener="#{mbBandejaEnviados.eliminarEnviado}" 
+	        					update=":formBorradores:panelIzq, :formBorradores:tablaEnviados, :formBorradores:mensaje_general_info, :formBorradores:mensaje_general_advertencia, :formBorradores:mensaje_general_exito" />
+    		</p:contextMenu>
+			
+		</div>
+	</div>
+	
+</ui:composition>

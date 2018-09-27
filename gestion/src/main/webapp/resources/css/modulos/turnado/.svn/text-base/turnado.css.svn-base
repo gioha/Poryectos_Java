@@ -1,0 +1,176 @@
+/*-------------------------------------------------*/
+/* Hoja de Estilos para los Sistemas               */
+/*       	Institucionales                        */
+
+/** ******************************* TURNADO ******************************* **/
+div.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-shadow.ui-hidden-container.ui-draggable.dialog-turnado{
+	border: solid 1px #D5007F !important;
+	/* box-shadow:none !important; */
+	 /* box-shadow: 0px 5px 10px rgba(0,0,0,0.3) !important; */
+}
+
+.dialog-turnado {
+	font-size: 12px;
+}
+
+.dialog-turnado section {
+	padding: 0px 0px 0px;	
+}
+
+.dialog-turnado h4{
+	padding: 0px 0px 0px;
+}
+
+.titulo_turnado{
+	color:#D5007F;
+	font-size:12pt;
+	font-weight: bold;
+	margin-left: 20px;
+}
+
+h4#tituloDetalle:after{
+	border-bottom: 4pt solid #d6007e !important;
+}
+
+.instrucciones_dialog{
+	color:black;
+	font-family:Roboto;
+	font-size:9pt;
+	font-weight:normal;
+	margin-left: 20px;
+}
+#line_dialog_turnado{
+	border-top: 1pt solid #D5007F;
+	box-shadow: 0px 3px 10px grey;
+	margin: 0px;
+}
+#row_instrucciones{
+	/* border-bottom: 1pt solid #D5007F; */
+	/* box-shadow: 0px 10px 0px 0px grey; */
+}
+
+#row_instrucciones_atencion{
+	padding: 20px 0px 0px 20px;
+}
+
+.titulo_instrucciones_atencion{
+	color:#E30613;
+	font-size:9pt;
+	font-weight:bold;
+}
+
+#row_instrucciones_informativas{
+	padding: 5px 0px 0px 20px;
+}
+
+.titulo_instrucciones_informativas{
+	color:#39B54A;
+	font-size:9pt;
+	font-weight:bold;
+}
+
+.lista-instrucciones {
+    line-height: normal;
+}
+
+.lista-instrucciones li.ui-datalist-item{
+	color:black !important;
+	font-family: Roboto !important;
+	font-size:9pt !important;
+}
+
+.lista-instrucciones ol {
+	padding-left: 0px;
+}
+
+.lista-instrucciones .ui-widget-content {
+	border:0px;
+}
+
+.instrucciones_turnado{
+	color:#D5007F;
+	font-family:Roboto;
+	font-size:9pt;
+	font-weight:bold;
+}
+
+/****** TABLA TURNAR*******/
+.tabla-turnado th.ui-state-default{
+	/* border:solid 1pt black !important; */
+	color:black;
+	font-family:Roboto;
+	font-size:9pt;
+	font-weight:bold;
+}
+
+/* style="width:240px;text-align: center" */
+th.ui-state-default.header_nombre{
+	border:solid 1pt black !important;
+	text-align: center;
+	width:240px;
+}
+/* .dialog-turnado .columna-nombre {
+	text-align: left;
+	min-width: 160px;
+}
+
+.dialog-turnado .ui-datatable thead th {
+    border-bottom: 0px !important;
+    border-top: 0px	 !important;
+}
+
+.dialog-turnado .ui-datatable thead {
+	    border-bottom: 1px solid black;
+    border-top: 2px solid black;
+}
+div.ui-datatable-scrollable-header-box tr{
+	border: 1pt solid black !important;
+	border-top: 2pt solid black !important;
+}
+
+th.ui-state-default.numeros{
+	border:1pt black solid !important;
+} */
+
+/* div.ui-datatable.ui-widget.ui-datatable-scrollable.tabla-turnado th.ui-state-default.header_nombre{
+	border: 1pt blue solid !important;
+} */
+
+div.ui-widget-header.ui-datatable-scrollable-header th.ui-state-default.header_nombre{
+	border:none !important;
+	border-bottom: 1pt black solid !important;
+	border-top: 2pt black solid !important;
+}
+
+div.ui-widget-header.ui-datatable-scrollable-header th.ui-state-default.header_atencion{
+	border:none !important;
+	border-left: 1pt black solid !important;
+	border-right: 1pt black solid !important;
+	border-top: 2pt black solid !important;
+}
+
+div.ui-widget-header.ui-datatable-scrollable-header th.ui-state-default.header_informativas{
+	border:none !important;
+	border-top: 2pt black solid !important;
+}
+
+div.ui-widget-header.ui-datatable-scrollable-header th.ui-state-default.numeros{
+	/* border:none !important; */
+	border: 1pt black solid !important;
+}
+
+div.ui-datatable-scrollable-body thead th{
+	/* display:none; */
+	border: none !important;
+}
+th.ui-state-default.header_nombre{
+	border:none !important;
+}
+/* div.ui-datatable-scrollable-body thead.ui-datatable-scrollable-theadclone th.ui-state-default.header_nombre{
+	border: none !important;
+} */
+
+#row_boton_aceptar{
+	padding-top:10px;
+	text-align: center;
+}

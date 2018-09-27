@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sec="http://www.springframework.org/security/tags">
+
+	<div id="row_pestana_bandeja" class="row">
+	
+		<c:if test="#{mbBEntrada.usuario.verVersionT eq 1}">
+			<p:commandLink 	actionListener="#{mbBEntrada.seleccionarPestanaPrincipal}"	update=":formBorradores:panelCentro">
+				<span class="#{mbBEntrada.pestanaSeleccionada eq messageSource['mensaje_pestana_principal'] ? 'pestana pestana_bandeja_selected' : 'pestana pestana_bandeja_noselected'}">
+					<p:graphicImage library="img/bandeja" name="bo_blanco.png" width="15"/> #{messageSource['mensaje_pestana_principal']}
+				</span>
+			</p:commandLink>
+		</c:if>
+		
+			<p:commandLink actionListener="#{mbBEntrada.seleccionarPestanaTurnados}" update=":formBorradores:panelCentro">
+				<span class="#{mbBEntrada.pestanaSeleccionada eq messageSource['mensaje_pestana_turnados'] ? 'pestana pestana_bandeja_selected' : 'pestana pestana_bandeja_noselected'}">
+					<p:graphicImage library="img/bandeja" name="bo_blanco.png" width="15"/> #{messageSource['mensaje_pestana_turnados']}
+				</span>
+			</p:commandLink>
+			
+		<c:if test="#{mbBEntrada.usuario.verVersionT ne 1}">
+			<p:commandLink 	actionListener="#{mbBEntrada.seleccionarPestanaPrincipal}"	update=":formBorradores:panelCentro">
+				<span class="#{mbBEntrada.pestanaSeleccionada eq messageSource['mensaje_pestana_principal'] ? 'pestana pestana_bandeja_selected' : 'pestana pestana_bandeja_noselected'}">
+					<p:graphicImage library="img/bandeja" name="bo_blanco.png" width="15"/> #{messageSource['mensaje_pestana_ccp']}
+				</span>
+			</p:commandLink>
+		</c:if>
+		
+		<!--Botón de Ordenar  -->
+		<div id="div_filtrar" style="float:right;margin-right: 15px;">
+			
+			<!-- Botón que se muestra cuando se ha desplegado la pestaña de RECIBIDOS-->
+			<c:if test="#{mbBEntrada.tabSeleccionada eq messageSource['mensaje_titulo_recibidos'] }">
+				<p:menuButton  id="boton_menu_filtrar" value="#{messageSource['mensaje_ordenar_documentos']}" styleClass="menu_filtrar">
+					<p:menuitem value="#{messageSource['mensaje_ordenar_documentos_folio']}" actionListener="#{mbBEntrada.ordenarRecibidosPorNombre()}"
+								update=":formBorradores:acordion_principal:tablaRecibidos"/>
+					<p:menuitem value="#{messageSource['mensaje_ordenar_documentos_fecha']}" actionListener="#{mbBEntrada.ordenarRecibidosPorFecha()}"
+								update=":formBorradores:acordion_principal:tablaRecibidos"/>
+				</p:menuButton>
+			</c:if>
+			
+			<!-- Botón que se muestra cuando se ha desplegado la pestaña de CCP-->
+			<c:if test="#{mbBEntrada.tabSeleccionada eq messageSource['mensaje_titulo_ccp'] }">
+				<p:menuButton  id="boton_menu_filtrar" value="#{messageSource['mensaje_ordenar_documentos']}" styleClass="menu_filtrar">
+					<p:menuitem value="#{messageSource['mensaje_ordenar_documentos_folio']}" actionListener="#{mbBEntrada.ordenarCCPPorNombre()}"
+								update=":formBorradores:acordion_principal:tablaCCP"/>
+					<p:menuitem value="#{messageSource['mensaje_ordenar_documentos_fecha']}" actionListener="#{mbBEntrada.ordenarCCPPorFecha()}"
+								update=":formBorradores:acordion_principal:tablaCCP"/>
+				</p:menuButton>
+			</c:if>
+			
+			<c:if test="#{mbBEntrada.tabSeleccionada eq messageSource['mensaje_titulo_atencion'] }">
+				<p:menuButton  id="boton_menu_filtrar" value="#{messageSource['mensaje_ordenar_documentos']}" styleClass="menu_filtrar" >
+					<p:menuitem value="#{messageSource['mensaje_ordenar_documentos_folio']}" actionListener="#{mbBEntrada.ordenarAtencionPorNombre()}"
+								update=":formBorradores:acordion_turnados:tablaAtencion"/>
+					<p:menuitem value="#{messageSource['mensaje_ordenar_documentos_fecha']}" actionListener="#{mbBEntrada.ordenarAtencionPorFecha()}"
+								update=":formBorradores:acordion_turnados:tablaAtencion"/>
+				</p:menuButton>
+			</c:if>
+			
+			<c:if test="#{mbBEntrada.tabSeleccionada eq messageSource['mensaje_titulo_info'] }">
+				<p:menuButton  id="boton_menu_filtrar" value="#{messageSource['mensaje_ordenar_documentos']}" styleClass="menu_filtrar">
+					<p:menuitem value="#{messageSource['mensaje_ordenar_documentos_folio']}" actionListener="#{mbBEntrada.ordenarInfoPorNombre()}"
+								update=":formBorradores:acordion_turnados:tablaInfo"/>
+					<p:menuitem value="#{messageSource['mensaje_ordenar_documentos_fecha']}" actionListener="#{mbBEntrada.ordenarInfoPorFecha()}"
+								update=":formBorradores:acordion_turnados:tablaInfo"/>
+				</p:menuButton>
+			</c:if>
+			
+			<c:if test="#{mbBEntrada.tabSeleccionada eq null}">
+				<p:menuButton  id="boton_menu_filtrar" value="#{messageSource['mensaje_ordenar_documentos']}" styleClass="menu_filtrar">
+					<p:menuitem value="#{messageSource['mensaje_ordenar_documentos_folio']}" />
+					<p:menuitem value="#{messageSource['mensaje_ordenar_documentos_fecha']}" />
+				</p:menuButton>
+			</c:if>
+			
+		</div>
+	</div>
+
+</ui:composition>

@@ -1,0 +1,288 @@
+.contenedor{
+  height: 49%;
+  background-color: #902B5E;
+  margin: 1% 1%;
+  color: #ffffff;
+}
+
+
+.left{
+    float: left;
+    
+}
+.right{
+    float: right;
+    
+}
+.center{
+    background:green;
+   display:inline-block
+}
+
+
+
+ /**************************************************************
+ *Estilos para los selectOneMenu
+ /**************************************************************/
+#reporte_seguimiento:menu{ 
+    background: pink;
+}
+#reporte_seguimiento:menu { 
+    background: pink;
+}
+
+
+/** Scrollable**/
+.ui-datatable-scrollable table{
+	table-layout:fixed;
+}
+.ui-datatable-scrollable-body{
+	overflow:auto;
+}
+.ui-datatable-scrollable-header,.ui-datatable-scrollable-footer{
+	overflow:hidden;
+	border:0px none;
+}
+.ui-datatable-scrollable .ui-datatable-scrollable-header,.ui-datatable-scrollable .ui-datatable-scrollable-footer{
+	position:relative;
+}
+ .ui-datatable-scrollable .ui-datatable-scrollable-header td{
+	font-weight:normal;
+}
+.ui-datatable-scrollable-body::-webkit-scrollbar{
+	-webkit-appearance:none;
+	width:15px;
+	background-color:transparent;
+}
+.ui-datatable-scrollable-body::-webkit-scrollbar-thumb{
+	border-radius:8px;
+	border:1px solid white;
+	background-color:#db46a3;
+}
+
+
+
+
+
+/* InCell Editing */.ui-datatable .ui-cell-editor-input{
+	display:none;
+}
+.ui-datatable .ui-row-editing .ui-cell-editor .ui-cell-editor-output{
+	display:none;
+}
+.ui-datatable .ui-row-editing .ui-cell-editor .ui-cell-editor-input{
+	display:block;
+}
+.ui-datatable .ui-row-editor span{
+	cursor:pointer;
+	display:inline-block;
+}
+.ui-datatable .ui-row-editor .ui-icon-pencil{
+	display:inline-block;
+}
+.ui-datatable .ui-row-editing .ui-row-editor .ui-icon-pencil{
+	display:none;
+}
+.ui-datatable .ui-row-editor .ui-icon-check,.ui-datatable .ui-row-editor .ui-icon-close{
+	display:none;
+}
+.ui-datatable .ui-row-editing .ui-row-editor .ui-icon-check,.ui-datatable .ui-row-editing .ui-row-editor .ui-icon-close{
+	display:inline-block;
+}
+.ui-datatable .ui-datatable-data tr.ui-row-editing td.ui-editable-column,.ui-datatable .ui-datatable-data td.ui-cell-editing{
+	padding:0;margin:0;
+}
+/*resizer */.ui-datatable .ui-column-resizer{
+	width:8px;height:20px;
+	padding:0px;cursor:col-resize;
+	background-image:url("/ScraperOnWeb/javax.faces.resource/spacer/dot_clear.gif.jsf?ln=primefaces");
+	margin:-4px -10px -4px 0px;
+	float:center;
+}
+.ui-datatable .ui-filter-column .ui-column-resizer{
+	height:45px;
+}
+.ui-datatable .ui-column-resizer-helper{
+	width:1px;
+	position:absolute;
+	z-index:10;
+	display:none;
+}
+.ui-datatable-resizable{
+	padding-bottom:1px;/*fix for webkit overlow*/overflow:auto;
+}
+.ui-datatable-resizable table{
+	table-layout:fixed;
+}
+.ui-datatable-rtl{
+	direction:rtl;
+}
+.ui-datatable-rtl.ui-datatable thead th, .ui-datatable-rtl.ui-datatable tfoot td{
+	text-align:right;
+}
+ /**/
+ 
+ .ui-datatable  {
+  background-color: #ffffff;
+  
+}
+
+ .ui-datatable {
+  border-right: 2px solid #d5d5d5 !important;
+  border-left: 2px solid #d5d5d5 !important;
+}
+
+ .ui-datatable {
+  border-right: 2px solid #d5d5d5 !important;
+  border-left: 2px solid #d5d5d5 !important;
+}
+
+ .ui-datatable {
+  border-right: 2px solid #d5d5d5 !important;
+  border-up: 2px solid #d5d5d5 !important;
+  	/* border-top: 2px solid #922c5f !important;
+  	border-bottom: 2px solid #922c5f !important; */
+}
+
+
+
+.ui-widget-content .ui-datatable-even{
+    background: #ffffff;
+  	border-bottom: 2px solid #d5d5d5 !important;
+  	border-right: 2px solid #d5d5d5 !important;
+}
+
+.ui-widget-content .ui-datatable-odd{
+    background: #f7f7f7;
+    	/* border-top: 2px solid #922c5f !important;
+  	border-bottom: 2px solid #922c5f !important; */
+  	border-bottom: 2px solid #d5d5d5 !important;
+  	border-right: 2px solid #d5d5d5 !important;
+}
+
+
+
+.ui-paginator{
+    background: #e4e3e3;
+    color: black;
+    font-family: Verdana, Arial, sans-serif;
+    font-size: small;
+}
+
+.ui-datatable-tablewrapper > table > thead {
+  	border: 2px solid  #d84a9f !important;
+}
+
+.ui-paginator-pages > .ui-paginator-page.ui-state-active {
+	background: #932c60;
+	color: #ffffff;
+	box-shadow: none;
+}
+
+.inputsForm.reducido {
+	width: 60%;
+}
+
+/**
+*#######################color de las cabeceras  del titulo de la tabla####################
+*/
+.labelsCabecera{
+		font-family:'Roboto Regular', arial; 
+	  	font-size: 25px; 
+	  	color:#FFFFFF; 
+	 	margin-left:30px;
+	}
+
+	.cabeceraAcuerdos{
+		height :40px;
+		background-color: #932C60;
+		height:35px;
+		margin-top: 30px;
+	}
+	.titulocabeceraAcuerdos{
+		float:left;
+		margin-left: 10px;	
+	}
+	
+		float: right;
+		margin-right: 30px;		
+	}
+	.imgCerrarModal{
+		  display: block;
+		  width: 30px !important;
+          height: 30px !important;	 
+		  background-repeat: no-repeat;	
+	}
+	
+	 .botonAgregar{        
+        margin-top: 5px;
+        float: left;
+        width: 25px !important;
+        height: 25px !important;
+        
+    } 
+    
+    
+    
+    .cerrarModal{
+		float: right;
+		margin-right: 30px;
+		margin-top: 4px;		
+	}
+	.imgCerrarModal{
+		  display: block;
+		  width: 30px !important;
+          height: 30px !important;	 
+		  background-repeat: no-repeat;	
+	}
+	
+	/*
+*###############################Inicia el css para la tabla###############################
+	*/
+	
+	
+	
+	.ui-paginator-page.ui-state-active {
+    border: 1px solid #a46284;
+    background: #85b2cb url(/acuerdos/app/javax.faces.resource/images/ui-bg_inset-hard_65_85b2cb_1x100.png?ln=primefaces-aristo) 50% 50% repeat-x;
+    background: #85b2cb linear-gradient(top, rgba(255,255,255,0), rgba(255,255,255,0.4));
+    background: rgba(164, 98, 132, 1);  -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0)), to(rgba(255,255,255,0.4)));
+    background: #85b2cb -moz-linear-gradient(top, rgba(255,255,255,0), rgba(255,255,255,0.4));
+    font-weight: bold;
+    color: white;
+     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+	}	
+	/**
+*############################CSS PARA LA SELECCION DE REPORTES
+	**/
+	
+		@media (max-width: 1200px) {
+	  .lblTituloForm {
+			font-size: 20px;
+			color: #1b7986;
+		}
+  }
+  
+  
+  /*
+  *#######################CSS PARA EL BOTON DE DESCARGA
+  */
+ 
+.ui-button{
+	 color: #902B5E;
+    background-color: #ffffff;
+}
+   .ui-corner-all{
+    color: #902B5E;
+    background-color: #ffffff;
+}
+ /**
+ * Alineamos las columnas al centro
+ **/
+ .tablaCentro {
+			text-align: center;
+
+		  }
+ .ui-datatable-empty-message{
+		 text-align:left;
+ }

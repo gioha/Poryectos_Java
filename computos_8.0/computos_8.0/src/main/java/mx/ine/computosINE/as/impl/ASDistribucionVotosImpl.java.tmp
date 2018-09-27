@@ -1,0 +1,141 @@
+package mx.ine.computosINE.as.impl;
+
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import mx.ine.common.helper.HLPCandidatosInterface;
+import mx.ine.common.ws.candidatos.dto.response.DTOCandidatoWS;
+import mx.ine.computosINE.as.ASDistribucionVotosInterface;
+import mx.ine.computosINE.dao.DAODistribucionVotosInterface;
+import mx.ine.computosINE.dto.DTOActaCasillaVotos;
+import mx.ine.computosINE.dto.DTOActaCasillaVotosPK;
+import mx.ine.computosINE.dto.DTODistribucionCandParcial;
+import mx.ine.computosINE.dto.DTODistribucionCandParcialPK;
+import mx.ine.computosINE.dto.DTODistribucionCandidatos;
+import mx.ine.computosINE.dto.DTODistribucionCandidatosPK;
+import mx.ine.computosINE.dto.DTODistribucionPartidosCI;
+import mx.ine.computosINE.dto.DTODistribucionPartidosCIPK;
+
+
+/**
+ * <code>ASDistribucionVotosImpl.java</code>Descripcion de la clase
+ *
+ * @author Alejandra Gómez Ruiz
+ * @version 1.0
+ * @since 28/04/2017 12:13:00
+ */
+@Scope("prototype")
+@Service("asDistribucionVotos")
+public class ASDistribucionVotosImpl implements ASDistribucionVotosInterface{
+
+	@Autowired
+	@Qualifier("daoDistribucionVotos")
+	private transient DAODistribucionVotosInterface dao;
+	
+	@Autowired
+	@Qualifier("hlpCandidatos")
+	private transient HLPCandidatosInterface hlpCandidatos;
+	
+	
+	/**
+	 * Consulta la información de la distribución final 
+	 * tomando en cuenta que es una candidatura de diputado o gobernador a nivel OPLE
+	 * @param pk
+	 * @return List<DTODistribucionCandidatos>
+	 * 
+	 */
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, readOnly=true, rollbackFor={Exception.class})
+	public List<DTODistribucionCandidatos> consultarDistribucionFinal(DTODistribucionCandidatosPK pk) throws Exception{
+		return dao.consultarDistribucionFinal(pk);
+	}
+	
+	
+	
+	/**
+	 * Consulta la información de la distribución parcial
+	 * tomando en cuenta que es una candidatura de diputado o gobernador a nivel CM
+	 * @param pk
+	 * @return List<DTODistribucionCandParcial>
+	 */
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, readOnly=true, rollbackFor={Exception.class})
+     public List<DTODistribucionCandParcial> consultarDistribucionParcial(DTODistribucionCandParcialPK pk) throws Exception{
+    	 return dao.consultarDistribucionParcial(pk);
+     }
+     
+     
+     
+     /**
+      * Consulta la información de la distribución de partidos y candidatos independientes,
+      * para los tipos de candidaturas de regidurias, ayuntamientos, gobernador y diputados
+      * @param pk
+	  * @return List<DTODistribucionPartidosCI>
+      */
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, readOnly=true, rollbackFor={Exception.class})
+	public List<DTODistribucionPartidosCI> consultarDistribucionPartidosCI(DTODistribucionPartidosCIPK pk) throws Exception{
+		return dao.consultarDistribucionPartidosCI(pk);
+	}
+
+
+
+	/**
+	 * Proporciona la lista de asociaciones que participan en una elección
+	 * @param pk
+	 * @return List<DTOActaCasillaVotos>
+	 */
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, readOnly=true, rollbackFor={Exception.class})
+	public List<DTOActaCasillaVotos> consultarAsociacionesParticipantes(DTOActaCasillaVotosPK pk) throws Exception {
+		return dao.consultarAsociacionesParticipantes(pk);
+	}
+
+
+
+	@Override
+	public DTOCandidatoWS getInfoFromAsociacion(Integer idProcesoElectoral, Integer idPartidoCandidato,
+			Integer idEstado) throws Exception {
+		return hlpCandidatos.consultarAsociacion(idProcesoElectoral, idPartidoCandidato, idEstado);
+	}
+	
+	
+	/**
+	 * Consulta la información de los distritos en los cuales ya se encuentra hecha la distribución
+	 * @param idProcesoElectoral
+	 * @param idDetalleProceso
+	 * @param idEstado
+	 * @param idMunicipio
+	 */
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, readOnly=true, rollbackFor={Exception.class})
+	public List<Integer> getDistritosWithDistribucion(Integer idProcesoElectoral,
+			 Integer idDetalleProceso, Integer idEstado, Integer idMunicipio) throws Exception{
+		return dao.getDistritosWithDistribucion(idProcesoElectoral, idDetalleProceso, idEstado, idMunicipio);
+	}
+	
+	
+	/**
+	 * Consulta la información de las demarcaciones en los cuales ya se encuentra hecha la distribución
+	 * @param idProcesoElectoral
+	 * @param idDetalleProceso
+	 * @param idEstado
+	 * @param idMunicipio
+	 */
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, readOnly=true, rollbackFor={Exception.class})
+	public List<Integer> getDemarcacionesWithDistribucion(Integer idProcesoElectoral,
+			 Integer idDetalleProceso, Integer idEstado, Integer idMunicipio) throws Exception{
+		return dao.getDemarcacionesWithDistribucion(idProcesoElectoral, idDetalleProceso, idEstado, idMunicipio);
+	}
+	
+	
+
+}

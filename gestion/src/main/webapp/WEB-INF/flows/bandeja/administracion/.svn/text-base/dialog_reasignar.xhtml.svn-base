@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sec="http://www.springframework.org/security/tags">
+
+	<p:dialog id="dialogReasignar" widgetVar="dialogReasignar" styleClass="ventanaEmergenteEnvio"
+			  header="Reasignar documento"
+			  modal="true" 
+			  height="600" width="700" >
+		<!-- <p:ajax event="close" listener="#{mbBorradores.limpiar}"
+				update=":formBorradores:dialog_enviar_fv" /> -->
+		<p:outputPanel id="panelReasignar">
+		
+			<p:outputPanel id="panelPestanaBusquedaReasignar"> 
+			
+				<div class="row" style="border-bottom: 2px solid #a0005f; padding-top: 9px; margin-right: 0px;">
+				
+					<!-- <div class="col-xs-3" style="padding-right: 0px;">
+						
+						<p:commandLink value="#{messageSource['mensaje_pestana_busqueda_por_area']}"
+									   actionListener="#{mbBEntrada.cambiarListaAreasAPersonas}"
+									   immediate="true"
+								       update="panelReasignar"
+								       styleClass="#{mbBEntrada.muestraPersonas ? 'ventanaEmergenteEnvioPestaniaActiva' : 'ventanaEmergenteEnvioPestaniaInactiva'}"
+								       style="color:white; text-decoration:none;"/> 
+		
+					</div> -->
+					<div class="col-xs-4" style="padding-right: 0px;">
+		
+						<p:commandLink value="#{messageSource['mensaje_pestana_busqueda_por_titulares']}"
+										actionListener="#{mbBEntrada.cambiarListaPersonasAAreas}"
+								       	immediate="true"
+								       	update="panelReasignar"
+								       	styleClass="#{mbBEntrada.muestraPersonas ? 'ventanaEmergenteEnvioPestaniaInactiva' : 'ventanaEmergenteEnvioPestaniaActiva'}"
+								       	style="color:white; text-decoration:none;"/>
+		
+					</div>
+							   
+				</div>
+			</p:outputPanel>
+			
+			<!-- <p:outputPanel rendered="#{mbBEntrada.muestraPersonas eq true}" >
+				<ui:include src="tabla_personas_reasignar.xhtml" />
+			</p:outputPanel> -->
+			
+			<p:outputPanel rendered="#{mbBEntrada.muestraPersonas ne true}" >
+				<ui:include src="tabla_titulares_reasignar.xhtml" />
+			</p:outputPanel>
+		
+		</p:outputPanel>
+
+	</p:dialog>
+</ui:composition>

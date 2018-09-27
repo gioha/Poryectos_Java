@@ -1,0 +1,62 @@
+/*-------------------------------------------------*/
+/* Hoja de Estilos para el módulo de               */
+/*       	Apartado de documentos		           */
+/*  v1.0 Release Date 04 de Enero de 2018          */
+/*-------------------------------------------------*/
+
+.linksPersonasEncontradas {
+	font-size: 13px !important;
+}
+
+.linksPersonasEncontradas.ui-commandlink  {
+	color: #706f6f;
+	text-decoration: none;
+}
+
+.linksPersonasEncontradas:hover {
+	color: #d6007e !important;
+}
+
+.detallePersona.ui-dialog .ui-dialog-content {
+	overflow: initial;
+}
+
+.texto_periodoVencido {
+	color: #a0005f;
+	font-weight: bold;
+	font-style: italic;
+	font-size: 13px;
+}
+
+/*************************** SANGRIAS *********************************/
+
+.ui-icon-bullet {
+	background-position: -81px -142px;
+}
+
+/*************************** INPUTFIELD *********************************/
+.ui-inputfield {
+	padding: 7px;
+}
+
+/*************************** GROWL *********************************/
+div[id="form_corresponsales:mensaje_general_info_container"] > div {
+
+	background: #29abe2 !important;
+}
+
+div[id="form_corresponsales:mensaje_general_advertencia_container"] > div {
+
+	background: #fcee21 !important;
+	color: black; 
+}
+
+div[id="form_corresponsales:mensaje_general_advertencia_container"] > div .ui-growl-item {
+	border-bottom: 2px solid black!important;
+	border-top: 2px solid black!important;
+}
+
+div[id="form_corresponsales:mensaje_general_exito_container"] > div {
+
+	background: #7ac943 !important;
+}

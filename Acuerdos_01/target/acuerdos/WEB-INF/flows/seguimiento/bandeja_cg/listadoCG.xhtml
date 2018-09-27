@@ -1,0 +1,586 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/templates/template.xhtml">	
+<ui:define name="CONTENT">
+ <c:if test="#{SPRING_SECURITY_CONTEXT != null}">	 
+	
+	<h:outputStylesheet library="css" name="bandeja.css" />
+	<!-- ############SCRIPT PARA EL TEMPORIZADOR DE DESCARGA -->
+		<script type="text/javascript">
+			function start() {
+				PF('statusDialog').show();
+			}
+
+			function stop() {
+				PF('statusDialog').hide();
+			}
+			function procesaNegritas() {
+				$('.extracto-texto-punto').each(function() {
+					var texto = $(this).text();
+					var arregloTexto = texto.split('.-');
+					console.log(arregloTexto);
+					
+					var afterText = "";
+				 	$.each( arregloTexto , function( i, l ){
+						
+						if(i !== 0){
+							
+							afterText	= afterText + ".-" + l;
+							
+						}
+						
+					}) 
+					
+					$(this).text(arregloTexto[0])
+					$(this).after(afterText);
+				});
+			}
+		</script>
+		<p:dialog modal="true" widgetVar="statusDialog" header="Cargando..."
+			draggable="false" closable="false" resizable="false">
+			<p:graphicImage name="/img/loader.gif"/>
+		</p:dialog>
+	<div class="container">	
+		<div class="row">
+			<div class="col-xs-12 espaciador-xs-top">
+				<!-- ##################################### CAMINO DE MIGAJAS  ##################################### -->
+				<ol class="breadcrumb migaja">
+					<li>
+						<a href="${request.contextPath}/app/home"> 
+							<h:outputText value="#{messageSource['lbl_home']}" />
+						</a>
+					</li>				
+					<li class="active">#{messageSource['lbl_acuerdo_migaja']}</li>
+				</ol>
+			</div>
+		</div>
+			
+		<!-- ##################################### ENCABEZADO DE LA PAGINA  ##################################### -->	
+		<div class="row">
+			<div class="col-xs-12 tituloModal lblTituloForm robotoRegular">
+				#{messageSource['lbl_acuerdo_migaja']}
+			</div>
+			<div class="col-xs-12 col-md-6 text-center">
+				<h:form>
+					<div id="radios-tipo-documento">
+						<p:selectOneRadio 	id="tipo"
+										value="#{mbBandeja.tipo}">
+							<f:selectItem itemValue="true" itemLabel="#{messageSource['lbl_acuerdos_bandeja']}" />
+							<f:selectItem itemValue="false" itemLabel="#{messageSource['lbl_resolucion_bandeja']}" />
+							<p:ajax process="@this" update=":form :formPun" listener="#{mbBandeja.selectRadioItemTipo}"/>						
+						</p:selectOneRadio>
+					</div>
+				</h:form>
+			</div>
+			<h:form id="formBusqueda">
+				<div id="busqueda-bandeja" class="col-xs-12 col-md-6 text-right">
+					<h:outputText value="#{messageSource['lbl_bus_acuerdo_por']}"/>		
+					<p:selectOneRadio id="buscarPor" value="#{mbBandeja.buscarPor}" styleClass="lblInputs">
+			       		 <f:selectItem itemLabel="#{messageSource['lbl_num_doc']}" itemValue="Acuerdo" selected="true"/>
+			       		 <f:selectItem itemLabel="#{messageSource['lbl_reporte_seguimiento_anio']}" itemValue="Fecha"/>
+			       		 <p:ajax update=":formBusqueda :form :formPun" event="change"/>
+			       		 <f:ajax execute="@this"/>                    
+			  	 	</p:selectOneRadio>
+			  	 	<div>
+						<c:if test="#{mbBandeja.buscarPor eq 'Acuerdo'}">	
+							<p:autoComplete id="busquedaAcuerdo" 
+									action="#{mbBandeja.cambio}"
+									value="#{mbBandeja.idBusqueda}" 
+									completeMethod="#{mbBandeja.busquedaAcuerdo}" 
+									styleClass="inputsForm" 											
+									placeholder="#{messageSource['lbl_bus_acuerdos']}"											
+									update=":form :formPun :consultaDetalleDialog"																
+									onkeyup="javascript:this.value=this.value.toUpperCase();"
+									minQueryLength="2"
+									onblur="this.value=verificarPalabras(this.value)">						                                    
+		                               <p:ajax event="keyup" update=":form :formPun :consultaDetalleDialog" listener="#{mbBandeja.busquedaAcuerdo}"/>
+		                               <p:ajax event="itemSelect" listener="#{mbBandeja.onItemSelect}" update=":form :formPun :consultaDetalleDialog :formBusqueda" onstart="start();" oncomplete="stop();"/>
+		                               <p:ajax event="change" listener="#{mbBandeja.cambio}" process=":form :formPun :consultaDetalleDialog :formBusqueda"/>
+		                    </p:autoComplete> 
+	                     </c:if>
+	                     <c:if test="#{mbBandeja.buscarPor eq 'Fecha'}">	
+							<p:inputText id="buscaPorFecha" 
+									placeholder="#{messageSource['lbl_bus_acuerdo_por_anio']}"										
+									size="20"
+									styleClass="inputsForm" 									
+									requiredMessage="#{messageSource['validacion_mensajes_generales_solo_numeros']}"										
+									maxlength="4"										
+									onkeypress="if(event.which &lt; 48 || event.which &gt; 57 ) return false;"
+									value="#{mbBandeja.anioBusqueda}"
+									onblur="this.value=verificarPalabras(this.value)">
+										<p:ajax event="keyup" update=":form :formPun" listener="#{mbBandeja.busquedaAcuerdoPorFecha}" />					  
+							</p:inputText>
+						</c:if>                                                                     	
+	                </div>
+			    </div>
+			</h:form>
+		</div>
+						
+		<!-- ##################################### DIALOG DE ELIMINACION DEL ACUERDO  ##################################### -->	
+			
+			<p:dialog widgetVar="elimAcuDialog" modal="true" showEffect="fade"
+			closeOnEscape="true" draggable="false"			
+			closable="true" position="center" id="elimAcu"
+			width="400px" hideEffect="fade" resizable="false">
+			<p:outputPanel id="panelElimAcu">		
+				<div class="ui-g contenModalElimAcu">
+				<h:form id="dlgA">
+					<c:if test="#{mbBandeja.puntosAcuerdoSeleccionado.size() > 0}">	
+						<div id="mensjeSiPuntos" class="contModalElimAcu">	
+								<c:if test="#{mbBandeja.acuerdoSeleccionado.idTipoDocumento eq 1}">					
+								<h:outputText class="robotoMedium" value="#{messageSource['lbl_con_puntos']}"/>	
+								</c:if>	
+								<c:if test="#{mbBandeja.acuerdoSeleccionado.idTipoDocumento eq 6}">					
+								<h:outputText class="robotoMedium" value="#{messageSource['lbl_rel_puntos']}"/>	
+								</c:if>					  	
+						</div>
+						<div id="mensje" >						
+								<h:outputText class="robotoMedium" value="#{messageSource['lbl_conf_puntos']}"/><br/>				   
+						</div>
+				    </c:if>
+				    <c:if test="#{mbBandeja.puntosAcuerdoSeleccionado.size() eq 0}">	
+						<div id="mensjeSiPuntos" class="contModalElimAcu">	
+								<c:if test="#{mbBandeja.acuerdoSeleccionado.idTipoDocumento eq 1}">						
+								<h:outputText class="robotoMedium" value="#{messageSource['validacion_mensaje_generales_eliminar_acuerdo']}"/>	
+								</c:if>	
+								<c:if test="#{mbBandeja.acuerdoSeleccionado.idTipoDocumento eq 6}">						
+								<h:outputText class="robotoMedium" value="#{messageSource['validacion_mensaje_elim_resolucion']}"/>	
+								</c:if>				  	
+						</div>						
+				    </c:if>		
+				</h:form>	
+					<div class="acciones-modal">
+		 	 			<p:commandButton value="#{messageSource['etiqueta_boton_cancelar']}" type="button" styleClass="ui-confirmdialog-no"  onclick="PF('elimAcuDialog').hide()"/>				 
+						<h:form>
+							 <p:commandButton value="#{messageSource['etiqueta_boton_aceptar']}" styleClass="ui-confirmdialog-yes" 
+							 					actionListener="#{mbBandeja.eliminaAcuerdo}"							 						
+							 					ajax="true"
+							 					update=":form :formPun"
+							 					onclick="PF('elimAcuDialog').hide()"
+							 					onstart="PF('progress').block()" 
+												onsuccess="PF('progress').unblock()"/>
+						</h:form>
+					</div>					
+				</div>
+			</p:outputPanel>
+		</p:dialog>
+		
+		<!-- ##################################### DIALOG DE ELIMINACION DEL PUNTO  ##################################### -->	
+			
+			<p:dialog widgetVar="elimPuntoDialog" modal="true" showEffect="fade"
+			closeOnEscape="true" draggable="false"			
+			closable="true" position="center" id="elimPunto"
+			width="400px" hideEffect="fade" resizable="false">
+			<p:outputPanel id="panelElimPunto">		
+				<div class="ui-g contenModalElimAcu">
+				<h:form id="dlgP">	
+							
+					<div id="mensjeSiPuntos" class="contModalElimAcu">
+							<c:if test="#{mbBandeja.puntoEnSeguimiento.size() > 0}">											
+								<h:outputText class="robotoMedium" value="#{messageSource['lbl_punto_en_seguimiento']}"/><br/>					
+						    </c:if>								
+												  	
+					</div> 		
+				</h:form>	
+						<div class="acciones-modal">
+							<p:commandButton value="#{messageSource['etiqueta_boton_cancelar']}" type="button" styleClass="ui-confirmdialog-no"  onclick="PF('elimPuntoDialog').hide()"/>
+							<h:form>
+								 <p:commandButton value="#{messageSource['etiqueta_boton_aceptar']}" styleClass="ui-confirmdialog-yes" 
+								 					actionListener="#{mbBandeja.eliminaPunto}"							 						
+								 					ajax="true"
+								 					update=":form :formPun"
+								 					onclick="PF('elimPuntoDialog').hide()"
+								 					onstart="PF('progress').block()" 
+													onsuccess="PF('progress').unblock()"/>
+							 </h:form>
+						</div>
+				</div>
+			</p:outputPanel>
+		</p:dialog>
+				
+	<!-- ##################################### DIALOG PARA VER DETALLES DEL ACUERDO  ##################################### -->
+	<!-- border-radius: 10px;
+border: 2px solid #A09F9F; -->		
+		<p:dialog widgetVar="muestraDetalle" modal="true" showEffect="fade"
+			closeOnEscape="true" draggable="true"			
+			closable="false" position="center" id="consultaDetalleDialog"
+			width="60%" hideEffect="fade" resizable="true" >
+			<p:outputPanel id="detalleConsulta">		
+				<div class="ui-g contenedorModal">
+					<div class="contenedorModalHeader">
+						 <span class="tituloModal">						 	 
+							 <h:outputText class="lblTituloForm" value="#{messageSource['lbl_consul_acuerdo']}"/>		
+					 	 </span>
+					 	 <span class="cerrarModal">
+					 	 	<p:commandLink  styleClass="imgCerrarModal" 
+								   	 	    onclick="PF('muestraDetalle').hide()">
+								   	 	     <h:graphicImage  name="cerrar_cons.png" 
+				               					  library="img/seguimiento" />	
+			   	 	    	</p:commandLink>					 
+						</span>			
+					</div>
+					<div class="separador"></div>
+					<div class="divTextoSeparador">
+						<h:outputLabel class="textoSeparador" value="#{mbBandeja.acuerdoSeleccionado.idNumAcuerdo}"/>
+					</div>	
+					<div class="nombreAcuerdo">
+						<h:outputText class="lblElemAcuerdo robotoBold" value="Tipo de documento:"/>&nbsp;
+						 <c:if test="#{mbBandeja.acuerdoSeleccionado.idTipoDocumento eq 1}">						
+						<h:outputText class ="robotoBold" value="Acuerdo"/>
+						</c:if>
+						 <c:if test="#{mbBandeja.acuerdoSeleccionado.idTipoDocumento eq 6}">						
+						<h:outputText class ="robotoBold" value="Resolución"/>
+						</c:if>						
+					</div>
+					<div class="desAcu">
+					   <c:if test="#{mbBandeja.acuerdoSeleccionado.idTipoDocumento eq 1}">						 
+						<h:outputText class="lblElemAcuerdo robotoBold" value="#{messageSource['lbl_nom_acuerdo']}:"/>&nbsp;
+					   </c:if>	
+					    <c:if test="#{mbBandeja.acuerdoSeleccionado.idTipoDocumento eq 6}">						 
+						<h:outputText class="lblElemAcuerdo robotoBold" value="#{messageSource['lbl_nom_resolucion']}:"/>&nbsp;
+					   </c:if>							
+						<h:outputText class ="robotoBold" value="#{mbBandeja.acuerdoSeleccionado.nombre}"/>
+					</div>
+					<div class="desAcu">						
+						<h:outputText class="lblElemAcuerdo robotoBold" value="#{messageSource['lbl_fecha_sesion']}:"/>&nbsp;						
+						<h:outputText class="lblContmAcuerdo robotoRegular" value="#{mbBandeja.acuerdoSeleccionado.fechaSesion}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+						</h:outputText>						
+					</div>
+					<div class="desAcu">
+						<h:outputText class="lblElemAcuerdo robotoBold" value="#{messageSource['lbl_tipo_sesion']}:"/>&nbsp;
+						<h:outputText class="lblContmAcuerdo robotoRegular" value="#{mbBandeja.tipoSesion()}"/>
+					</div>
+					<div class="desAcu">				
+							<h:form>
+									<h:outputText class="lblElemAcuerdo robotoBold" value="#{messageSource['lbl_liga']}:"/>&nbsp;	
+								    <h:commandLink class="lblContmAcuerdo robotoRegular" value="#{mbBandeja.acuerdoSeleccionado.ligaAcuerdo}" target="_new" action="#{mbBandeja.redirect}" />
+							</h:form>
+						
+					</div>
+					<c:if test="#{mbBandeja.acuerdoSeleccionado.acuerdoAdjunto ne null}">
+						<div class="desAcu">
+							<h:outputText class="lblElemAcuerdo robotoBold" value="#{messageSource['lbl_archivo']}:"/>
+							<a href="${request.contextPath}/#{mbBandeja.rutaPrevisualizacionAcuerdo}" target="_blank" class="archivo-decarga robotoRegular">
+						    	<h:outputText value="#{mbBandeja.obtenNombreAdjunto(mbBandeja.acuerdoSeleccionado.acuerdoAdjunto)}" />
+						    </a>
+						</div>
+	            	</c:if>
+					<c:if test="#{mbBandeja.acuerdoSeleccionado.numOficioEngrose != null}">
+									
+						<div class="desAcu">
+							<h:outputText class="lblElemAcuerdo robotoBold" value="#{messageSource['lbl_con_engrose']}"/>
+						</div>
+						<div class="desEng">
+							<h:outputText class="lblElemAcuerdo robotoBold" value="#{messageSource['lbl_fecha_notif']}:"/>&nbsp;
+							<h:outputText class="lblContmAcuerdo robotoRegular" value="#{mbBandeja.acuerdoSeleccionado.fechaEngrose}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+						</h:outputText>	
+						</div>
+						<div class="desEng">
+							<h:outputText class="lblElemAcuerdo robotoBold" value="#{messageSource['lbl_num_oficio']}:"/>&nbsp;
+							<h:outputText class="lblContmAcuerdo robotoRegular" value="#{mbBandeja.acuerdoSeleccionado.numOficioEngrose}"/>
+						</div>
+					
+					</c:if>
+					<c:if test="#{mbBandeja.acuerdoSeleccionado.engrose eq 0}">
+									
+						<div class="desAcu">
+							<h:outputText class="lblElemAcuerdo robotoBold" value="#{messageSource['lbl_con_engrose']}:"/>&nbsp;
+							<h:outputText class="lblContmAcuerdo robotoRegular" value="#{messageSource['lbl_no']}"/>
+						</div>
+						
+					</c:if>	
+					<c:if test="#{mbBandeja.acuerdoSeleccionado.engrose eq 1}">
+									
+						<div class="desAcu">
+							<h:outputText class="lblElemAcuerdo robotoBold" value="#{messageSource['lbl_con_engrose']}:"/>&nbsp;
+							<h:outputText class="lblContmAcuerdo robotoRegular" value="#{messageSource['lbl_si']}"/>
+						</div>
+						
+					</c:if>		
+				</div>
+			</p:outputPanel>
+		</p:dialog>
+		
+		<!-- BLOCKUI-->
+		<pe:blockUI id="progressAcuerdo" target="form" content="blockUIContentA"  widgetVar="progressAcuerdo" />
+		
+		<!-- BLOCKUICONTENT -->
+		<h:panelGrid id="blockUIContentA" columns="2" style="display:none;"> 
+		    <h:graphicImage library="img" name="loader.gif" width="70"/> 	
+		    <h:outputText value="#{messageSource['mensaje_generales_procesando']}" style="white-space: nowrap;"/> 	
+	    </h:panelGrid>	
+		
+		
+		<!-- ##################################### CONTENIDO DE LA PAGINA  ##################################### -->		
+		<div class="row">
+			<h:form id="form">
+				<div class="col-xs-12">
+					<p:growl id="msgs" showDetail="false" />
+				</div>
+				<div class="col-xs-12 col-md-6">
+					<div class="cabeceraAcuerdos">
+						 <span class="titulocabeceraAcuerdos">							
+								 <c:if test="#{mbBandeja.tipo == 'true'}">
+								  <h:outputText value="Acuerdos" class="labelsCabecera"/>	
+								 </c:if>
+								 <c:if test="#{mbBandeja.tipo == 'false'}">
+								  <h:outputText value="Resoluciones" class="labelsCabecera"/>										
+								 </c:if>	
+						</span>
+						 <span class="cerrarModal">						
+								<p:commandLink  id="agrAcuerdo"
+												styleClass="botonAgregar" 
+												action="agregaAcuerdo"											
+												immediate="true" 
+												ajax="false"
+												rendered="#{mbBandeja.mostrarBotonesAgregarAcuerdo()}">
+									 <h:graphicImage  name="btn_agregar_nrm.png" 
+					               					  library="img/seguimiento" 
+					               					  onmouseover="src='#{request.contextPath}/app/javax.faces.resource/btn_agregar_hover.png?ln=img/seguimiento'"
+					               					  onmouseout="src='#{request.contextPath}/app/javax.faces.resource/btn_agregar_nrm.png?ln=img/seguimiento'" />	
+								</p:commandLink>							
+								  <p:tooltip id="toolTipTrackResol" for="agrAcuerdo" value="#{messageSource['lbl_agregar_doc']}" trackMouse="true" />										
+								 
+						</span> 
+					</div>
+					
+					<p:dataTable    styleClass="tabla"								
+									id="eventsDT" var="acuerdo"
+					 				value="#{mbBandeja.listaAcuerdos}"
+					 				selectionMode="single"				 				
+					 				rowKey="#{acuerdo.idNumAcuerdo}" 
+					 				scrollable="true" 
+					 				scrollHeight="300" 
+					 				rowStyleClass="columnas"
+					 				emptyMessage="No hay información para mostrar">
+				       
+				      	   <p:ajax event="rowSelect" 
+				        		listener="#{mbBandeja.onRowSelect}" 
+				        		update=":form :formPun :consultaDetalleDialog" 
+				        		onstart="start();"
+				        		oncomplete="stop(); procesaNegritas();"/> 
+				          
+					        <p:column headerText="#{messageSource['etiqueta_generales_fecha']}" 
+					        		  sortBy="#{acuerdo.fechaSesion}"
+					        		  styleClass="headerTabla">        	
+					            		<h:outputText class="robotoMedium" value="#{acuerdo.fechaSesion}">
+					            			 <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+					            		</h:outputText>					            	         
+					        </p:column> 
+					        <p:column headerText="#{messageSource['etiqueta_generales_estatus']}" 
+					        		  sortBy="#{acuerdo.estatus}"
+					        		  styleClass="headerTabla" >         				           	 		 			       
+					               
+					               <h:graphicImage  name="#{acuerdo.estatus}.png" 
+					               					library="img/seguimiento" 
+					               					class="reloj"/>         						
+					        </p:column>					       
+					        <p:column headerText="" colspan="3">			        	
+					            <h:outputText value="#{acuerdo.idNumAcuerdo }" style="float:left;"/>			           	
+					            <div style="margin: 0; width:65px; height:10; float:right;display: #{mbBandeja.acuerdoSeleccionado.idNumAcuerdo eq acuerdo.idNumAcuerdo ?'block':'none'};"
+					            	 class="contenedor">				            	
+									   	 <p:commandLink  id="editAcuerdo"
+									   	 				 styleClass="botonEditar"
+									   	 				 action="editaAcuerdo"
+														 immediate="true" 
+														 ajax="false"
+														 rendered="#{mbBandeja.mostrarBotonesCapturaAcuerdos()}">
+											  <h:graphicImage  name="btn_edita_nrm.png" library="img/seguimiento"
+											  onmouseover="src='#{request.contextPath}/app/javax.faces.resource/btn_edita_hover.png?ln=img/seguimiento'"
+					               			  onmouseout="src='#{request.contextPath}/app/javax.faces.resource/btn_edita_nrm.png?ln=img/seguimiento'"/>	
+											   <c:if test="#{mbBandeja.tipo == 'true'}">
+											   <p:tooltip id="toolTipTrack2" for="editAcuerdo" value="#{messageSource['lbl_edit_acuerdo']}" trackMouse="true" />
+											  </c:if>
+											  <c:if test="#{mbBandeja.tipo == 'false'}">
+											   <p:tooltip id="toolTipTrack2Resol" for="editAcuerdo" value="#{messageSource['lb_edit_resol']}" trackMouse="true" />
+											  </c:if>	
+										</p:commandLink>				 
+									 
+									   	 <p:commandLink  id="verAcuerdo"
+									   	 				 styleClass="botonVer" 
+									   	 				 onclick="PF('muestraDetalle').show()"
+									   	 				 rendered="#{mbBandeja.mostrarBotonesConsulta()}">
+									   	 				<h:graphicImage  name="btn_vista_nrm.png" library="img/seguimiento" 
+									   	 				onmouseover="src='#{request.contextPath}/app/javax.faces.resource/btn_vista_hover.png?ln=img/seguimiento'"
+					               			  			onmouseout="src='#{request.contextPath}/app/javax.faces.resource/btn_vista_nrm.png?ln=img/seguimiento'"/>
+									   	 				<c:if test="#{mbBandeja.tipo == 'true'}">
+									   	 				<p:tooltip id="toolTipTrack3" for="verAcuerdo" value="#{messageSource['lbl_ver_acuerdo']}" trackMouse="true" />								 				
+									   	 				</c:if>
+									   	 				<c:if test="#{mbBandeja.tipo == 'false'}">
+									   	 				<p:tooltip id="toolTipTrack3Resol" for="verAcuerdo" value="#{messageSource['lbl_ver_resol']}" trackMouse="true" />								 				
+									   	 				</c:if>
+									   	 				
+									   	 </p:commandLink>				 
+									  
+									   	 <p:commandLink  id="elimAcuerdo"
+									   	 				 styleClass="botonEliminar"
+									   	 				 ajax="true"
+									   	 				 update=":dlgA"
+									   	 				 oncomplete="PF('elimAcuDialog').show()"
+									   	 				 rendered="#{mbBandeja.mostrarBotonesCapturaAcuerdos()}">
+									   	 	  <h:graphicImage  name="btn_elimina_nrm.png" library="img/seguimiento" 
+									   	 	  					onmouseover="src='#{request.contextPath}/app/javax.faces.resource/btn_elimina_hover.png?ln=img/seguimiento'"
+					               			  					onmouseout="src='#{request.contextPath}/app/javax.faces.resource/btn_elimina_nrm.png?ln=img/seguimiento'"/>
+									   	 	  <c:if test="#{mbBandeja.tipo == 'true'}">
+									   	 	  <p:tooltip id="toolTipTrack4" for="elimAcuerdo" value="#{messageSource['lbl_elim_acuerdo']}" trackMouse="true" />	
+									   	 	  </c:if>	
+									   	 	  <c:if test="#{mbBandeja.tipo == 'false'}">
+									   	 	  <p:tooltip id="toolTipTrack4Resol" for="elimAcuerdo" value="#{messageSource['lbl_elim_resol']}" trackMouse="true" />	
+									   	 	  </c:if>						 
+									   	</p:commandLink> 				 						 
+					            	  
+					            	   </div>
+					        </p:column>				      	
+				    </p:dataTable>
+				</div>
+			</h:form>
+			<h:form id="formPun">
+		 		<div class="col-xs-12 col-md-6">
+				 	<div class="cabeceraAcuerdos">
+						 <span class="titulocabeceraAcuerdos">
+								<h:outputText value="#{messageSource['lbl_puntos']}" 
+										  	  class="labelsCabecera"/>		
+						</span>
+						 <span class="cerrarModal">						
+								<p:commandLink  id="agrPunto"
+												style="display:#{mbBandeja.mostrarAgregarPunto eq 'false' ?'none':'block'}"
+												styleClass="botonAgregar" 
+												action="agregaPunto"
+												immediate="true" 
+												ajax="false"
+												rendered="#{mbBandeja.mostrarBotonesAgregarAcuerdo()}">
+												 <h:graphicImage  name="btn_agregar_nrm.png" 
+								               					  library="img/seguimiento"
+								               					  onmouseover="src='#{request.contextPath}/app/javax.faces.resource/btn_agregar_hover.png?ln=img/seguimiento'"
+								               					  onmouseout="src='#{request.contextPath}/app/javax.faces.resource/btn_agregar_nrm.png?ln=img/seguimiento'" />
+								</p:commandLink>
+								<p:tooltip id="toolTipTrack7" for="agrPunto" value="#{messageSource['lbl_agregar_punto']}" trackMouse="true" />												
+						</span> 
+					</div>
+					
+					<p:dataTable id="eventsDTC" 								 
+									scrollable="true" 
+					 				scrollHeight="300"
+					 				var="punto" 
+					 				selectionMode="single"
+					 				rowKey="#{punto.id.numeralia}"
+					 				value="#{mbBandeja.puntosAcuerdoSeleccionado}" 
+					 				styleClass="tabla"
+					 				emptyMessage="#{mbBandeja.mensajesTablaPuntos()}">
+				       	 
+				       	 <p:ajax event="rowSelect" 
+				        		 listener="#{mbBandeja.onRowSelectPunto}" 
+				        		 update=":formPun:eventsDTC"
+				        		 oncomplete="procesaNegritas();" />        		 
+				       <c:if test="#{mbBandeja.mostrarSemaforos eq 'true'}">
+				       			 <p:column headerText="">
+							         <f:facet name="header">
+								        <h:graphicImage  name="reloj.png" 
+							               					library="img/seguimiento" 
+							               					class="reloj"/>
+								    </f:facet>
+								    
+						            <h:graphicImage  name="#{punto.semaforo}.png" 
+							               					library="img/seguimiento" class="reloj"/>					             
+						        </p:column>
+				       </c:if>
+				        <c:if test="#{mbBandeja.mostrarSemaforos eq 'false'}">			       
+						        <p:column headerText="#{messageSource['etiqueta_generales_estatus']}"  width="20%" styleClass="colEstatus">           	 
+						            	   <h:outputText value="#{punto.estatusGlobal}" class="#{punto.estatusGlobal}"/>							            						            
+						        </p:column>
+						        <p:column headerText="">
+							         <f:facet name="header">
+								        <h:graphicImage 	name="reloj.png" 
+							               					library="img/seguimiento" 
+							               					class="reloj"/>
+								    </f:facet>
+								    
+						            <h:graphicImage  name="#{punto.semaforo}.png" 
+							               					library="img/seguimiento" 
+							               					class="reloj"/>					             
+						        </p:column>
+				        </c:if> 
+				        <p:column headerText="" colspan="4" styleClass="textoPunto robotoRegular">
+				        	
+				            	<!-- <h:outputText value="#{punto.textoPunto}" /> -->
+				            	<span class="extracto-texto-punto">
+				            		<h:outputText value="#{punto.textoPunto.length() gt 350 ? punto.textoPunto.substring(0,350).concat('.....') : punto.textoPunto}" />
+				            	</span>
+				           
+				            <div style="margin: 0; display: #{mbBandeja.puntoSeleccionado.id.numeralia eq punto.id.numeralia ?'block':'none'}; 
+					            	 width:65px; 
+					            	 height:10; 
+					            	 float:right;"
+					            	 class="contenedor">
+					            	
+									   	 <p:commandLink  id="editPunto"
+									   	 				 styleClass="botonEditar"
+									   	 				 action="editaPunto"
+														 immediate="true" 
+														 ajax="false"
+														 rendered="#{mbBandeja.mostrarBotonesCapturaPuntos()}">
+												 <h:graphicImage  name="btn_edita_nrm.png"  library="img/seguimiento"
+												 				  onmouseover="src='#{request.contextPath}/app/javax.faces.resource/btn_edita_hover.png?ln=img/seguimiento'"
+					               								  onmouseout="src='#{request.contextPath}/app/javax.faces.resource/btn_edita_nrm.png?ln=img/seguimiento'"/>	
+												 <p:tooltip id="toolTipTrack5" for="editPunto" value="#{messageSource['lbl_edit_punto']}" trackMouse="true" />	 
+										</p:commandLink>				 
+									  
+									  	<c:if test="#{mbBandeja.sinAreas eq 'true'}">
+										   	 <p:commandLink  id="segPunto"
+										   	 				 styleClass="botonDesPunto" 
+										   	 				 action="histPunto"
+															 immediate="true" 
+															 ajax="false"
+															 rendered="#{mbBandeja.mostrarBotonesConsulta()}">								   	 				 
+										   	 				 <h:graphicImage  name="btn_conseg_nrm.png" library="img/seguimiento"
+																	onmouseover="src='#{request.contextPath}/app/javax.faces.resource/btn_conseg_hover.png?ln=img/seguimiento'"
+						               			  					onmouseout="src='#{request.contextPath}/app/javax.faces.resource/btn_conseg_nrm.png?ln=img/seguimiento'"/>
+													<p:tooltip id="toolTipTrack8" for="segPunto" value="#{messageSource['lbl_seguim_punto']}" trackMouse="true" />	 		 
+											</p:commandLink>				 
+									  	</c:if>
+									   	 <p:commandLink  styleClass="botonEliminar"								   	 
+													   	 id="btnEliminar"													 											 
+														 update=":dlgP"													 
+														 ajax="true" 												
+														 oncomplete="PF('elimPuntoDialog').show()"
+														 rendered="#{mbBandeja.mostrarBotonesCapturaPuntos()}">
+														 <h:graphicImage  name="btn_elimina_nrm.png" library="img/seguimiento" 
+														 		onmouseover="src='#{request.contextPath}/app/javax.faces.resource/btn_elimina_hover.png?ln=img/seguimiento'"
+					               			  					onmouseout="src='#{request.contextPath}/app/javax.faces.resource/btn_elimina_nrm.png?ln=img/seguimiento'"/>											 		
+												 		<p:tooltip id="toolTipTrack9" for="btnEliminar" value="#{messageSource['lbl_elim_punto']}" trackMouse="true" />				
+									 	</p:commandLink>
+									 
+					           </div>
+				        </p:column>
+				       
+				    </p:dataTable>	
+			    </div>		 
+		</h:form>
+	</div>		
+<!-- BLOCKUI-->
+		<pe:blockUI id="idProgress" target="form" content="blockUIContent"  widgetVar="progress" />
+		
+<!-- BLOCKUICONTENT -->
+		<h:panelGrid id="blockUIContent" columns="2" style="display:none;"> 
+		    <h:graphicImage library="img" name="loader.gif" width="70"/> 	
+		    <h:outputText value="#{messageSource['mensaje_generales_procesando']}" style="white-space: nowrap;"/> 	
+	    </h:panelGrid>	
+	</div>
+	</c:if>	
+	
+	<h:outputScript library="js" name="verificaPalabras.js" />
+	
+ </ui:define>	
+</ui:composition>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui" xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sf="http://www.springframework.org/tags/faces"
+				xmlns:sec="http://www.springframework.org/security/tags" >
+
+	<p:outputPanel id="id_panelVotos" >
+		<div class="ui-g">
+			<h2>
+				#{messageSource['etiqueta_regVotacion_votos_contabi']} - #{messageSource['etiqueta_seccion']}
+                #{mbCapActaDRP.form.acta.seccion} - #{messageSource['etiqueta_casilla']} #{mbCapActaDRP.form.acta.nombreCasilla}
+                - #{mbCapActaDRP.form.acta.descTipoCandidatura}
+			</h2>
+
+			<c:forEach var="c" items="${mbCapActaDRP.carga.candidatos}" varStatus="status">
+				<div class="ui-g-12">
+					<div class="row">
+						<!-- NOMBRES DE LA ASOCIACION POLITICA -->
+						<div class="ui-g-5 ui-md-5">
+					    	<h:outputText value="${c.nombreAsociacion}" />
+					    </div>
+						<c:choose>
+							<!-- PARTIDOS POLITICOS -->
+							<c:when test="${c.tipoAsociacion eq 1}">
+							    <div class="ui-g-1 ui-md-1">
+							    	<p:graphicImage value="#{mbCapActaDRP.imagen}" 
+													height="30" 
+													cache="false" >
+										<f:param name="id_candidato" value="${c.cveCandidato}" />
+										<f:param name="emblema" value="${c.emblema}" />
+									</p:graphicImage>
+							    </div>
+							</c:when>
+							<!-- CANDIDATOS INDEPENDIENTES -->
+							<c:when test="${c.tipoAsociacion eq 4}">
+								<div class="ui-g-1 ui-md-1">
+							    	<p:graphicImage url="/resources/image/id_CI.png"
+													height="30" 
+													cache="false" >
+									</p:graphicImage>
+							    </div>
+							</c:when>
+							<!-- CANDIDATOS NO REGISTRADOS -->
+							<c:when test="${c.tipoAsociacion eq -1}">
+							    <div class="ui-g-1 ui-md-1">
+							    	<p:graphicImage url="/resources/image/noregistrados.png"
+													height="30" 
+													cache="false" >
+									</p:graphicImage>
+							    </div>
+							</c:when>
+							<!-- VOTOS NULOS -->
+							<c:when test="${c.tipoAsociacion eq -2}">
+							    <div class="ui-g-1 ui-md-1">
+							    	<p:graphicImage url="/resources/image/votos_nulos.png"
+													height="30" 
+													cache="false" >
+									</p:graphicImage>
+							    </div>
+							</c:when>
+						</c:choose>
+						<!-- VOTOS -->
+						<div class="ui-g-3 ui-md-3">
+							<c:if test="#{mbCapActaDRP.action ne 'idConsulta'}">
+								<span class="requerido"></span>
+							</c:if>
+							#{messageSource['etiqueta_votos']} &nbsp;&nbsp;
+							<p:inputText id="id#{status.index}" 
+										 value="#{c.votosAux}" 
+										 disabled="#{(mbCapActaDRP.form.acta.idEstatusActa eq 3 or mbCapActaDRP.form.acta.idEstatusActa eq 4 or !mbCapActaDRP.form.actaValida or mbCapActaDRP.action eq 'idConsulta') ? true :false}"
+									     maxlength="4" 
+									     onkeypress="if (event.keyCode==35 || event.keyCode > 57) return false;"
+									     required="true" 
+										 autocomplete="off" 
+										 requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+									     style="width:50px;">
+
+								<pe:keyFilter regEx="/[0-9]/" />
+								<p:ajax event="change" process="@this" update="@this" listener="#{mbCapActaDRP.quitaCerosLeft(c)}"/>
+								<p:ajax event="blur"   process="@this" update="msj_id#{status.index}"/>
+							</p:inputText>
+							<p:message for="id#{status.index}" display="text" id="msj_id#{status.index}"/>
+					    </div>
+					    <!-- ACUMULACION DE VOTOS -->
+						<div class="ui-g-3 ui-md-3">
+					    	#{messageSource['etiqueta_votos_acumulados']}&nbsp;&nbsp;
+						    <h:outputText value="${c.votosAcumulados}" />
+					    </div>
+				    </div>
+				    <div class="divider"></div>
+				</div>
+			</c:forEach>
+		</div>
+	</p:outputPanel>
+</ui:composition>
+<!--
+	Seccion para el registro de los votos
+	author Clemencia Cuellar
+	version 1.0
+	fecha 21/04/2017
+-->

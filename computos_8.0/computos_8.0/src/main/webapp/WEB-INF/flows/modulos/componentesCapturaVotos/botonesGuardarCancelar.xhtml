@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:ine="http://www.ine.mx/ui" xmlns:deceyec="http://ine.mx/ui">
+
+
+	<!-- FUNCIÖN QUE VALIDA SI HAY UN CAMPO POR SER CAPTURADO QUE NO FUE CAPTURADO -->
+	<script>
+
+		function evaluaRequeridos() {
+			
+			$('#formCapturaActa input').each(
+				    function(index){  
+				        var input = $(this);
+				        
+				        // solo evaluamos los inputText, menos los select´s, lo hice con if anidados por que no soportaba condiciones multiples en un solo if
+				        if(  input.attr('type') == "text" ){
+				        	 if(   input.attr('id') !== "formCapturaActa:distrito_focus" ){
+			        		 	if(   input.attr('id') !== "formCapturaActa:demarcacion_focus" ){ 
+				        			if(   input.attr('id') !== "formCapturaActa:seccion_focus" ){
+				        				if(   input.attr('id') !== "formCapturaActa:casilla_focus" ){
+				        					if(   input.attr('id') !== "formCapturaActa:estatus_focus" ){ 
+				        				
+						        				//console.log('Type: ' + input.attr('type') + ' Name: ' + input.attr('name') + ' Value: ' + input.val() + ' id:' + input.attr('id') ); 	
+						        				// evaluamos si el input text de votos esta vacio, si si rompemos el ciclo y en ese primer input vacio identificado ponemos el focus
+						        				
+					        					if( !input.val() ){
+					        						document.getElementById( input.attr('id') ).focus(); 
+					        						return false; 
+					        					} 
+				        				
+		        				 			}
+				        				}
+				        			}
+			        		 	}	
+			        		} 
+				        }
+				        
+				    }
+				);
+		}
+	
+	</script>
+
+
+	<!-- BOTONES DE GUARDAR Y CANCELAR -->
+
+
+		<div class="ui-g" >
+			<div class="ui-g-12 text-center">
+				
+				<!-- BOTON ACEPTAR -->
+		    	<c:if test="#{mbCapturaVotos.accion eq 'CAPTURA'}" >
+					<p:commandButton id="btnGuardar" 
+							 action="#{mbCapturaVotos.guardaActa}"
+							 disabled="#{mbCapturaVotos.dto.actaCasilla.idEstatus eq 0 or mbCapturaVotos.dto.asociaciones.size() lt 1}"
+							 value="#{messageSource['etiqueta_boton_aceptar']}" 
+							 process="@form"
+							 update="@form" 
+							 onstart="PF('progress').block()" 
+							 onsuccess="PF('progress').unblock()"
+							 onclick="evaluaRequeridos()"
+					 		  />
+				</c:if>
+			
+				
+				<!-- BOTON ELIMINAR -->
+				<c:if test="#{mbCapturaVotos.accion eq 'CONSULTA'}" >
+				
+					<!-- <sec:authorize ifAnyGranted="ROLE_COMPUTOS.ADMIN.EXT.OPLE.JL">
+					</sec:authorize> -->
+			
+					<p:commandButton id="btnGuardar" 
+						 action="#{mbCapturaVotos.eliminaActa}"
+						 disabled="#{mbCapturaVotos.dto.actaCasilla.idEstatus eq 0 or mbCapturaVotos.dto.asociaciones.size() lt 1  or  mbCapturaVotos.deshabilitaEliminarPorRol() or  mbCapturaVotos.dto.isEsRecuentoTotal() or mbCapturaVotos.validaModuloAbierto()}"
+						 value="#{messageSource['etiqueta_boton_eliminar']}" 
+						 process="@form"
+						 update="@form" 
+						 onstart="PF('progress').block()" 
+						 onsuccess="PF('progress').unblock()" >
+						 
+				 		<p:confirm  header="" message="#{messageSource['validacion_mensaje_generales_eliminar_acta']}" icon="ui-icon-alert" />
+				 
+				 	</p:commandButton>
+				 
+					 <p:confirmDialog global="true" >
+			        	<p:commandButton value="#{messageSource['etiqueta_boton_aceptar']}"  type="button" styleClass="ui-confirmdialog-yes"/>
+			        	<p:commandButton value="#{messageSource['etiqueta_boton_cancelar']}" type="button" styleClass="ui-confirmdialog-no" />    
+			    	</p:confirmDialog>
+			 		  
+				</c:if>
+				
+				<!-- BOTON MODIFICAR -->
+				<c:if test="#{mbCapturaVotos.accion eq 'MODIFICA'}" >
+					<p:commandButton id="btnGuardar" 
+							 action="#{mbCapturaVotos.modificaActa}"
+							 disabled="#{mbCapturaVotos.dto.actaCasilla.idEstatus eq 0 or mbCapturaVotos.dto.asociaciones.size() lt 1 }"
+							 value="#{messageSource['etiqueta_boton_modificar']}" 
+							 process="@form"
+							 update="@form" 
+							 onstart="PF('progress').block()" 
+							 onsuccess="PF('progress').unblock()"
+							 onclick="evaluaRequeridos()"
+					 		  />
+				</c:if>
+			    
+			    <!-- BOTON CANCELAR, NO APARECE EN LAS CONSULTAS -->
+			    <c:if test="#{mbCapturaVotos.accion ne 'CONSULTA'}" >
+			    	<p:commandButton id="btnCancelar"
+								 action="cancelar" 
+								 disabled="#{mbCapturaVotos.dto.actaCasilla.idEstatus eq 0}"
+								 value="#{messageSource['etiqueta_boton_cancelar']}"
+								 immediate="true" />
+				</c:if>
+				
+			</div>
+		</div>
+	
+	
+		<!-- BLOCKUI-->
+		<pe:blockUI id="idProgress" target="formCapturaActa" content="blockUIContent"  widgetVar="progress" />
+		
+		<!-- BLOCKUICONTENT -->
+		<h:panelGrid id="blockUIContent" columns="2" style="display:none;"> 
+		    <h:graphicImage library="img" name="loader.gif" width="70"/> 	
+		    <h:outputText value="#{messageSource['mensaje_generales_procesando']}" style="white-space: nowrap;"/> 	
+	    </h:panelGrid>
+
+
+</ui:composition>

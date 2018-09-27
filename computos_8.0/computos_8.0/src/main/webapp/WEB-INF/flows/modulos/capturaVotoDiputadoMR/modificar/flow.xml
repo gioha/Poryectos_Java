@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+	  start-state="validaRolUsuario" parent="parent-flow">
+	  
+
+	<secured attributes="ROLE_COMPUTOS.ADMIN.PARAM.CAPTURA.OC, 
+						 ROLE_COMPUTOS.ADMIN.CAPTURA.OC, 
+						 ROLE_COMPUTOS.CONSEJERO.OC, 
+						 ROLE_COMPUTOS.CONSULTA.OC, 
+						 ROLE_COMPUTOS.CAU.OC, 
+						 ROLE_COMPUTOS.CAPTURA.JL, 
+						 ROLE_COMPUTOS.CONSULTA.JL, 
+						 ROLE_COMPUTOS.ADMIN.EXT.OPLE.JL,  
+						 ROLE_COMPUTOS.CAPTURA.JM, 
+						 ROLE_COMPUTOS.CONSULTA.JM,
+						 ROLE_COMPUTOS.PARTIDO.CONSULTA.JL, 
+						 ROLE_COMPUTOS.PARTIDO.CONSULTA.JM" match="any"/>
+	  
+	  	
+ 	<var name="constantes" class="mx.ine.computosINE.util.Constantes"/>
+ 	
+ 	
+ 	<decision-state id="validaRolUsuario">
+ 		
+		<if test="mbCapturaVotos.validarRolParaModifica()" then="modificar"
+														else="consultar" />
+														
+	</decision-state>
+	
+	
+	<view-state id="modificar" view="modificar.xhtml">
+
+ 	  	<on-entry> 
+ 	  		<evaluate expression="mbCapturaVotos.setCandidatura(constantes.DIPUTADO_MR )" />
+			<evaluate expression="mbCapturaVotos.setAccion(constantes.ACCION_MODIFICA)" />
+ 	  	 			
+ 	  	 	<evaluate expression="mbCapturaVotos.initModificar()" />
+ 	  	 			
+			<evaluate expression="mbAdmin.dto.setIdModulo(3)"></evaluate>
+            <evaluate expression="mbAdmin.dto.setIdAccion(3)"></evaluate>
+ 		</on-entry> 
+
+	 	<transition on="success"  to="modificar" />
+		<transition on="error"  to="modificar" />
+		<transition on="cancelar" to="modificar" /> 
+	
+		<transition on="captura" to="capturar" />
+		<transition on="consulta" to="consultar" />
+	
+	</view-state>
+	
+ 	<view-state id="capturar"
+		view="externalRedirect:servletRelative:/modulos/capturaVotoDiputadoMR/capturar"/>
+	<view-state id="consultar"
+		view="externalRedirect:servletRelative:/modulos/capturaVotoDiputadoMR/consultar" /> 
+	  
+</flow>

@@ -1,0 +1,88 @@
+/** ******************************* GENERALES ******************************* **/
+@media (max-width: 1142px) {
+	h3 {
+		font-size: 22px;
+		padding: 30px 10px 33px 40px !important;
+	}
+}
+
+@media (max-width: 1050px) {
+	h3 {
+		font-size: 18px;
+		padding: 30px 10px 38px 40px !important;
+	}
+}
+
+@media (max-width: 900px) {
+	.tituloConfigHidden {
+		display: none;
+	}
+	h3 {
+		padding: 30px 10px 57px 40px !important;
+	}
+}
+
+/** ******************************* DATATABLE ******************************* **/
+.tablaAtencion.ui-datatable thead th {
+	border-top: 3px solid #db040c !important;
+}
+
+.tablaAtencion .ui-datatable-header.ui-widget-header {
+	font-size: 12pt;
+}
+
+.ui-datatable .ui-selection-column {
+	border-bottom: none !important;
+}
+
+.ui-datatable .ui-datatable-empty-message {
+	text-align: center;
+	font-size: 15px;
+	font-weight: bold;
+	height: 110px;
+	color: gray;
+}
+
+/* Estilos aplicados por Miguel Ortiz */
+/*************************** GROWL *********************************/
+div[id="idFormRemitentesExt:mensaje_general_info_container"] > div {
+	background: #29abe2 !important;
+}
+
+div[id="idFormRemitentesExt:mensaje_general_advertencia_container"] > div {
+	background: #fcee21 !important;
+	color: black; 
+}
+
+div[id="idFormRemitentesExt:mensaje_general_advertencia_container"] > div .ui-growl-item {
+	border-bottom: 2px solid black!important;
+	border-top: 2px solid black!important;
+}
+
+div[id="idFormRemitentesExt:mensaje_general_exito_container"] > div {
+	background: #7ac943 !important;
+}
+
+.expans-horiz-100 {
+	width: 100%;
+}
+
+.expans-horiz-95 {
+	width: 95%;
+}
+
+.expans-horiz-10 {
+	width: 10%;
+}
+
+.espaciador-row {
+	margin-top: 15px;
+}
+
+.centrar-componente {
+	text-align: center;
+}
+
+.ui-state-highlight .ui-icon {
+    background-image: url(/gestion4/app/javax.faces.resource/images/ui-icons_2e83ff_256x240.png?ln=primefaces-aristo) !important;
+}

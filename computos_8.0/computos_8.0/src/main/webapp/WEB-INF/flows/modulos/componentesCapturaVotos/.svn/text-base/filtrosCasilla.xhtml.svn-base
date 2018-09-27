@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:ine="http://www.ine.mx/ui" xmlns:deceyec="http://ine.mx/ui">
+
+	<!-- FILTROS PARA LAS ACTAS DE CASILLAS -->
+				
+	<p:outputPanel id="filtrosCasillas" >
+		<div class="ui-g">
+			
+			<!-- PRIMER DIV O NIVEL -->
+			
+			<div class="ui-g-12">
+			
+				<!-- DISTRITO DEL ACTA -->
+				<c:if test="#{mbCapturaVotos.esTipoDiputado()}" > 
+					<div class="ui-g-12 ui-md-4 md-selectfield">
+						<p:outputLabel for="distrito" value="#{messageSource['etiqueta_capturavotos_distrito']}"/>
+	    				<p:selectOneMenu id="distrito" 
+		        						 value="#{mbCapturaVotos.dto.actaCasilla.id.idDistrito}" 
+			             				 requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+			             				 required="true"
+			             				 styleClass="form-control"
+			             				 onstart="PF('progress').block()" 
+						 				 onsuccess="PF('progress').unblock()"
+						 				>
+		                  
+                   			<!-- capturar -->
+							<c:if test="#{mbCapturaVotos.accion eq 'CAPTURA'}" >
+								<f:selectItems 	value="#{mbCapturaVotos.dto.casillasPorCapturar.distritos}" 
+			                      				var="distrito" 
+		                      					itemValue="#{distrito.distrito}" 
+			                      				itemLabel="#{distrito.distrito} #{distrito.cabeceraDistrital}"/>
+							</c:if>
+							
+							<!-- consultar y modifica-->
+							<c:if test="#{mbCapturaVotos.accion eq 'CONSULTA' or mbCapturaVotos.accion eq 'MODIFICA'}" >
+								<f:selectItems 	value="#{mbCapturaVotos.dto.casillasParaConsultar.distritos}" 
+			                      				var="distrito" 
+		                      					itemValue="#{distrito.distrito}" 
+			                      				itemLabel="#{distrito.distrito} #{distrito.cabeceraDistrital}"/>
+							</c:if>
+		                    
+		                    <!-- captura y modifica-->
+		                    <c:if test="#{mbCapturaVotos.accion eq 'CAPTURA' or mbCapturaVotos.accion eq 'MODIFICA'}" >  				
+			                    <f:ajax event="change" 
+			                    		render="avanceCaptura seccion casilla estatus votosPanel btnGuardar btnCancelar"
+										listener="#{mbCapturaVotos.cambiaSecciones()}" 
+										/>
+							</c:if>
+							
+							<!-- consultar-->
+							<c:if test="#{mbCapturaVotos.accion eq 'CONSULTA'}" >  				
+			                    <f:ajax event="change" render="avanceCaptura seccion casilla estatus votosPanel btnGuardar"
+									listener="#{mbCapturaVotos.cambiaSecciones()}" />
+							</c:if>
+		                      				                    
+	                  	</p:selectOneMenu>
+	                  	<p:message id="msj_distrito" for="distrito"  />	
+					</div>
+				</c:if> 
+				
+				<!-- DEMARCACIÓN DEL ACTA -->
+				<c:if test="#{mbCapturaVotos.esTipoRegiduria()}" >
+					<div class="ui-g-12 ui-md-4 md-selectfield">
+						<p:outputLabel for="demarcacion" value="#{messageSource['etiqueta_capturavotos_demarcacion']}"/>
+	    				<p:selectOneMenu id="demarcacion" 
+		        						 value="#{mbCapturaVotos.dto.actaCasilla.id.idRegiduria}" 
+			             				 requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+			             				 required="true"
+			             				 styleClass="form-control"
+			             				 onstart="PF('progress').block()" 
+						 				 onsuccess="PF('progress').unblock()"
+			             				 >
+			             	
+     	                   	<!-- capturar -->
+							<c:if test="#{mbCapturaVotos.accion eq 'CAPTURA'}" >
+								<f:selectItems 	value="#{mbCapturaVotos.dto.casillasPorCapturar.regidurias}" 
+			                      				var="regiduria" 
+		                      					itemValue="#{regiduria.idRegiduria}" 
+			                      				itemLabel="#{regiduria.nombreRegiduria}"/>
+							</c:if>
+							
+							<!-- consultar y modifica -->
+							<c:if test="#{mbCapturaVotos.accion eq 'CONSULTA' or mbCapturaVotos.accion eq 'MODIFICA'}" >
+								<f:selectItems 	value="#{mbCapturaVotos.dto.casillasParaConsultar.regidurias}" 
+			                      				var="regiduria" 
+		                      					itemValue="#{regiduria.idRegiduria}" 
+			                      				itemLabel="#{regiduria.nombreRegiduria}"/>
+							</c:if>
+			             				 
+			             	<!-- captura y modifica-->
+		                    <c:if test="#{mbCapturaVotos.accion eq 'CAPTURA' or mbCapturaVotos.accion eq 'MODIFICA'}" >  				
+			                    <f:ajax event="change" render="avanceCaptura seccion casilla estatus votosPanel btnGuardar btnCancelar"
+									listener="#{mbCapturaVotos.cambiaSecciones()}" />
+							</c:if>
+							
+							<!-- consultar-->
+							<c:if test="#{mbCapturaVotos.accion eq 'CONSULTA'}" >  				
+			                    <f:ajax event="change" render="avanceCaptura seccion casilla estatus votosPanel btnGuardar"
+									listener="#{mbCapturaVotos.cambiaSecciones()}" />
+							</c:if>
+							               				                    
+	                  	</p:selectOneMenu>
+	                  	<p:message id="msj_demarcacion" for="demarcacion"  />	
+					</div>
+				</c:if> 
+				
+				<!-- SECCIÓN DEL ACTA -->
+ 				<div class="ui-g-12 ui-md-4 md-selectfield">
+					<p:outputLabel for="seccion" value="#{messageSource['etiqueta_capturavotos_seccion']}"/>
+    				<p:selectOneMenu id="seccion" 
+	        						 value="#{mbCapturaVotos.dto.actaCasilla.id.seccion}" 
+		             				 requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+		             				 required="true"
+		             				 styleClass="form-control"
+		             				 onstart="PF('progress').block()" 
+					 				 onsuccess="PF('progress').unblock()"
+		             				 >
+	                      
+						<f:selectItems 	value="#{mbCapturaVotos.dto.seccionesEnPantalla}" 
+	                      				var="seccion" 
+                      					itemValue="#{seccion.seccion}" 
+	                      				itemLabel="#{seccion.seccion}"/> 
+							        	              
+						<!-- captura y modifica-->
+	                    <c:if test="#{mbCapturaVotos.accion eq 'CAPTURA' or mbCapturaVotos.accion eq 'MODIFICA'}" >  				
+		                    <f:ajax event="change" render="casilla estatus votosPanel btnGuardar btnCancelar"
+								listener="#{mbCapturaVotos.cambiaCasillas()}" />
+						</c:if>
+						
+						<!-- consultar-->
+						<c:if test="#{mbCapturaVotos.accion eq 'CONSULTA'}" >  				
+		                    <f:ajax event="change" render="casilla estatus votosPanel btnGuardar"
+								listener="#{mbCapturaVotos.cambiaCasillas()}" />
+						</c:if>	        	           
+							         
+                  	</p:selectOneMenu>
+                  	<p:message id="msj_seccion" for="seccion"  />	
+				</div> 
+				
+				<!-- CASILLA DEL ACTA -->
+  				<div class="ui-g-12 ui-md-4 md-selectfield">
+					<p:outputLabel for="casilla" value="#{messageSource['etiqueta_capturavotos_casilla']}"/>
+    				<p:selectOneMenu id="casilla" 
+	        						 value="#{mbCapturaVotos.dto.actaCasilla.cveCasilla}" 
+		             				 requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+		             				 required="true"
+		             				 styleClass="form-control"
+		             				 onstart="PF('progress').block()" 
+					 				 onsuccess="PF('progress').unblock()"
+		             				 >
+	                      
+							<f:selectItems 	value="#{mbCapturaVotos.dto.casillasEnPantalla}" 
+	                      				var="casilla" 
+                      					itemValue="#{casilla.tipoCasilla}-#{casilla.idCasilla}-#{casilla.extContigua}" 
+	                      				itemLabel="#{casilla.nombreCasilla}"/>
+	                      				
+	                      	<c:if test="#{mbCapturaVotos.accion eq 'CAPTURA'}" >
+		                      	<f:ajax event="change" render="estatus votosPanel btnGuardar btnCancelar"
+									listener="#{mbCapturaVotos.reiniciaEstatusAsociaciones()}" 
+								/>
+							</c:if>
+							
+							<c:if test="#{mbCapturaVotos.accion eq 'MODIFICA'}" >
+								<f:ajax event="change" render="estatus votosPanel btnGuardar btnCancelar"
+									listener="#{mbCapturaVotos.reiniciaEstatusAsociacionesYCargaCaptura()}"
+								/>
+							</c:if>
+	                      	
+	                      	<c:if test="#{mbCapturaVotos.accion eq 'CONSULTA'}" >
+								<f:ajax event="change" render="estatus votosPanel btnGuardar"
+									listener="#{mbCapturaVotos.reiniciaEstatusAsociacionesYCargaCaptura()}" />
+							</c:if>
+	                      	
+	                      				
+                  	</p:selectOneMenu>
+                  	<p:message id="msj_casilla" for="casilla"  />	
+				</div>  
+				
+			</div>
+
+
+			<!-- SEGUNDO DIV O NIVEL -->
+			
+			<div class="ui-g-12">
+			
+				<!-- ESTATUS DEL ACTA -->
+				<div class="ui-g-12 ui-md-4 md-selectfield">
+					<p:outputLabel for="estatus" value="#{messageSource['etiqueta_capturavotos_estatus_acta']}"/>
+    				<p:selectOneMenu id="estatus" 
+	        						 value="#{mbCapturaVotos.dto.actaCasilla.idEstatus}" 
+	        						 disabled="#{ mbCapturaVotos.accion eq 'CONSULTA' }"
+		             				 requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+		             				 required="true"
+		             				 styleClass="form-control"
+		             				 onstart="PF('progress').block()" 
+					 				 onsuccess="PF('progress').unblock()"
+		             				 >
+	                      
+                		<f:selectItem itemValue="0" itemLabel="#{messageSource['etiqueta_generales_selecciona']}"/>
+						
+						<f:selectItems 	value="#{mbCapturaVotos.dto.listaEstatus}" 
+	                      				var="estatus" 
+                      					itemValue="#{estatus.idEstatus}" 
+	                      				itemLabel="#{estatus.descripcion}"/>
+	                      		
+	                    <c:if test="#{mbCapturaVotos.accion eq 'CAPTURA'}" >		
+	     					<f:ajax event="change" render="votosPanel btnGuardar btnCancelar"
+									listener="#{mbCapturaVotos.cargaAsociaciones()}" />
+						</c:if>
+						
+						<c:if test="#{mbCapturaVotos.accion eq 'MODIFICA'}" >		
+	     					<f:ajax event="change" render="votosPanel btnGuardar btnCancelar"
+									listener="#{mbCapturaVotos.validaEstatusModificado()}" />
+						</c:if>
+	                    
+                  	</p:selectOneMenu>
+                  	<p:message id="msj_estatus" for="estatus"  />	
+				</div>
+				
+			</div>
+			
+			
+		</div>
+	</p:outputPanel>
+
+
+</ui:composition>

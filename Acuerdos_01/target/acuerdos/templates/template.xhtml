@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns:mp="http://primefaces.org/ui"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:ine="http://ine.mx/ui" xmlns:deceyec="http://ine.mx/ui"
+	lang="es-MX" xml:lang="es-MX">
+<!-- Definición de la plantilla de sistemas -->
+<f:view contentType="text/html" encoding="UTF-8" locale="es_MX">
+
+	<h:head>
+
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+		<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+		<link href="#{resource[':/img/faviconINE.ico']}" rel="shortcut icon"
+			type="image/x-icon" />
+
+		<title>Acuerdos</title>
+		<link href="http://www.ine.mx/archivos2/portal/img/faviconINE.ico"
+			rel="shortcut icon" />
+
+		<!-- Font -->
+		<link href="https://fonts.googleapis.com/css?family=Roboto"
+			rel="stylesheet" />
+		<link href="https://fonts.googleapis.com/css?family=Lato"
+			rel="stylesheet" />
+		
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet"/>
+		<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"></link>
+		
+		<!-- JS -->
+		<h:outputScript library="primefaces" name="jquery/jquery.js"
+			target="head" />
+		<h:outputScript library="primefaces" name="jquery/jquery-plugins.js"
+			target="head" />
+		<h:outputScript library="js" name="bootstrap.min.js"
+			target="head" />
+
+		<!-- CSS -->
+		<h:outputStylesheet library="css" name="bootstrap.css" />		
+		<h:outputStylesheet library="css" name="acuerdos-general.css" />
+		<h:outputStylesheet library="css" name="headerAc.css" />
+		<h:outputStylesheet name="footer.css" library="css" />
+		<h:outputStylesheet name="menu.css" library="css" />
+
+		<!-- meta para que en moviles se aplique el modo responsivo y se cancele el zoom-->
+		<meta name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-sca,le=1.0, minimum-scale=1.0, user-scalable=no" />
+
+		<ui:insert name="headIncludes" />
+
+	</h:head>
+
+	<h:body id="pagina">
+
+		<!-- Funcion general para imprimir la pantalla -->
+		<script>
+			$(document).ready(
+					function() {
+						
+						var estado = 'none';
+						
+						var pathname = window.location.pathname;
+						var pathnameSplit = pathname.split("/");
+					
+						if( pathnameSplit.length > 0 ){
+							
+							var page = pathnameSplit[pathnameSplit.length - 1];
+
+							switch (page) {
+							case 'home':
+								estado = 'none';
+								break;
+							case 'error':
+								estado = 'none';
+								break;
+							case 'login':
+								estado = 'none';
+								break;
+
+							default:
+								estado = 'block';
+								break;
+							}
+							
+						}
+
+						$("#menuSuper").css("display", estado);
+
+						/* $('.dropdown-menu li a').each(
+								function(index) {
+									if (this.href.trim().indexOf(
+											window.location.pathname) > -1) {
+										$(this).parent().parent().parent()
+												.addClass("active");
+									}
+								}); */
+					})
+
+			function printpage() {
+				window.print();
+				return false;
+			}
+		</script>
+
+		<!--   HEADER   -->
+		<!-- [[[[[[[[[[[[[[[[LA CLASE DE MENU-LAYOUT-STATIC REALIZA UN TOGGLE PARA MOSTRAR U OCULTAR MENU]]]]]]]]]]]]]]]] -->
+		<div class="layout-wrapper menu-layout-static">
+
+
+			<!-- 			<h:form id="formMenu"> -->
+			<!-- 						 	<p:remoteCommand name="renderMenuLateral" actionListener="#{mbAdmin.renderMenuLateral()}"/> -->
+
+			<ui:include src="header.xhtml" />
+				<div style="position: relative;">
+						<ui:include src="/templates/menuAcciones.xhtml" />
+				</div>
+
+
+			<!-- 							<ui:include src="menuAcciones.xhtml" /> -->
+			<!-- 							<ui:include src="menu.xhtml" />  -->
+
+			<!-- 
+							Incluimos el menú de acciones y llamadas a mbAdmin para generarlo
+							Las llamadas se generan desde el evento ready en el archivo main.js
+							En caso de querer recargar el menú deben llamar a estos remoteCommand 
+							después de haber cambiado el proceso, estado o distrito.
+							Para el menú de acciones, debe establecerse el idModulo y el idAccion
+							 al iniciar el flujo del módulo
+						 -->
+			<!-- 						 			<pe:blockUI id="progressMenu" target=":pagina" content="blockUIContentMenu" -->
+			<!-- 										widgetVar="progressMenu" /> -->
+			<!-- 									<h:panelGrid id="blockUIContentMenu" columns="2" style="display:none;"> -->
+			<!-- 										<h:graphicImage library="img" name="loader.gif" width="70" /> -->
+			<!-- 										<h:outputText value="Procesando" -->
+			<!-- 											style="white-space: nowrap;" /> -->
+			<!-- 									</h:panelGrid>	 -->
+			<!-- 								<p:remoteCommand  name="menuAcciones" actionListener="#{mbAdmin.renderMenuAcciones()}" update="formMenu"/> -->
+			<!-- 								<p:remoteCommand  name="menuLateral" actionListener="#{mbAdmin.renderMenuLateral()}"/> -->
+			<!-- 			</h:form> -->
+
+
+			<!-- [[[[[[[[[[[[[[[[PARA QUE EL CONTENIDO Y EL FOOTER SEAN EMPUJADOS AL MOSTRAR EL MENÚ]]]]]]]]]]]]]]]] -->
+			<div class="layout-main">
+
+				<ui:insert name="CONTENT" />
+				<!-- 				<c:if test="#{SPRING_SECURITY_CONTEXT != null}"> -->
+
+				<!-- 				</c:if> -->
+			</div>
+			<div>
+				<ui:include src="footer.xhtml" />
+			</div>
+		</div>
+
+	</h:body>
+</f:view>
+</html>

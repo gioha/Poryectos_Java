@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+	  start-state="reporte" parent="parent-flow">
+			
+	<!-- MB -->
+	<var name="mbModulo" class="mx.ine.computosINE.mb.MBReporteRecuento"/>
+
+	<view-state id="reporte" view="reporte.xhtml">
+		<on-entry>
+			<evaluate expression="mbModulo.inicializa()"/>
+		</on-entry>
+		<transition on="regresar" to="regresa"/>
+	</view-state>
+	
+	<view-state id="regresa" view="externalRedirect:servletRelative:/reportes" />
+</flow> 

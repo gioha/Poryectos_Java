@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:ine="http://www.ine.mx/ui" xmlns:deceyec="http://ine.mx/ui">
+
+	<style>
+   		.layout-main {
+		    margin-top: 72px;
+		    margin-bottom: 72px;
+		}
+   		.valign-wrapper {
+		    display: -webkit-box;
+		    display: -webkit-flex;
+		    display: -ms-flexbox;
+		    display: flex;
+		    -webkit-box-align: center;
+		    -webkit-align-items: center;
+		    -ms-flex-align: center;
+		    align-items: center;
+		    height: calc(100vh - 144px);
+		    flex-wrap: wrap;
+		}
+		.despliega-inline-block {
+			display: inline-block;
+			margin: 0 15px;
+		}
+		.full-width {
+			width: 100%;
+		}
+		@media only screen and (max-width: 992px) {
+			.despliega-inline-block {
+				width: 180px;
+			}
+		}
+   </style>
+
+	<!-- BOTONES HOME -->
+			<p:outputPanel id="home">
+<!-- ############################################# HOME DE CUATRO BOTONES ############################################ -->			  
+			   <!-- <c:if test="#{mbHome.form.btn_sesion == 'true' and mbHome.form.btn_reportes == 'true' and mbHome.form.btn_admin == 'true' and mbHome.form.btn_seguimiento == 'true'}" > --> 
+			   <c:if test="#{mbHome.form.numBtn == 4}">
+					<div class="valign-wrapper">
+						<div class="row full-width">
+							<div class="col-xs-12 text-center">
+								<div class="despliega-inline-block">
+									<div class="sombra">
+										<p:commandLink action="irSesion" disabled="#{mbHome.bloquerPantallaPorRol}" >
+					    					<h:graphicImage name="btn_sesion.png" styleClass="" library="img" class="pull-right img-responsive push " />
+										</p:commandLink>  
+									</div>
+								</div>
+								<div class="despliega-inline-block">
+									<div class="sombra">
+										<p:commandLink action="irSeguimiento" disabled="#{mbHome.bloquerPantallaPorRol}">
+					    					<h:graphicImage name="btn_seguimiento.png" styleClass="" library="img" class="pull-right img-responsive push " />
+										</p:commandLink>  
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row full-width">
+							<div class="col-xs-12 text-center">
+								<div class="despliega-inline-block">
+								 	<div class="sombra">
+										<p:commandLink action="irReportes" disabled="#{mbHome.bloquerPantallaPorRol}">
+					    					<h:graphicImage name="btn_reportes.png" styleClass="" library="img" class="pull-right img-responsive push " />
+										</p:commandLink>  
+									</div>
+								</div>
+								<div class="despliega-inline-block">
+				 					<div class="sombra">
+										<p:commandLink action="irConfiguracion" disabled="#{mbHome.bloquerPantallaPorRol}">
+					    					<h:graphicImage name="btn_configuracion.png" styleClass="" library="img" class="pull-right img-responsive push " />
+										</p:commandLink>  
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+			   </c:if> 
+			   
+<!-- ############################################# HOME DE TRES BOTONES ############################################ -->			   
+			   <c:if test="#{mbHome.form.numBtn == 3}">
+      				<div class="valign-wrapper">  
+					 <div class="row full-width">
+						<div class="col-xs-12 text-center">
+							<c:if test="#{mbHome.form.btn_sesion=='true'}">
+								<div class="despliega-inline-block">
+										<div class="sombra"   >
+											<p:commandLink action="irSesion" disabled="#{mbHome.bloquerPantallaPorRol}" >
+						    					<h:graphicImage name="btn_sesion.png" styleClass="" library="img" class="pull-right img-responsive push " />
+											</p:commandLink>  
+										</div>	
+								</div>
+							</c:if>
+							<c:if test="#{mbHome.form.btn_seguimiento=='true'}">
+								<div class="despliega-inline-block">
+	 									<div class="sombra " >
+											<p:commandLink action="irSeguimiento" disabled="#{mbHome.bloquerPantallaPorRol}">
+						    					<h:graphicImage name="btn_seguimiento.png" styleClass="" library="img" class="pull-right img-responsive push " />
+											</p:commandLink>  
+										</div> 
+								</div>
+							</c:if>
+							<c:if test="#{mbHome.form.btn_reportes=='true'}">
+								<div class="despliega-inline-block">
+									 	<div class="sombra " >
+											<p:commandLink action="irReportes" disabled="#{mbHome.bloquerPantallaPorRol}">
+						    					<h:graphicImage name="btn_reportes.png" styleClass="" library="img" class="pull-right img-responsive push " />
+											</p:commandLink>  
+										</div>
+								</div>
+							</c:if>
+							<c:if test="#{mbHome.form.btn_admin=='true'}">
+								<div class="despliega-inline-block">
+					 					<div class="sombra " >
+											<p:commandLink action="irConfiguracion" disabled="#{mbHome.bloquerPantallaPorRol}">
+						    					<h:graphicImage name="btn_configuracion.png" styleClass="" library="img" class="pull-right img-responsive push " />
+											</p:commandLink>  
+										</div>
+								</div>
+							</c:if>
+						</div>
+				   </div>
+      			</div> 		 	
+			   </c:if>
+
+
+<!-- ############################################# HOME DE DOS BOTONES ############################################ -->			   
+			   	<c:if test="#{mbHome.form.numBtn == 2}">
+					<div class="valign-wrapper">
+						<div class="row full-width">
+							<div class="col-xs-12 text-center">
+								<c:if test="#{mbHome.form.btn_sesion=='true'}">
+									<div class="despliega-inline-block">
+										<div class="sombra">
+											<p:commandLink action="irSesion" disabled="#{mbHome.bloquerPantallaPorRol}" >
+						    					<h:graphicImage name="btn_sesion.png" styleClass="" library="img" class="pull-right img-responsive push " />
+											</p:commandLink>  
+										</div>	
+									</div>
+								</c:if>
+								<c:if test="#{mbHome.form.btn_seguimiento=='true'}">
+									<div class="despliega-inline-block">
+										<div class="sombra">
+											<p:commandLink action="irSeguimiento" disabled="#{mbHome.bloquerPantallaPorRol}">
+						    					<h:graphicImage name="btn_seguimiento.png" styleClass="" library="img" class="pull-right img-responsive push " />
+											</p:commandLink>  
+										</div> 
+									</div>
+								</c:if>
+								<c:if test="#{mbHome.form.btn_reportes=='true'}">
+									<div class="despliega-inline-block"  >
+									 	<div class="sombra">
+											<p:commandLink action="irReportes" disabled="#{mbHome.bloquerPantallaPorRol}">
+						    					<h:graphicImage name="btn_reportes.png" styleClass="" library="img" class="pull-right img-responsive push " />
+											</p:commandLink>  
+										</div>
+									</div>
+								</c:if>
+								<c:if test="#{mbHome.form.btn_admin=='true'}">
+									<div class="despliega-inline-block">
+					 					<div class="sombra">
+											<p:commandLink action="irConfiguracion" disabled="#{mbHome.bloquerPantallaPorRol}">
+						    					<h:graphicImage name="btn_configuracion.png" styleClass="" library="img" class="pull-right img-responsive push " />
+											</p:commandLink>  
+										</div>
+									</div>
+								</c:if>
+							</div>
+						</div>
+					</div> 		 	
+			   </c:if>
+			</p:outputPanel>
+</ui:composition>

@@ -1,0 +1,213 @@
+/*-------------------------------------------------*/
+/* Hoja de Estilos para el módulo de               */
+/*       	Captura de documento		           */
+/*  v1.1.5 Release Date 02 de octubre de 2017      */
+/*-------------------------------------------------*/
+
+/*************************** GENERALES *********************************/
+
+.instruccionesRedaccion {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	color: #8c8b8b;	
+}
+
+.personasEncontradas.ui-datatable thead th {
+	font-weight: bold;
+	border: none !important;
+	border-bottom: 1px solid #908f90 !important;
+	border-top: none !important;
+	text-align: left;
+}
+
+.personasEncontradas .ui-datatable-odd {
+	background-color: white;
+}
+
+.personasEncontradas .ui-datatable-scrollable .ui-paginator.ui-paginator-bottom,
+.personasEncontradas .ui-paginator-bottom,
+.personasEncontradas .ui-datatable-tablewrapper {
+	border-bottom: none !important;
+}
+
+.detallePersona {
+	border: 1px solid #999999;
+}
+
+.detallePersona.ui-dialog .ui-dialog-content {
+	overflow: initial;
+}
+
+.linksPersonasEncontradas {
+	font-size: 13px !important;
+}
+
+.linksPersonasEncontradas.ui-commandlink  {
+	color: #706f6f;
+	text-decoration: none;
+}
+
+.linksPersonasEncontradas:hover {
+	color: #d6007e !important;
+}
+
+.linkEditar {
+	font-size: 13px !important;
+	color: #706f6f !important;
+	text-decoration: none;
+}
+
+.linkEditar:hover {
+	color: #d6007e !important;
+}
+
+.tablaAnexos.ui-datatable thead th {
+	background: #d6007e !important;
+	border: 2px solid white !important;
+	color: white;
+	font-family: Roboto;
+	text-shadow: none;
+	padding: 10px 10px
+}
+
+.tablaAnexos .ui-datatable-even {
+	background-color: #f6f6f6 !important;
+}
+
+.tablaAnexos .ui-datatable-odd {
+	background-color: #e2e2e2 !important;
+}
+
+.tablaAnexos.ui-datatable tbody td {
+	border-left: 2px solid white !important;
+	border-right: 2px solid white !important;
+	font-family: Roboto;
+}
+
+.tablaAnexos .ui-datatable-scrollable .ui-paginator.ui-paginator-bottom,
+.tablaAnexos .ui-paginator-bottom,
+.tablaAnexos .ui-datatable-tablewrapper {
+	border-bottom: none !important;
+}
+
+.radiosTipoAreaUno.ui-selectoneradio label {
+	width: 100%;
+}
+
+.tituloDetalle {
+	color: #cb0282; 
+	font-weight: bold;
+	font-size: 19px;
+	padding-bottom: 18px;
+}
+
+.tituloDetalle:after {
+	content: "";
+    display: block;
+    padding: 5px;
+    border-bottom: 2px solid #d6007e !important;
+}
+
+/*************************** SWITCH *********************************/
+
+.ui-inputswitch {
+	width: 45px !important;
+	border: 1px solid #d5007f;
+}
+
+.ui-inputswitch.ui-corner-all {
+	border-radius: 10px;
+}
+
+.ui-inputswitch-handle {
+	width: 25px !important;
+	border-radius: 12px;
+}
+
+.ui-inputswitch-on.ui-state-active {
+	box-shadow: none;
+	width: 24px !important;
+	height: 25px;
+	background: #d5007f;
+	border-radius: 8px;
+}
+
+.switchOff .ui-inputswitch-handle {
+	background: #d5007f;
+	border: none;
+	top: -2px;
+}
+
+.switchON .ui-inputswitch-handle {
+	background: white;
+	border: none;
+	height: 22px;
+}
+
+.switchON .ui-inputswitch-on.ui-state-active {
+	width: 30px !important;
+}
+
+.switchOff .ui-inputswitch-on.ui-state-active {
+	border-radius: 13px;
+}
+
+/*************************** GROWL *********************************/
+div[id="formCapturaDocumento:mensaje_general_info_container"] > div {
+
+	background: #29abe2 !important;
+}
+
+div[id="formCapturaDocumento:mensaje_general_advertencia_container"] > div {
+
+	background: #fcee21 !important;
+	color: black; 
+}
+
+div[id="formCapturaDocumento:mensaje_general_advertencia_container"] > div .ui-growl-item {
+	border-bottom: 2px solid black!important;
+	border-top: 2px solid black!important;
+}
+
+div[id="formCapturaDocumento:mensaje_general_exito_container"] > div {
+
+	background: #7ac943 !important;
+}
+
+/*************************** FILEUPLOAD *********************************/
+.ui-fileupload-buttonbar.ui-widget-header {
+	border: none;
+	padding: 0px !important;
+}
+
+.ui-fileupload-content.ui-widget-content {
+	border: none;
+}
+
+.ui-fileupload-choose .ui-button-icon-left.ui-icon {
+	background-image: none;
+	width: 0px;
+	height: 0px;
+}
+
+.ui-fileupload-choose.ui-button-text-icon-left .ui-button-text {
+	padding: 11px 15px 0px 15px;
+}
+
+.ui-fileupload-choose.ui-button.ui-state-default {
+	background-color: #999999 !important;
+}
+
+.ui-fileupload-choose.ui-state-default.ui-state-hover {
+	box-shadow: none !important;
+	border: none !important;
+	background-color: #575756 !important;
+}
+
+
+/*************************** RADIOS *********************************/
+.ui-radiobutton {
+	width: 25px;
+	display: inline-flex;
+}
+

@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+	<script>
+		function login() {
+			$("#logginSubmmit").submit();
+		}
+	</script>
+	
+	<!-- 	<div class="container"> -->
+	<div id="headDegradado" class="row">
+		<div class="col-xs-6" >
+
+			
+			
+			<!-- SE AGREGA EL NOMBRE DEL SISTEMA EN EL HEADER, QUE A SU VEZ ES UN LINK PARA REDIRIGIR AL HOME -->
+			<!-- 		<div class="col-md-6"> -->
+			<h:outputLink
+				rendered="#{SPRING_SECURITY_CONTEXT != null and
+                          	requestScope['javax.servlet.error.status_code'] != 403}"
+				value="${request.contextPath}/app/home">
+
+				<div id="dvheadArea" >
+					<span id="headArea"> <b> Acuerdos </b>
+					</span> <span id="headLineaBlanca">|</span>
+				</div>
+
+				<div id="headDep" >
+					<span id="headDep1">Sistema Integral de </span><br /> <span
+						id="headDep2">Seguimiento de Acuerdos</span>
+				</div>
+
+			</h:outputLink>
+			
+			
+
+			<!-- SE IMPRIME EN PANTALLA EL INCIAR SESION O EL CERRAR SESION, SEGUN SI SE IDENTIFICA O NO UNA SESION ACTIVA -->
+			<c:if test="#{SPRING_SECURITY_CONTEXT == null}">
+
+				<div id="dvheadArea">
+					<span id="headArea"> <b> Acuerdos </b>
+					</span> <span id="headLineaBlanca">|</span>
+				</div>
+
+				<div id="headDep">
+					<span id="headDep1">Sistema Integral de </span><br /> <span
+						id="headDep2">Seguimiento de Acuerdos</span>
+				</div>
+
+			</c:if>
+			
+		
+		</div>
+			<div class="col-xs-6" >
+				<!-- RECUPERAMOS EL NOMBRE DEL USUARIO EN SESION Y LO IMPRIMIMOS EN EL HEADER -->
+				
+					<div class="centerUserText">
+						<c:if test="#{SPRING_SECURITY_CONTEXT != null}">
+						<h:outputLabel	value=" Hola: #{SPRING_SECURITY_CONTEXT.authentication.principal.username}"
+										rendered="#{SPRING_SECURITY_CONTEXT!=null}" />
+						</c:if>
+						<!-- BOTON INICIAR SESION -->
+						<c:if test="#{SPRING_SECURITY_CONTEXT == null}">
+			
+							<h:outputLink value="javascript:void(0)"
+								onclick="PF('dlgLogin').show();"
+								title="login">
+			
+								<div id="headSesion">
+									<h:outputLabel id="textoImagenLogin" value="Iniciar sesi&oacute;n" />
+								</div>
+			
+							</h:outputLink>
+							
+						</c:if>
+	
+						<!-- BOTON CERRAR SESION -->
+						<c:if test="#{SPRING_SECURITY_CONTEXT != null}">
+			
+							<h:outputLink
+								value="${request.contextPath}/app/j_spring_security_logout"
+								title="login">
+			
+								<div id="headSesion">
+									<!-- 				<div> -->
+									<h:outputLabel id="textoImagenLogin" value="Cerrar sesi&oacute;n" />
+								</div>
+							</h:outputLink>
+			
+						</c:if>
+					</div>
+			</div>		
+
+
+		</div>
+		
+		
+		
+	
+	
+	
+	
+	<!-- LOGIN -->
+	<p:dialog id="dlgLogin" styleClass="dlgLogin" closeOnEscape="true"
+		visible="${not empty param.error}" widgetVar="dlgLogin"
+		resizable="false" draggable="true" position="center"
+		width="${not empty param.error ? '360px' : '365px'}"
+		height="${not empty param.error ? '495px' : '455px'}" closable="true"
+		modal="true" responsive="true" showHeader="true">
+
+		<form id="formMain">
+			<div class="divDialog">
+
+				<div class="headerLogini ">
+
+					<div class="row">
+						<div class="col-md-4"></div>
+						<div class="col-md-4" align="center">
+							<h:graphicImage name="/img/acuerdos.png" />
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-3"></div>
+						<div class="col-md-6 txtTituloLogin" align="center">Acuerdos
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+
+					<c:if test="${not empty param.error}">
+						<h:panelGrid styleClass="errorLogin" columns="2">
+							<i class="fa fa-exclamation-triangle "
+								style="padding: 0px 7px; font-size: 25px;" />
+							<h:outputLabel styleClass="errorLoginMessage"
+								value="#{sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message}"
+								rendered="#{sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message != null}" />
+							<h:outputLabel styleClass="errorLoginMessage"
+								value="Se ha agotado el tiempo de sesión, intenta nuevamente."
+								rendered="#{sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message == null and
+								(param.error eq 'caducaSesion' or param.error eq 'sesionInvalida' or param.error eq 1)}" />
+						</h:panelGrid>
+					</c:if>
+
+				</div>
+
+
+				<div class="bodyLogin ">
+
+					<div class="row">
+						<div class="ui-g-12 ui-md-4">
+							<div style="margin-left: -8px;" class="inner-addon left-addon">
+								<i class="glyphicon glyphicon-user"> </i>
+								<p:inputText id="username" name="username"
+									styleClass="form-control" required="true" placeholder="Usuario"
+									onkeyup=" document.getElementById('j_username').value=this.value;" />
+
+							</div>
+						</div>
+					</div>
+
+					<div class="row form-group">
+						<div class="inner-addon left-addon">
+							<span class="glyphicon glyphicon-lock"></span>
+
+							<p:password id="password" name="password"
+								styleClass="form-control" required="true" placeholder="Contraseña"
+								onkeyup="document.getElementById('j_password').value=this.value;" />
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6 textSeguridad">
+							<p:outputLabel value="Control de seguridad:" for="j_captcha"
+								autocomplete="off" />
+						</div>
+						<div class="col-md-6"></div>
+					</div>
+
+					<div class="row">
+
+						<div style="margin-left: -6px;" class="col-md-6" id="bordeCaptcha" align="center">
+							<p:graphicImage rendered="true" styleClass="imgCaptcha"
+								value="captcha/captcha.png" alt="captcha" id="captchaimg" />
+						</div>
+
+						<div style="width: 139px;" class="col-md-6">
+							<p:inputText id="captcha" name="captcha"
+								styleClass="form-control txtCaptcha" required="true"
+								requiredMessage="Dato requerido"
+								onkeyup="document.getElementById('j_captcha').value=this.value;" />
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-7 divQuees">
+						
+						</div>
+
+						<div class="col-md-4 divRefresh" align="left">
+							<p:commandLink>
+								<p:graphicImage name="/img/cambio.png">
+								</p:graphicImage>
+								<p:ajax event="click" update="captchaimg" />
+							</p:commandLink>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-md-12">
+							<p:commandButton id="btnIngreso" styleClass="btnLogin"
+								onclick="login()" value="Ingresar"></p:commandButton>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="footerLogin ">					
+					<div class="row lineaFoo" align="center">_____________________________</div>					
+				</div>
+				
+				<div class="row">
+					<div class="col-md-12" align="center" >
+					
+						<a href="https://intranet.ife.org.mx/unicom/DiS/SSW/sistemas/AvisoProteccionDatos.html" target="_blank">
+							<span class="txtQuees" >Políticas de privacidad</span>
+						</a>
+						
+					</div>
+				</div>
+				
+			</div>
+
+		</form>
+
+
+	</p:dialog>
+	<!--  FIN DE LOGIN -->
+
+	<form id="logginSubmmit" method="post" action="j_spring_security_check">
+		<h:inputHidden id="j_password" name="j_password" />
+		<h:inputHidden id="j_username" name="j_username" />
+		<h:inputHidden id="j_captcha" name="j_captcha" />
+	</form>
+
+</ui:composition>
+</html>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+	start-state="reportes" parent="parent-flow">
+	<var name="mbReportes" class="mx.ine.computosINE.mb.MBReportes" />
+	<view-state id="reportes" view="reporte.xhtml">
+		<on-entry>
+			<evaluate expression="mbAdmin.dto.setIdAccion(2)" />
+			<evaluate expression="mbAdmin.dto.setIdModulo(21)" />
+			<evaluate expression="mbReporte.setNumReporte(7)" />
+			<evaluate expression="mbReporte.init()" />
+		</on-entry>
+		<transition on="regresar" to="regresa" />
+	</view-state>
+	<view-state id="regresa" view="externalRedirect:servletRelative:/reportes" />
+</flow> 
+

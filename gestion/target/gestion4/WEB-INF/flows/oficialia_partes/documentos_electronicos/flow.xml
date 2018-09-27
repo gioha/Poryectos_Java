@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+	start-state="oficialiaPartes" parent="parent-flow">
+
+	<secured attributes="ROLE_GESTION4.OFICIALIA.OC, ROLE_GESTION4.CONSULTA_CAU.OC" match="any" />
+	<var name="mbOficialiaPartes" class="mx.ine.gestion.mb.MBOficialiaPartes" />
+	<input name="dtoBandejaEntrada" value="mbOficialiaPartes.dtoBandejaEntradaElectronico" />
+	<input name="folioPendiente" value="mbOficialiaPartes.dtoBandejaEntradaFisico"/>
+	
+	<!-- Pantalla de Ejemplo -->
+	<view-state id="oficialiaPartes" view="oficialia_partes.xhtml">
+		<on-entry>
+			<evaluate expression="mbOficialiaPartes.iniciar()" />
+			
+		</on-entry>
+		
+		<!-- Llamando el subflujo de modificación de prueba -->
+		<transition on="regresarABandeja" to="regresarABandeja" />
+		
+	</view-state>
+	
+	
+
+	<!-- Validación para revisar que el usuario con el se este accediendo ya 
+		se encuentre registrado en el Organigrama -->
+	<decision-state id="validaRegistroEnGestion">
+
+		<on-entry>
+			<set name="mbAdministrador.menuSelecionado" value="resourceBundle['id_modulo_clasificacion_oficialia']" />
+		</on-entry>
+
+		<if test="currentUser.principal.usuarioNoRegistradoEnGestion" then="vsErrorNoRegistrado"
+			else="oficialiaPartes" />
+
+	</decision-state>
+	
+	
+	<subflow-state id="regresarABandeja" subflow="bandeja_oficialia/administracion">
+		<input name="mostrarMensaje" value="mbOficialiaPartes.clasificado" />
+	</subflow-state>
+
+</flow>

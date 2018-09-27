@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	   xmlns="http://www.springframework.org/schema/beans"	 
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:jee="http://www.springframework.org/schema/jee"
+	   xsi:schemaLocation="
+	   	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd">
+
+	
+	<!-- Definición del properties de la aplicación -->
+	<context:property-placeholder location="classpath:ApplicationConfig.properties" />
+	
+	<!-- Definición para habilitar anotaciones en los bean -->
+	<context:annotation-config/>
+	
+	<!-- Definición de paquetes que escaneará para subir a contexto -->
+	<context:component-scan base-package="mx.ine.acuerdos, mx.ine.common, mx.org.ine.servicios, mx.ine.comunicaciones" />
+
+	<!-- Definición de beans para uso en el sistema -->
+	<bean id="currentDate" class="java.util.Date" scope="request" />
+
+	<!-- Definición de las vistas del tipo xhtml que funcionan con faces -->
+	<bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="viewClass" value="org.springframework.faces.mvc.JsfView" />
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".xhtml" />
+	</bean>
+	
+	<!-- Bean Principal de la aplicacion que mantiene los datos del usuario dutante toda la sesion-->
+	
+	<bean id="mbAdmin" class="mx.ine.acuerdos.mb.MBAdministradorSistema" scope="session" >
+  		<!-- Declarar las variables necesarias para su sistema -->
+  		<!-- <property name="dto.vigente" value="${vigente}"/>
+  		<property name="dto.tipoProceso" value="${tipo.proceso}"/> -->
+  	</bean>
+  	
+  	<bean id="mbGraphicsIndex" class="mx.ine.acuerdos.mb.MBGraphicsIndex" scope="request" >
+  		<!-- Declarar las variables necesarias para su sistema -->
+  		<!-- <property name="hola" value="hola"/>   -->
+  	</bean>
+	
+	<!-- Bean Principal de la aplicacion que mantiene los datos del usuario dutante toda la sesion-->
+
+	<!-- Definición de archivos properties de la aplicación, para subir al contexto -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource" autowire="byName">
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="basenames">
+			<list>
+				<value>ApplicationResources</value>
+				<value>GenericConstants</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- JNDI Gluster -->
+	<jee:jndi-lookup id="rutaGluster" jndi-name="java:/util/glusterFS"/>
+
+	<!-- Utilerias -->
+	<bean id="jaxbUtil" class="mx.ine.common.util.JaxbUtil">
+		<constructor-arg ref="jaxbContextHelper"/>
+	</bean>
+	<bean id="jaxbContextHelper" class="mx.ine.acuerdos.util.JaxbContextHelperFactory"
+		factory-method="getJaxbContextHelper">
+		<constructor-arg>
+			<list>
+				<value>mx.ine.common.ws.administracion.dto.response.DTODetalleProcesoWS</value>
+				<value>mx.ine.common.ws.administracion.dto.response.DTOProcesoElectoralVigenteWS</value>
+				<value>mx.ine.common.ws.administracion.dto.response.DTOResponseProcesoWS</value>				
+			</list>
+		</constructor-arg>
+	</bean>
+	<bean id="jsonParser" class="com.google.gson.Gson"/>
+	
+	<!-- JNDI WS -->
+	<jee:jndi-lookup id="jndiUrlRestWS" jndi-name="${jndi.rest.ws}"/>
+	<!-- Bean del la url del servidor del servicios web -->
+	<bean id="urlRestWs" class="java.lang.String">
+		<constructor-arg value="#{jndiUrlRestWS}"/>
+	</bean>
+	
+	<!-- Datos del certificado -->
+	<bean id="certPath" class="java.lang.String">
+		<constructor-arg value="keystore/certINE.jks"/>
+	</bean>
+
+ 	<!-- <jee:jndi-lookup id="jndiCertPassWS" jndi-name="${jndi.certPass.ws}"/>
+	<bean id="certPass" class="java.lang.String">
+		<constructor-arg value="#{jndiCertPassWS}"/>
+	</bean> --> 
+	
+	<bean id="utils" class="mx.ine.acuerdos.util.Utilidades" scope="singleton">
+		<property name="rutaGlusterFS" value="#{rutaGluster}"/>
+  	</bean>
+	
+</beans>

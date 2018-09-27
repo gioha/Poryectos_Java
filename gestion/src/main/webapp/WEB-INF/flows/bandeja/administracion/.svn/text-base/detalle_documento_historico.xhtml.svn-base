@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sec="http://www.springframework.org/security/tags">
+	<!--Links -->
+	<!-- <div class="row">
+		<div class="col-xs-4" >
+			<h4 class="titulo_anexos">General</h4>
+		</div>
+		
+		<div class="col-xs-4" style="padding:0px;" >
+			<p:commandLink  title="&nbsp; #{messageSource['mensaje_todos_comentarios']}"
+							actionListener="#{mbBHistorico.mostrarDialogComentarios}"
+							update=":formBorradores:dialog_revisar_comentarios, :formBorradores:panelDer" 
+							style="color: #E30613; text-decoration: none; float: right; font-size: 13px; font-weight: bold">
+				
+				<i class="fa fa-commenting" aria-hidden="true"/><h:outputText value="&nbsp; #{messageSource['mensaje_todos_comentarios']}" style="text-decoration: underline"/>
+			</p:commandLink>
+		</div>
+		<div class="col-xs-4" >
+			<p:commandLink 	title="Historico del turnado Entrada"
+							actionListener="#{mbBHistorico.mostrarDialogHistoricoTurnado}"
+							update=":formBorradores:dialogHistoricoTurnado"
+							style="color: #A0005F ; text-decoration: none; float: right; font-size: 13px; font-weight: bold">
+							
+				<i class="fa fa-clock-o" aria-hidden="true"/><h:outputText value="&nbsp; Historial del Turnado" style="text-decoration: underline;"/>
+			</p:commandLink>
+		</div>
+	</div> -->
+	
+	<!--Tabla Remitentes-->
+	<div class="row">
+		<p:dataTable 	id="tablaDetalleRemitentesEntrada" styleClass="tabla_anexos"
+						value="#{mbBHistorico.detalleDocumentoHelper.listaRemitentes}"
+						var="remitente"
+						emptyMessage="No tiene personas remitentes" scrollable="true" >
+			
+			<f:facet name="header">Remitentes</f:facet>
+			<p:column headerText="Nombre" >
+				<h:outputText style="font-size:10px;" value="#{remitente.nombreCompleto}" />
+			</p:column>
+			<p:column headerText="Cuenta" style="text-align:center;">
+				<h:outputText style="font-size:10px;" value="#{remitente.cuentaLDAP}" />
+			</p:column>
+		</p:dataTable>
+	</div>
+	
+
+	<!--Tabla Destinatario -->
+	<div class="row">
+		<p:dataTable 	id="tablaDetalleDestinatariosEntrada" styleClass="tabla_anexos"
+						value="#{mbBHistorico.detalleDocumentoHelper.listaDestinatarios}"
+						var="destinatario"
+						emptyMessage="No tiene personas remitentes" scrollable="true" >
+			<f:facet name="header">Destinatarios</f:facet>
+			
+			<p:column headerText="Nombre" >
+				<h:outputText style="font-size:10px;" value="#{destinatario.persona.nombreCompleto}" rendered="#{destinatario.tipoDestinatario eq 1}"/>
+				<h:outputText style="font-size:10px;" value="#{destinatario.persona.area.descripcion}" rendered="#{destinatario.tipoDestinatario eq 2}"/>
+			</p:column>
+			
+			<p:column headerText="Cuenta" style="text-align:center;">
+				<h:outputText style="font-size:10px;" value="#{destinatario.persona.cuentaLDAP}" rendered="#{destinatario.tipoDestinatario eq 1}"/>
+			</p:column>
+			
+		</p:dataTable>
+	</div>
+	
+		<!--Tabla CCP-->
+	<div class="row">
+		<p:dataTable 	id="tablaDetalleCCPEntrada" styleClass="tabla_anexos"
+						value="#{mbBHistorico.detalleDocumentoHelper.listaCCP}"
+						var="ccp"
+						emptyMessage="No tiene personas CCP" scrollable="true" >
+			<f:facet name="header">CCP</f:facet>
+			
+			<p:column headerText="Nombre" >
+				<h:outputText style="font-size:10px;" value="#{ccp.nombreCompleto}" />
+			</p:column>
+			
+			<p:column headerText="Cuenta" style="text-align:center;">
+				<h:outputText style="font-size:10px;" value="#{ccp.cuentaLDAP}" />
+			</p:column>
+		</p:dataTable>
+	</div>
+	
+</ui:composition>

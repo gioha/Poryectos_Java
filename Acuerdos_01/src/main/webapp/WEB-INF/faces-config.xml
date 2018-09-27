@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+			  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
+			  version="2.2">
+	<absolute-ordering>
+		<others />
+	</absolute-ordering>
+	<!-- 
+	 <component>
+        <component-type>org.primefaces.component.UltimaMenu</component-type>
+        <component-class>mx.ine.sanciones.util.UltimaMenu</component-class>
+    </component>
+    
+    <render-kit>
+        <renderer>
+            <component-family>org.primefaces.component</component-family>
+            <renderer-type>org.primefaces.component.UltimaMenuRenderer</renderer-type>
+            <renderer-class>mx.ine.sanciones.util.UltimaMenuRenderer</renderer-class>
+        </renderer>
+    </render-kit>
+    -->
+	<application>
+		<!-- Esta línea se agregó para que faces pueda ver los beans de spring, 
+			i.e., aquellos anotados como component, service, repository, etc. como si 
+			fuese un managed bean propio de faces -->
+		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+		
+		<!-- Permite direccionar a página de error cuando se solicita un recurso no existente -->
+		<resource-handler>mx.ine.acuerdos.seguridad.SecurityResourceHandler</resource-handler>
+	</application>
+
+</faces-config>

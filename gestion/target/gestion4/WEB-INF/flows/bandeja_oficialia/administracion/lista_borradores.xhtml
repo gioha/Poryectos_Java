@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sec="http://www.springframework.org/security/tags">
+	
+	<div id="row_lista_bandeja" class="row">
+ 		
+ 		<div id="col_lista_borradores" class="col-xs-12">
+
+			<p:dataTable id="tablaBorradores" styleClass="tabla_borradores"
+						 var="borrador" value="#{mbBandejaOficialia.listaDTOBorradores}"
+						 rows="10" paginator="true" paginatorPosition="top"
+						 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						 selectionMode="single"
+						 selection="#{mbBandejaOficialia.dtoBorradorSeleccionado}"
+						 rowKey="#{borrador.idDocumento}"
+						 emptyMessage="Sin docs">
+
+				<p:ajax event="rowSelect" listener="#{mbBandejaOficialia.seleccionarBorrador}"
+						update=":formBorradores:panelDer, :formBorradores:panelCentro" />
+						
+				<p:column styleClass="columna_icono" style="width:42px;">
+
+					<h:graphicImage rendered="#{borrador.numEnviadoFirma ne 0}" name="bo_firma.png" library="img/bandeja"
+						class="pull-center img-responsive" />
+						
+					<h:graphicImage rendered="#{borrador.numEnviadoValidacion ne 0}" name="bo_valida.png" library="img/bandeja"
+						class="pull-center img-responsive" />
+				
+					<h:graphicImage rendered="#{borrador.numEnviadoFirma eq 0 and borrador.numEnviadoValidacion eq 0}" name="bo_negro.png" library="img/bandeja"
+						class="pull-center img-responsive" />
+
+				</p:column>
+				
+				<p:column styleClass="columna_borradores" style="width:200px;">
+
+					<span class="tabla_siglas" data="#{borrador.idDocumento}">
+						<h:outputText value="#{borrador.documento.noDocumento}" /> 
+						<i class="#{borrador.documento.tipoCaptura eq 3 ? 'fa fa-paperclip':'sin_adjunto' }" aria-hidden="true"></i><br />
+						
+					</span>
+					<span>Asunto</span>
+					
+				</p:column>
+
+				<p:column styleClass="columna_borradores">
+
+					<h:outputText value="#{borrador.fechaHora}">
+						<f:convertDateTime pattern="dd/MM/yyyy hh:mm" />
+					</h:outputText>
+
+				</p:column>
+				
+				<p:column styleClass="columna_borradores">
+					
+					<i class="#{borrador.conComentarios ne 0 ? 'fa fa-commenting con_comentarios': 'fa fa-commenting'}" aria-hidden="true"></i>
+					
+					<i class="#{borrador.conModificaciones ne 0 ? 'fa fa-pencil con_ediciones': 'fa fa-pencil'}" aria-hidden="true"></i>
+					
+					<i class="#{borrador.conValidacion ne 0 ? 'fa fa-check con_validaciones': 'fa fa-check'}" aria-hidden="true"></i>
+					
+					<!-- test="#{mbBandejaOficialia.dtoBorradorSeleccionado.conFirma ne 0}" -->
+					<!-- 
+					<h:graphicImage  name="firma1.png" library="img/bandeja" rendered=""/>
+					<h:graphicImage  name="firma2.png" library="img/bandeja" rendered=""/>
+					<h:graphicImage  name="firma3.png" library="img/bandeja" rendered=""/>
+					 -->
+					<p:graphicImage  	name="firma1.png" library="img/bandeja" 
+										styleClass="icon_con_firma" rendered="#{borrador.conFirma ne 0}"/>
+					 
+					<p:graphicImage  	name="firma2.png" library="img/bandeja" 
+										styleClass="icon_firma" rendered="#{borrador.conFirma eq 0}"/>
+
+				</p:column>
+				
+				<p:column styleClass="columna_borradores" style="width:80px">
+
+					<p:menuButton value="Acciones" styleClass="menu_acciones">
+		
+						<p:menuitem value="Enviar a Validación"
+							actionListener="#{mbBandejaOficialia.mostrarEnviarValidar}"
+							disabled="#{borrador.numEnviadoFirma ne 0 or borrador.numEnviadoValidacion ne 0}"
+							update=":formBorradores:dialog_enviar_fv" />
+		
+						<p:menuitem value="Enviar a Destinatario" />
+		
+						<p:menuitem value="Enviar a Firma" id="enviar_firma" ajax="true"
+							actionListener="#{mbBandejaOficialia.mostrarEnviarFirmar}"
+							disabled="#{borrador.numEnviadoFirma ne 0 or borrador.numEnviadoValidacion ne 0}"
+							update=":formBorradores:dialog_enviar_fv" />
+		
+						<p:menuitem value="Editar" action="modificar" />
+		
+						<p:menuitem value="Firmar" actionListener="#{mbBandejaOficialia.firmar}"
+							disabled="#{borrador.numEnviadoFirma ne 0 or borrador.numEnviadoValidacion ne 0}" />
+		
+						<p:menuitem value="Eliminar Borrador"
+							actionListener="#{mbBandejaOficialia.confirmarEliminarBorrador}"
+							disabled="#{borrador.numEnviadoFirma ne 0 or borrador.numEnviadoValidacion ne 0}"
+							update=":formBorradores:tablaBorradores,:formBorradores:mensaje_general_info" />
+		
+					</p:menuButton>
+
+				</p:column>
+
+			</p:dataTable>
+			
+			
+
+		</div>
+			 
+	</div>
+</ui:composition>

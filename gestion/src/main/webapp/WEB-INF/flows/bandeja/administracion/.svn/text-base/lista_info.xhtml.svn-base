@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sec="http://www.springframework.org/security/tags">
+
+			<p:dataTable id="tablaInfo" widgetVar="tablaInfo" styleClass="tabla_bandeja"
+						 var="info" value="#{mbBEntrada.listaInfoLazy}" lazy="true"
+						 paginator="true" paginatorPosition="top" rows="10"
+						 selectionMode="single" selection="#{mbBEntrada.infoSeleccionado}"
+						 
+						 emptyMessage="#{messageSource['mensaje_tabla_borradores_vacia']}">
+
+				 <p:ajax event="rowSelect" listener="#{mbBEntrada.seleccionarFilaInfo}" 
+				 			update=":formBorradores:panelCentro, :formBorradores:panelDer, :formBorradores:panelIzq, menu_formulario"/>
+				 <p:ajax event="contextMenu" listener="#{mbBEntrada.seleccionarFilaInfo}"
+						update="formBorradores:acordion_turnados:menuAccionesInfo, :formBorradores:panelDer, :formBorradores:panelCentro, :formBorradores:panelIzq, menu_formulario" oncomplete="PF('menuAccionesInfo').show(currentEvent);"/> 
+						
+				<p:column styleClass="#{info.noLeido eq messageSource['constante_documento_noLeido'] ? 'columna_franja_nuevo_noleidos':'columna_franja_nuevo'}" />
+				
+				<p:column styleClass="columna_icono" >
+
+					<h:graphicImage rendered="#{info.documento.tipoCaptura ne 3}" 
+									name="bo_negro.png" library="img/bandeja" class="pull-center img-responsive" />
+						
+					<h:graphicImage rendered="#{info.documento.tipoCaptura eq 3}" name="iconos_adjunto.png" library="img/bandeja"
+									class="pull-center img-responsive" />
+
+				</p:column>
+				
+				<p:column styleClass="#{info.noLeido eq messageSource['constante_documento_noLeido'] ? 'columna_bandeja_noleido':'columna_bandeja'}" >
+
+					<span class="tabla_siglas">
+						 <h:outputText value="#{info.documento.noDocumento}" />
+						<i class="#{info.documento.contieneAnexos eq 1 ? 'fa fa-paperclip':'sin_adjunto' }" aria-hidden="true"></i><br />
+					</span>
+					<span class="asunto">
+						 <h:outputText value="#{info.documento.asunto}" /> 
+						 <!-- <br/><h:outputText value="#{info.idDocumento}" /> -->
+					</span>
+					
+				</p:column>
+
+				<p:column styleClass="#{info.noLeido eq messageSource['constante_documento_noLeido'] ? 'columna_bandeja_noleido columna_fecha':'columna_bandeja columna_fecha'}" >
+
+					<h:outputText value="#{info.fechaRecepcion}" >
+						<f:convertDateTime pattern="dd/MM/yy " />
+					</h:outputText>
+				
+					<h:outputText value="#{info.fechaRecepcion}">
+						<f:convertDateTime pattern="hh:mm aa" />
+					</h:outputText>
+
+				</p:column>
+ 
+			</p:dataTable>
+			
+			<p:contextMenu id="menuAccionesInfo" widgetVar="menuAccionesInfo" for="tablaInfo">
+				<p:menuitem value="#{messageSource['mensaje_menu_turnar']}"
+							actionListener="#{mbTurnado.abrirTurnado(mbBEntrada.infoSeleccionado)}"
+							update=":formBorradores:dialogTurnado" />
+			</p:contextMenu>
+
+</ui:composition>

@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'robotoThin';
+    src: url('Roboto-Thin.eot');
+    src: url('Roboto-Thin.eot?#iefix') format('embedded-opentype'),
+         url('Roboto-Thin.woff') format('woff'),
+         url('Roboto-Thin.ttf') format('truetype'),
+         url('Roboto-Thin.svg#robotoThin') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+.robotoThin{
+	font-family: 'robotoThin';
+}

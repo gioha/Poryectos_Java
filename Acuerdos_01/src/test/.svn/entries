@@ -1,0 +1,34 @@
+10
+
+dir
+334341
+svn+ssh://giovanni.hernandez@10.0.1.85/repositorio/DIS-UNICOM/Codigo/2017/Gestion_Inst/Acuerdos_1.0/trunk/src/test
+svn+ssh://giovanni.hernandez@10.0.1.85/repositorio/DIS-UNICOM
+
+
+
+2017-08-18T23:41:15.899901Z
+276267
+rogelio.marquez
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+b6cf43f3-9c2e-435a-add6-29cfb2289967
+
+java
+dir
+
+resources
+dir
+

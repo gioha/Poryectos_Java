@@ -1,0 +1,368 @@
+/*-------------------------------------------------*/
+/* Hoja de Estilos para el módulo de               */
+/*       	Captura de documento		           */
+/*  v1.1.5 Release Date 02 de octubre de 2017      */
+/*-------------------------------------------------*/
+
+/*************************** GENERALES *********************************/
+.ui-widget {
+	font-family: Roboto, sans-serif, FontAwesome !important;
+}
+
+.shape{
+  text-align:left;
+  background-color:#d6007e;
+  border-radius: 2px;
+  width:230px;
+  height:35px;
+  line-height:35px;
+  color:white;
+  position:relative;
+  padding: 0px 0px 0px 15px;
+}
+
+.instruccionesRedaccion {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	color: #8c8b8b;	
+}
+
+.personasEncontradas.ui-datatable thead th {
+	font-weight: bold;
+	border: none !important;
+	border-bottom: 1px solid #908f90 !important;
+	border-top: none !important;
+	text-align: left;
+}
+
+.personasEncontradas .ui-datatable-odd {
+	background-color: white;
+}
+
+.personasEncontradas .ui-datatable-scrollable .ui-paginator.ui-paginator-bottom,
+.personasEncontradas .ui-paginator-bottom,
+.personasEncontradas .ui-datatable-tablewrapper {
+	border-bottom: none !important;
+}
+
+.listasPersonasElectronico.ui-datatable thead th {
+	font-weight: bold;
+	border: none !important;
+	border-bottom: none
+	border-top: none !important;
+	text-align: left;
+}
+
+.listasPersonasElectronico .ui-datatable-odd {
+	background-color: white;
+}
+
+.listasPersonasElectronico .ui-datatable-scrollable .ui-paginator.ui-paginator-bottom,
+.listasPersonasElectronico .ui-paginator-bottom,
+.listasPersonasElectronico .ui-datatable-tablewrapper {
+	border-bottom: none !important;
+}
+
+.detallePersona.ui-dialog .ui-dialog-content {
+	overflow: initial;
+}
+
+.linksPersonasEncontradas {
+	font-size: 13px !important;
+}
+
+.linksPersonasEncontradas.ui-commandlink  {
+	color: #706f6f;
+	text-decoration: none;
+}
+
+.linksPersonasEncontradas:hover {
+	color: #d6007e !important;
+}
+
+.linkEditar {
+	font-size: 13px !important;
+	color: #706f6f !important;
+	text-decoration: none;
+}
+
+.linkEditar:hover {
+	color: #d6007e !important;
+}
+
+.tablaAnexos.ui-datatable thead th {
+	background: #d6007e !important;
+	border: 2px solid white !important;
+	color: white;
+	font-family: Roboto;
+	text-shadow: none;
+	padding: 10px 10px
+}
+
+.tablaAnexos .ui-datatable-even {
+	background-color: #f6f6f6 !important;
+}
+
+.tablaAnexos .ui-datatable-odd {
+	background-color: #e2e2e2 !important;
+}
+
+.tablaAnexos.ui-datatable tbody td {
+	border-left: 2px solid white !important;
+	border-right: 2px solid white !important;
+	font-family: Roboto;
+}
+
+.tablaAnexos .ui-datatable-scrollable .ui-paginator.ui-paginator-bottom,
+.tablaAnexos .ui-paginator-bottom,
+.tablaAnexos .ui-datatable-tablewrapper {
+	border-bottom: none !important;
+}
+
+.radiosTipoAreaUno.ui-selectoneradio label {
+	width: 100%;
+}
+
+.linkAnexos {
+	background-color: #e2e2e2 !important;
+	text-align:left;
+    width:auto;
+    height:30px;
+    line-height:30px;
+    line-width:50px;
+    position:relative;
+    padding: 0px 0px 0px 5px;
+    font-weight: normal;
+}
+
+.link_anexo{
+	color: black !important;
+	text-decoration: none !important;
+}
+
+.link_anexo:hover{
+	text-decoration: underline !important;
+}
+
+.icon_anexo{
+	color:black !important;
+	text-decoration: none !important;
+}
+
+.icon_anexo:hover{
+	color: #D5007F !important;
+}
+
+#anexoBoton {
+	font-family: roboto;
+	font-size: 13px;
+	margin: 0px;
+	padding: 0px;
+	text-align: left;
+}
+
+#anexoBoton .ui-button-text-only .ui-button-text {
+	padding: 0px;
+	color: black;
+	font-size: 14px;
+}
+
+#anexoBoton .ui-button {
+	box-shadow : none;
+	background: #cccccc !important;
+}
+
+#anexoBoton .ui-button.ui-state-default.ui-state-hover {
+	background: #f7cce5 !important;
+	border: none !important;
+}
+
+#anexoBoton .ui-button.ui-state-default.ui-state-hover .ui-button-text {
+	color: black;
+}
+
+a:link {
+    color: #000000;
+    text-decoration: none;
+}
+
+a:visited {
+    color: #000000;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #D5007F;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: none;
+}
+/*************************** SWITCH *********************************/
+
+.ui-inputswitch {
+	width: 45px !important;
+	border: 1px solid #d5007f;
+}
+
+.ui-inputswitch.ui-corner-all {
+	border-radius: 10px;
+}
+
+.ui-inputswitch-handle {
+	width: 25px !important;
+	border-radius: 12px;
+}
+
+.ui-inputswitch-on.ui-state-active {
+	box-shadow: none;
+	width: 24px !important;
+	height: 25px;
+	background: #d5007f;
+	border-radius: 8px;
+}
+
+.switchOff .ui-inputswitch-handle {
+	background: #d5007f;
+	border: none;
+	top: -2px;
+}
+
+.switchON .ui-inputswitch-handle {
+	background: white;
+	border: none;
+	height: 22px;
+}
+
+.switchON .ui-inputswitch-on.ui-state-active {
+	width: 30px !important;
+}
+
+.switchOff .ui-inputswitch-on.ui-state-active {
+	border-radius: 13px;
+}
+
+/*************************** GROWL *********************************/
+div[id="form_datos_documento:mensaje_general_info_container"] > div {
+
+	background: #29abe2 !important;
+}
+
+div[id="form_datos_documento:mensaje_general_advertencia_container"] > div {
+
+	background: #fcee21 !important;
+	color: black; 
+}
+
+div[id="form_datos_documento:mensaje_general_advertencia_container"] > div .ui-growl-item {
+	border-bottom: 2px solid black!important;
+	border-top: 2px solid black!important;
+}
+
+div[id="form_datos_documento:mensaje_general_exito_container"] > div {
+
+	background: #7ac943 !important;
+}
+
+/*************************** FILEUPLOAD *********************************/
+.ui-fileupload-buttonbar.ui-widget-header {
+	border: none;
+	padding: 0px !important;
+}
+
+.ui-fileupload-content.ui-widget-content {
+	border: none;
+}
+
+.ui-fileupload-choose .ui-button-icon-left.ui-icon {
+	background-image: none;
+	width: 0px;
+	height: 0px;
+}
+
+.ui-fileupload-choose.ui-button-text-icon-left .ui-button-text {
+	padding: 11px 15px 0px 15px;
+}
+
+.ui-fileupload-choose.ui-button.ui-state-default {
+	background-color: #999999 !important;
+}
+
+.ui-fileupload-choose.ui-state-default.ui-state-hover {
+	box-shadow: none !important;
+	border: none !important;
+	background-color: #575756 !important;
+}
+
+
+/*************************** RADIOS *********************************/
+.ui-radiobutton {
+	width: 25px;
+	display: inline-flex;
+}
+
+#anexoBoton {
+	font-family: roboto;
+	font-size: 13px;
+	margin: 0px;
+	padding: 0px;
+	text-align: left;
+}
+
+#anexoBoton .ui-button-text-only .ui-button-text {
+	padding: 0px;
+	color: black;
+	font-size: 14px;
+}
+
+#anexoBoton .ui-button {
+	box-shadow : none;
+	background: #cccccc !important;
+}
+
+#anexoBoton .ui-button.ui-state-default.ui-state-hover {
+	background: #f7cce5 !important;
+	border: none !important;
+}
+
+#anexoBoton .ui-button.ui-state-default.ui-state-hover .ui-button-text {
+	color: #a0005f;
+}
+
+/* Estilos aplicados por Miguel Ortiz */
+/* Estilos generales */
+/*************************** GROWL *********************************/
+div[id="capturaDocumentoOficialia:mensaje_general_info_container"] > div {
+	background: #29abe2 !important;
+}
+
+div[id="capturaDocumentoOficialia:mensaje_general_advertencia_container"] > div {
+	background: #fcee21 !important;
+	color: black; 
+}
+
+div[id="capturaDocumentoOficialia:mensaje_general_advertencia_container"] > div .ui-growl-item {
+	border-bottom: 2px solid black!important;
+	border-top: 2px solid black!important;
+}
+
+div[id="capturaDocumentoOficialia:mensaje_general_exito_container"] > div {
+	background: #7ac943 !important;
+}
+
+.pe-inputNumber {
+	width: 40px;
+}
+
+.tituloDetalle {
+	color: #cb0282; 
+	font-weight: bold;
+	font-size: 19px;
+	padding-bottom: 18px;
+}
+
+.tituloDetalle:after {
+	content: "";
+    display: block;
+    padding: 5px;
+    border-bottom: 2px solid #d6007e !important;
+}

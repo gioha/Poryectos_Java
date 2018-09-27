@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sf="http://www.springframework.org/tags/faces"
+				xmlns:sec="http://www.springframework.org/security/tags"
+				template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+	
+		<!-- Estilos propios para la pantalla -->
+		<h:outputStylesheet library="css" name="pautas/vista_limitada/pautas-vista_limitada.css" />
+	<div class="container">
+		
+		
+		<h:form id="formVistaLimitada">
+			
+			<p:growl id="msgError" widgetVar="msgError" globalOnly="true" showDetail="true" closable="true" severity="error" sticky="true" />
+			
+			<pe:blockUI id="bloquearContenido" target="formVistaLimitada" content="blockUIContent"  widgetVar="bloquearContenido"/>
+			
+			<h:panelGrid id="blockUIContent" columns="2" style="display:none;">  
+				<h:graphicImage library="img" name="loader.gif" width="70"/>  
+				<h:outputText value="Procesando información..." style="white-space: nowrap;"/>				
+			</h:panelGrid>
+		
+			<script>
+
+				$(function() {
+					$('.ui-inputtextarea').flexible();
+					});
+					function setSelectedText() {
+					var range = $('.ui-inputtextarea').textrange();
+					setSelectedTextCommand([{name: 'selectedText', value: range.text}]);
+				}
+
+			</script>
+			
+			
+				
+				<p:spacer height="30"/>
+				
+				<section style="background-color: transparent; border: none; margin-bottom: 0px; padding: 0px 15px;" >
+				
+					<div class="row" style="background-color: #D8D8D8; height: 30px">
+							
+						<div class="col-md-2" style="border-style: solid; border-width: thin; text-align: center; height: 30px; padding-top: 5px; background-color: #C1BFBF">
+							<i class="fa fa-bookmark" style="color: #6E6E6E"/> <b><u>SQL</u></b>
+						</div>
+						
+						<div class="col-md-2" style="border-style: solid; border-width: thin; text-align: center; height: 30px; padding-top: 5px">
+							<i class="fa fa-bookmark" style="color: #6E6E6E"/>
+							<p:commandLink action="cambioAGluster" immediate="true"
+										   style="font-size: 1em; color: black;"> Gluster</p:commandLink>
+						</div>
+						
+						<div class="col-md-8" style="border-style: solid; border-width: thin; text-align: center; height: 30px">
+							.
+						</div>
+					
+					</div>
+					
+				</section>
+
+				<section style="padding: 5px 20px;">
+					
+					<p:spacer height="10"/>
+					
+					<div class="row">
+
+						<div class="col-md-12">
+
+							<i class="fa fa-rebel" aria-hidden="true" style="font-size: 20px"/> &nbsp; <b>A great power comes a great responsibility</b>
+
+						</div>
+
+					</div>
+					
+					<br/>
+					
+					<div class="row">
+					
+						<div class="col-md-1">
+							
+							<p:outputLabel id="contraseniaLabel" value="Contraseña:"/>
+							
+						</div>
+						
+						<div class="col-md-3">
+						
+							<p:password id="contrasenia" value="#{mbConsulta.contrasenia}" required="true" requiredMessage="Contraseña requerida" redisplay="true"/>
+							<p:message id="contraseniaMensaje" for="contrasenia" display="text"/>
+					
+						</div>
+					
+					</div>
+					
+					<br/>
+					
+					<div class="row">
+						
+						<div class="col-md-12">
+							
+							<p:inputTextarea id="operacionArea" value="#{mbConsulta.operacion}" styleClass="form-control" />
+							
+						</div>
+					
+					</div>
+					
+					<br/>
+					
+					<div class="row">
+						
+						<div class="col-md-12" style="text-align: center">
+							
+							<p:commandButton id="botonCrear" value="Ejecutar" 
+											 styleClass="btn btn-default"
+											 action="#{mbConsulta.validarOperacion}"
+											 process="@this contrasenia contraseniaMensaje operacionArea"
+											 update="@form"
+											 onstart="PF('bloquearContenido').block()"
+											 oncomplete="PF('bloquearContenido').unblock()"/>
+						
+						</div>
+					
+					</div>
+				
+				</section>
+
+			
+
+			<p:panel id="resultado">
+
+				<table border="1">
+					
+					<tr>
+						<ui:repeat var="resultado"	value="#{mbConsulta.listaResultado[0].cmps}" >
+							
+							<td style="background: #BDBDBD; font-weight: bold; text-align: center">
+								<h:outputText value="#{resultado}" />
+							</td>
+
+						</ui:repeat>
+					</tr>
+						
+					<ui:repeat var="resultados"	value="#{mbConsulta.listaResultado}" offset="1" >
+						
+						<tr>
+							<ui:repeat var="resultado"	value="#{resultados.cmps}" >
+
+								<td>
+									<h:outputText value="#{resultado}" />
+								</td>
+
+							</ui:repeat>
+
+						</tr>
+
+					</ui:repeat>
+
+				</table>
+
+			</p:panel>
+
+			<!-- DIALOGOS -->
+			
+			<!-- Dialogo de delete -->
+			<p:confirmDialog id="confirmaDelete" widgetVar="confirmaDelete" 
+							 message="Tú query contiene un DELETE, ¿Estás seguro de querer llevar acabo esta operación? (No hay vuelta atrás)"
+							 hideEffect="puff">
+
+				<center>
+					<p:commandButton id="btnSi" value="#{messageSource['etiqueta_aceptar']}" type="button"
+									 action="#{mbConsulta.generarOperacion}"
+									 update="@form"
+									 styleClass="ui-confirmdialog-yes" 
+									 onstart="PF('confirmaDelete').hide(); PF('bloquearContenido').block();"
+									 oncomplete="PF('bloquearContenido').unblock()"/>
+					<p:commandButton id="btnNo" value="#{messageSource['etiqueta_cancelar']}" type="button"
+									 onclick="PF('confirmaDelete').hide()"
+									 styleClass="ui-confirmdialog-no" />
+				</center>
+
+			</p:confirmDialog>
+
+			<!-- Dialogo de consulta SIN where -->
+			<p:confirmDialog id="confirmaSinWhere" widgetVar="confirmaSinWhere"
+							 message="Tú query contiene un SELECT pero no tiene ningún WHERE, esta búsqueda podría traer muchos resultados ¿Estás seguro de querer llevarla acabo?"
+							 hideEffect="puff">
+
+				<center>
+					<p:commandButton id="btnSi2" value="#{messageSource['etiqueta_aceptar']}"
+									 action="#{mbConsulta.generarOperacion}"
+									 update="@form"
+									 styleClass="ui-confirmdialog-yes" 
+									 onstart="PF('confirmaSinWhere').hide(); PF('bloquearContenido').block();"
+									 oncomplete="PF('bloquearContenido').unblock()"/>
+					<p:commandButton id="btnNo2" value="#{messageSource['etiqueta_cancelar']}"
+									 onclick="PF('confirmaSinWhere').hide()"
+									 styleClass="ui-confirmdialog-no" />
+				</center>
+
+			</p:confirmDialog>
+			
+			<!-- Dialogo drop -->
+			<p:confirmDialog id="confirmaDrop" widgetVar="confirmaDrop"
+							 message="No se puede ejecutar esa operación desde aquí"
+							 hideEffect="puff">
+
+				<center>
+					<p:commandButton id="btnNo3" value="#{messageSource['etiqueta_aceptar']}"
+									 onclick="PF('confirmaDrop').hide()"
+									 styleClass="ui-confirmdialog-no" />
+				</center>
+
+			</p:confirmDialog>
+
+			<!-- Dialogo de insert -->
+			<p:confirmDialog id="confirmaInsert" widgetVar="confirmaInsert" 
+							 message="Tú query contiene un INSERT, ¿Estás seguro de querer llevar acabo esta operación? (No hay vuelta atrás)"
+							 hideEffect="puff">
+
+				<center>
+					<p:commandButton id="btnSi4" value="#{messageSource['etiqueta_aceptar']}" type="button"
+									 action="#{mbConsulta.generarOperacion}"
+									 update="@form"
+									 styleClass="ui-confirmdialog-yes"
+									 onstart="PF('confirmaInsert').hide(); PF('bloquearContenido').block();"
+									 oncomplete="PF('bloquearContenido').unblock()"/>
+					<p:commandButton id="btnNo4" value="#{messageSource['etiqueta_cancelar']}" type="button"
+									 onclick="PF('confirmaInsert').hide()"
+									 styleClass="ui-confirmdialog-no" />
+				</center>
+
+			</p:confirmDialog>
+			
+			<!-- Dialogo de update -->
+			<p:confirmDialog id="confirmaUpdate" widgetVar="confirmaUpdate" 
+							 message="Tú query contiene un UPDATE, ¿Estás seguro de querer llevar acabo esta operación? (No hay vuelta atrás)"
+							 hideEffect="puff">
+
+				<center>
+					<p:commandButton id="btnSi5" value="#{messageSource['etiqueta_aceptar']}" type="button"
+									 action="#{mbConsulta.generarOperacion}"
+									 update="@form"
+									 styleClass="ui-confirmdialog-yes"
+									 onstart="PF('confirmaUpdate').hide(); PF('bloquearContenido').block();"
+									 oncomplete="PF('bloquearContenido').unblock()"/>
+					<p:commandButton id="btnNo5" value="#{messageSource['etiqueta_cancelar']}" type="button"
+									 onclick="PF('confirmaUpdate').hide()"
+									 styleClass="ui-confirmdialog-no" />
+				</center>
+
+			</p:confirmDialog>
+
+		</h:form>
+</div>
+		<h:outputScript library="js" name="jquery.flexibleArea.js" />
+		<h:outputScript library="js" name="jquery-textrange.js" />
+	
+	</ui:define>
+
+</ui:composition>

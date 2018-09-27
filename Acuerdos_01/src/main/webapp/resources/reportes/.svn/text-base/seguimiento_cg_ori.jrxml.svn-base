@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="seguimiento_cg_ori" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="08407b12-f038-47d6-b33a-7220804a343c">
+	<property name="ireport.zoom" value="1.5026296018032064"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#B3A1A1">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#FFE6E6">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="e2c40336-ddbe-4b3c-99e2-d13f9c36cbff"/>
+	<parameter name="logoIne" class="java.lang.String"/>
+	<parameter name="filtroAcuerdo" class="java.lang.String"/>
+	<parameter name="filtroArea" class="java.lang.String"/>
+	<parameter name="filtroClasificacion" class="java.lang.String"/>
+	<parameter name="filtroEstatus" class="java.lang.String"/>
+	<parameter name="filtroPunto" class="java.lang.String"/>
+	<parameter name="tipoDocumento" class="java.lang.String"/>
+	<parameter name="anio" class="java.lang.String"/>
+	<parameter name="mensaje" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="textoPunto" class="java.lang.String">
+		<fieldDescription><![CDATA[textoPunto]]></fieldDescription>
+	</field>
+	<field name="tematica" class="java.lang.String">
+		<fieldDescription><![CDATA[tematica]]></fieldDescription>
+	</field>
+	<field name="punto" class="java.lang.String">
+		<fieldDescription><![CDATA[punto]]></fieldDescription>
+	</field>
+	<field name="nombreAcuerdo" class="java.lang.String">
+		<fieldDescription><![CDATA[nombreAcuerdo]]></fieldDescription>
+	</field>
+	<field name="fecha" class="java.util.Date">
+		<fieldDescription><![CDATA[fecha]]></fieldDescription>
+	</field>
+	<field name="estatus" class="java.lang.String">
+		<fieldDescription><![CDATA[estatus]]></fieldDescription>
+	</field>
+	<field name="areaSiglas" class="java.lang.String">
+		<fieldDescription><![CDATA[areaSiglas]]></fieldDescription>
+	</field>
+	<field name="anio" class="java.lang.String">
+		<fieldDescription><![CDATA[anio]]></fieldDescription>
+	</field>
+	<field name="area" class="java.lang.String">
+		<fieldDescription><![CDATA[area]]></fieldDescription>
+	</field>
+	<field name="acuerdo" class="java.lang.String">
+		<fieldDescription><![CDATA[acuerdo]]></fieldDescription>
+	</field>
+	<field name="movimientosHistorico" class="java.lang.String">
+		<fieldDescription><![CDATA[movimientosHistorico]]></fieldDescription>
+	</field>
+	<field name="tipoSesion" class="java.lang.String">
+		<fieldDescription><![CDATA[tipoSesion]]></fieldDescription>
+	</field>
+	<field name="fechaEmision" class="java.lang.String">
+		<fieldDescription><![CDATA[fechaEmision]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="101" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="122" height="41" uuid="ccd1567d-2b87-4ca8-92c5-7b1d26ded315"/>
+				<imageExpression><![CDATA[$P{logoIne}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="-1" y="2" width="802" height="20" uuid="9d65b93f-d3d2-4edb-a80b-74aefb39bd5e"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporte de Seguimiento del Consejo General]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="57" width="616" height="44" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="06acfb31-b909-4e49-bf3a-307a9567b2a2"/>
+				<textFieldExpression><![CDATA[($P{filtroEstatus}==null?"":$P{filtroEstatus}.toString().equals("")?"":"Estatus: " + $P{filtroEstatus}+"\n")+
+($P{filtroArea}==null?"":$P{filtroArea}.toString().equals("")?"":"Área: "+$P{filtroArea}+"\n")+
+($P{filtroClasificacion}==null?"":$P{filtroClasificacion}.toString().equals("")?"":"Clasificación: " + $P{filtroClasificacion})]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy HH:mm:ss">
+				<reportElement x="685" y="41" width="116" height="15" uuid="bad94ccb-c545-4563-82f2-896369ff93b7"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="583" y="41" width="100" height="15" uuid="83da008a-bbfd-4039-9a72-20ca47db9e22"/>
+				<textElement textAlignment="Right">
+					<font pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Fecha: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="41" width="24" height="15" uuid="2bac8c9e-077f-4e76-bb7a-eb4878388e02"/>
+				<text><![CDATA[Año:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="24" y="41" width="101" height="15" uuid="9bd5e1ce-a1aa-49e6-81d9-a43632e17194"/>
+				<textFieldExpression><![CDATA[$P{anio}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="26" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="483" y="0" width="45" height="26" backcolor="#CCCCCC" uuid="41f901c3-7256-4acb-a231-fb6dc18894eb"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineColor="#999999"/>
+					<rightPen lineWidth="0.0" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Estatus]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="605" y="0" width="45" height="26" backcolor="#CCCCCC" uuid="f7690155-47f1-49f7-8dbc-5e67ddd15eb9"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+					<topPen lineWidth="0.5" lineColor="#999999"/>
+					<leftPen lineWidth="0.5" lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineColor="#999999"/>
+					<rightPen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Área Responsable]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="528" y="0" width="77" height="26" backcolor="#CCCCCC" uuid="ae479d8a-c81b-4d30-a454-de5b593f0631"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+					<topPen lineWidth="0.5" lineColor="#999999"/>
+					<leftPen lineWidth="0.5" lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineColor="#999999"/>
+					<rightPen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Clasificación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="650" y="0" width="152" height="26" backcolor="#CCCCCC" uuid="7606f7e6-aace-4d5e-b5cd-a3103a4faf10"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+					<topPen lineWidth="0.5" lineColor="#999999"/>
+					<leftPen lineWidth="0.5" lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineColor="#999999"/>
+					<rightPen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Movimientos]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="52" y="0" width="54" height="26" backcolor="#CCCCCC" uuid="647833fc-c768-468c-b61d-e6f862e6d6ca"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#999999"/>
+					<leftPen lineWidth="0.5" lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineColor="#999999"/>
+					<rightPen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Número de " + $P{tipoDocumento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="106" y="0" width="186" height="26" backcolor="#CCCCCC" uuid="fc7d6dc9-2004-42bb-88aa-ef80d74c240c"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#999999"/>
+					<leftPen lineWidth="0.5" lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineColor="#999999"/>
+					<rightPen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nombre de " + $P{tipoDocumento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="292" y="0" width="191" height="26" backcolor="#CCCCCC" uuid="2627e577-f705-46af-bdfb-72966f6ec028"/>
+				<box>
+					<topPen lineWidth="0.5" lineColor="#999999"/>
+					<leftPen lineWidth="0.5" lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineColor="#999999"/>
+					<rightPen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{tipoDocumento}.toString().equals("Resolución")?("Punto Resolutivo"):"Punto de " + $P{tipoDocumento}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="52" height="26" backcolor="#CCCCCC" uuid="43b2eff3-cb55-4dfe-8a84-ddf7584847b8"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+					<topPen lineWidth="0.5" lineColor="#999999"/>
+					<leftPen lineWidth="0.5" lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineColor="#999999"/>
+					<rightPen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Tipo de sesión y fecha]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="52" y="0" width="54" height="20" isPrintWhenDetailOverflows="true" uuid="0339f43e-e38a-4b58-8b03-cb5ac267ca1b"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="1" rightPadding="3">
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25" lineColor="#999999"/>
+					<leftPen lineWidth="0.25" lineColor="#999999"/>
+					<bottomPen lineWidth="0.25" lineColor="#999999"/>
+					<rightPen lineWidth="0.25" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{acuerdo}==null?"":$F{acuerdo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="106" y="0" width="186" height="20" isPrintWhenDetailOverflows="true" uuid="405b6b69-d9ed-425d-8f6b-dd5aa3b3252c"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="1" rightPadding="3">
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25" lineColor="#999999"/>
+					<leftPen lineWidth="0.25" lineColor="#999999"/>
+					<bottomPen lineWidth="0.25" lineColor="#999999"/>
+					<rightPen lineWidth="0.25" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombreAcuerdo}.toString().trim().replace("\n"," ")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="292" y="0" width="191" height="20" isPrintWhenDetailOverflows="true" uuid="7b8c674e-198b-4cbd-9615-51758d18d607"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="1" rightPadding="3">
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25" lineColor="#999999"/>
+					<leftPen lineWidth="0.25" lineColor="#999999"/>
+					<bottomPen lineWidth="0.25" lineColor="#999999"/>
+					<rightPen lineWidth="0.25" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{textoPunto}.toString().trim().replace("\n"," ")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="605" y="0" width="45" height="20" isPrintWhenDetailOverflows="true" uuid="326dfc19-08a5-4cf2-bd3e-954cb05ee97b"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="1" rightPadding="3">
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25" lineColor="#999999"/>
+					<leftPen lineWidth="0.25" lineColor="#999999"/>
+					<bottomPen lineWidth="0.25" lineColor="#999999"/>
+					<rightPen lineWidth="0.25" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{areaSiglas}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="483" y="0" width="45" height="20" isPrintWhenDetailOverflows="true" uuid="f36a8197-766f-4096-aa14-2e4de97a2fef"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="1" rightPadding="3">
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25" lineColor="#999999"/>
+					<leftPen lineWidth="0.25" lineColor="#999999"/>
+					<bottomPen lineWidth="0.25" lineColor="#999999"/>
+					<rightPen lineWidth="0.25" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estatus}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="528" y="0" width="77" height="20" isPrintWhenDetailOverflows="true" uuid="e35f96ef-fc8f-416e-9cb2-6c4260695463"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="1" rightPadding="3">
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25" lineColor="#999999"/>
+					<leftPen lineWidth="0.25" lineColor="#999999"/>
+					<bottomPen lineWidth="0.25" lineColor="#999999"/>
+					<rightPen lineWidth="0.25" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tematica}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="650" y="0" width="152" height="20" isPrintWhenDetailOverflows="true" uuid="24eccf50-ad47-4514-bf73-0f2a38706787"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="1" rightPadding="3">
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25" lineColor="#999999"/>
+					<leftPen lineWidth="0.25" lineColor="#999999"/>
+					<bottomPen lineWidth="0.25" lineColor="#999999"/>
+					<rightPen lineWidth="0.25" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{movimientosHistorico}==null?"":$F{movimientosHistorico}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="52" height="20" isPrintWhenDetailOverflows="true" uuid="7ce06385-06bd-40cf-b8c4-494ec47ca436"/>
+				<box topPadding="2" leftPadding="3" bottomPadding="1" rightPadding="3">
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25" lineColor="#999999"/>
+					<leftPen lineWidth="0.25" lineColor="#999999"/>
+					<bottomPen lineWidth="0.25" lineColor="#999999"/>
+					<rightPen lineWidth="0.25" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tipoSesion}.toString().equals("") && $F{fechaEmision}.toString().equals("")?"": $F{tipoSesion}+"\n"+"("+$F{fechaEmision}+")"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="21">
+			<textField>
+				<reportElement x="670" y="0" width="131" height="20" uuid="c42bbf97-a4a7-478c-805f-c3f9e5d65765"/>
+				<box rightPadding="5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="50">
+			<textField>
+				<reportElement x="0" y="0" width="555" height="20" uuid="743f4a04-b3b5-464b-bbbd-cbcc52596bff"/>
+				<box leftPadding="8"/>
+				<textElement verticalAlignment="Bottom">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{mensaje}.toString()]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

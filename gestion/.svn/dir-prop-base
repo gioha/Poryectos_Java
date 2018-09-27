@@ -1,0 +1,10 @@
+K 10
+svn:ignore
+V 47
+.settings
+.metadata
+.classpath
+.project
+target
+
+END

@@ -1,0 +1,45 @@
+/*------------------------------------------------------*/
+/* Hoja de Estilos para afectar elementos 				*/
+/* de primefaces en el proyecto de Gestión				*/
+/*   		Pantalla de error  							*/
+/*------------------------------------------------------*/
+
+/** ******************************* GENERAL ******************************* **/
+#main {
+	background-color: #706f6f;
+	top: 0px;
+	height: 100%;
+}
+
+.containerError {
+	width: 100%;
+	height: 100%;
+}
+
+.contenedorMensajeError {
+    position: absolute;
+    top: 30%;
+    left: 26%;
+    right: 26%;
+    width: 700px;
+    border-top: 3px solid white !important;
+    border-bottom: 3px solid white !important;
+    padding-bottom: 30px;
+    padding-top: 30px;
+    color: white;
+}
+
+.tituloDescripcionError {
+	font-size: 35px;
+	font-family: Roboto;
+	font-weight: 900;
+	padding-bottom: 10px;
+	border-bottom: 3px solid white !important;
+	padding-left: 0px;
+}
+
+.ui-datalist-content.ui-widget-content {
+	background: none;
+	border: none;
+	color: white;
+}

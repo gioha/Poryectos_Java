@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+	start-state="home_view" parent="parent-flow">
+	
+	<on-start>
+		<evaluate expression="mbAdministrador.cargarValoresRegistradoEnGestionParaUsuarioLogueado()"/>
+		<evaluate expression="mbAdministrador.validarPantallaInicioSegunRol()"/>
+		
+		<set name="mbAdministrador.menuSelecionado" value="0"/>
+	</on-start>
+
+	<!-- Flujos Internos -->
+	<view-state id="home_view" view="home.xhtml"/>
+
+</flow>

@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sf="http://www.springframework.org/tags/faces"
+				xmlns:sec="http://www.springframework.org/security/tags"
+				template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+		
+		<h:outputStylesheet library="css" name="modulos/apartado_folios/apartado_folios.css" />
+		
+		<!-- DIALOG PARA MOSTRAR LA CARGA -->
+		<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+			<p:graphicImage name="/img/estructura/loader.gif" />
+		</p:dialog>
+		<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" onerror="PF('statusDialog').hide()"/>
+		
+		<h:form id="formApartadoFolios">
+			
+			<p:growl id="mensaje_general_info" showDetail="true" sticky="true" globalOnly="true" severity="info"/>
+			<p:growl id="mensaje_general_advertencia" showDetail="true" sticky="true" globalOnly="true" severity="warn"/>
+			<p:growl id="mensaje_general_exito" showDetail="true" sticky="true" globalOnly="true" severity="fatal"/>
+			
+			<div class="container">
+				<h2>
+					<h:outputText value="Inicio" style="color: #999999"/>&nbsp;&nbsp;
+					<i class="fa fa-angle-right" aria-hidden="true" style="font-size: 18px; color: #999999"/>&nbsp;&nbsp;
+					<h:outputText value="Apartado de folios" style="font-weight: bold"/>
+				</h2>
+				<h3>
+					<h:outputLabel value="Apartado de folios" />
+				</h3>
+				<h4>
+					<h:outputLabel id="infoDoc" value="Información del folio" />
+				</h4>
+				<h5>
+					Los datos con (<span style="color:red">*</span>) son requeridos
+				</h5>
+				
+				<p:outputPanel id="panelInfoFolio">
+					
+					<section>
+						
+						<!-- ESTAS OPCIONES SOLO ESTAN DISPONIBLES PARA EL ADMINISTRADOR DEL SISTEMA-->
+						<c:if test="#{sec:areAnyGranted('ROLE_GESTION4.ADMIN.OC')}">
+						
+							<div class="row">
+	
+								<!-- TIPO AREA -->
+								<div class="col-md-5">
+									<div class="row">
+										<p:outputLabel style="color:red">*</p:outputLabel><h:outputLabel id="nombreTipoArea" for="tipo_area" value="Tipo de área" />
+									</div>
+									<div class="row">
+										<div class="col-md-12" style="padding-left: 0px">
+											<p:selectOneMenu id="tipoAreaCombo" value="#{mbApartado.filtros.tipoArea}" style="width: 100%" 
+															 required="true" requiredMessage="#{messageSource['mensaje_general_campoRequerido']}">
+			
+												<f:selectItem itemLabel="#{messageSource['mensaje_general_selecciona']}" itemValue="#{null}" />
+												<f:selectItems var="tipoAreaCombo" value="#{mbApartado.filtros.listaTiposArea}"
+															   itemLabel="#{tipoAreaCombo.descripcion}" itemValue="#{tipoAreaCombo.idTipoArea}" />
+												
+												<p:ajax event="change" process="@this" listener="#{mbApartado.validarTipoAreaSeleccionada}" 
+														update="tipoAreaCombo entidadCombo areaCombo tipoDocumentoCombo acronimoCombo
+																mensaje_tipoAreaCombo mensaje_entidadCombo mensaje_areaCombo mensaje_tipoDocumentoCombo mensaje_acronimoCombo"/>
+												
+											</p:selectOneMenu>
+										</div>
+									</div>
+									<div class="row mensajesPorCampo" >
+										<div class="col-md-12" style="padding-left: 0px">
+											<p:message id="mensaje_tipoAreaCombo" for="tipoAreaCombo" display="text"/>
+										</div> 
+									</div>
+								</div>
+								
+								
+								<!-- ENTIDAD -->
+								<div class="col-md-6">
+									
+									<div class="row">
+										<p:outputLabel style="color:red">*</p:outputLabel><h:outputLabel for="entidad" value="Entidad" /> 
+									</div>
+									<div class="row">
+										<p:selectOneMenu id="entidadCombo" value="#{mbApartado.filtros.idEstado}" style="width: 100%" disabled="#{mbApartado.filtros.tipoArea ne 2}"
+														 required="true" requiredMessage="#{messageSource['mensaje_general_campoRequerido']}">
+		
+											<f:selectItem itemValue="" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+											<f:selectItems var="entidadC" value="#{mbApartado.filtros.listaEstados}"
+														   itemLabel="#{entidadC.nombreEstado}" itemValue="#{entidadC.idEstado}" />
+											
+											<p:ajax event="change" process="@this" listener='#{mbApartado.consultarAreas}' 
+													update="entidadCombo areaCombo tipoDocumentoCombo acronimoCombo
+															mensaje_entidadCombo mensaje_areaCombo mensaje_tipoDocumentoCombo mensaje_acronimoCombo"/>
+		
+										</p:selectOneMenu>
+									</div>
+									<div class="row mensajesPorCampo">
+										<div class="col-md-4">
+											<p:message id="mensaje_entidadCombo" for="entidadCombo" display="text"/>
+										</div> 
+									</div>
+									
+								</div>
+							</div>
+	
+							<!-- ÁREA -->
+							<div class="row" style="padding-top: 15px;">
+								<div class="col-md-4">
+									<p:outputLabel style="color:red">*</p:outputLabel><h:outputLabel id="areaDest" for="areaDestinatario" value="&Aacute;rea" />
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-5">
+									<p:selectOneMenu id="areaCombo" value="#{mbApartado.filtros.idArea}" style="width: 100%" 
+													 required="true" requiredMessage="#{messageSource['mensaje_general_campoRequerido']}">
+										
+										<f:selectItem itemLabel="#{messageSource['mensaje_general_selecciona']}" itemValue="#{null}" noSelectionOption="true" />
+										<f:selectItems var="areaC" value="#{mbApartado.filtros.listaAreas}"
+													   itemLabel="#{areaC.descripcion}" itemValue="#{areaC.idArea}" />
+										
+										<p:ajax event="change" process="@this" listener='#{mbApartado.consultarTiposDocumento}' 
+												update="areaCombo tipoDocumentoCombo acronimoCombo
+														mensaje_areaCombo mensaje_tipoDocumentoCombo mensaje_acronimoCombo"/>
+										
+									</p:selectOneMenu>
+								</div>
+							</div>
+							<div class="row mensajesPorCampo">
+								<div class="col-md-4">
+									<p:message id="mensaje_areaCombo" for="areaCombo" display="text"/>
+								</div> 
+							</div>
+						
+						</c:if>
+						<!-- FIN - ESTAS OPCIONES SOLO ESTAN DISPONIBLES PARA EL ADMINISTRADOR DEL SISTEMA-->
+
+						<!-- TIPO DOCUMENTO -->
+						<div class="row" style="padding-top: 20px;">
+							<div class="col-md-4">
+								<p:outputLabel style="color:red">*</p:outputLabel><h:outputLabel value="Tipo documento" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-5">
+								<p:selectOneMenu id="tipoDocumentoCombo" value="#{mbApartado.filtros.idTipoDocumento}" style="width:100%;" 
+												 required="true" requiredMessage="#{messageSource['mensaje_general_campoRequerido']}">
+										
+									<f:selectItem itemLabel="#{messageSource['mensaje_general_selecciona']}" itemValue="#{null}" noSelectionOption="true" />
+									<f:selectItems  value="#{mbApartado.filtros.listaTiposDocumento}" var="tipoDoc" itemValue="#{tipoDoc.idTipoDocumento}" itemLabel="#{tipoDoc.descripcion}" />
+									
+									<p:ajax event="change" process="@this" listener="#{mbApartado.consultarAcronimos}"
+											update="tipoDocumentoCombo acronimoCombo
+													mensaje_tipoDocumentoCombo mensaje_acronimoCombo" />
+	
+								</p:selectOneMenu>
+							</div>
+						</div>
+						<div class="row mensajesPorCampo">
+							<div class="col-md-4">
+								<p:message id="mensaje_tipoDocumentoCombo" for="tipoDocumentoCombo" display="text"/>
+							</div> 
+						</div>
+						
+						<!-- ACRONIMO -->
+						<div class="row" style="padding-top: 20px;">
+							<div class="col-md-6">
+								<p:outputLabel style="color:red">*</p:outputLabel> <h:outputLabel value="Acrónimo" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-5">
+								<p:selectOneMenu id="acronimoCombo" value="#{mbApartado.filtros.idAcronimo}" style="width:100%;" 
+												 required="true" requiredMessage="#{messageSource['mensaje_general_campoRequerido']}">
+									
+									<f:selectItem itemLabel="#{messageSource['mensaje_general_selecciona']}" itemValue="#{null}"/>
+									<f:selectItems  value="#{mbApartado.filtros.listaAcronimos}" var="acronimo" itemValue="#{acronimo.idAcronimo}" itemLabel="#{acronimo.descripcion}" />
+									
+										<p:ajax event="change" process="@this" update="acronimoCombo mensaje_acronimoCombo" />
+	
+								</p:selectOneMenu>
+							</div>
+						</div>
+						<div class="row mensajesPorCampo">
+							<div class="col-md-4">
+								<p:message id="mensaje_acronimoCombo" for="acronimoCombo" display="text" />
+							</div> 
+						</div>
+						
+						<!-- NUMERO DE FOLIOS A APARTAR -->
+						<div class="row" style="padding-top: 20px;">
+							<div class="col-md-5">
+								<p:outputLabel style="color:red">*</p:outputLabel> <h:outputLabel value="¿Cuántos números de folio deseas apartar?" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-5">
+								<p:inputText id="numeroApartarText" value="#{mbApartado.filtros.numeroFoliosAApartar}" 
+											 required="true" requiredMessage="#{messageSource['mensaje_general_campoRequerido']}" 
+											 size="7" maxlength="2" validatorMessage="El máximo de folios a apartar son 99">
+
+									<pe:keyFilter regEx="/[0-9]/" />
+									<p:ajax event="blur" process="@this" update="numeroApartarText mensaje_numeroApartarText" />						
+
+								</p:inputText>
+							</div>
+						</div>
+						<div class="row mensajesPorCampo">
+							<div class="col-md-4">
+								<p:message id="mensaje_numeroApartarText" for="numeroApartarText" display="text" />
+							</div> 
+						</div>
+						
+						<div class="row botonesAcomodo" style="padding-top: 50px;">
+							<div class="col-md-12">
+								<p:commandButton value="Aceptar"
+												 process="panelInfoFolio"
+												 update="@form"
+												 action="#{mbApartado.capturarApartadoFolio}"
+												 oncomplete="focusPorRoberto(xhr, status, args)"/>
+	
+							</div>
+						</div>
+						
+						<script>
+							
+							function focusPorRoberto(xhr, status, args) {  
+								if (args != undefined) {
+									if(!args.validationFailed) {
+										window.location='#msg';
+								    }
+								}
+							}  
+						
+						</script>
+					
+					</section>
+					
+				</p:outputPanel>
+				
+				<h4>
+					<h:outputLabel value="Lista de folios apartados" />
+				</h4>
+				<h5>
+					Aquí puedes consultar la lista de folios que han sido apartados por distintos usuarios y las fechas en que fueron apartados
+				</h5>
+				<section>
+					<div id="msg"/>
+					<center style="padding-top: 20px">
+						
+						<p:dataTable id="tablaFoliosApartados" widgetVar="tablaFoliosApartados"
+									 value="#{mbApartado.listaFoliosApartadosLazy}" var="folioAp" 
+									 lazy="true"
+									 paginator="true" paginatorPosition="bottom" rows="10"
+									 styleClass="tablaFoliosAp"
+									 emptyMessage="No hay folios apartados al momento"
+									 rowIndexVar="indexFoAp"
+									 rowStyleClass="#{mbApartado.filtros.listaApartadosRecientes.contains(folioAp) and folioAp.idPersonaElimino == null ? 'filaNueva' : ''}">
+							
+							<p:column headerText="Área" rendered="#{sec:areAnyGranted('ROLE_GESTION4.ADMIN.OC')}"
+									  style="border-right: 1px solid #908f90 !important;"
+									  filterBy="#{folioAp.area.descripcion}" filterMaxLength="280" filterStyle="width: 145px">
+
+								<h:outputText value="#{folioAp.area.descripcion}"
+											  style="#{mbApartado.filtros.listaApartadosRecientes.contains(folioAp) and folioAp.idPersonaElimino == null ? 'font-weight:bold' : folioAp.idPersonaElimino != null ? 'color: #a0005f;' : ''}"
+											  styleClass="blinkdiv"/>
+
+							</p:column>
+							
+							<p:column headerText="Folio" style="text-align: center"
+									  filterBy="#{folioAp.numDocumento}" filterMaxLength="52" filterStyle="width: 142px">
+								
+								<h:outputText value="#{folioAp.numDocumento}" 
+											  style="#{mbApartado.filtros.listaApartadosRecientes.contains(folioAp) and folioAp.idPersonaElimino == null ? 'font-weight:bold' : folioAp.idPersonaElimino != null ? 'color: #a0005f;' : ''}"/>
+
+							</p:column>
+						
+							<p:column headerText="Usuario que aparto" style="text-align: center; border-left: 1px solid #908f90 !important;"
+									  filterMaxLength="20">
+								
+								<h:outputText value="#{folioAp.personaCapturo.nombreCompleto}"
+											  style="#{mbApartado.filtros.listaApartadosRecientes.contains(folioAp) and folioAp.idPersonaElimino == null ? 'font-weight:bold' : folioAp.idPersonaElimino != null ? 'color: #a0005f;' : ''}"/>
+
+							</p:column>
+							
+							<p:column headerText="Fecha"
+									  style="text-align: center; border-left: 1px solid #908f90 !important;"
+									  filterBy="#{folioAp.fechaCaptura}" filterMaxLength="18" filterStyle="width: 140px">
+
+								<h:outputText value="#{folioAp.fechaCaptura}"
+											  style="#{mbApartado.filtros.listaApartadosRecientes.contains(folioAp) and folioAp.idPersonaElimino == null ? 'font-weight:bold' : folioAp.idPersonaElimino != null ? 'color: #a0005f;' : ''}">
+									<f:convertDateTime pattern="dd/MM/yyyy hh:mm" />
+								</h:outputText>
+
+							</p:column>
+							
+							<p:column headerText="Eliminar" style="text-align: center; border-left: 1px solid #908f90 !important;">
+								
+								<p:commandLink action="#{mbApartado.setFolioParaEliminar(folioAp)}"
+											   process="@this"
+											   oncomplete="PF('dialogEliminar').show()"
+											   rendered="#{folioAp.idPersonaElimino == null}">
+									<i class="fa fa-times" aria-hidden="true" style="color: #d5007f"/>
+								</p:commandLink>
+								
+								<h:outputText value="Eliminado #{folioAp.fechaEliminacionConFormato} por &lt;br/&gt;" escape="false"
+											  rendered="#{folioAp.idPersonaElimino != null}"
+											  style="color: #a0005f; font-size: 11px; font-weight: bold;"/>
+								<h:outputText value="#{folioAp.personaElimino.nombreCompleto}" 
+											  rendered="#{folioAp.idPersonaElimino != null}"
+											  style="color: #a0005f; font-size: 10px; font-weight: bold;"/>
+
+							</p:column>
+							
+						</p:dataTable>
+					
+					</center>
+				
+				</section>
+				
+			</div>
+			
+			<p:confirmDialog widgetVar="dialogEliminar" styleClass="ventanaConfirmacion">
+				
+				<f:facet name="message">
+			         El folio seleccionado será dado de baja permanentemente para no ser utilizado de nuevo <b>¿Estás seguro que deseas continuar?</b>
+			    </f:facet>
+			
+        		<p:commandButton value="No" onclick="PF('dialogEliminar').hide()"/>
+        		<p:commandButton value="Sí" style="background-color: white !important; color: #d5007f !important; border: 1px solid #d5007f !important;"
+        									process="@this" update="@form"
+        									action="#{mbApartado.eliminarApartadoFolio}"
+        									oncomplete="PF('dialogEliminar').hide()"/>
+			</p:confirmDialog>
+			
+		</h:form>
+		
+	</ui:define>
+
+</ui:composition>

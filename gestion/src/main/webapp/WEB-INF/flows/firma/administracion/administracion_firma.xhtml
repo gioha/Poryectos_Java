@@ -1,0 +1,805 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sf="http://www.springframework.org/tags/faces"
+				xmlns:sec="http://www.springframework.org/security/tags"
+				template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+	
+	<!-- Estilos propios para la pantalla -->
+	<h:outputStylesheet library="css" name="modulos/firma/firma.css" />
+	
+	<h:form id="firmaAdministracion" enctype="multipart/form-data">
+	
+		<!-- Dialog para el detalle del documento-->
+		<ui:include src="detalle_documento.xhtml" />
+	
+		<script>
+			 $( function() { 
+				 $('.timer-start').hide();
+				 $('.timer-start2').hide();
+			 });
+		</script>
+		
+		<p:remoteCommand name="actualizar" actionListener="#{mbFirma.actualizar()}" update="@form,menu_formulario" />
+		
+		
+		<h:outputScript name="js/firma/pkijs/common.js"/>
+		<h:outputScript name="js/firma/pkijs/asn1.js"/>
+		<h:outputScript name="js/firma/pkijs/x509_schema.js"/>
+		<h:outputScript name="js/firma/pkijs/x509_simpl.js"/>
+		<h:outputScript name="js/firma/pkijs/cms_schema.js"/>
+		<h:outputScript name="js/firma/pkijs/cms_simpl.js"/>
+		<h:outputScript name="js/firma/cryptojs/tripledes.js"/>
+		<h:outputScript name="js/firma/sgdatajs/pkcs8_wp52_schema.js"/>
+		<h:outputScript name="js/firma/sgdatajs/pkcs8_wp52_simpl.js"/>
+		<h:outputScript name="js/firma/forge/forge.min.js"/>
+		<h:outputScript name="js/firma/sgdatajs/SDSgLib_PBKDF2.js"/>
+		<h:outputScript name="js/firma/sgdatajs/SDSgLib_PKCS8.js"/>
+		<h:outputScript name="js/firma/sgdatajs/SDSgLib_PKCS7.js"/>
+		<h:outputScript name="js/firma/sgdatajs/SgDataCrypto.js"/>
+		<h:outputScript name="js/firma/sgdatajs/JSgLibv2.js"/>
+		<h:outputScript name="js/firma/firmaElectronicaGestion.js"/>
+		
+		<!-- PANEL PARA LOS MENSAJES DEL GROWL -->
+		<p:outputPanel id="mensajes_generales">
+			<p:growl id="mensaje_general_info" showDetail="true" sticky="true" globalOnly="true" severity="info"/>
+			<p:growl id="mensaje_general_advertencia" widgetVar ="msgWarning" showDetail="true" sticky="true" globalOnly="true" severity="warn"/>
+			<p:growl id="mensaje_general_exito"  showDetail="true" sticky="true" globalOnly="true" severity="fatal"/>
+		</p:outputPanel>
+		
+		<!-- DIALOG PARA MOSTRAR LA CARGA -->
+            <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+                <p:graphicImage name="/img/estructura/loader.gif" />
+            </p:dialog>
+            <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+		
+		<div class="container">
+			<h2>
+				<h:outputText value="Inicio" style="color: #999999"/>&nbsp;&nbsp;
+				<i class="fa fa-angle-right" aria-hidden="true" style="font-size: 18px; color: #999999"/>&nbsp;&nbsp;
+				<h:outputText value="#{messageSource['etiqueta_firma_migasMenu']}" style="font-weight: bold"/>&nbsp;&nbsp;
+			</h2>
+			<h3>
+				<h:outputText value="#{messageSource['etiqueta_firma_titulo']}" />
+			</h3>
+			
+			<h4>
+				<h:outputText value="#{messageSource['etiqueta_firma_seccionPendientesFirma']}" />
+			</h4>
+			
+			<section style="padding: 0px 40px 1px">
+				
+				<div class="row" style="border-bottom: 1px solid #cccccc; font-family: Roboto; margin-right: 0px; margin-left: 0px; padding: 3px 0px 7px 0px !important;">
+
+					<div class="col-md-1" style="width: 90px; text-align: center; border-left: 1px solid #cccccc; font-size: 17px;">
+
+						<pe:timer id="cronometroActualizaciones"
+						          widgetVar="cronometroActualizaciones" format="mm:ss"
+								  update="checkboxDT, panelFirma, menu_formulario" singleRun="false"
+								  timeout="#{mbFirma.tiempoRestanteActualizacion}"
+								  listener="#{mbFirma.actualizar}"
+								  oncomplete="if (PF('cronometroActualizaciones') != undefined) { PF('cronometroActualizaciones').start(); }"/>
+					
+					</div>
+					
+					<div class="col-md-1" style="width: 40px; text-align: center; border-left: 1px solid #cccccc; padding-left: 0px; padding-right: 0px;">
+						
+						<p:commandLink id = "timer-stop" 								
+									   styleClass="timer-stop fa fa-stop-circle"
+									   style="color: #000000; margin-left: 10px; margin-right: 10px; font-size: 20px; text-decoration: none;"
+									   onclick="PF('cronometroActualizaciones').restart();   $('.timer-start').show(); $('.timer-stop').hide();" 
+									   oncomplete="PF('cronometroActualizaciones').pause();"
+									   onsuccess="PF('cronometroActualizaciones').pause();">
+									   
+						</p:commandLink> 
+						
+						<p:commandLink  id = "timer-start" 
+										styleClass="timer-start fa fa-play-circle"
+										style="color: #000000; margin-left: 10px; margin-right: 10px; font-size: 20px; text-decoration: none;"
+										onclick="PF('cronometroActualizaciones').start(); $('.timer-stop').show(); $('.timer-start').hide();">
+						</p:commandLink>
+					
+					</div>
+						
+					<div class="col-md-1" style="width: 40px; text-align: center; border-left: 1px solid #cccccc; padding-left: 0px; padding-right: 0px;">
+					
+						<p:commandLink id = "timer-pause"
+									   styleClass="timer-pause fa fa-pause-circle"
+									   style="margin-left: 10px; margin-right: 10px; font-size: 20px; text-decoration: none;"
+									   onclick="PF('cronometroActualizaciones').pause(); $('.timer-start2').show(); $('.timer-pause').hide();">
+						</p:commandLink>
+						
+						<p:commandLink  id = "timer-start2" 
+										styleClass="timer-start2 fa fa-play-circle"
+										style="margin-left: 10px; margin-right: 10px; font-size: 20px; text-decoration: none;"
+										onclick="PF('cronometroActualizaciones').start(); $('.timer-pause').show(); $('.timer-start2').hide();">
+						</p:commandLink>
+					
+					</div>
+					
+					<div class="col-md-1" style="width: 40px; text-align: center; border-left: 1px solid #cccccc; border-right: 1px solid #cccccc; padding-left: 0px; padding-right: 0px;">
+					
+						<p:commandLink styleClass="fa fa-refresh" value=""
+									   id = "timer-restart"
+									   style="color:#000000;margin-left: 10px; margin-right: 10px; font-size: 20px; text-decoration: none;"
+									   onclick="PF('cronometroActualizaciones').restart();$('.timer-pause, .timer-stop').show();$('.timer-start, .timer-start2').hide();">
+						</p:commandLink>
+					
+					</div>
+					
+					<div class="col-md-8" style="text-align: left">
+					
+						<h:outputText value="#{messageSource['etiqueta_timer_actualizacion']} " style="color:#D5007F; font-weight: bold"/>
+						<h:outputText value="#{messageSource['etiqueta_timer_descripcion']}" />
+					
+					</div>
+					
+				</div>
+				
+			</section>		
+
+			<h5 style="padding: 20px 40px 2px">
+				#{messageSource['etiqueta_firma_instruccionPendientesFirma']}
+			</h5>
+			<p:outputPanel id="panelDocumentosAFirmar" >
+				<section>
+											
+					<p:dataTable id="checkboxDT" var="lis" value="#{mbFirma.dtoFirma}" selection="#{mbFirma.dtoDocumentosSeleccionados}" rowKey="#{lis.idDocumento}" style="margin-bottom:0; font-size: 13px !important;"
+								 rows="10" paginator="true" rowIndexVar="index" styleClass="myTable"
+								 paginatorTemplate=" {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  paginatorPosition="bottom"
+								 emptyMessage="#{messageSource['etiqueta_firma_tablaVaciaFirmar']}" 
+								 disabledSelection="#{lis.bloqueado == '1'}">
+        					
+        				<p:ajax event="rowSelectCheckbox" listener="#{mbFirma.marcarLeido}" update=":firmaAdministracion:panelFirma checkboxDT menu_formulario" />
+					    <p:ajax event="rowUnselectCheckbox" listener="#{mbFirma.obtenerTamanioDeSeleccionados}" update=":firmaAdministracion:panelFirma checkboxDT menu_formulario" />
+					    <p:ajax event="rowSelect" listener="#{mbFirma.marcarLeido}" update=":firmaAdministracion:panelFirma checkboxDT menu_formulario" />
+					    <p:ajax event="rowUnselect" listener="#{mbFirma.obtenerTamanioDeSeleccionados}" update=":firmaAdministracion:panelFirma checkboxDT menu_formulario" />
+					    <p:ajax event="toggleSelect" listener="#{mbFirma.marcarTodosLeidos}" update=":firmaAdministracion:panelFirma checkboxDT menu_formulario" />
+        					
+        				<f:facet name="header">
+				        </f:facet>
+				        
+				        <p:column style="color:#ff8000;width:30px;text-align: center" >
+
+							<h:outputLink rendered="#{lis.bloqueado == '1'}" style="color:#ff8000;width:30px;text-align: center; font-size: 18px;" id="candadito" value="#">
+						        <h:outputText styleClass="fa fa-lock" />
+						    </h:outputLink>
+							
+					        <h:outputLink rendered="#{lis.estatusRegresado eq 1 and lis.bloqueado eq null}" style="color:#ff8000;width:30px;text-align: center; font-size: 18px;" id="campanita" value="#">
+						        <h:outputText styleClass="fa fa-bell" />
+						    </h:outputLink>
+
+						   <pe:tooltip id="tooltipInfo" widgetVar="tooltipInfo"
+		                    			value="#{messageSource['mensaje_firma_usuario']} #{lis.dtoPersonaRegreso.nombre} #{lis.dtoPersonaRegreso.apellidos} #{messageSource['mensaje_firma_usuarioFirmar']}"
+		                    			for="campanita"
+		                    			showEffectLength="0"
+		                    			showEvent="mouseover" hideEvent="mouseout"
+		                    			showEffect="fadeIn" hideEffect="fadeIn"
+		                    			position="top"
+		                    			atPosition="top right" myPosition="bottom left">
+		                   	</pe:tooltip>
+		                   	
+		                   	<pe:tooltip id="tooltipInfoCandado" widgetVar="tooltipInfoCandado"
+		                    			value="El documento está siendo usado por el usuario #{lis.dtoPersonaBloqueado.nombre} #{lis.dtoPersonaBloqueado.apellidos} y no es posible usarlo en este momento"
+		                    			for="candadito"
+		                    			showEffectLength="0"
+		                    			showEvent="mouseover" hideEvent="mouseout"
+		                    			showEffect="fadeIn" hideEffect="fadeIn"
+		                    			position="top"
+		                    			atPosition="top right" myPosition="bottom left">
+		                   	</pe:tooltip>
+
+					    
+					    </p:column>
+					    
+					    <p:column selectionMode="multiple" style="width:4%;text-align:center" />
+					    
+					        <p:column headerText="#{messageSource['etiqueta_firma_tablaNumeroDocumento']}" style="#{lis.noLeido == 1 ? 'font-weight:bold;':'font-weight:normal;'} text-align:left">
+					            
+					            <p:commandLink id="link_visualizar_documento"
+					           				   styleClass="linksPersonasEncontradas" 
+									           actionListener="#{mbFirma.visualizarDocumento(lis,true)}"
+									           update="firmaAdministracion:checkboxDT "
+									           process="firmaAdministracion:panelDocumentosAFirmar">
+					            
+					            	<i style="font-size: 18px; " />&nbsp;<h:outputText value="#{lis.dtoDocumento.noDocumento}" style="#{lis.conVisualizacion != 0 ? 'color:#2313EA;' : ''}text-decoration: underline;"/>
+					            
+					            </p:commandLink>
+					            
+					        </p:column>
+					        
+					        <p:column headerText="#{messageSource['etiqueta_firma_tablaRemitente']}" style="#{lis.noLeido == 1 ? 'font-weight:bold;':'font-weight:normal;'} text-align:left">
+					            			                
+				                	<h:outputText rendered="#{lis.dtoDocumentoRemitente.nombreNivelArea == null}" value="#{lis.dtoDocumentoRemitente.nombreCompleto}" />
+				                	<h:outputText rendered="#{lis.dtoDocumentoRemitente.nombreNivelArea != null}" value="#{lis.dtoDocumentoRemitente.nombreNivelArea}" />							
+					            
+					            
+					        </p:column>
+					        
+					        <p:column headerText="#{messageSource['etiqueta_firma_tablaFecha']}" style="#{lis.noLeido == 1 ? 'font-weight:bold;':'font-weight:normal;'} text-align:left;width:10%;">
+					            <h:outputText value="#{lis.fechaFirma}" />
+					        </p:column>
+					       
+					        <p:column style="width:40%;text-align: center">
+					           	
+					            <p:spacer width="15"/>
+					            
+					            <p:commandLink id="link_ver_detalle" 
+					            			   update=":firmaAdministracion:panelDocumentosAFirmar,:firmaAdministracion:inf-doc-dialog,menu_formulario" 
+					            			   actionListener="#{mbFirma.abrirInformacionDocumento(lis)}"
+					            			   styleClass="linksPersonasEncontradas">
+					            
+					            	<i class="fa fa-info-circle" style="font-size: 18px;" />&nbsp;<h:outputText value="Información" style="text-decoration: underline;"/>
+					            
+					            </p:commandLink>
+					            
+					            <p:spacer width="15"/>
+					            
+					            <p:commandLink id="link_editar_documento" 
+					            			   disabled="#{lis.bloqueado == '1'}"
+					            			   styleClass="linksPersonasEncontradas" 
+					            			   process="@form firmaAdministracion"
+									           update="firmaAdministracion:checkboxDT, firmaAdministracion:mensajes_generales"
+									           actionListener="#{mbFirma.verificarEdicion(lis)}"
+									           onclick="PF('cronometroActualizaciones').pause(); $('.timer-start2').show(); $('.timer-pause').hide();"
+									           >
+									 
+									 <i class="fa fa-pencil" style="#{lis.conModificaciones != 0 ? 'color:#2313EA;' : ''} font-size: 18px; " />&nbsp;<h:outputText value="#{messageSource['etiqueta_firma_editar']}" style="#{lis.conModificaciones != 0 ? 'color:#2313EA;' : ''} text-decoration: underline;"/>
+					            
+					            </p:commandLink>
+					           
+					            <p:spacer width="15"/>
+					          
+					            <p:commandLink title="Comentario" styleClass="linksPersonasEncontradas"
+					            			   disabled="#{lis.bloqueado == '1'}"
+									           id="link_comentario_documento" process="firmaAdministracion"
+									           update="firmaAdministracion:panelComentario firmaAdministracion:mensajes_generales" 
+									           
+									           actionListener="#{mbFirma.verComentario(lis)}">
+					            
+					            	<i class="fa fa-comment" style="#{lis.dtoComentario != null ? 'color:#2313EA;' : ''} font-size: 18px; "/>&nbsp;<h:outputText value="#{messageSource['etiqueta_firma_comentar']}" style="text-decoration: underline; #{lis.dtoComentario != null ? 'color:#2313EA;' : ''}"/>
+					            
+					            </p:commandLink>
+					            
+					        </p:column>
+					        
+					    </p:dataTable>
+					    
+					    <!-- DIALOGO DE CONFIRMACIÓN GENERAL -->
+					    <p:confirmDialog global="true" styleClass="ventanaConfirmacion">
+							<p:commandButton value="#{messageSource['etiqueta_boton_no']}" styleClass="ui-confirmdialog-no" type="button" />
+							<p:commandButton value="#{messageSource['etiqueta_boton_si']}" styleClass="ui-confirmdialog-yes" type="button" style="background-color: white !important; color: #d5007f !important; border: 1px solid #d5007f !important;"/>
+						</p:confirmDialog>
+					    
+					    <!-- DIALOGO PARA LOS COMENTARIOS -->
+					    <p:dialog resizable="false" widgetVar="dlg1" height="50%" modal="true" width="40%">
+					    	
+					    	<p:outputPanel id="panelComentario"> 
+						    	
+						    	<div class="row">
+									
+									<div class="col-md-12">
+										
+										<div class="row" style="text-align:center">
+											<p:inputTextarea id="editor" rows="15" cols="60" counter="contador" maxlength="500" counterTemplate="{0} #{messageSource['etiqueta_firma_comentarios']}" widgetVar="editorWidget" value="#{mbFirma.comentarioActual}" width="600" />
+										</div>
+										
+										<div class="row" style="text-align:center">
+											<h:outputText id="contador" />
+										</div>
+										
+										<div class="row botonesAcomodo">
+											
+											<p:commandButton rendered="#{mbFirma.comentarioActual ne ''}" 
+															 value="#{messageSource['etiqueta_boton_eliminar']}" 
+															 oncomplete="" title="#{messageSource['etiqueta_boton_eliminar']}" 
+															 styleClass = "smallButton" 
+									            			 id="boton_comentario_eliminar" 
+									            			 process="firmaAdministracion"
+									            			 update="firmaAdministracion:panelComentario firmaAdministracion:checkboxDT, firmaAdministracion:checkboxDT2, firmaAdministracion:mensajes_generales" 
+									            			 onclick="PF('dlg1').hide();"
+									            			 actionListener="#{mbFirma.eliminarComentario}">
+									        </p:commandButton>
+    										
+    										<p:commandButton value="#{messageSource['etiqueta_boton_aceptar']}" 
+    														 oncomplete="" 
+    														 title="#{messageSource['etiqueta_boton_aceptar']}" 
+    														 styleClass = "smallButton" 
+									            			 id="boton_comentario_documento" 
+									            			 process="firmaAdministracion"
+									             			 update="firmaAdministracion:panelComentario firmaAdministracion:checkboxDT firmaAdministracion:checkboxDT2, firmaAdministracion:mensajes_generales" 
+									            			 onclick="PF('dlg1').hide();"
+									            			 actionListener="#{mbFirma.guardarComentario}"> 
+									        </p:commandButton>
+									        
+										</div>
+										
+									</div> 
+									
+								</div>
+								
+	    					</p:outputPanel>
+	    					
+						</p:dialog>
+						
+						<!-- DIALOGO PARA CONFIRMACIÓN DE EDICION CON VALIDACION-->
+						<p:dialog id="mensajeEdicionConfirmar" widgetVar="dlg3" height="50%" modal="true" width="35%" resizable = "false">
+					    	
+					    	<p:outputPanel id="panelMensajeEdicion"> 
+						    	
+						    	<div class="row">
+									
+									<div class="col-md-12">
+										
+										<div class="row" style="text-align:center">
+											
+											<h:outputText id="mensajeEdicionC" 
+														  value="#{messageSource['mensaje_firma_eliminarValidaciones']}" 
+														  width="600" />
+										</div>
+										
+										<div class="row botonesAcomodo">
+											
+											<p:commandButton value="#{messageSource['etiqueta_boton_cancelar']}" 
+									            			 id="boton_cancelar_edicion" 
+									             			 update="firmaAdministracion:panelMensajeEdicion" 
+									            			 onclick="PF('dlg3').hide();">
+									        </p:commandButton>
+									        
+									        <p:commandButton id="botonContinuar" 
+									   	  					 actionListener="#{mbFirma.eliminarValidacion}"
+						 				  					 update="panelFirmados,firmaAdministracion:panelDocumentosAFirmar"
+						 				 					 process="@this panelFirmados,panelFirma,firmaAdministracion:panelDocumentosAFirmar"	
+						 				 					 value="#{messageSource['etiqueta_boton_continuar']}"
+						 				 					 onclick="PF('dlg3').hide();"
+						 				 					 oncomplete="actualizar()">
+											
+											</p:commandButton>
+										
+										</div>
+									
+									</div> 
+								
+								</div>
+	    					
+	    					</p:outputPanel>
+						
+						</p:dialog>
+						
+						<!-- DIALOGO PARA CONFIRMACIÓN DE EDICION -->
+						<p:dialog id="mensajeEdiciones" widgetVar="dlg4" height="50%" modal="true" width="35%" resizable = "false">
+					    	
+					    	<p:outputPanel id="panelMensajeEdicionSinValidacion"> 
+						    	
+						    	<div class="row">
+									
+									<div class="col-md-12">
+										
+										<div class="row" style="text-align:center">
+											
+											<h:outputText id="mensajeEdicion" 
+														  value="#{messageSource['mensaje_firma_editar']}" 
+														  width="600" />
+										</div>
+										
+										<div class="row botonesAcomodo">
+											
+											<p:commandButton value="#{messageSource['etiqueta_boton_cancelar']}" 
+									            			 id="boton_cancelar_segunda_dicion" 
+									             			 update="firmaAdministracion:panelMensajeEdicionSinValidacion" 
+									            			 onclick="PF('dlg4').hide();">
+									        </p:commandButton>
+									        
+									        <p:commandButton id="botonContinuarEdicion" 
+									   	  					 actionListener="#{mbFirma.editarDocumento}"
+						 				  					 update="@this panelDocumentosAFirmar"
+						 				 					 process="@this panelDocumentosAFirmar"	
+						 				 					 value="#{messageSource['etiqueta_boton_continuar']}"
+						 				 					 onclick="PF('dlg4').hide();"
+						 				 					 oncomplete="actualizar()">
+											</p:commandButton>
+											
+										</div>
+										
+									</div> 
+									
+								</div>
+								
+	    					</p:outputPanel>
+	    					
+						</p:dialog>
+						
+						<!-- DIALOGO PARA CONFIRMACIÓN DE ENVÍO SIN MODIFICACIONES -->
+						<p:confirmDialog  widgetVar="confirmacion_regresar" styleClass="ventanaConfirmacion">
+							
+							<f:facet name="message">
+						         Hay por lo menos un documento sin comentarios ni modificaciones, <b>¿Estás seguro que quieres regresar al remitente?</b>
+						    </f:facet>
+							
+							<p:commandButton value="#{messageSource['etiqueta_boton_no']}" onclick="PF('confirmacion_regresar').hide();" />
+							
+							<p:commandButton value="#{messageSource['etiqueta_boton_si']}" style="background-color: white !important; color: #d5007f !important; border: 1px solid #d5007f !important;"
+											 actionListener="#{mbFirma.regresarARemitente}" update="mensajes_generales, panelDocumentosAFirmar"
+											 oncomplete="PF('confirmacion_regresar').hide()" />
+						</p:confirmDialog>
+						
+						<!-- DIALOGO PARA CONFIRMACIÓN DE REGRESO CON DOCUMENTOS FIRMADOS -->
+						<p:dialog id="mensajeRegresarSinFirmar" widgetVar="confirmacion_regresar_sin_firmar" height="50%" modal="true" width="35%" resizable = "true">
+					    	
+					    	<p:outputPanel id="panelRegresarSinFirmar"> 
+						    	
+						    	<div class="row">
+									
+									<div class="col-md-12">
+										
+										<div class="row" style="text-align:center">
+											
+											<h:outputText id="mensajeConfirm" 
+														  value="El/Los documento(s)#{mbFirma.docsFirmadosRegresadosMensaje} ya han sido firmados por otros usuarios, si los regresa se eliminarán las firmas. ¿Estás seguro?"  
+														  width="600" />
+										</div>
+										
+										<div class="row botonesAcomodo">
+											
+											<p:commandButton value="#{messageSource['etiqueta_boton_cancelar']}" 
+									            			 id="boton_cancelar_confirmacion_regresar" 
+									            			 onclick="PF('confirmacion_regresar_sin_firmar').hide();">
+									        </p:commandButton>
+									        
+									        <p:commandButton id="boton_continuar_confirmacion_regresar" 
+									   	  					 actionListener="#{mbFirma.regresarARemitente}"
+						 				  					 update="@this panelDocumentosAFirmar mensajes_generales, menu_formulario"
+						 				 					 process="@this panelDocumentosAFirmar"	
+						 				 					 value="#{messageSource['etiqueta_boton_continuar']}"
+						 				 					 onclick="PF('confirmacion_regresar_sin_firmar').hide();"
+						 				 					 >
+											</p:commandButton>
+											
+										</div>
+										
+									</div> 
+									
+								</div>
+								
+	    					</p:outputPanel>
+	    					
+						</p:dialog>
+						
+						<!-- DIALOGO PARA VISOR DE PDF -->
+						<p:dialog widgetVar="dlgpdf" height="100%" width="80%" header="pdf"  
+		                          resizable="false" dynamic="true" showEffect="clip" modal="true"> 	                          
+		                    
+		                    <div id="div_vista_previo">
+								
+								<object type="application/pdf"
+										data="#{request.contextPath}/filePDF/#{mbFirma.rutaPDF}" 
+										height="700px" width="100%">
+										Your browser can't display pdf, <a
+										href="#{request.contextPath}/filePDF/#{mbFirma.rutaPDF}">click</a>
+										to download pdf instead.
+								</object>
+								
+							</div>
+							
+		                </p:dialog>
+					     
+					    <div class="row" style="padding-top: 20px">
+							
+							<div class="col-md-12">
+								
+								<div class="row">
+									<h:outputLabel for="firmaOpcion" value="#{messageSource['etiqueta_firma_comboAccion']}" />
+								</div>
+								
+								<div class="row">
+								
+									<p:selectOneMenu id="firmaOpcion" value="#{mbFirma.comboFirma}" autoWidth="false" style="width:50%">
+									
+										<f:selectItem itemLabel="#{messageSource['mensaje_general_selecciona']}" itemValue="0" />
+										<f:selectItem itemLabel="#{messageSource['etiqueta_firma_comboFirma']}" itemValue="1" />
+										<f:selectItem itemLabel="#{messageSource['etiqueta_firma_comboRegresar']}" itemValue="2" />
+										<f:selectItem itemLabel="#{messageSource['etiqueta_firma_rechazar']}" itemValue="3" />
+										
+										<p:ajax event="change" update="@form" rendered="@this panelFirmados,panelFirma" process="@this panelFirma panelDocumentosAFirmar panelFirmados" listener="#{mbFirma.mostrarFirma}" />
+										
+									</p:selectOneMenu>
+		
+								</div>
+								
+								<div class="row botonesAcomodo">
+								
+									<p:commandButton value="#{messageSource['etiqueta_boton_aceptar']}" 
+													 oncomplete="" title="#{messageSource['etiqueta_boton_aceptar']}" 
+							            			 id="boton_enviar_documento" process="firmaAdministracion"
+									    			 update="mensajes_generales panelDocumentosAFirmar menu_formulario" 
+									    			 rendered="#{mbFirma.muestraBotonAceptar}"
+									   				 actionListener="#{mbFirma.accionarAceptar}">
+									 </p:commandButton>
+									 
+								</div>
+								
+							</div>
+							
+						</div>
+					
+				</section>
+				
+			</p:outputPanel>
+			
+			<p:outputPanel id="panelFirma" rendered = "#{mbFirma.muestraFirma}">
+				
+				<h4>
+					<h:outputText value="#{messageSource['etiqueta_firma_seccionFirma']}" />
+				</h4>
+
+				<h5>
+					#{messageSource['etiqueta_firma_instruccionFirma']}
+				</h5>
+			
+				<section>
+				
+					<div class="row">
+						
+						<div class="col-md-9">
+							
+							<div class="row">
+							
+								<h:outputText id="certificadoLabelAsterisco" value="*" />
+								<p:outputLabel id="certificadoLabel" value="#{messageSource['etiqueta_firma_certificado']}"/>
+							
+							</div>	
+							
+							<div class="row" style="padding-right: 0px;">
+								
+								<div class="col-md-3" style="padding-right: 0px; padding-left: 0px; height: 55px;">		
+									
+									<p:fileUpload id="certificadoFile"  fileUploadListener="#{mbFirma.handleFileUpload}" update="nombreArchivoCer" mode="advanced" auto="true" 
+												  label="Seleccionar archivo" />
+								</div>
+								
+								<div class="col-md-9" style="padding-top: 20px; padding-left: 0px;">
+									
+									<h:outputLabel id="nombreArchivoCer" value="#{mbFirma.nombreCertificado}" />
+								
+								</div>
+								
+								<script>
+									document.getElementById('firmaAdministracion:certificadoFile').addEventListener('change', handleParsingCertFile, true);
+								</script> 
+		
+							</div>
+							 
+						</div>
+								
+					</div>
+	
+					<div class="row" style="padding-bottom: 20px;">
+						<div class="col-md-9">
+							<div class="row">
+							
+								<h:outputText id="llaveLabelAsterisco" value="*" />
+								<p:outputLabel id="llaveLabel" value="#{messageSource['etiqueta_firma_llavePrivada']}"/>
+								
+							</div>
+							
+							<div class="row">
+									
+								<p:fileUpload id="llaveFile" mode="simple" skinSimple="true" label="#{messageSource['etiqueta_boton_seleccionarArchivo']}"/>
+								<script>
+									document.getElementById('firmaAdministracion:llaveFile').addEventListener('change', handleParsingPrivKeyFile, false);
+								</script> 
+	
+							</div>
+							
+						</div>
+						
+					</div>
+							
+					<div class="row">
+					
+						<div class="col-md-9">
+						
+							<div class="row">
+								<h:outputText id="contraseniaLabelAsterisco" value="*" />
+								<p:outputLabel id="contraseniaLabel" value="#{messageSource['etiqueta_firma_contrasenia']}"/>
+							</div>
+							
+							<div class="row">
+								<p:password id="contraseniaText" style="background: #ffffff; width: 200px; padding: 7px 7px 7px 7px"/>
+							</div>
+							
+						</div>
+						
+					</div>
+					
+					<!-- CAMPOS EN HIDDEN PARA FIRMA -->
+					<h:inputHidden id="numeroSerieHidden" value="#{mbFirma.firmaH.numeroSerie}"/>
+					<h:inputHidden id="algoritmoHidden" value="#{mbFirma.firmaH.algoritmoHash}"/>
+					<h:inputHidden id="hashCertificadoHidden" value="#{mbFirma.firmaH.hashCert}"/> 
+					<h:inputHidden id="numeroArchivosAFirmarHidden" value="#{mbFirma.numeroArchivosAFirmar}" />
+					
+					<h:panelGroup id="panelOcultos"  >
+					
+					<c:forEach items="#{mbFirma.dtoDocumentosSeleccionados}" var="ordenAFirmar" varStatus="estatusLinea">
+	
+						<h:inputHidden id="hashCertificadoHidden_#{estatusLinea.index}" value="#{ordenAFirmar.dtoFirmaElectronica.hashCadenaOriginal}"/>
+						<h:inputHidden id="pkcs7Hidden_#{estatusLinea.index}" value="#{ordenAFirmar.dtoFirmaElectronica.pkcs7}"/>
+								
+					</c:forEach>
+					
+					</h:panelGroup>
+					
+					<p:remoteCommand name="iniciarActualizacion" actionListener="#{mbFirma.cerrarFirma}" update="@form "/>
+					
+					<div class="col-md-12" style="text-align: center;">
+							
+						<p:commandButton id="busquedaFolioLBoton" 
+										 value="#{messageSource['etiqueta_firma_botonFirmar']}"
+						 				 actionListener="#{mbFirma.validarFirmar}"
+										 update="mensajes_generales, firmaAdministracion:panelOcultos,panelFirmados,panelDocumentosAFirmar"
+							 			 process="@this panelFirmados,panelFirma,panelDocumentosAFirmar"/>
+					</div>						
+						 
+				</section>
+
+			</p:outputPanel>
+			
+			<p:outputPanel id="panelFirmados" >
+
+				<!-- <h:panelGroup id="gridFirmados" rendered = "#{mbFirma.muestraFirma}"> -->
+				<h:panelGroup id="gridFirmados">
+
+				<h4>
+					<h:outputText value="#{messageSource['etiqueta_firma_seccionPendienteEnvio']}" />
+				</h4>
+				
+				<h5>
+					#{messageSource['etiqueta_firma_instruccionPendienteEnvio']}
+				</h5>
+				
+					<section>
+					
+						<p:spacer height="20"/>
+											
+							<p:dataTable id="checkboxDT2" var="lista" value="#{mbFirma.dtoFirmados}" selection="#{mbFirma.dtoDocumentosSeleccionadosFirmados}" rowKey="#{lista.idDocumento}" style="margin-bottom:0; font-size: 13px !important;"
+										 rows="10" paginator="true" rowIndexVar="index" paginatorTemplate=" {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  paginatorPosition="bottom"
+										 emptyMessage="#{messageSource['etiqueta_firma_tablaVaciaFirmados']}">
+										 
+						        
+						        
+						        <p:column style="color:#ff8000;width:30px;text-align: center">
+
+							        <h:outputLink rendered="#{lista.estatusRegresado == '1'}" style="color:#ff8000;width:30px;text-align: center; font-size: 18px;" id="fade" value="#">
+								        <h:outputText styleClass="fa fa-bell" />
+								    </h:outputLink>
+		
+								    <pe:tooltip id="tooltipInfo" widgetVar="tooltipInfo"
+				                    			value="#{messageSource['mensaje_firma_usuario']} #{lista.dtoPersonaRegreso.nombre} #{lista.dtoPersonaRegreso.apellidos} #{messageSource['mensaje_firma_usuarioFirmar']}"
+				                    			for="fade"
+				                    			showEffectLength="0"
+				                    			showEvent="mouseover" hideEvent="mouseout"
+				                    			showEffect="fadeIn" hideEffect="fadeIn"
+				                    			position="top"
+				                    			atPosition="top right" myPosition="bottom left">
+				                   	</pe:tooltip>
+		                   	
+						        </p:column>
+						        
+						        <p:column selectionMode="multiple" style="width:4%;text-align:center"/>
+						        
+						        <p:column headerText="#{messageSource['etiqueta_firma_tablaNumeroDocumento']}" style="text-align:left">
+					            
+					            <p:commandLink id="link_visualizar_documento_Firmado"
+					           				   styleClass="linksPersonasEncontradas" 
+									           actionListener="#{mbFirma.visualizarDocumento(lista,true)}"
+									           update="firmaAdministracion:checkboxDT "
+									           process="firmaAdministracion:panelFirmados">
+					            
+					            	<i style="font-size: 18px; " />&nbsp;<h:outputText value="#{lista.dtoDocumento.noDocumento}" style="#{lista.conVisualizacion != 0 ? 'color:#2313EA;' : ''}text-decoration: underline;"/>
+					            
+					            </p:commandLink>
+					            
+					        </p:column>
+						        
+						        <p:column headerText="Remitente" style="text-align:left">
+						           <h:outputText rendered="#{lista.dtoDocumentoRemitente.nombreNivelArea == null}" value="#{lista.dtoDocumentoRemitente.nombreCompleto}" />
+				                   <h:outputText rendered="#{lista.dtoDocumentoRemitente.nombreNivelArea != null}" value="#{lista.dtoDocumentoRemitente.nombreNivelArea}" />
+				                   <h:outputText value="#{lista.dtoDocumento.idDocumento}" />							
+					            
+						        </p:column>
+						        
+						        <p:column headerText="Fecha" style="width:10%;text-align:left">
+						            <h:outputText value="#{lista.fechaFirma}" />
+						        </p:column>
+						        
+						 		<p:column style="text-align:center">
+						 		
+						 		<p:spacer width="5"/>
+					            
+						            <p:commandLink id="link_ver_detalle" 
+					            			   	   update=":firmaAdministracion:panelDocumentosAFirmar,:firmaAdministracion:inf-doc-dialog,menu_formulario" 
+					            			       actionListener="#{mbFirma.abrirInformacionDocumento(lista)}"
+					            			       styleClass="linksPersonasEncontradas">
+						            
+						            	<i class="fa fa-info-circle" style="font-size: 18px;" />&nbsp;<h:outputText value="Información" style="text-decoration: underline;"/>
+						            
+						            </p:commandLink>					         			     
+						            
+						            <p:spacer width="20px"/>
+						           
+						            <p:commandLink title="Comentario" styleClass="linksPersonasEncontradas"
+									          	   id="link_comentario_documentoFirmados" 
+									           	   process="firmaAdministracion:panelFirmados"
+									           	   update="firmaAdministracion:panelComentario" 
+									           	   onclick="PF('dlg1').show();"
+									           	   actionListener="#{mbFirma.verComentario(lista)}">
+					            
+					            		<i class="fa fa-comment" style="#{lista.dtoComentario != null ? 'color:#2313EA;' : ''} font-size: 18px; "/>&nbsp;<h:outputText value="#{messageSource['etiqueta_firma_comentar']}" style="text-decoration: underline; #{lista.dtoComentario != null ? 'color:#2313EA;' : ''}"/>
+					            
+					            	</p:commandLink>
+					            	
+						        </p:column>
+						        
+						    </p:dataTable>
+						    
+						    <div class="row">
+						    
+								<div class="col-md-12">
+									
+									<div class="row">
+										<h:outputLabel for="firmadoOpcion" value="#{messageSource['etiqueta_firma_comboAccion']}" />
+									</div>
+								
+									<div class="row">
+										
+										<p:selectOneMenu id="firmadoOpcion"  value="#{mbFirma.comboFirmados}" required="true" autoWidth="false" style="width:50%">
+										
+											<f:selectItem itemLabel="#{messageSource['mensaje_general_selecciona']}" itemValue="0" />
+											<f:selectItem itemLabel="Enviar a oficialia y titular" itemValue="1" />
+											
+											<f:selectItem itemLabel="#{messageSource['etiqueta_firma_comboRegresar']}" itemValue="4" />
+											
+										</p:selectOneMenu>
+			
+									</div>
+									
+									<p:spacer height="150"/>
+									
+									<div class="row botonesAcomodo">
+									
+										<p:commandButton value="#{messageSource['etiqueta_boton_aceptar']}" 
+														 oncomplete="" 
+														 title="#{messageSource['etiqueta_boton_aceptar']}" 
+											             id="boton_enviar_documento_firmado"
+											             actionListener="#{mbFirma.cerrarDocumento}"
+										 				 update="mensajes_generales,panelFirmados,menu_formulario"
+										 				 process="@this panelFirmados">   
+										 </p:commandButton>
+									
+									</div>
+									
+								</div>
+								
+							</div>
+									
+						</section>
+						
+					</h:panelGroup>
+					
+				</p:outputPanel>
+				
+			</div>
+			
+		</h:form>
+		
+	</ui:define>
+	
+</ui:composition>

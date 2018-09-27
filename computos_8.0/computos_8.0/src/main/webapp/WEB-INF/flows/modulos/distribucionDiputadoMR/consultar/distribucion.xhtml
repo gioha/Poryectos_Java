@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:ine="http://www.ine.mx/ui" xmlns:deceyec="http://ine.mx/ui" template="/templates/template.xhtml">
+    
+    <style>
+	.no-border {
+    	border-style: hidden !important ; /* or none */
+    	text-align: center;
+    	margin: 0 auto;
+    	left:50%;margin-left:-100px;width:200px;
+	}
+	</style>
+    
+	<ui:define name="CONTENT">
+	
+		<h:form id="formHome" styleClass="container">
+			<!-- Block UI -->
+			<pe:blockUI id="idProgress" target="formHome"
+				content="blockUIContent" widgetVar="progress" />
+			<!-- 			BLOCKUICONTENT -->
+			<h:panelGrid id="blockUIContent" columns="2" style="display:none;">
+				<h:graphicImage library="img" name="loader.gif" width="70" />
+				<h:outputText
+					value="#{messageSource['mensaje_generales_procesando']}"
+					style="white-space: nowrap;" />
+			</h:panelGrid>
+<!-- ################################################## SCRIPTS ########################################################### -->		
+			<script>
+				function extLegend() {
+				    this.cfg.legend= {
+				        show: true,
+				        location: 'ne',
+				        placement: 'outsideGrid'
+				    };
+				}
+			</script>
+		
+<!-- ############################################## MENSAJES GLOBAlES ###################################################### -->	
+
+<!-- #################################################### MIGAJA  ########################################################## -->		
+
+<!-- ################################################ TITULO MODULO  ####################################################### -->
+	
+<!-- ################################################ REQUERIDOS ############################################################ -->	
+
+<!-- ############################################ MENSAJES PARTICULARES #################################################### -->
+
+<!-- ################################################### FILTRO  ########################################################### -->
+		
+<!-- ############################################### DATOS DEL HOME ######################################################## -->		
+	
+		    <div class="container">
+				<div class="card" style="margin-top: 20px;">
+				
+				<!-- Growl informativos -->
+					<p:growl id="growlMsj" life="5000" showDetail="true" sticky="false"
+						for="mensajesExito" />
+					<div id="mensajesExito" />
+
+					<!-- Mensajes -->
+					<p:messages id="msj" closable="false" for="mensaje"
+						styleClass="ui-g-12" style="margin-top: 0px;" />
+					<div id="mensaje" />
+				
+				<h3>#{messageSource['etiqueta_generales_distribucion']}  #{messageSource['etiqueta_capVotos_cand_dipMR']}</h3>
+				
+					<!-- Inicio de Panel de Selección -->
+					<p:panel id="mensajesfallo" widgetVar="mensajesfallo" styleClass="no-border" style="margin-bottom:20px" closable="true" toggleable="true" rendered="#{mbDistGen.isPermiteConsultarDistribucion() eq false}">
+					#{messageSource['validacion_mensaje_generales_distribucion_no_consulta']}
+					</p:panel>
+					<p:panel id="combos" widgetVar="combos" styleClass="no-border" style="margin-bottom:20px" closable="true" toggleable="true" rendered="#{mbDistGen.isPermiteConsultarDistribucion() eq true}">
+					<div class="ui-g ui-fluid">
+						<div class="ui-g-8 ui-g-nopad">
+						
+							<div class="ui-g-12">
+							</div>
+							    <!--  <p:growl id="msgs" showDetail="true" />-->
+							    <div class="ui-g-12 ui-md-4 md-selectfield">
+									<p:outputLabel for="distrito" value="#{messageSource['etiqueta_capturavotos_distrito']}"/>
+				    				<p:selectOneMenu id="distrito" 
+					        						 value="#{mbDistGen.idDistritoSeleccionado}" 
+						             				 requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+						             				 required="true"
+						             				 styleClass="form-control">
+					                     <f:selectItem itemLabel="Selecciona" itemValue="-5" />  
+										<f:selectItems 	value="#{mbDistGen.distritos}" 
+					                      				var="dist" 
+				                      					itemValue="#{dist.idDistrito}" 
+					                      				itemLabel="#{dist.idDistrito}-#{dist.nombreDistrito}"/>
+					                      <f:ajax event="change" listener="#{mbDistGen.cargaDistribucion}" update="@form"  />				                    
+				                  	</p:selectOneMenu>
+				                  	<p:message id="msj_distrito" for="distrito"  />	
+								</div>
+							    <br></br>
+					            <div class="ui-g-3 ui-lg-3">
+									<!-- <p:commandButton id="viewButton" value="#{messageSource['etiqueta_menu_accion_consultar']}" action="#{mbDistGen.cargaDistribucion}"
+									onclick="PF('outpanel').show();PF('outpanel2').show();PF('outpanel3').show();"
+									onstart="PF('progress').block()" onsuccess="PF('progress').unblock()"
+									update="@form">
+									</p:commandButton> -->
+									<p:commandButton id="viewButton" value="#{messageSource['etiqueta_menu_accion_consultar']}"
+									onclick="PF('outpanel').show();PF('outpanel2').show();PF('outpanel3').show();"
+									onstart="PF('progress').block()" onsuccess="PF('progress').unblock()"
+									update="@form">
+									</p:commandButton>
+					            </div>
+						</div>
+					</div>
+					</p:panel>
+					<!-- Fin de Panel de Selección -->
+					
+					
+					<!-- Inicio de Panel de Total de votos -->
+					  <p:panel id="outPanel" widgetVar="outpanel" style="margin-bottom:20px" closable="true" toggleable="true" rendered="#{mbDistGen.isPanelesVisible() eq true}">
+					<p:outputPanel id="displayx">
+					<ui:debug hotkey="x" />
+						<h2>#{messageSource['etiqueta_generales_total.votos']}</h2>
+					</p:outputPanel>
+					#{messageSource['etiqueta_generales_PPYCI']}
+					<p:separator />
+					<div class="ui-g">
+					<ui:repeat value="#{mbDistGen.partidosCompletos}" var="asociacion" varStatus="loop">
+					    <div class="ui-g-1" align="center">
+					    <ui:fragment rendered="#{asociacion.tipoAsociacion eq 1}">
+					    <p:graphicImage value="#{mbDistGen.imagen}"
+									width="50"
+									height="50" 
+									cache="false" >
+						<f:param name="emblema" value="#{asociacion.emblema}"/>
+						</p:graphicImage>
+						</ui:fragment>
+						<ui:fragment rendered="#{asociacion.tipoAsociacion eq 4}">#{asociacion.nombreCandidato}</ui:fragment>
+					    <br><p:inputText disabled="true" value="#{asociacion.votos}" style="font-weight: bold;" /></br>
+					    </div>
+					</ui:repeat>
+					</div>
+					 #{messageSource['etiqueta_generales_coaliciones']}
+					 <p:separator />
+					<div class="ui-g">
+					<ui:repeat value="#{mbDistGen.coalicionesCompletas}" var="asociacionCoalicion" varStatus="loop">
+						<div align="center">
+						<p:graphicImage value="#{mbDistGen.imagen}"
+									height="30" 
+									cache="false" >
+							<f:param name="emblema" value="#{asociacionCoalicion.emblema}"/>
+						</p:graphicImage>
+						<br><p:inputText disabled="true" value="#{asociacionCoalicion.votos}" style="font-weight: bold; margin-bottom: 14px; width: 80%" /></br></div>
+					</ui:repeat>
+					</div>
+					<p>#{messageSource['etiqueta_generales_otros']}</p>
+					<p:separator />
+					<i class="fa fa-user" aria-hidden="true"></i>#{messageSource['etiqueta_generales_CNR']}: #{mbDistGen.cnr.votos}
+					<br><i class="fa fa-ban" aria-hidden="true"></i>#{messageSource['etiqueta_generales_VN']}: #{mbDistGen.nulos.votos}
+					<br><i class="fa fa-check-square-o" aria-hidden="true"></i>#{messageSource['etiqueta_generales_total.votos']}: #{mbDistGen.totalVotos}</br>
+					</br>
+					</p:panel>
+					<!-- Fin de Panel de Total de votos -->
+					
+					
+					<!-- Inicio de Panel de Distribución por Partidos Políticos -->
+					<p:panel id="outPanel2" widgetVar="outpanel2" style="margin-bottom:20px" closable="true" toggleable="true" rendered="#{mbDistGen.isPanelesVisible() eq true}">
+					<p:outputPanel id="displayx2">
+						<h2>#{messageSource['etiqueta_generales_distribucion.pp']}</h2>
+					</p:outputPanel>
+					#{messageSource['etiqueta_generales_PP']}
+					<p:separator />
+					<div class="ui-g">
+					<ui:repeat value="#{mbDistGen.distribucionPPcompleta}" var="asociacion" varStatus="loop">
+					    <div class="ui-g-1" align="center">
+					    <!--  <h:graphicImage library="image" name="pri.png" width="30" height="30" />-->
+					    <ui:fragment rendered="#{asociacion.tipoAsociacion eq 1}">
+					    <p:graphicImage value="#{mbDistGen.imagen}"
+									width="50"
+									height="50" 
+									cache="false" >
+							<f:param name="emblema" value="#{asociacion.emblema}"/>
+						</p:graphicImage>  
+						</ui:fragment>
+						<ui:fragment rendered="#{asociacion.tipoAsociacion eq 4}">#{asociacion.nombreCandidato}</ui:fragment>
+					    <br><p:inputText disabled="true" value="#{asociacion.votos}" style="font-weight: bold;" /></br>
+					    </div>
+					</ui:repeat>
+					</div>
+					<p>#{messageSource['etiqueta_generales_otros']}</p>
+					<p:separator />
+					<i class="fa fa-user" aria-hidden="true"></i>#{messageSource['etiqueta_generales_CNR']}: #{mbDistGen.cnr.votos}
+					<br><i class="fa fa-ban" aria-hidden="true"></i>#{messageSource['etiqueta_generales_VN']}: #{mbDistGen.nulos.votos}
+					<br><i class="fa fa-check-square-o" aria-hidden="true"></i>#{messageSource['etiqueta_generales_total.votos']}: #{mbDistGen.totalVotos}</br>
+					</br>
+					</p:panel>
+					<!-- Fin de Panel de Distribución por Partidos Políticos -->
+					
+					
+					
+					<!-- Inicio de Panel de Distribución por Candidato -->
+					<p:panel id="outPanel3" widgetVar="outpanel3" style="margin-bottom:20px" closable="true" toggleable="true" rendered="#{mbDistGen.isPanelesVisible() eq true}">
+					<p:outputPanel id="displayx3">
+						<h2>#{messageSource['etiqueta_generales_distribucion.candidato']}</h2>
+					</p:outputPanel>
+					#{messageSource['etiqueta_generales_candidato']}
+					<p:separator />
+					<div class="ui-g">
+					<ui:repeat value="#{mbDistGen.distribucionCandidato}" var="asociacion" varStatus="loop">
+					    <div align="center">
+					    <ui:fragment rendered="#{asociacion.tipoAsociacion eq 1 || asociacion.tipoAsociacion eq 3}">
+					    <p:graphicImage value="#{mbDistGen.imagen}"
+									height="30" 
+									cache="false" >
+							<f:param name="emblema" value="#{asociacion.emblema}"/>
+						</p:graphicImage> 
+						</ui:fragment> 
+						<ui:fragment rendered="#{asociacion.tipoAsociacion eq 4}">#{asociacion.nombreCandidato}</ui:fragment>
+					    <br><p:inputText disabled="true" value="#{asociacion.votos}" style="font-weight: bold; margin-bottom: 14px; width: 80%" /></br>
+					    </div>
+					</ui:repeat>
+					</div>
+					<p>#{messageSource['etiqueta_generales_otros']}</p>
+					<p:separator />
+					<i class="fa fa-user" aria-hidden="true"></i>#{messageSource['etiqueta_generales_CNR']}: #{mbDistGen.cnr.votos} = #{mbDistGen.porcentajeCNR}%
+					<br><i class="fa fa-ban" aria-hidden="true"></i>#{messageSource['etiqueta_generales_VN']}: #{mbDistGen.nulos.votos} = #{mbDistGen.porcentajeNulos}%
+					<br><i class="fa fa-check-square-o" aria-hidden="true"></i>#{messageSource['etiqueta_generales_total.votos']}: #{mbDistGen.totalVotos} = 100%</br>
+					</br>
+					</p:panel>
+					<!-- Fin de Panel de Distribución por Candidato -->
+					
+					<!-- Inicio de Botones para Eliminar la Distribución de votos  -->
+					<p:panel id="botones" widgetVar="botones" styleClass="no-border text-center" style="margin-bottom:20px" closable="true" toggleable="true" rendered="#{mbDistGen.isPermiteEliminar() eq true}">
+						<p:commandButton widgetVar="btnElimina" value="#{messageSource['etiqueta_boton_eliminar']}" action="#{mbDistGen.eliminarDistribucion}" icon="ui-icon-check" disabled="false">
+						<p:confirm  header="" message="#{messageSource['validacion_mensaje_generales_distribucion_confirmar_eliminar']}" icon="ui-icon-alert" />
+						</p:commandButton>
+						
+						<p:confirmDialog global="true" >
+                        	<p:commandButton value="#{messageSource['etiqueta_boton_aceptar']}"  type="button" styleClass="ui-confirmdialog-yes"/>
+                        	<p:commandButton value="#{messageSource['etiqueta_boton_cancelar']}" type="button" styleClass="ui-confirmdialog-no" />    
+                    	</p:confirmDialog>
+					</p:panel>
+					<!-- Fin de Botones para Eliminar la Distribución de votos  -->
+				
+				</div>
+		    </div>
+		</h:form>
+	</ui:define>
+	
+	    
+</ui:composition>

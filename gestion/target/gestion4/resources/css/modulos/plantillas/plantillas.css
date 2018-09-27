@@ -1,0 +1,80 @@
+/*-------------------------------------------------*/
+/* Hoja de Estilos para el módulo de               */
+/*       	Configuración de plantillas            */
+/*  v1.1.5 Release Date 02 de octubre de 2017      */
+/*-------------------------------------------------*/
+
+/*************************** GENERALES *********************************/
+
+.linkEditar {
+	font-size: 13px !important;
+	color: #706f6f !important;
+	text-decoration: none;
+}
+
+.linkEditar:hover {
+	color: #d6007e !important;
+}
+
+.tablaPlantillas {
+	width: 1010px;
+}
+
+.tablaPlantillas.ui-datatable thead th {
+	background: none;
+	background-color: #d5007f !important;
+	border-top: none !important;
+	border-bottom: none !important;
+	color: white;
+	font-weight: normal;
+	border: 1px solid white !important;
+}
+
+.tablaPlantillas .ui-datatable-data {
+	font-size: 12px;
+}
+
+.tablaPlantillas .ui-column-title {
+	font-size: 12px;
+	padding-right: 5px;
+	font-family: Roboto;
+}
+
+.tablaPlantillas .ui-filter-column {
+	padding: 18px 10px 13px 10px;
+}
+
+.tablaPlantillas .ui-filter-column .ui-inputfield {
+	height: 30px;
+}
+
+.tablaPlantillas.ui-datatable .ui-column-filter {
+	display: inline;
+}
+
+/*************************** GROWL *********************************/
+div[id="form_plantillas:mensaje_general_info_container"] > div {
+
+	background: #29abe2 !important;
+}
+
+div[id="form_plantillas:mensaje_general_advertencia_container"] > div {
+
+	background: #fcee21 !important;
+	color: black; 
+}
+
+div[id="form_plantillas:mensaje_general_advertencia_container"] > div .ui-growl-item {
+	border-bottom: 2px solid black!important;
+	border-top: 2px solid black!important;
+}
+
+div[id="form_plantillas:mensaje_general_exito_container"] > div {
+
+	background: #7ac943 !important;
+}
+
+/* Estilos aplicados por Miguel Ortiz */
+.expans-horiz-100 {
+	width: 100%;
+}

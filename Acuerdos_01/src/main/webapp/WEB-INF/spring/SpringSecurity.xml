@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bean:beans xmlns="http://www.springframework.org/schema/beans" 
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:security="http://www.springframework.org/schema/security" 
+            xmlns:bean="http://www.springframework.org/schema/beans" 
+            xmlns:jee="http://www.springframework.org/schema/jee"
+            xsi:schemaLocation="http://www.springframework.org/schema/beans 
+            http://www.springframework.org/schema/beans/spring-beans.xsd 
+            http://www.springframework.org/schema/security
+            http://www.springframework.org/schema/security/spring-security.xsd
+            http://www.springframework.org/schema/jee
+            http://www.springframework.org/schema/jee/spring-jee.xsd">		
+	
+	<!-- Las reglas seguriead para las URL se ejecutan en el orden que aparecen -->
+	
+	<!-- La página de error no se protege para que el web.xml redireccione a ésta en caso
+		 de no tener acceso al sistema -->
+	<security:http pattern="/app/error" security="none"/>
+	<security:http pattern="/app/login*" security="none"/> <!-- Ciudadano -->
+	<security:http pattern="/app/captcha/captcha.png" security="none"/>
+	
+	<!-- Todos los recursos de faces no se protegen para el Login -->
+	<security:http pattern="/app/javax.faces.resource/**" security="none"/> 
+	<security:http pattern="/resources/**" security="none"/>	 
+	
+	
+	<!-- Definición de archivos properties de la aplicación, para subir al contexto -->
+	<!-- <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource" 
+		  lazy-init="false" autowire="byName" >
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="basenames">
+			<list>
+				<value>ApplicationResources</value>
+				<value>GenericConstants</value>
+			</list>
+		</property>
+	</bean> -->
+	
+	
+	<!-- #######################################################################
+							Security Configuración Generica 
+		 ####################################################################### -->
+	
+	<bean id="httpSessionSecurityContextRepository" class="org.springframework.security.web.context.HttpSessionSecurityContextRepository"/>
+
+	<!-- INICIO - FILTRO PARA EL MANEJO DE SESIONES CONCURRENTES -->
+	<bean id="compositeSessionAuthenticationStrategy" class="org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy">
+		<constructor-arg>
+			<list>
+				<bean class="org.springframework.security.web.authentication.session.ConcurrentSessionControlAuthenticationStrategy">
+					<constructor-arg ref="sessionRegistry"/>
+					<property name="exceptionIfMaximumExceeded" value="true" />
+					<property name="maximumSessions" value="5" />					
+				</bean>
+				<bean class="org.springframework.security.web.authentication.session.SessionFixationProtectionStrategy">
+				</bean>
+				<bean class="org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy">
+					<constructor-arg ref="sessionRegistry"/>
+				</bean>
+			</list>
+		</constructor-arg>
+	</bean>	
+	
+	<bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl"/>
+	
+	<!-- FIN - FILTRO PARA EL MANEJO DE SESIONES CONCURRENTES -->
+	
+	
+	<!-- #######################################################################
+							Security Context Administrador 
+		 ####################################################################### -->
+	
+		<security:http auto-config="true" disable-url-rewriting="true" use-expressions="true" 
+					authentication-manager-ref="authenticationManager" 
+					pattern="/app/**">	
+					
+				<security:form-login login-page="/app/login" 
+							 default-target-url="/app/home" 
+							 always-use-default-target="true"
+							 authentication-failure-url="/app/login?error=credencialesInvalidas"/>
+		
+		<security:intercept-url pattern="/**" access="isAuthenticated()"/>
+		
+		<security:intercept-url pattern="/**" access="hasAnyRole('ACUERDOS.CAPTURA_ADMIN.OC','ACUERDOS.CONSULTA_ADMIN.OC','ACUERDOS.CAPTURA_SE.OC','ACUERDOS.CONSULTA_SE.OC','ACUERDOS.CAPTURA_TITULAR_AREA.OC','ACUERDOS.CONSULTA_TITULAR_AREA.OC','ACUERDOS.CAPTURA_AREA.OC','ACUERDOS.CONSULTA_AREA.OC','ACUERDOS.CAPTURA_SIVOPLE.OC','ACUERDOS.CONSULTA_SIVOPLE.OC','ACUERDOS.CONSULTA_CAU.OC')"/>
+		
+		<!-- delete-cookies limpia la cookie de sesión para evitar que cuando se haga un logout también
+		 se genere un submit con una sesión inválida y se redireccione a invalid-session-url -->
+		<security:logout success-handler-ref="customLogoutHandler" 
+						 delete-cookies="JSESSIONID"
+						 logout-url="/app/j_spring_security_logout"/>
+		
+		<security:headers disabled="true" />		
+
+		<security:csrf disabled="true" />
+				
+ 		<security:custom-filter ref="sessionManagementFilter" before="SESSION_MANAGEMENT_FILTER"/>
+		<security:custom-filter ref="filtroSeguridadComplementaria" before="FORM_LOGIN_FILTER" />		
+				
+	</security:http>
+	
+	<!-- INICIO - FILTRO PARA DETECTAR UNA SESIÓN INVÁLIDA -->
+	<bean id="sessionManagementFilter" class="org.springframework.security.web.session.SessionManagementFilter">
+		<constructor-arg ref="httpSessionSecurityContextRepository"/>
+		<constructor-arg ref="compositeSessionAuthenticationStrategy"/>
+		<property name="invalidSessionStrategy" ref="jsfRedirectStrategy" />
+	</bean>
+	
+	<!-- Clase personalizada para soportar solicitudes ajax -->
+	<bean id="jsfRedirectStrategy" class="mx.ine.acuerdos.seguridad.FiltroSeguridadAjax">
+        <property name="invalidSessionUrl" value="/app/login?error=caducaSesion" />
+    </bean>
+	
+	<!-- FIN - FILTRO PARA DETECTAR UNA SESIÓN INVÁLIDA -->
+	
+	<!-- INCIO - CLASE PARA AGREGAR A LA AUTENTICACIÓN EL CAPTCHA -->	
+    <bean id="filtroSeguridadComplementaria" class="mx.ine.acuerdos.seguridad.FiltroSeguridadComplementaria">
+    	<property name="filterProcessesUrl" value="/app/j_spring_security_check"/> 
+        <property name="authenticationManager" ref="authenticationManager"/>
+        <property name="sessionAuthenticationStrategy" ref="compositeSessionAuthenticationStrategy" />
+ 		<property name="succesUrl" value="/app/home"/>
+		<property name="errorUrl" value="/app/login?error=1"/>
+		<property name="usernameParameter" value="j_username"/>
+		<property name="passwordParameter" value="j_password"/>		
+        <property name="captchaParamName" value="j_captcha"/> 
+    </bean>
+    <!-- FIN - CLASE PARA AGREGAR A LA AUTENTICACIÓN EL CAPTCHA -->    
+    
+    <!-- FIN - Filtro que permite interceptar cuando se realiza un logout en la aplicación -->
+    <!-- Aqui Manda a llamaer al filtro en  CustomLogoutHandler Pensaba mandar a llamar a la Session para almacenarla en la BD-->
+	<bean id="customLogoutHandler" class="mx.ine.acuerdos.seguridad.CustomLogoutHandler">
+		<property name="logoutSuccessUrl" value="/app/login?logout=true"/>
+		<property name="invalidSessionUrl" value="/app/login?error=sesionInvalida"/>
+	</bean>    	
+	
+	<security:authentication-manager id="authenticationManager" >
+		<security:authentication-provider ref="ldapAuthProvider"/>
+	</security:authentication-manager>
+	
+	<bean id="ldapAuthProvider" class="org.springframework.security.ldap.authentication.LdapAuthenticationProvider">		
+		<constructor-arg>
+			<bean class="org.springframework.security.ldap.authentication.BindAuthenticator">
+				<constructor-arg ref="contextSource"/>
+				<property name="userDnPatterns">
+					<list>
+						<value>uid={0},ou=externo,ou=people</value> <!-- Línea para buscar externos si se requiere -->
+						<value>uid={0},ou=people</value>
+						<value>uid={0},ou=generica</value>
+					</list>
+				</property>
+			</bean>
+		</constructor-arg>
+		<constructor-arg>
+             <bean id="ldapAuthoritiesPopulator" class="org.springframework.security.ldap.userdetails.DefaultLdapAuthoritiesPopulator">
+                 <constructor-arg ref="contextSource"/>
+                 <constructor-arg value="ou=grupos"/>
+                 <property name="groupRoleAttribute" value="cn"/>
+                 <property name="groupSearchFilter" value="memberUid={1}" />
+             </bean>
+         </constructor-arg>
+		
+		<!-- Clase para agregar datos del usuario -->
+     	<property name="userDetailsContextMapper" ref="ldapUserDetailsMapper"/>
+	</bean>
+	
+    <!-- Filtro para la búsqueda de roles en el LDAP  (parámetros del constructor: ContextSource contextSource, String groupSearchBase) -->
+    <bean id="ldapAuthoritiesPopulator" class="org.springframework.security.ldap.authentication.NullLdapAuthoritiesPopulator"/>
+	
+	<!-- Clase para agregar datos del usuario -->
+   	<bean id="ldapUserDetailsMapper" class="mx.ine.acuerdos.seguridad.CustomUserDetailsMapper"/>
+	
+	<!-- INICIO - AUTENTICACIÓN LDAP -->
+	<!-- Servidor de LDAP -->
+	<jee:jndi-lookup id="jndiLdapServer" jndi-name="${ldap.url}" />
+	<security:ldap-server url="#{jndiLdapServer}/dc=ife.org.mx"/>
+		
+	<!-- Configuración para la conexión por jndi al LDAP -->
+	<bean id="contextSource" class="org.springframework.ldap.core.support.LdapContextSource">
+		<!-- Importante deshabilitar el pool porque causa el error 500:
+			 org.springframework.ldap.ServiceUnavailableException: <ldap>; socket closed; nested exception is javax.naming.ServiceUnavailableException:
+			 Este error causa esa excepción porque no fue configurado pool de la JVM con el argumento -Dcom.sun.jndi.ldap.connect.pool.timeout -->
+		<property name="pooled" value="false"/>
+		<property name="url" value="#{jndiLdapServer}"/>
+		<property name="base" value="dc=ife.org.mx"/>
+ 		<property name="baseEnvironmentProperties">
+			<map>
+				<entry key="com.sun.jndi.ldap.connect.timeout" value="9000" />
+				<entry key="com.sun.jndi.ldap.read.timeout" value="9000" />
+				<entry key="java.naming.security.authentication" value="simple" />
+			</map>
+		</property>
+	</bean>
+   	
+    <!-- FIN - AUTENTICACIÓN LDAP -->
+    
+    <!-- Configuración para la búsqueda del usuario en el LDPA
+		(parámetros del constructor: String searchBase, String searchFilter, BaseLdapPathContextSource contextSource) -->
+	<bean id="ldapUserSearchUID" class="org.springframework.security.ldap.search.FilterBasedLdapUserSearch">
+        <constructor-arg index="0" value=""/>
+        <constructor-arg index="1" value="uid={0}"/>
+        <constructor-arg index="2" ref="contextSource"/>
+        <property name="searchSubtree" value="true"/>
+    </bean>
+    
+    <!--  
+		Configuración para la búsqeuda del usuario en el LDAP
+		(parámetros del constructor: String searchBase, String searchFilter(Por nombre, apellidos y/o usuario), BaseLdapPathContextSource contextSource)
+	 -->
+	<bean id="ldapUserSearchByGivenNameSnUid" class="mx.ine.acuerdos.dao.impl.DAOLdap">
+        <constructor-arg index="0" value=""/>
+        <constructor-arg index="1" value="(&amp;{0}{1}{2}{3}(givenName=*)(sn=*)(ou=*)(uid=*)(idEstado=0))"/>
+        <constructor-arg index="2" ref="contextSource"/>
+    </bean>
+    
+    <bean id="ldapTemplate" class="org.springframework.ldap.core.LdapTemplate">
+        <constructor-arg ref="contextSource" />
+    </bean>
+    
+</bean:beans>

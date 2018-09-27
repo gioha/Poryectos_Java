@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+	  start-state="configuracion_plantillas" parent="parent-flow">
+	
+	<var name="mbPlantilla" class="mx.ine.gestion.mb.MBPlantillas"/>
+	
+  	<!-- Pantalla de captura de plantillas-->
+	<view-state id="configuracion_plantillas" view="administracion_plantillas.xhtml">
+		
+	</view-state>
+
+</flow>

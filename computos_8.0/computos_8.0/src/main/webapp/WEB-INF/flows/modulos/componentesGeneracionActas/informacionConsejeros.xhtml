@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:ine="http://www.ine.mx/ui" xmlns:deceyec="http://ine.mx/ui">
+
+	<div class="ui-g">
+
+		<!-- ****************************************************************************************************** -->
+		<!-- **************************************** VISTA CAPTURAR ********************************************** -->
+		<!-- ****************************************************************************************************** -->
+		<p:outputPanel id="infConsejerosCap" styleClass="ui-g-12"
+			rendered="#{mbGeneradorActa.isRendered(mbGeneradorActa.accionCapturar) or mbGeneradorActa.isRendered(mbGeneradorActa.accionModificar)}">
+
+			<h2 style="padding: 15px 0px;">#{messageSource['etiqueta_subtitulo_conformacion_consejo_acta_computos']}</h2>
+
+			<!--- Mensaje de información de apellidos-->
+			<div class="ui-messages ui-widget" aria-live="polite">
+				<div class="ui-messages-info ui-corner-all">
+					<a href="#" class="ui-messages-close"
+						onclick="$(this).parent().slideUp();return false;"> </a> <span
+						class="ui-messages-info-icon"></span>
+					<ul>
+						<li><span class="ui-messages-info-detail">#{messageSource['validacion_mensaje_generales_minimo_un_apellidos']}</span></li>
+					</ul>
+				</div>
+			</div>
+
+			<!-- Lista de consejeros -->
+			<c:forEach items="#{mbGeneradorActa.datos.consejeros}"
+				var="consejero">
+				<div class="ui-g-12 ui-md-12 ui-lg-12" style="margin: 10px 0px">
+					<span class="ui icon fa fa-user" /> <b style="padding: 10px">
+						#{consejero.tituloConsejero}</b>
+				</div>
+
+				<!-- ************************************************************************************************************** -->
+				<!-- *********************************************** CONSEJEROS - VISTA CAPTURAR *************************************************** -->
+
+
+				<div class="ui-g-12 ui-md-12 ui-lg-3">
+					<div class=" md-inputfield">
+						<p:inputText
+							id="informacionConsejerosNombreCap#{consejero.idTipoConsejero}"
+							value="#{consejero.nombre}"
+							validatorMessage="#{messageSource['validacion_mensajes_generales_caracteresValidos_nombre']}"
+							onblur="this.value=this.value.toUpperCase().trim();"
+							onkeypress="if (event.keyCode == 13) { return false; }"
+							maxlength="50">
+							<f:validateRegex
+								pattern="#{messageSource['validacion_expresion_generales_caracteresValidos_nombre']}" />
+							<p:ajax event="keyup"
+								update="mensajeConsejeroNombreCap#{consejero.idTipoConsejero}" />
+							<pe:keyFilter
+								regEx="#{messageSource['validacion_expresion_generales_caracteresValidos_nombre_filtro']}"
+								preventPaste="false" />
+						</p:inputText>
+						<p:outputLabel value="Nombre"
+							for="informacionConsejerosNombreCap#{consejero.idTipoConsejero}" />
+					</div>
+					<p:messages
+						id="mensajeConsejeroNombreCap#{consejero.idTipoConsejero}"
+						for="informacionConsejerosNombreCap#{consejero.idTipoConsejero}" />
+				</div>
+
+
+
+				<!-- Apellido paterno consejero -->
+				<div class="ui-g-12 ui-md-12 ui-lg-3">
+					<div class=" md-inputfield">
+						<p:inputText
+							id="informacionConsejerosAPaternoCap#{consejero.idTipoConsejero}"
+							value="#{consejero.aPaterno}"
+							validatorMessage="#{messageSource['validacion_mensajes_generales_caracteresValidos_nombre']}"
+							onblur="this.value=this.value.toUpperCase().trim();"
+							onkeypress="if (event.keyCode == 13) { return false; }"
+							maxlength="50">
+							<f:validateRegex
+								pattern="#{messageSource['validacion_expresion_generales_caracteresValidos_nombre']}" />
+							<p:ajax event="keyup"
+								update="mensajeConsejeroAPaternoCap#{consejero.idTipoConsejero} mensajeConsejeroAMaternoCap#{consejero.idTipoConsejero}" />
+<!-- 							<f:ajax listener="#{mbGeneradorActa.validaCampos()}" /> -->
+							<pe:keyFilter
+								regEx="#{messageSource['validacion_expresion_generales_caracteresValidos_nombre_filtro']}"
+								preventPaste="false" />
+						</p:inputText>
+						<p:outputLabel value="Apellido paterno"
+							for="informacionConsejerosAPaternoCap#{consejero.idTipoConsejero}" />
+					</div>
+
+					<p:messages
+						id="mensajeConsejeroAPaternoCap#{consejero.idTipoConsejero}"
+						for="informacionConsejerosAPaternoCap#{consejero.idTipoConsejero}" />
+				</div>
+
+
+				<!-- Apellido materno consejero -->
+				<div class="ui-g-12 ui-md-12 ui-lg-3">
+					<div class=" md-inputfield">
+						<p:inputText
+							id="informacionConsejerosAMaternoCap#{consejero.idTipoConsejero}"
+							value="#{consejero.aMaterno}"
+							validatorMessage="#{messageSource['validacion_mensajes_generales_caracteresValidos_nombre']}"
+							onblur="this.value=this.value.toUpperCase().trim();"
+							onkeypress="if (event.keyCode == 13) { return false; }"
+							maxlength="50">
+							<f:validateRegex
+								pattern="#{messageSource['validacion_expresion_generales_caracteresValidos_nombre']}" />
+							<p:ajax event="keyup"
+								update="mensajeConsejeroAMaternoCap#{consejero.idTipoConsejero} mensajeConsejeroAPaternoCap#{consejero.idTipoConsejero}" />
+							<pe:keyFilter
+								regEx="#{messageSource['validacion_expresion_generales_caracteresValidos_nombre_filtro']}"
+								preventPaste="false" />
+						</p:inputText>
+						<p:outputLabel value="Apellido materno"
+							for="informacionConsejerosAMaternoCap#{consejero.idTipoConsejero}" />
+					</div>
+					<p:messages
+						id="mensajeConsejeroAMaternoCap#{consejero.idTipoConsejero}"
+						for="informacionConsejerosAMaternoCap#{consejero.idTipoConsejero}" />
+				</div>
+				<!-- 				</c:if> -->
+
+
+
+
+
+
+
+
+
+				<!-- ********************************* CALIDAD - VISTA CAPTURAR ********************************************* -->
+
+
+				<!-- Calidad Consejero: Propietario/Suplente -->
+				<!-- 				<c:if -->
+				<!-- 					test="#{mbGeneradorActa.isRendered(mbGeneradorActa.accionCapturar)}"> -->
+				<!-- 					<c:if test="#{consejero.idTipoConsejero.intValue() == 1}"> -->
+				<!-- 						<div class="ui-g-12 ui-md-12 ui-lg-3"> -->
+				<!-- 							<div class=" md-selectfield"> -->
+				<!-- 								<p:outputLabel -->
+				<!-- 									for="informacionConsejerosRolCap#{consejero.idTipoConsejero}" -->
+				<!-- 									value="Calidad" rendered="#{mbGeneradorActa.calidadPresidente}" /> -->
+				<!-- 								Para consejero presidente -->
+				<!-- 								<p:selectOneMenu -->
+				<!-- 									id="informacionConsejerosRolCap#{consejero.idTipoConsejero}" -->
+				<!-- 									value="#{consejero.calidad}" -->
+				<!-- 									required="#{consejero.nombre != null and consejero.nombre ne ''}" -->
+				<!-- 									requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"> -->
+
+				<!-- 									<f:selectItem itemLabel="Selecciona" itemValue="" /> -->
+				<!-- 									<f:selectItem itemLabel="Propietario" itemValue="P" /> -->
+				<!-- 									<f:selectItem itemLabel="Suplente" itemValue="S" /> -->
+
+				<!-- 									<p:ajax event="change" -->
+				<!-- 										update="mensajeConsejeroCalidadPreCap#{consejero.idTipoConsejero}" /> -->
+				<!-- 								</p:selectOneMenu> -->
+				<!-- 							</div> -->
+				<!-- 							<p:messages -->
+				<!-- 								id="mensajeConsejeroCalidadPreCap#{consejero.idTipoConsejero}" -->
+				<!-- 								for="informacionConsejerosRolCap#{consejero.idTipoConsejero}" /> -->
+				<!-- 						</div> -->
+				<!-- 					</c:if> -->
+
+
+				<!-- Para consejero secretario -->
+				<!-- 					<c:if -->
+				<!-- 						test="#{consejero.idTipoConsejero.intValue() == 2 and mbGeneradorActa.usuario.getIdMunicipioSeleccionado() eq 0}"> -->
+				<!-- 						<div class="ui-g-12 ui-md-12 ui-lg-3"> -->
+				<!-- 							<div class=" md-selectfield"> -->
+				<!-- 								<p:outputLabel -->
+				<!-- 									for="informacionConsejerosRolCap#{consejero.idTipoConsejero}" -->
+				<!-- 									value="Calidad" rendered="#{mbGeneradorActa.calidadSecretario}" /> -->
+
+				<!-- 								<p:selectOneMenu -->
+				<!-- 									id="informacionConsejerosRolCap#{consejero.idTipoConsejero}" -->
+				<!-- 									value="#{consejero.calidad}" -->
+				<!-- 									required="#{consejero.nombre != null and consejero.nombre ne ''}" -->
+				<!-- 									requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"> -->
+
+				<!-- 									<f:selectItem itemLabel="Selecciona" itemValue="" /> -->
+				<!-- 									<f:selectItem itemLabel="Encargado de despacho" itemValue="E" /> -->
+				<!-- 									<f:selectItem itemLabel="Suplente" itemValue="S" /> -->
+
+				<!-- 									<p:ajax event="change" -->
+				<!-- 										update="mensajeConsejeroCalidadSecCap#{consejero.idTipoConsejero}" /> -->
+				<!-- 								</p:selectOneMenu> -->
+				<!-- 							</div> -->
+				<!-- 							<p:messages -->
+				<!-- 								id="mensajeConsejeroCalidadSecCap#{consejero.idTipoConsejero}" -->
+				<!-- 								for="informacionConsejerosRolCap#{consejero.idTipoConsejero}" /> -->
+				<!-- 						</div> -->
+				<!-- 					</c:if> -->
+
+
+				<!-- 					<c:if -->
+				<!-- 						test="#{consejero.idTipoConsejero.intValue() == 2 and mbGeneradorActa.usuario.getIdMunicipioSeleccionado() ne 0}"> -->
+				<!-- 						<div class="ui-g-12 ui-md-12 ui-lg-3"> -->
+				<!-- 							<div class=" md-selectfield"> -->
+				<!-- 								<p:outputLabel -->
+				<!-- 									for="informacionConsejerosRolCap#{consejero.idTipoConsejero}" -->
+				<!-- 									value="Calidad" /> -->
+
+				<!-- 								<p:selectOneMenu -->
+				<!-- 									id="informacionConsejerosRolCap#{consejero.idTipoConsejero}" -->
+				<!-- 									value="#{consejero.calidad}" -->
+				<!-- 									required="#{consejero.nombre != null and consejero.nombre ne ''}" -->
+				<!-- 									requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"> -->
+
+
+				<!-- 									<f:selectItem itemLabel="Selecciona" itemValue="" /> -->
+				<!-- 									<f:selectItem itemLabel="Titular" itemValue="T" /> -->
+
+				<!-- 									<p:ajax event="change" -->
+				<!-- 										update="mensajeConsejeroCalidadSecCap#{consejero.idTipoConsejero}" /> -->
+				<!-- 								</p:selectOneMenu> -->
+				<!-- 							</div> -->
+				<!-- 							<p:messages -->
+				<!-- 								id="mensajeConsejeroCalidadSecCap#{consejero.idTipoConsejero}" -->
+				<!-- 								for="informacionConsejerosRolCap#{consejero.idTipoConsejero}" /> -->
+				<!-- 						</div> -->
+				<!-- 					</c:if> -->
+
+
+				<!-- Calidad Consejero: Propietario/Suplente -->
+				<!-- 					<c:if -->
+				<!-- 						test="#{consejero.idTipoConsejero.intValue() != 1 and consejero.idTipoConsejero.intValue() != 2 and mbGeneradorActa.calidadConsejeros}"> -->
+				<!-- 						<div class="ui-g-12 ui-md-12 ui-lg-3"> -->
+				<!-- 							<div class=" md-selectfield ui-g-12 ui-md-12 ui-lg-12"> -->
+				<!-- 								<p:outputLabel -->
+				<!-- 									for="informacionConsejerosRolCap#{consejero.idTipoConsejero}" -->
+				<!-- 									value="Calidad" rendered="#{mbGeneradorActa.calidadConsejeros}" /> -->
+
+				<!-- 								<p:selectOneMenu -->
+				<!-- 									id="informacionConsejerosRolCap#{consejero.idTipoConsejero}" -->
+				<!-- 									value="#{consejero.calidad}" -->
+				<!-- 									required="#{consejero.nombre != null and consejero.nombre ne ''}" -->
+				<!-- 									requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"> -->
+
+				<!-- 									<f:selectItem itemLabel="Selecciona" itemValue="" /> -->
+				<!-- 									<f:selectItem itemLabel="Propietario" itemValue="P" /> -->
+
+				<!-- 									<p:ajax event="change" -->
+				<!-- 										update="mensajeConsejeroCalidadCap#{consejero.idTipoConsejero}" /> -->
+				<!-- 								</p:selectOneMenu> -->
+				<!-- 							</div> -->
+				<!-- 							<p:messages -->
+				<!-- 								id="mensajeConsejeroCalidadCap#{consejero.idTipoConsejero}" -->
+				<!-- 								for="informacionConsejerosRolCap#{consejero.idTipoConsejero}" /> -->
+
+				<!-- 						</div> -->
+
+
+				<!-- 					</c:if> -->
+
+				<!-- Calidad Consejero: Propietario/Suplente -->
+				<!-- 					<c:if -->
+				<!-- 						test="#{consejero.idTipoConsejero.intValue() != 1 and consejero.idTipoConsejero.intValue() != 2 and !mbGeneradorActa.calidadConsejeros}"> -->
+				<!-- 						<div class="ui-g-12 ui-md-12 ui-lg-3"> -->
+				<!-- 							<div class=" md-selectfield ui-g-12 ui-md-12 ui-lg-12"> -->
+				<!-- 								<p:outputLabel -->
+				<!-- 									for="informacionConsejerosRolCap#{consejero.idTipoConsejero}" -->
+				<!-- 									value="Calidad" /> -->
+
+				<!-- 								<p:selectOneMenu -->
+				<!-- 									id="informacionConsejerosRolCap#{consejero.idTipoConsejero}" -->
+				<!-- 									value="#{consejero.calidad}" -->
+				<!-- 									required="#{consejero.nombre != null and consejero.nombre ne ''}" -->
+				<!-- 									requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"> -->
+
+				<!-- 									<f:selectItem itemLabel="Selecciona" itemValue="" /> -->
+				<!-- 									<f:selectItem itemLabel="Propietario" itemValue="P" /> -->
+				<!-- 									<f:selectItem itemLabel="Suplente" itemValue="S" /> -->
+
+				<!-- 									<p:ajax event="change" -->
+				<!-- 										update="mensajeConsejeroCalidadCap#{consejero.idTipoConsejero}" /> -->
+				<!-- 								</p:selectOneMenu> -->
+				<!-- 							</div> -->
+				<!-- 							<p:messages -->
+				<!-- 								id="mensajeConsejeroCalidadCap#{consejero.idTipoConsejero}" -->
+				<!-- 								for="informacionConsejerosRolCap#{consejero.idTipoConsejero}" /> -->
+
+				<!-- 						</div> -->
+
+				<!-- 					</c:if> -->
+				<!-- 				</c:if> -->
+
+
+				<!-- *************************************** CALIDAD - VISTA MODIFICAR ******************************************** -->
+				<!-- Calidad Consejero: Propietario/Suplente -->
+				<!-- 				<c:if -->
+				<!-- 					test="#{mbGeneradorActa.isRendered(mbGeneradorActa.accionModificar)}"> -->
+				<c:if test="#{consejero.idTipoConsejero.intValue() == 1}">
+					<div class="ui-g-12 ui-md-12 ui-lg-3">
+						<div class=" md-selectfield">
+							<p:outputLabel
+								for="informacionConsejerosRolCap#{consejero.idTipoConsejero}"
+								value="Calidad" />
+							<!-- Para consejero presidente -->
+							<p:selectOneMenu
+								id="informacionConsejerosRolCap#{consejero.idTipoConsejero}"
+								value="#{consejero.calidad}">
+
+								<f:selectItem itemLabel="Selecciona" itemValue="" />
+								<f:selectItem itemLabel="Propietario" itemValue="P" />
+								<f:selectItem itemLabel="Suplente" itemValue="S" />
+
+								<p:ajax event="change"
+									update="mensajeConsejeroCalidadPreCap#{consejero.idTipoConsejero}" />
+							</p:selectOneMenu>
+						</div>
+						<p:messages
+							id="mensajeConsejeroCalidadPreCap#{consejero.idTipoConsejero}"
+							for="informacionConsejerosRolCap#{consejero.idTipoConsejero}" />
+					</div>
+				</c:if>
+
+
+				<!-- Para consejero secretario -->
+				<c:if
+					test="#{consejero.idTipoConsejero.intValue() == 2 and 
+						((empty mbGeneradorActa.usuario.getIdMunicipioSeleccionado()) or 
+									(mbGeneradorActa.usuario.getIdMunicipioSeleccionado() eq 0) or
+									(mbGeneradorActa.usuario.getIdMunicipioSeleccionado() lt 0))}">
+					<div class="ui-g-12 ui-md-12 ui-lg-3">
+						<div class=" md-selectfield">
+							<p:outputLabel
+								for="informacionConsejerosRolCap#{consejero.idTipoConsejero}"
+								value="Calidad" />
+
+							<p:selectOneMenu
+								id="informacionConsejerosRolCap#{consejero.idTipoConsejero}"
+								value="#{consejero.calidad}">
+
+								<f:selectItem itemLabel="Selecciona" itemValue="" />
+								<f:selectItem itemLabel="Encargado de despacho" itemValue="E" />
+								<f:selectItem itemLabel="Suplente" itemValue="S" />
+
+								<p:ajax event="change"
+									update="mensajeConsejeroCalidadSecCap#{consejero.idTipoConsejero}" />
+							</p:selectOneMenu>
+						</div>
+						<p:messages
+							id="mensajeConsejeroCalidadSecCap#{consejero.idTipoConsejero}"
+							for="informacionConsejerosRolCap#{consejero.idTipoConsejero}" />
+					</div>
+				</c:if>
+
+
+				<c:if
+					test="#{consejero.idTipoConsejero.intValue() == 2 and mbGeneradorActa.usuario.getIdMunicipioSeleccionado() > 0}">
+					<div class="ui-g-12 ui-md-12 ui-lg-3">
+						<div class=" md-selectfield">
+							<p:outputLabel
+								for="informacionConsejerosRolCap#{consejero.idTipoConsejero}"
+								value="Calidad" />
+
+							<p:selectOneMenu
+								id="informacionConsejerosRolCap#{consejero.idTipoConsejero}"
+								value="#{consejero.calidad}">
+
+
+								<f:selectItem itemLabel="Selecciona" itemValue="" />
+								<f:selectItem itemLabel="Titular" itemValue="T" />
+
+								<p:ajax event="change"
+									update="mensajeConsejeroCalidadSecCap#{consejero.idTipoConsejero}" />
+							</p:selectOneMenu>
+						</div>
+						<p:messages
+							id="mensajeConsejeroCalidadSecCap#{consejero.idTipoConsejero}"
+							for="informacionConsejerosRolCap#{consejero.idTipoConsejero}" />
+					</div>
+				</c:if>
+
+
+				<!-- Calidad Consejero: Propietario/Suplente -->
+				<c:if
+					test="#{consejero.idTipoConsejero.intValue() != 1 and consejero.idTipoConsejero.intValue() != 2 and mbGeneradorActa.calidadConsejeros}">
+					<div class="ui-g-12 ui-md-12 ui-lg-3">
+						<div class=" md-selectfield ui-g-12 ui-md-12 ui-lg-12">
+							<p:outputLabel
+								for="informacionConsejerosRolCap#{consejero.idTipoConsejero}"
+								value="Calidad" rendered="#{mbGeneradorActa.calidadConsejeros}" />
+
+							<p:selectOneMenu
+								id="informacionConsejerosRolCap#{consejero.idTipoConsejero}"
+								value="#{consejero.calidad}">
+
+								<f:selectItem itemLabel="Selecciona" itemValue="" />
+								<f:selectItem itemLabel="Propietario" itemValue="P" />
+
+								<p:ajax event="change"
+									update="mensajeConsejeroCalidadCap#{consejero.idTipoConsejero}" />
+							</p:selectOneMenu>
+						</div>
+						<p:messages
+							id="mensajeConsejeroCalidadCap#{consejero.idTipoConsejero}"
+							for="informacionConsejerosRolCap#{consejero.idTipoConsejero}" />
+
+					</div>
+
+
+				</c:if>
+
+				<!-- Calidad Consejero: Propietario/Suplente -->
+				<c:if
+					test="#{consejero.idTipoConsejero.intValue() != 1 and consejero.idTipoConsejero.intValue() != 2 and !mbGeneradorActa.calidadConsejeros}">
+					<div class="ui-g-12 ui-md-12 ui-lg-3">
+						<div class=" md-selectfield ui-g-12 ui-md-12 ui-lg-12">
+							<p:outputLabel
+								for="informacionConsejerosRolCap#{consejero.idTipoConsejero}"
+								value="Calidad" />
+
+							<p:selectOneMenu
+								id="informacionConsejerosRolCap#{consejero.idTipoConsejero}"
+								value="#{consejero.calidad}">
+
+								<f:selectItem itemLabel="Selecciona" itemValue="" />
+								<f:selectItem itemLabel="Propietario" itemValue="P" />
+								<f:selectItem itemLabel="Suplente" itemValue="S" />
+
+								<p:ajax event="change"
+									update="mensajeConsejeroCalidadCap#{consejero.idTipoConsejero}" />
+							</p:selectOneMenu>
+						</div>
+						<p:messages
+							id="mensajeConsejeroCalidadCap#{consejero.idTipoConsejero}"
+							for="informacionConsejerosRolCap#{consejero.idTipoConsejero}" />
+
+					</div>
+
+					<!-- 					</c:if> -->
+				</c:if>
+
+			</c:forEach>
+
+		</p:outputPanel>
+
+	</div>
+
+</ui:composition>

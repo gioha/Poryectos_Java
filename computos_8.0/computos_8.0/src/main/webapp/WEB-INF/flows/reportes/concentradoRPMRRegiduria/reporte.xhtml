@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:deceyec="http://ine.mx/ui" template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+		<!-- LAS ETIQUETAS SE ENCUENTRAN EN APPLICATIONRESOURCES.PROPERTIES -->
+		<!-- LAS CONSTANTES SE ENCUENTRAN EN GENERICCONSTANTS.PROPERTIES -->
+		<!-- BLOCKUI-->
+		<pe:blockUI id="progress" target="formReportes"
+			content="blockUIContent" widgetVar="progress" />
+		<!-- BLOCKUICONTENT -->
+		<h:panelGrid id="blockUIContent" columns="2" style="display:none;">
+			<h:graphicImage library="img" name="loader.gif" width="70" />
+			<h:outputText
+				value="#{messageSource['mensaje_generales_procesando']}"
+				style="white-space: nowrap;" />
+		</h:panelGrid>
+
+		<script type="text/javascript">
+			function handleResponse(xhr, status, args) {
+				if (args.validationFailed) {
+					window.scrollTo(0, 0);
+				}
+			}
+			$("body").click(function(event) {
+				event.target.focus();
+			});
+		</script>
+
+		<h:form id="formReportes" styleClass="container">
+			<!-- IMPORTANTE, DEJAR UN COMMAND BUTTON VACIO AL INICIO DEL FORM -->
+			<p:commandButton style="display: none;" />
+			<pe:inputNumber style="display:none" />
+
+			<div class="ui-g" style="margin: 0px;">
+				<!-- Mensajes -->
+				<p:messages id="msj" closable="false" for="mensaje"
+					styleClass="ui-g-12" style="margin-top: 0px;" />
+				<div id="mensaje" />
+			</div>
+
+			<div>
+				<ui:include src="../componentes/menuFiltros_Regidurias.xhtml" />
+			</div>
+
+			<p:outputPanel id="panelTabla">
+				<p:outputPanel rendered="#{not empty mbReporte.lazyData}">
+					<p:dataTable id="encabezadoGenericReport" value="#"
+						resizableColumns="false">
+						<f:facet name="header">
+							<h:outputText value="" />
+						</f:facet>
+						<!-- ENCABEZADO FIJO TABLA -->
+						<p:columnGroup type="header">
+							<c:if
+								test="#{mbReporte.dtoParametros.columnas != null and mbReporte.dtoParametros.columnas > 0 and mbReporte.lazyData.numColumnas != 0}">
+								<p:row>
+									<p:column colspan="2"
+										headerText="#{mbReporte.dtoParametros.tituloReporte}"
+										styleClass="ui-state-default" style="text-align: center" />
+								</p:row>
+
+								<p:row>
+									<p:column colspan="1"
+										headerText="Entidad federativa: #{mbReporte.dtoParametros.descEntidad}"
+										styleClass="ui-state-default" style="text-align: center" />
+									<p:column colspan="1"
+										headerText="Fecha y hora de impresión: #{mbReporte.dtoParametros.fechaHora} hrs."
+										styleClass="ui-state-default" style="text-align: right" />
+								</p:row>
+							</c:if>
+						</p:columnGroup>
+					</p:dataTable>
+					<p:dataTable id="genericReport" value="#{mbReporte.lazyData}"
+						var="lineResult" widgetVar="tabla" paginator="true" rows="20"
+						currentPageReportTemplate="({currentPage} de {totalPages})"
+						paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="20,80,150,200" lazy="true"
+						emptyMessage="#{messageSource['etiqueta_reporte_sin_datos']}"
+						resizableColumns="false" resizeMode="expand"
+						paginatorPosition="bottom" tableStyle="table-layout: auto;">
+						<!-- EVENTOS AJAX -->
+						<p:ajax event="page" update="genericReport" />
+
+						<!-- ENCABEZADO ASOCIACIONES -->
+						<p:columnGroup type="header">
+							<c:if
+								test="#{mbReporte.dtoParametros.columnas != null and mbReporte.dtoParametros.columnas > 0 and mbReporte.lazyData.numColumnas != 0}">
+								<c:forEach items="#{mbReporte.dtoParametros.encabezado}" var="e">
+									<p:row>
+										<c:forEach items="#{e.index}" var="i">
+											<p:column colspan="#{e.ancho.get(i)}"
+												rowspan="#{e.alto.get(i)}" styleClass="ui-state-default"
+												headerText="#{e.descEncabezado.get(i)}" />
+
+										</c:forEach>
+									</p:row>
+								</c:forEach>
+							</c:if>
+						</p:columnGroup>
+
+						<!-- DATOS DEL REPORTE -->
+						<c:forEach var="j" begin="0"
+							end="#{mbReporte.lazyData.numColumnas-1}">
+							<p:column style="text-align: center">
+								<h:outputText value="#{lineResult[j]}" style="width:20px;" />
+							</p:column>
+						</c:forEach>
+					</p:dataTable>
+
+					<h3>#{messageSource['etiqueta_exportar_reporte']}</h3>
+					<h:commandLink>
+						<i class="fa fa-file-excel-o  fa-4x" aria-hidden="true"></i>
+						<p:dataExporter type="xls" target="genericReport"
+							fileName="reporteResultadoComputoPorDemarcacion" pageOnly="false"
+							postProcessor="#{mbReporte.postProcessXLS}" />
+
+					</h:commandLink>
+				</p:outputPanel>
+			</p:outputPanel>
+			<!-- BOTON REGRESAR -->
+<!-- 			<div class="ui-g"> -->
+<!-- 		        <div class="ui-g-12 ui-md-12 ui-ld-12"> -->
+<!-- 					<div class="center-block text-center"> -->
+<!-- 						<p:commandButton icon="ui-icon-arrow-1-w" -->
+<!-- 							             action="regresar" value="Regresar"  -->
+<!-- 							             immediate="true" process="@this"/> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+		</h:form>
+	</ui:define>
+</ui:composition>

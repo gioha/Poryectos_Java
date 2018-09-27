@@ -1,0 +1,113 @@
+#---------------------------------------------------------------------------------
+# 					      MENSAJES Y ETIQUEDAS GENERICAS
+#
+# Contiene las constantes que se utilizan en el sistema
+#
+# Nomenclatura constantes: constante_general_"nombre de la constante"
+#---------------------------------------------------------------------------------
+
+####### GENERALES  #######
+constante_generica_idSistema											   = 10
+constante_generica_ubicacion_usuario									   = UNIDAD DE SERVICIOS DE INFORM\u00C1TICA
+
+####### DURACION DE MENSAJES  ####### 
+constante_generica_duracion_mensaje_info								   = 5000
+
+####### TAMAÑO MÁXIMO ARCHIVO  ####### 
+# 1MB
+constante_generica_tamano_maximo_archivo								   = 1000000
+
+####### CORREO ELECTRONICO ####### 
+constante.generica.cuentaCorreoDefault                        			   = sistemas.pef2015@ine.mx
+
+####### LOGIN ####### 
+application.captcha  													   = true
+
+####### AÑO BASE ####### 
+constante_generica_year_base  											   = 2015
+
+####### VERSIONES DE ROL ####### 
+constante_version_rol_oc	  											   = OC
+constante_version_rol_jl	  											   = JL
+constante_version_rol_jm	  											   = JM
+constante_version_rol_ople	  											   = OPLE
+constante_version_rol_confi	  											   = CONFI
+constante_version_rol_consejero											   = CONSEJERO
+constante_version_rol_mapas	  											   = MAPAS
+
+######  Inicial grupos LDAP  ####### 
+constante_roles_sistema														= COMPUTOS
+
+######  CONSTANTES INSTALACI�N  #######
+constante_instalacion_ora-00001                                             = ORA-00001\:
+constante_instalacion_ORA-02291                                             = ORA-02291
+constante_instalacion_INSTALACIONUK2                                        = INSTALACIONUK2
+constante_instalacion_SIJEINE_INSTALACIONUK1                                = SIJEINE_INSTALACIONUK1
+constante_instalacion_ora-000011                                            = ORA-00001
+
+#---------------------------------------------------------------------------------
+# 									CONSTANTES MODULOS
+#---------------------------------------------------------------------------------
+
+####	CONSTANTE IDENTIFICADOR PARA EL MODULO DIPUTADOS RP
+constante_modulo_diputadosRP				= DIPUTADOSRP
+####	CONSTANTE IDENTIFICADOR PARA EL MODULO REGIDURIAS RP
+constante_modulo_regiduriasRP				= REGIDURIASRP
+####	CONSTANTE IDENTIFICADOR PARA EL TIPO CASILLA S-ESPECIAL
+constante_tipoCasilla_s						= S
+
+####	CONSTANTE IDENTIFICADOR PARA EL TIPO DE CANDIDATURA PARA DIPUTADOS RP [ORIGEN INFORMACION: WS->SNR/servicioCandidatos/obtenTiposCandidaturas]
+constante_idTipoCandidatura_DRP				= 8
+####	CONSTANTE IDENTIFICADOR PARA EL NOMBRE CORTO DEL TIPO DE CANDIDATURA PARA DIPUTADOS RP [ORIGEN INFORMACION: WS->SNR/servicioCandidatos/obtenTiposCandidaturas]
+constante_nombreCortoTipoCand_DRP			= DIPUTADO LOCAL RP
+####	CONSTANTE IDENTIFICADOR PARA EL TIPO DE CANDIDATURA PARA REGIDURIAS RP [ORIGEN INFORMACION: WS->SNR/servicioCandidatos/obtenTiposCandidaturas]
+constante_idTipoCandidatura_RRP				= 16
+####	CONSTANTE IDENTIFICADOR PARA EL NOMBRE CORTO DEL TIPO DE CANDIDATURA PARA REGIDURIAS RP [ORIGEN INFORMACION: WS->SNR/servicioCandidatos/obtenTiposCandidaturas]
+constante_nombreCortoTipoCand_RRP			= REGIDOR FISCALIZABLE RP
+####	CONSTANTE IDENTIFICADOR 1.- CONTABILIZA EN EL PROCESO DE CAPTURA.
+constante_capturada_1		 				= 1
+####	CONSTANTE IDENTIFICADOR 0.- Aun no se contabiliza.
+constante_capturada_0		 				= 0
+####	CONSTANTE IDENTIFICADOR PARA EL ESTATUS DE LA CASILLA 5.- Recuento total
+constante_estatus_recuentoTotal				= 5
+
+####	CONSTANTE IDENTIFICADOR PARA EL ESTATUS DE LA CASILLA 3.- Casilla no instalada
+constante_estatus_CasillaNoInstalada		= 3
+####	CONSTANTE IDENTIFICADOR PARA EL ESTATUS DE LA CASILLA 4.- Paquete no entregado
+constante_estatus_PaqueteNoEntregado		= 4
+
+####	CONSTANTE IDENTIFICADOR PARA EL TIPO ASOCIACION AUXILIAR DE CANDIDATOS NO REGISTRADOS
+constante_tipoAsociacionAux_canNoReg		= 15
+####	CONSTANTE IDENTIFICADOR PARA EL TIPO ASOCIACION AUXILIAR DE VOTOS NULOS
+constante_tipoAsociacionAux_votosNulos		= 16
+
+####	CONSTANTE IDENTIFICADOR PARA EL ORDEN AUXILIAR DE CANDIDATOS NO REGISTRADOS
+constante_idAsociacionAux_canNoReg		 	= 1
+####	CONSTANTE IDENTIFICADOR PARA EL ORDEN AUXILIAR DE DE VOTOS NULOS
+constante_idAsociacionAux_votosNulos	 	= 1
+
+####	CONSTANTE IDENTIFICADOR PARA EL ORDEN DE CANDIDATOS NO REGISTRADOS
+constante_orden_canNoRegistrado				= 1
+####	CONSTANTE IDENTIFICADOR PARA EL ORDEN DE VOTOS NULOS
+constante_orden_votosNulos					= 2
+
+####	CONSTANTE IDENTIFICADOR PARA EL ID ASOCIACION DE CANDIDATOS NO REGISTRADOS
+constante_idAsociacion_canNoRegistrado		= -1
+####	CONSTANTE IDENTIFICADOR PARA EL TIPO ASOCIACION DE CANDIDATOS NO REGISTRADOS
+constante_tipoAsociacion_canNoRegistrado 	= -1
+####	CONSTANTE IDENTIFICADOR PARA EL ID ASOCIACION DE VOTOS NULOS
+constante_idAsociacion_votosNulos			= -2
+####	CONSTANTE IDENTIFICADOR PARA EL TIPO ASOCIACION DE VOTOS NULOS
+constante_tipoAsociacion_votosNulos		 	= -2
+
+####	CONSTANTE IDENTIFICADOR PARA EL ID_COALICION PARA CUANDO NO TIENE UN VALOR, POR EL TIPO DE ECENARIO QUE PRESENTA
+constante_idCoalicion					 	= -10
+####	CONSTANTE IDENTIFICADOR PARA EL ID_DISTRITO PARA CUANDO NO TIENE UN VALOR, POR EL TIPO DE ECENARIO QUE PRESENTA
+constante_idDistrito					 	= -5
+####	CONSTANTE IDENTIFICADOR PARA EL ID_MUNICIPIO PARA CUANDO NO TIENE UN VALOR, POR EL TIPO DE ECENARIO QUE PRESENTA
+constante_idMunicipio					 	= -6
+####	CONSTANTE IDENTIFICADOR PARA EL ID_REGIDURIA PARA CUANDO NO TIENE UN VALOR, POR EL TIPO DE ECENARIO QUE PRESENTA
+constante_idRegiduria					 	= -7
+####	CONSTANTE IDENTIFICADOR PARA EL ID_COMUNIDAD PARA CUANDO NO TIENE UN VALOR, POR EL TIPO DE ECENARIO QUE PRESENTA
+constante_idComunidad					 	= -8
+

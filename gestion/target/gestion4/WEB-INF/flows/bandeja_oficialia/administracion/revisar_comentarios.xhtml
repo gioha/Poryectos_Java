@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sec="http://www.springframework.org/security/tags">
+
+	<p:dialog id="dialog_revisar_comentarios" modal="true"
+		widgetVar="dialog_revisar_comentarios" styleClass="ventanaEmergenteEnvio" height="500" width="700" >
+		<p:ajax event="close" listener="#{mbBandejaOficialia.leerComentarios}" update=":formBorradores:dialog_revisar_comentarios"/>
+
+		<p:outputPanel id="panelComentarios">
+
+			<div class="container">
+
+				<div class="row">
+				
+				<h:outputText value="Comentarios leídos" />
+				
+					<p:dataTable id="tablaComentariosLeidos"
+						value="#{mbBandejaOficialia.listaComentariosLeidos}"
+						var="comentariosLeidos"
+						emptyMessage="#{mbBandejaOficialia.mensajeTablaVacia}" scrollable="true"
+						scrollHeight="100">		
+
+						<p:column headerText="Comentarios">
+							<h:outputText value="#{comentariosLeidos.comentarios}" />
+						</p:column>
+
+						<p:column headerText="Comentario de " >
+							<h:outputText value="#{comentariosLeidos.usuarioComento}" />
+						</p:column>
+
+					</p:dataTable>
+
+				</div>
+
+				<div class="row">
+				
+				<h:outputText value="Comentarios no leídos" />
+				
+					<p:dataTable id="tablaComentariosNoLeidos"
+						value="#{mbBandejaOficialia.listaComentariosNoLeidos}"
+						var="comentariosNoLeidos"
+						emptyMessage="#{mbBandejaOficialia.mensajeTablaVacia}" scrollable="true"
+						scrollHeight="100">		
+
+						<p:column headerText="Comentarios">
+							<h:outputText value="#{comentariosNoLeidos.comentarios}" />
+						</p:column>
+
+						<p:column headerText="Comentario de">
+							<h:outputText value="#{comentariosNoLeidos.usuarioComento}" />
+						</p:column>
+
+					</p:dataTable>
+
+				</div>
+
+			</div>
+		</p:outputPanel>
+
+	</p:dialog>
+</ui:composition>

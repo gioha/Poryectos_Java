@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+      abstract="true">
+
+	<end-state id="esHome" view="externalRedirect:servletRelative:/app/home"/>
+
+	<view-state id="vsError" view="externalRedirect:servletRelative:/error" />
+	
+	<view-state id="vsErrorNoRegistrado" view="externalRedirect:servletRelative:/app/vista_usuario_no_registrado" />
+
+	<global-transitions>
+		<transition on="home" to="esHome"/>			
+	</global-transitions>
+
+</flow>

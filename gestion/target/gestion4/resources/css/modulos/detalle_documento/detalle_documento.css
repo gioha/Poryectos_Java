@@ -1,0 +1,98 @@
+/*-------------------------------------------------*/
+/* Hoja de Estilos para la ventana de historial    */
+/*       	de creacón de documento                */
+/*  v1     Release Date 08 de enero de 2018        */
+/*-------------------------------------------------*/
+
+.ventanaDetalleDocumento.ui-dialog .ui-dialog-content {
+	padding: 0px 0px 30px 0px !important;
+	font-family: Roboto;
+}
+
+.ventanaDetalleDocumento {
+	border: 1px solid #a0005f;
+}
+
+#row_anexo {
+	height: 40px;
+	margin: 0px;
+	padding: 0px;
+	 
+}
+
+#row_anexo {
+	height: 40px;
+	margin: 0px;
+	padding: 0px;
+	 
+}
+
+#historial,
+#anexo {
+	height: 30px;
+	font-family: roboto;
+	font-size: 13px;
+	margin: 0px;
+	padding: 0px;
+	padding-top: 5px;
+	text-align: left;
+	width:110px;
+}
+
+#historial2,
+#anexo2 {
+	font-family: roboto;
+	font-size: 13px;
+	margin: 0px;
+	padding: 0px;
+	text-align: left;
+}
+
+#historial2 .ui-button-text-only .ui-button-text,
+#anexo2 .ui-button-text-only .ui-button-text {
+	padding: 0px;
+	color: black;
+	font-size: 14px;
+}
+
+#historial2 .ui-button,
+#anexo2 .ui-button {
+	box-shadow : none;
+	background: #cccccc !important;
+}
+
+#historial2 .ui-button.ui-state-default.ui-state-hover,
+#anexo2 .ui-button.ui-state-default.ui-state-hover {
+	background: #f7cce5 !important;
+	border: none !important;
+}
+
+#historial2 .ui-button.ui-state-default.ui-state-hover .ui-button-text,
+#anexo2 .ui-button.ui-state-default.ui-state-hover .ui-button-text {
+	color: #a0005f;
+}
+
+
+#tituloDetalle {
+	color: #a0005f;
+}
+
+#tituloDetalle:after {
+	padding: 2px;
+	border-bottom: 4px solid #a0005f !important;
+}
+
+#subtituloDetalle {
+	padding: 10px 40px 10px 40px;
+}
+
+#subtituloDetalle:after {
+	padding: 3px;
+	border-bottom: 1px solid #a0005f !important
+}
+
+/** ******************************* DATATABLE ******************************* **/
+
+.tablasDetalleDocumento.ui-datatable thead th {
+	border-top: none !important;
+}

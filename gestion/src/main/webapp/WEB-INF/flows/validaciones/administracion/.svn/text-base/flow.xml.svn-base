@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+	start-state="validaRegistroEnGestion" parent="parent-flow">
+	
+	<var name="mbValidacion" class="mx.ine.gestion.mb.MBValidacion"/>	
+	
+	<!-- Flujos Internos -->
+		
+	<view-state id="administracion_firma" view="validaciones.xhtml">
+		<on-entry>
+			<evaluate expression="mbValidacion.iniciar()"/>
+		</on-entry>
+	</view-state>
+
+	<!-- Validación para revisar que el usuario con el se este accediendo ya se encuentre registrado en el Organigrama -->
+	<decision-state id="validaRegistroEnGestion">
+		
+		<on-entry>
+			<set name="mbAdministrador.menuSelecionado" value="resourceBundle['id_modulo_validacion']"/>		
+		</on-entry>
+		
+		<if test="currentUser.principal.usuarioNoRegistradoEnGestion" then="vsErrorNoRegistrado" else="administracion_firma"/>
+	
+	</decision-state>
+
+</flow>

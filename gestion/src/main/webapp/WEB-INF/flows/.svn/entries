@@ -1,0 +1,107 @@
+10
+
+dir
+342112
+svn+ssh://giovanni.hernandez@10.0.1.85/repositorio/DIS-UNICOM/Codigo/2017/Gestion_Inst/Gestion_4.0/trunk/src/main/webapp/WEB-INF/flows
+svn+ssh://giovanni.hernandez@10.0.1.85/repositorio/DIS-UNICOM
+
+
+
+2018-02-16T01:30:53.795102Z
+341173
+homero.villanueva
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+b6cf43f3-9c2e-435a-add6-29cfb2289967
+
+apartado_folios
+dir
+
+bandeja
+dir
+
+bandeja_oficialia
+dir
+
+captura_documento
+dir
+
+configuracion
+dir
+
+configuracion_oficialia
+dir
+
+estructura
+dir
+
+firma
+dir
+
+home
+dir
+
+oficialia_partes
+dir
+
+parent-flow.xml
+file
+
+
+
+
+2018-02-19T23:27:03.643000Z
+97743f438701dcb040407bf472db4339
+2018-01-16T21:27:50.263929Z
+329961
+roberto.shirasago
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+710
+
+reportes_oficialia
+dir
+
+seleccion_rol
+dir
+
+validaciones
+dir
+
+vista_limitada
+dir
+
+vista_usuario_no_registrado
+dir
+

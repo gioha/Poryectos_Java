@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sf="http://www.springframework.org/tags/faces"
+				xmlns:sec="http://www.springframework.org/security/tags"
+				template="/templates/template.xhtml">
+				
+	<ui:define name="CONTENT">
+		<h:outputStylesheet library="css" name="catalogos/catalogo-usuarios.css" />
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12">
+					<ol class="breadcrumb" style="background-color: #FFFFFF;">
+						<li>
+							<a href="${request.contextPath}/app/home"> 
+								<h:outputText value="Home" />
+							</a>
+						</li>
+						<li>
+							<a href="${request.contextPath}/app/catalogos"> 
+								#{messageSource['lbl_titulo_administracion_home']}
+							</a>
+						</li>
+						<li class="active">#{messageSource['lbl_catalogo_usuarios']} - #{messageSource['etiqueta_menu_accion_capturar']}</li>
+					</ol>
+				</div>
+				<div class="col-xs-12">
+					<h1 class="lblTituloForm robotoRegular">#{messageSource['lbl_modulo_catalogo_usuarios']}</h1>
+				</div>
+				<c:if test="#{!mbCatalogoUsuarios.esTitularAreaSinRegistro}">
+					<div class="col-xs-12 text-right">
+						<div class="tabs-catalogo">
+							<div class="activo">
+							    <a> 
+									<h:outputText value="Capturar" />
+								</a>
+							</div>
+							<div>
+								<a href="${request.contextPath}/app/catalogos/usuarios/consulta"> 
+									<h:outputText value="Consultar" />
+								</a>
+							</div>
+							<div>
+								<a href="${request.contextPath}/app/catalogos/usuarios/modifica"> 
+									<h:outputText value="Modificar" />
+								</a>
+							</div>
+							<hr/>
+						</div>
+					</div>
+				</c:if>
+				<c:if test="#{mbCatalogoUsuarios.esTitularAreaSinRegistro}">
+					<div class="col-xs-12">
+						<div class="alert alert-info">
+							#{messageSource['lbl_confirma_datos_titular_area']}
+						</div>
+					</div>
+				</c:if>
+				<div class="col-xs-12">
+					<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" globalOnly="true" showSummary="false" />
+					<!-- <p:growl id="growl" showDetail="true" sticky="true" /> -->
+				</div>
+				<c:if test="#{!mbCatalogoUsuarios.esTitularAreaSinRegistro}">
+					<p:outputPanel id="panel-principal">
+						<h:form id="form-busqueda">
+							<div class="col-xs-12 subtitulo">
+								<h4>#{messageSource['lbl_busqueda']}</h4>
+								<hr/>
+								<div class="text-right">
+									<span class="label label-busqueda">
+										#{messageSource['lbl_validacion_busqueda']}
+									</span>
+								</div>
+							</div>
+					        <div class="col-xs-12 col-md-6 espaciador-top">
+					        	<div>
+									<h:outputLabel for="nombres-busqueda"
+										value="#{messageSource['lbl_nombre_busqueda']}" />
+								</div>
+								<p:inputText id="nombres-busqueda"
+									value="#{mbCatalogoUsuarios.formCatalogoUsuarios.nombreBusqueda}"
+									styleClass="inputsForm" />
+							</div>
+					        <div class="col-xs-12 col-md-6 espaciador-top">
+								<div>
+									<h:outputLabel for="apellidos-busqueda"
+										value="#{messageSource['lbl_apellidos_busqueda']}" />
+								</div>
+								<p:inputText id="apellidos-busqueda"
+									value="#{mbCatalogoUsuarios.formCatalogoUsuarios.apellidosBusqueda}"
+									styleClass="inputsForm" />
+							</div>
+					        <div class="col-xs-12 col-md-6 espaciador-xs-top">
+								<div>
+									<h:outputLabel for="usuario-busqueda"
+										value="#{messageSource['lbl_usuario_busqueda']}" />
+								</div>
+								<p:inputText id="usuario-busqueda"
+									value="#{mbCatalogoUsuarios.formCatalogoUsuarios.usuarioBusqueda}"
+									styleClass="inputsForm" />
+							</div>
+					        <div class="col-xs-12 col-md-6 espaciador-xs-top">
+								<div>
+									<h:outputLabel for="area-adscripcion"
+										value="#{messageSource['lbl_area_adscripcion']}" />
+								</div>
+								<p:inputText id="area-adscripcion"
+									value="#{mbCatalogoUsuarios.formCatalogoUsuarios.areaAdscripcion}"
+									styleClass="inputsForm" />
+							</div>
+					        <div class="col-xs-12 text-center espaciador-top">
+								<p:commandButton id="btnBuscar"
+									value="#{messageSource['etiqueta_boton_buscar']}"
+									styleClass="btnAC robotoBold"
+									actionListener="#{mbCatalogoUsuarios.buscaLdap}"
+									onstart="return validaComposBusqueda()" 
+	            					oncomplete="escondeCargando()"
+									update="tabla-responsables panel-datos" />
+							</div>
+							<div id="contenedor-tabla-responsables" class="col-xs-12 espaciador-top">
+								<p:dataTable
+									id="tabla-responsables"
+									var="responsable"
+									value="#{mbCatalogoUsuarios.formCatalogoUsuarios.responsables}"
+									reflow="true"
+									rows="5"
+									paginator="true"
+									selectionMode="single"
+									selection="#{mbCatalogoUsuarios.formCatalogoUsuarios.responsable}"
+									rowKey="#{responsable.cuentaLdap}"
+									emptyMessage="No se encontraron resultados"
+									widgetVar="tablaResponsables"
+									rowIndexVar="rindex"
+									paginatorPosition="top">
+									<p:ajax event="rowSelect" listener="#{mbCatalogoUsuarios.verificaDatosConBD}" update="panel-datos" />
+									<p:column headerText="" styleClass="radio-column">
+										<input type="radio" name="radio-responsable" onclick="PF('tablaResponsables').unselectAllRows(); PF('tablaResponsables').selectRow(#{rindex});" />
+									</p:column>
+								    <p:column headerText="#{messageSource['lbl_nombre_busqueda']}" sortBy="#{responsable.nombre}">
+								        <h:outputText value="#{responsable.nombre}" />
+								    </p:column>
+								 
+								    <p:column headerText="#{messageSource['lbl_apellidos_busqueda']}" sortBy="#{responsable.apellidos}">
+								        <h:outputText value="#{responsable.apellidos}" />
+								    </p:column>
+								 
+								    <p:column headerText="#{messageSource['lbl_usuario_busqueda']}" sortBy="#{responsable.cuentaLdap}">
+								        <h:outputText value="#{responsable.cuentaLdap}" />
+								    </p:column>
+								 
+								    <p:column headerText="#{messageSource['lbl_area_adscripcion']}" sortBy="#{responsable.nomNivelArea}">
+								        <h:outputText value="#{responsable.nomNivelArea}" />
+								    </p:column>
+								</p:dataTable>
+							</div>
+							<div id="cargando" class="col-xs-12 espaciador-top esconde">
+					            <div class="spinner">
+					                #{messageSource['lbl_cargando']}
+					                <div class="rect1"></div>
+					                <div class="rect2"></div>
+					                <div class="rect3"></div>
+					                <div class="rect4"></div>
+					                <div class="rect5"></div>
+					            </div>
+					        </div>
+						</h:form>
+				    </p:outputPanel>
+				</c:if>
+			    <p:outputPanel id="panel-datos">
+			    	<c:if test="#{mbCatalogoUsuarios.formCatalogoUsuarios.responsable != null}">
+			    		<div id="inicio-datos-usuario"
+			    			class="col-xs-12 subtitulo espaciador-lg-top #{mbCatalogoUsuarios.esTitularAreaSinRegistro ? 'reduce-espaciado' : ''}">
+				    		<h4>#{messageSource['lbl_datos_usuario']}</h4>
+				    		<hr/>
+				    	</div>
+				    	<div class="col-xs-12 col-md-6 espaciador-top">
+				    		<p:outputLabel>#{messageSource['lbl_nombre_etiqueta']}:</p:outputLabel>
+				    		<p:outputLabel styleClass="label-responsable">
+				    			#{mbCatalogoUsuarios.formCatalogoUsuarios.responsable.nombre}
+				    			#{mbCatalogoUsuarios.formCatalogoUsuarios.responsable.apellidos}
+				    		</p:outputLabel>
+				    	</div>
+				    	<div class="col-xs-12 col-md-6 espaciador-top">
+				    		<p:outputLabel>#{messageSource['lbl_usuario_busqueda']}:</p:outputLabel>
+				    		<p:outputLabel styleClass="label-responsable">
+				    			#{mbCatalogoUsuarios.formCatalogoUsuarios.responsable.cuentaLdap}
+			    			</p:outputLabel>
+				    	</div>
+				    	<c:if test="#{!mbCatalogoUsuarios.formCatalogoUsuarios.existeResponsableBD}">
+				    		<h:form id="form-responsable">
+					    		<div class="col-xs-12 col-md-6 espaciador-xs-top">
+						    		<p:outputLabel styleClass="label-bold">#{messageSource['lbl_area_adscripcion']}:</p:outputLabel>
+						    		<p:outputLabel>#{mbCatalogoUsuarios.formCatalogoUsuarios.responsable.nomNivelArea}</p:outputLabel>
+						    		<div id="contenedor-cambia-area-checbox">
+						    			<p:selectBooleanCheckbox
+						    				id="cambia-area-check"
+						    				value="#{mbCatalogoUsuarios.formCatalogoUsuarios.cambiaArea}"
+						    				disabled="#{mbCatalogoUsuarios.formCatalogoUsuarios.responsable.idArea == null}">
+						    				<p:ajax event="change" update="panel-area-ine" /> 
+							    		</p:selectBooleanCheckbox>
+							    		<p:outputLabel for="cambia-area-check">#{messageSource['lbl_cambia_area']}</p:outputLabel>
+						    		</div>
+						    		<script>
+							    		$('#panel-datos input[type=checkbox]').change(function() {
+							    			$(this).parents('#contenedor-cambia-area-checbox')
+							    				.find('.ui-chkbox-icon').toggleClass('ui-icon-check ui-icon-blank');
+							    		});
+						    		</script>
+						    	</div>
+						    	<div class="col-xs-12 col-md-6 espaciador-xs-top">
+						    		<p:outputPanel id="panel-area-ine">
+						    			<c:if test="#{mbCatalogoUsuarios.formCatalogoUsuarios.cambiaArea}">
+						    				<div>
+						    					<span class="asterisco-requerido">#{messageSource['etiqueta_simbolo_asterisco']}</span>
+						    					<p:outputLabel>#{messageSource['lbl_area_ine']}</p:outputLabel>
+						    				</div>
+								    		<p:selectOneMenu id="area-ine"
+												value="#{mbCatalogoUsuarios.formCatalogoUsuarios.responsable.idArea}"
+												required="true"
+												requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+												styleClass="inputsForm">
+												<f:selectItem itemLabel="#{messageSource['lbl_selecciona_opcion']}" itemValue="" />
+												<f:selectItems
+													value="#{mbCatalogoUsuarios.formCatalogoUsuarios.areas}"
+													var="area"
+													itemValue="#{area.id.idArea}"
+													itemLabel="#{area.descripcion}" />
+											</p:selectOneMenu>
+											<p:message for="area-ine" display="text" />
+										</c:if>
+						    		</p:outputPanel>
+						    	</div>
+						    	<div class="clearfix"></div>
+						    	<c:if test="#{!mbCatalogoUsuarios.esTitularAreaSinRegistro}">
+						    		<div class="col-xs-12 col-md-6 espaciador-xs-top">
+							    		<div>
+							    			<span class="asterisco-requerido">#{messageSource['etiqueta_simbolo_asterisco']}</span>
+							    			<p:outputLabel>#{messageSource['lbl_pregunta_titular']}</p:outputLabel>
+							    		</div>
+							    		<p:selectOneRadio
+							    			id="tipo-responsable"
+							    			value="#{mbCatalogoUsuarios.formCatalogoUsuarios.responsable.tipoResponsable}"
+							    			required="true"
+											requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}">
+									            <f:selectItem itemLabel="#{messageSource['etiqueta_generales_si']}" itemValue="1" />
+									            <f:selectItem itemLabel="#{messageSource['etiqueta_generales_no']}" itemValue="2" />
+								        </p:selectOneRadio>
+								        <p:message for="tipo-responsable" display="text" />
+							    	</div>
+						    	</c:if>
+						    	<div class="col-xs-12 text-center espaciador-top">
+						    		<p:commandButton id="btnAceptar"
+										value="#{messageSource['etiqueta_boton_aceptar']}"
+										styleClass="btnAC robotoBold"
+										ajax="false"
+										action="#{mbCatalogoUsuarios.guardaResponsable}" />
+						    	</div>
+					    	</h:form>
+				    	</c:if>
+				    	<c:if test="#{mbCatalogoUsuarios.formCatalogoUsuarios.existeResponsableBD}">
+				    		<div class="col-xs-12 espaciador-xs-top">
+				    			<div class="alert alert-info text-center" role="alert">
+				    				#{messageSource['lbl_usuario_ya_registrado']}
+					    		</div>
+				    		</div>
+				    	</c:if>
+			    	</c:if>
+			    </p:outputPanel>
+			    <div class="col-xs-12" id="fin-pagina"></div>
+			</div>
+		</div>
+		<h:outputScript library="js" name="catalogos/catalogo-usuarios.js"/>
+	</ui:define>
+</ui:composition>

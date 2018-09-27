@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+	  start-state="validaRegistroEnGestion" parent="parent-flow">
+
+	<var name="mbRemitentesExt" class="mx.ine.gestion.mb.MBRemitentesExternos" />
+
+	<!-- Flujos Internos -->
+	<view-state id="remitentes_externos" view="remitentes_externos.xhtml">
+		<!-- Método que se ejecuta al iniciar -->
+		<on-entry>
+			<evaluate expression="mbRemitentesExt.init()" />
+		</on-entry>
+	</view-state>
+
+	<!-- Validación para revisar que el usuario con el que se esté accediendo ya 
+		 se encuentre registrado en el Organigrama -->
+	<decision-state id="validaRegistroEnGestion">
+		<on-entry>
+			<set name="mbAdministrador.menuSelecionado" value="resourceBundle['id_modulo_configuracion']" />
+		</on-entry>
+
+		<if test="currentUser.principal.usuarioNoRegistradoEnGestion" then="vsErrorNoRegistrado" else="remitentes_externos" />
+	</decision-state>
+</flow>

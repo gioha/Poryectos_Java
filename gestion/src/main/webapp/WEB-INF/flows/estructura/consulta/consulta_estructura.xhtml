@@ -1,0 +1,805 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sec="http://www.springframework.org/security/tags"
+				template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+		
+		<h:outputStylesheet library="css" name="modulos/estructura/estructura.css" />
+		
+		<!-- CONTENEDOR DE ESTRUCTURA -->
+		<h:form id="formEstructura" onkeypress="if (window.event.which == 13 ) {return false;}" >
+		
+			<!-- GROWL PARA MOSTRAR LOS MENSAJES GENERALES -->
+			<p:growl id="mensaje_general_info" showDetail="true" sticky="true" globalOnly="true" severity="info"/>
+			<p:growl id="mensaje_general_advertencia" showDetail="true" sticky="true" globalOnly="true" severity="warn"/> 
+			<p:growl id="mensaje_general_exito" showDetail="true" sticky="true" globalOnly="true" severity="fatal"/>
+			
+			<!-- DIALOG PARA MOSTRAR LA CARGA -->
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+				<p:graphicImage name="/img/estructura/loader.gif" />
+			</p:dialog>
+
+			<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+
+			<div class="container">
+				<h2 style="padding-bottom: 30px;">
+					<h:outputText value="Inicio" style="color: #999999"/>&nbsp;&nbsp;
+					<i class="fa fa-angle-right" aria-hidden="true" style="font-size: 18px; color: #999999"/>&nbsp;&nbsp;
+					<h:outputText value="#{messageSource['etiqueta_estructura_migasMenu']}" style="color: #999999"/>&nbsp;&nbsp;
+					<i class="fa fa-angle-right" aria-hidden="true" style="font-size: 18px; color: #999999"/>&nbsp;&nbsp;
+					<h:outputText value="#{messageSource['etiqueta_miga_tipoPantallaConsulta']}" style="font-weight: bold"/>
+				</h2>
+				<!-- Titulo General CON PESTANIAS -->
+				<div class="row rowTituloPestanias">
+					<div class="col-md-3 columnTituloPestanias" style="width: 19%">
+						<h3 class="h3TituloPestania">
+							<h:outputText value="Organigrama" styleClass="tituloOrgaHidden"/>
+						</h3>
+					</div>
+					<div class="col-md-9 columnPestanias" style="width: 81%">
+						<div class="row" style="height: 51px !important; width: 95.8%; border-bottom: 3px solid #a0005f;">
+							
+							<div class="col-md-2 columnDerechaUltimaPestania" style="width: 174px;">
+								<span class="pestaniaActiva">#{messageSource['etiqueta_estructura_consulta_modifica']}</span>
+							</div>
+							
+							<div class="col-md-2 columnIzquierdaPestania" style="width: 100px;">
+								<span class="pestaniaInactiva"><p:link href="/app/estructura/captura" value="#{messageSource['etiqueta_estructura_captura']}" style="color: white; font-weight: bold; text-decoration: none;"/></span>
+							</div>
+							
+						</div>
+						
+						<div class="row" style="height: 36px; !important;"/>
+					</div>
+				</div>
+				
+				<h4>
+					<h:outputText value="#{messageSource['etiqueta_estructura_datos_generales']}" />
+				</h4>
+				<h5>
+					Los datos con (<span style="color:red">*</span>) son requeridos
+				</h5>
+				
+				<!-- TITULAR -->
+				<p:outputPanel id="buscar_titular_form" rendered="#{mbEstructura.mostrarFormulario}">
+					<section>
+						<div class="row">
+							<div class="col-md-6">
+								
+								<div class="row">
+									<p:outputLabel style="color:red">*</p:outputLabel><h:outputLabel for="tipo_area" value="#{messageSource['etiqueta_tipo_area']}" />
+								</div>
+
+								<div class="row">
+									
+									<p:selectOneMenu id="tipo_area" 
+										required="true" requiredMessage="#{messageSource['mensaje_general_campoRequerido']}"
+										value="#{mbEstructura.tipoAreaSeleccionado}" rendered="#{not mbEstructura.conRolAdminArea}">
+										
+										<p:ajax event="change" update="formEstructura" listener='#{mbEstructura.mostrarAreas("consulta")}' />
+										
+										<f:selectItem itemValue="" itemLabel = "#{messageSource['mensaje_general_selecciona']}" />
+										<f:selectItems value="#{mbEstructura.listaTiposAreas}" var="tipoArea"
+															itemValue="#{tipoArea.idTipoArea}"
+															itemLabel="#{tipoArea.descripcion}" />
+
+									</p:selectOneMenu>
+									
+									<p:outputPanel rendered="#{mbEstructura.conRolAdminArea}">
+										<h:outputText rendered="#{mbEstructura.tipoAreaSeleccionado eq '1'}"  value = "Órganos centrales"/>
+										<h:outputText rendered="#{mbEstructura.tipoAreaSeleccionado eq '2'}"  value = "Órganos desconcentrados"/>
+										<h:outputText rendered="#{mbEstructura.tipoAreaSeleccionado eq '3'}"  value = "Otro"/>
+									</p:outputPanel>
+									
+								</div>
+								<div class="row mensajesPorCampo">
+									<p:message id="mensaje_tipo_area" for="tipo_area" display="text"/> 
+								</div>
+							</div>
+						</div>
+						
+							<c:if test="${mbEstructura.tipoAreaSeleccionado eq '2'}">
+							<div class="row">
+								<div class="col-md-6">
+								
+									<div class="row">
+										<h:outputLabel for="entidad" value="#{messageSource['etiqueta_entidad']}" /> 
+									</div>
+									
+									<div class="row">
+	
+										<p:selectOneMenu id="entidad" value="#{mbEstructura.entidadSeleccionada}"
+														rendered="#{not mbEstructura.conRolAdminArea}"
+														 required="true" requiredMessage="#{messageSource['mensaje_general_campoRequerido']}"
+														 disabled="#{mbEstructura.conRolAdminArea}">
+										<p:ajax event="change" update="formEstructura" listener='#{mbEstructura.mostrarAreasEntidad("consulta")}' />
+											
+											<f:selectItem itemValue="" itemLabel = "#{messageSource['mensaje_general_selecciona']}" />
+											<f:selectItems value="#{mbEstructura.listaEstados}" var="entidad"	
+															itemValue="#{entidad.idEstado}"
+															itemLabel="#{entidad.nombreEstado}" />
+										</p:selectOneMenu>
+										
+										<h:outputText value = "#{mbEstructura.obtenerNombreEntidad()}" rendered="#{mbEstructura.conRolAdminArea and mbEstructura.tipoAreaSeleccionado eq '2'}"/>	
+	
+									</div>
+									
+									<div class="row mensajesPorCampo">
+										<p:message id="mensaje_entidad" for="entidad" display="text"/> 
+									</div>
+									
+								</div>
+							</div>
+						</c:if>
+						
+						<div class="row">
+							<div class="col-md-8">
+							
+								<div class="row">
+									<h:outputLabel for="area" value="#{messageSource['etiqueta_area']}" /> 
+								</div>
+								
+								<div class="row">
+
+									<p:selectOneMenu id="area" value="#{mbEstructura.areaSeleccionada}" rendered="#{not mbEstructura.conRolAdminArea}"
+											required="true" requiredMessage="#{messageSource['mensaje_general_campoRequerido']}">
+										
+										<p:ajax event="change" update="formEstructura"
+											listener="#{mbEstructura.buscarEstructuraPorArea}" />
+										
+										<f:selectItem itemValue="" itemLabel = "#{messageSource['mensaje_general_selecciona']}" />
+										<f:selectItems value="#{mbEstructura.listaAreas}" var="area"
+														itemValue="#{area.idArea}"
+														itemLabel="#{area.descripcion}" />
+									</p:selectOneMenu>
+									<h:outputText value = "#{mbEstructura.obtenerNombreArea()}" rendered="#{mbEstructura.conRolAdminArea}"/>
+									
+								</div>
+								
+								<div class="row mensajesPorCampo">
+									<p:message id="mensaje_area" for="area" display="text"/> 
+								</div>
+								
+							</div>
+							<div class="col-md-3">
+								
+								<div class="row"> 
+									<p:outputLabel for="siglas" value = "#{messageSource['etiqueta_siglas_area']}" />
+								</div>
+
+								<div class="row">
+									<p:inputText id="siglas" value="#{mbEstructura.siglas}" readonly="true" rendered="#{not mbEstructura.conRolAdminArea}" />
+									<h:outputText value = "#{mbEstructura.siglas}" rendered="#{mbEstructura.conRolAdminArea}"/>				
+								</div>
+
+							</div>
+						</div>
+						
+					</section>
+							
+				<h4>
+						<h:outputText value = "#{messageSource['etiqueta_estructura_titular']}" />
+					</h4>
+					<h5>
+						<h:outputText value="#{messageSource['etiqueta_estructura_titular_ingresar']}" />
+					</h5>
+
+					<section>
+						<!-- BÚSQUEDA DEL TITULAR DE ÁREA -->
+						
+						<p:focus context="formEstructura"/>
+						<div class="row ">
+							<div class="col-md-5">
+								<div class="row">
+									<p:outputLabel for="nombre_principal" value = "#{messageSource['etiqueta_nombre']}" />
+								</div>
+								<div class="row">
+									<p:inputText 
+										validatorMessage="#{messageSource['mensaje_regex_solo_letras_acentos_espacios']}"
+									 	id="nombre_principal" value="#{mbEstructura.nombreTitular}">
+									 	<f:validateRegex pattern = "#{messageSource['regex_solo_letras_acentos_espacios']}" />
+										<pe:keyFilter regEx="#{messageSource['regex_letras_acentos_espacios_validate']}" />
+									 </p:inputText>
+								</div>
+								<div class="row mensajesPorCampo">
+									<p:message id="mensaje_nombre_principal" for="nombre_principal" display="text"/>
+								</div>
+							</div>
+							<div class="col-md-5 col-md-offset-2">
+								<div class="row">
+									<p:outputLabel for="apellidos_principal" value="#{messageSource['etiqueta_apellidos']}" />
+								</div>
+								<div class="row">
+									<p:inputText 
+										validatorMessage="#{messageSource['mensaje_regex_solo_letras_acentos_espacios']}"
+										id="apellidos_principal" value="#{mbEstructura.apellidosTitular}" >
+										<f:validateRegex pattern = "#{messageSource['regex_solo_letras_acentos_espacios']}" />
+										<pe:keyFilter regEx="#{messageSource['regex_letras_acentos_espacios_validate']}" />
+									</p:inputText>
+									
+								</div>
+								<div class="row mensajesPorCampo">
+									<p:message id="mensaje_apellidos_principal" for="apellidos_principal" display="text"/>
+								</div>
+							</div>
+						</div>
+						<div class="row  botonesAcomodo">
+							<div class="col-md-12 ">
+								<p:commandButton value="Buscar" id="btn_buscar_titular"
+												 process="buscar_titular_form"
+												 update="@form"
+												 action="#{mbEstructura.buscarTitular}" />
+							</div>
+						</div>												
+					</section>
+				</p:outputPanel>
+				
+				<!-- ORGANIGRAMA -->
+				<h4>
+					<h:outputText value="#{messageSource['etiqueta_estructura_organigrama']}" />
+				</h4>
+	
+				<section>				
+					<div class="row">
+						
+						<p:outputPanel id="form_tabla_estructura" rendered="#{mbEstructura.mostrarFormulario}">
+							<p:treeTable value="#{mbEstructura.arbolEstructura}" var="personal" nodeVar="nodo" emptyMessage="" style="font-size:13px;">
+								<p:column>
+					  				<p:outputPanel style="float:left;">
+					  					<h:outputText rendered="#{nodo.leaf}" styleClass="ui-treetable-toggler ui-icon ui-icon-bullet ui-c" style="float:left; margin-left:-15px;"/>
+									    <h:outputText style="font-weight: bold;" value="#{personal.dtoEstructuraAreas.nombreCompleto}"
+									    	rendered = "#{personal.dtoEstructuraAreas.nombreNivelArea eq null}"/>
+									    <h:outputText style="font-weight: bold;" value="#{personal.dtoEstructuraAreas.nombreNivelArea}"
+									    	rendered = "#{personal.dtoEstructuraAreas.nombreNivelArea ne null}"/>
+									    
+										<br/>
+										<h:outputText value="#{personal.dtoEstructuraAreas.puesto}"
+											rendered = "#{personal.dtoEstructuraAreas.nombreNivelArea.trim() eq null}"/>
+										<h:outputText value="#{personal.dtoEstructuraAreas.nombreCompleto}"
+											rendered = "#{personal.dtoEstructuraAreas.nombreNivelArea ne null}"/>
+					  				</p:outputPanel>
+								</p:column>
+								<p:column style="width:70px;">
+									<p:commandLink  title="Agregar subnivel" id="link_agregar_subnivel"
+													process="formEstructura" styleClass="linksPersonasEncontradas"
+													update="formEstructura:agregar_subnivel"
+													actionListener="#{mbEstructura.abrirVentanaSubnivel(personal)}"
+													onclick="PF('agregar_subnivel').show();">
+										
+										<i class="fa fa-user-plus" aria-hidden="true"/>&nbsp;<h:outputText value = "#{messageSource['etiqueta_estructura_agregar_subnivel']}" style="text-decoration: underline;"/>		
+											
+									</p:commandLink>
+								</p:column>
+								<p:column style="width:70px;">
+									<p:commandLink styleClass="linksPersonasEncontradas"
+													id="link_eliminar_titular" process="formEstructura"
+													update="formEstructura"
+													actionListener="#{mbEstructura.eliminarSubnivel(personal)}">
+										
+										<i class="fa fa-user-times" aria-hidden="true"/>&nbsp;<h:outputText value="#{messageSource['etiqueta_estructura_eliminar']}" style="text-decoration: underline;"/>
+										
+										<p:confirm message="¿Está seguro que quiere eliminar a la persona?" />
+
+									</p:commandLink>
+								</p:column>
+								<p:column style="width:70px;">
+									<p:commandLink styleClass="linksPersonasEncontradas"
+													id="link_detalle_titular" process="formEstructura"
+													update="formEstructura:detalle_estructura_panel"
+													actionListener="#{mbEstructura.verDetalleEstructura(personal)}"
+													onclick="PF('detalle_estructura').show();">
+										
+										<i class="fa fa-search" aria-hidden="true" />&nbsp;<h:outputText value = "#{messageSource['etiqueta_estructura_detalle']}" style="text-decoration: underline;"/>
+										
+									</p:commandLink>
+								</p:column>
+							</p:treeTable>
+							<!-- CONFIRM DIALOG GENERAL -->
+						</p:outputPanel>
+					</div>
+
+				</section>
+				
+				<!-- PERSONAL DE OFICIALÍA DE PARTES -->
+				
+				<h4>
+					<h:outputText value = "#{messageSource['etiqueta_estructura_oficialia']}" />
+				</h4>
+				<h5>
+					<h:outputText value = "#{messageSource['etiqueta_estructura_oficialia_ingresar']}" />
+				</h5>
+				
+				<section>
+					<p:outputPanel id="buscar_oficialia_form" rendered="#{mbEstructura.mostrarFormulario}">
+						<div class="row ">
+							<div class="col-md-5">
+								<div class="row">
+									<p:outputLabel for="nombre_oficialia" value="#{messageSource['etiqueta_nombre']}" />
+								</div>
+								<div class="row">
+									<p:inputText 
+										validatorMessage="#{messageSource['mensaje_regex_solo_letras_acentos_espacios']}"
+										id="nombre_oficialia" value="#{mbEstructura.nombreOficialia}">
+										<f:validateRegex pattern = "#{messageSource['regex_solo_letras_acentos_espacios']}" />
+										<pe:keyFilter regEx="#{messageSource['regex_letras_acentos_espacios_validate']}" />
+									</p:inputText>
+								</div>
+								<div class="row mensajesPorCampo">
+									<p:message globalOnly="true" id="mensaje_nombre_oficialia"	for="nombre_oficialia" display="text" />
+								</div>
+							</div>
+							<div class="col-md-5 col-md-offset-2">
+								<div class="row">
+									<p:outputLabel for="apellidos_oficialia" value="#{messageSource['etiqueta_apellidos']}" />
+								</div>
+								<div class="row">
+									<p:inputText 
+										validatorMessage="#{messageSource['mensaje_regex_solo_letras_acentos_espacios']}"
+										id="apellidos_oficialia" value="#{mbEstructura.apellidosOficialia}">
+										<f:validateRegex pattern = "#{messageSource['regex_solo_letras_acentos_espacios']}" />
+										<pe:keyFilter regEx="#{messageSource['regex_letras_acentos_espacios_validate']}" />
+									</p:inputText>
+									
+								</div>
+								<div class="row mensajesPorCampo">
+									<p:message globalOnly="true" id="mensaje_apellidos_oficialia" for="apellidos_oficialia" />
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-5">
+							
+								<div class="row">
+									<h:outputLabel for="areaOficialia" value = "#{messageSource['etiqueta_area']}" /> 
+								</div>
+								
+								<div class="row">
+
+									<p:selectOneMenu id="areaOficialia" value="#{mbEstructura.areaSeleccionadaOficialia}">
+										
+										<f:selectItem itemValue="" itemLabel = "#{messageSource['mensaje_general_selecciona']}" />
+										<f:selectItems value="#{mbEstructura.listaAreasOficialia}" var="area"
+														itemValue="#{area.idArea}"
+														itemLabel="#{area.descripcion}" />
+									</p:selectOneMenu>
+									
+								</div>
+								
+							</div>
+						</div>
+						
+						
+						<div class="row botonesAcomodo">
+							<div class="col-md-12">
+								<p:commandButton value="Buscar" id="btn_buscar_oficialia"
+												process="buscar_oficialia_form"
+												update="buscar_oficialia_form,agregar_oficialia_form,mensaje_general_info,mensaje_general_advertencia,mensaje_general_exito"
+												actionListener="#{mbEstructura.buscarOficialia}" />
+							</div>
+						</div>
+					</p:outputPanel>
+					
+				</section>
+				
+				<h4>
+					<h:outputText value = "#{messageSource['etiqueta_estructura_personal_oficialia']}" />
+				</h4>
+				<section>
+					
+					<div class="row">
+						<p:outputPanel id="form_tabla_oficialia" styleClass="form_tabla_oficialia" rendered="#{mbEstructura.mostrarFormulario}">
+							<p:dataTable value="#{mbEstructura.listaOficialia}" var="personal" emptyMessage=" " style="font-size:13px;">
+								<p:column>
+									<h:outputText styleClass="ui-treetable-toggler ui-icon ui-icon-bullet ui-c" style="float:left"/>
+									<h:outputText style="font-weight: bold;" value="#{personal.nombre} #{personal.apellidos} "/>
+									
+									<br/>
+									<h:outputText value="&nbsp;&nbsp;&nbsp;&nbsp;"/>
+									<h:outputText value="(#{personal.puesto})"/>
+							
+								</p:column>
+								<p:column style="width:90px;text-align:center">									
+									<p:commandLink styleClass="linksPersonasEncontradas" oncomplete="" title = "#{messageSource['etiqueta_estructura_eliminar']}"
+												   id="link_eliminar_oficialia" process="formEstructura:form_tabla_oficialia"
+												   update="formEstructura"
+												   actionListener="#{mbEstructura.eliminarOficialia(personal)}">
+										
+										<i class="fa fa-user-times" aria-hidden="true"/>&nbsp;<h:outputText value="#{messageSource['etiqueta_estructura_eliminar']}" style="text-decoration: underline;"/>
+												   
+										<p:confirm message="¿Está seguro que quiere eliminar a la oficialía?" />
+											
+										
+									</p:commandLink>
+								</p:column>
+								<p:column style="width:90px;text-align:center">
+									
+									<p:commandLink styleClass="linksPersonasEncontradas"  oncomplete="" title="Detalle"
+												   id="link_detalle_oficialia" process="formEstructura:form_tabla_oficialia"
+												   onclick="PF('detalle_oficialia').show();"
+												   update="formEstructura:detalle_oficialia_panel"
+												   actionListener="#{mbEstructura.verDetalleOficialia(personal)}">
+													
+										
+										<i class="fa fa-search" aria-hidden="true" />&nbsp;<h:outputText value="#{messageSource['etiqueta_estructura_detalle']}" style="text-decoration: underline;"/>
+										
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+						</p:outputPanel>
+					</div>
+					<!-- BOTÓN REGISTRAR ESTRUCTURA -->
+					<div class="row botonesAcomodo">
+						<div class="col-md-12">
+							<p:outputPanel id="form_guardar_estructura" rendered="#{mbEstructura.mostrarFormulario}">
+								<p:commandButton value="#{messageSource['etiqueta_boton_aceptar']}"
+									disabled="#{not sec:areAnyGranted('ROLE_GESTION4.ADMIN.OC, ROLE_GESTION4.ADMIN_AREA.OC')}"
+									title="#{messageSource['etiqueta_estructura_registrar']}" id="boton_guardar_estructura"
+									process="formEstructura" 
+									update="formEstructura"
+									actionListener="#{mbEstructura.guardarEstructura('consulta')}" />
+							</p:outputPanel>
+						</div>
+					</div>
+				</section>
+			</div>
+			
+			<!-- DIALOG DE ESTRUCTURA -->
+			<p:dialog id="dialog_buscar_titular" widgetVar="dialog_buscar_titular" modal="true" styleClass="ventanaPersonaBusqueda">
+				
+				<div class="row">
+
+					<p:dataTable id="datatable_buscar_titular" var="empleado" 
+								 paginator="true" rows="10" paginatorPosition="bottom"
+								 value="#{mbEstructura.listaBusquedaEstructura}"
+								 selection="#{mbEstructura.titularSeleccionado}"
+								 sortBy="#{empleado.cuentaLDAP}"
+								 rowKey="#{empleado.cuentaLDAP}-#{empleado.nombre}"
+								 scrollable="true">
+						
+						<f:facet name="header">
+					        #{messageSource['etiqueta_estructura_titular']}
+					    </f:facet>
+								 
+						<p:column selectionMode="single" style="width:35px;text-align:center" />
+						<p:column headerText="#{messageSource['etiqueta_cuenta_institucional']}">
+							<h:outputText value="#{empleado.cuentaLDAP}" />
+						</p:column>
+						<p:column headerText="#{messageSource['etiqueta_nombre']}">
+							<h:outputText value="#{empleado.nombre}" />
+						</p:column>
+						<p:column headerText="#{messageSource['etiqueta_apellidos']}">
+							<h:outputText value="#{empleado.apellidos}" />
+						</p:column>
+						<p:column headerText="#{messageSource['etiqueta_puesto']}">
+							<h:outputText value="#{empleado.puesto}" />
+						</p:column>
+
+					</p:dataTable>
+
+					<p:messages globalOnly="true" id="mensaje_datatable_buscar_titular"
+								for="datatable_buscar_titular"/>
+				</div>
+				
+				<div class="col-md-12 botonesAcomodo">
+					<p:commandButton value = "#{messageSource['etiqueta_boton_cancelar']}"
+									 onclick="PF('buscar_titular').hide();"/>
+					&nbsp;
+					<p:commandButton value = "#{messageSource['etiqueta_boton_agregar']}"
+									 id="btn_agregar_titular" process="formEstructura:dialog_buscar_titular"
+									 update="form_tabla_estructura,dialog_buscar_titular,mensaje_general_info,mensaje_general_advertencia,mensaje_general_exito,buscar_titular_form"
+									 actionListener="#{mbEstructura.agregarTitular}">
+<!-- 
+						<c:if test="#{mbEstructura.mostrarConfirmacionAgregarTitular()}">
+							<p:confirm message="¿Está seguro que quiere agregar otro titular, si lo hace la estructura 	completa se eliminará?" />	
+						</c:if>
+ -->
+					</p:commandButton>
+
+				</div>
+				
+			</p:dialog>
+			
+			<!-- DIALOG DE DETALLE PARA ESTRUCTURA -->
+			<p:dialog widgetVar="detalle_estructura" modal="true" header = "#{messageSource['etiqueta_estructura_datos_funcionario']}" styleClass="detallePersona">
+				
+				<p:outputPanel id="detalle_estructura_panel"> 
+				<div class="row">
+					<div class="col-md-5">
+						<div class="row">
+							<c:if test="#{mbEstructura.detalleEstructura.genero eq 'H'}">
+								<h:graphicImage style="width:100%;" name="#{messageSource['ruta_imagen_hombre']}" />
+							</c:if>
+							<c:if test="#{mbEstructura.detalleEstructura.genero eq 'M'}">
+								<h:graphicImage style="width:100%;" name="#{messageSource['ruta_imagen_mujer']}" />
+							</c:if>
+							<c:if test="#{empty mbEstructura.detalleEstructura.genero}">
+								<h:graphicImage style="width:100%;" name="#{messageSource['ruta_imagen_generica']}" />
+							</c:if>
+						</div>
+					</div>
+					<div class="col-md-7">
+						<div class="row" style="margin-bottom:10px;font-weight: bold;color:#d5007f;">
+							<h:outputText value="#{mbEstructura.detalleEstructura.nombreCompleto}"/>
+						</div>
+						<div class="row" style="font-weight: bold;">
+							<h:outputText value="#{messageSource['etiqueta_estructura_puesto_cargo']}"/>
+						</div>
+						<div class="row" style="margin-bottom:10px;">
+							<h:outputText value="#{mbEstructura.detalleEstructura.puesto}"/>
+						</div>
+						<div class="row" style="font-weight: bold;">
+							<h:outputText value="#{messageSource['etiqueta_estructura_area_adscripcion']}"/>
+						</div>
+						<div class="row" style="margin-bottom:10px;">
+							<h:outputText value="#{mbEstructura.detalleEstructura.nombreArea}"/>
+						</div>
+						<div class="row" style="font-weight: bold;">
+							<h:outputText value="#{messageSource['etiqueta_estructura_correo_electronico']}"/>
+						</div>
+						<div class="row">
+							<h:outputText value="#{mbEstructura.detalleEstructura.cuentaLDAP}@ine.mx"/>
+						</div>
+						<div class="row" style="font-weight: bold;">
+							<h:outputText value = "#{messageSource['etiqueta_estructura_extension']}"/>
+						</div>
+						<div class="row">
+							<h:outputText value="#{mbEstructura.detalleEstructura.extensionTel != null 
+    							? mbEstructura.detalleEstructura.extensionTel : 'Sin extensión'}" />
+						</div>
+					</div>
+				</div>
+				</p:outputPanel>
+			</p:dialog>
+			
+			<!-- DIALOG DE DETALLE PARA OFICIALIA -->
+			<p:dialog widgetVar="detalle_oficialia" modal="true" header = "#{messageSource['etiqueta_estructura_datos_funcionario']}" styleClass="detallePersona">
+				
+				<p:outputPanel id="detalle_oficialia_panel"> 
+				<div class="row">
+					<div class="col-md-5">
+						<c:if test="#{mbEstructura.detalleOficialia.genero eq 'H'}">
+							<h:graphicImage style="width:100%;" name="/img/estructura/H.png"/>								
+						</c:if>
+						<c:if test="#{mbEstructura.detalleOficialia.genero eq 'M'}">
+							<h:graphicImage style="width:100%;" name="/img/estructura/M.png"/>								
+						</c:if>
+						<c:if test="#{empty mbEstructura.detalleOficialia.genero}">
+							<h:graphicImage style="width:100%;" name="#{messageSource['ruta_imagen_generica']}" />
+						</c:if>
+					</div>
+					<div class="col-md-7">
+						<div class="row" style="margin-bottom:10px;font-weight: bold;color:#d5007f;">
+							<h:outputText value="#{mbEstructura.detalleOficialia.tratamiento != null ? 
+							mbEstructura.detalleOficialia.tratamiento : ''} #{mbEstructura.detalleOficialia.nombre} #{mbEstructura.detalleOficialia.apellidos}"/>
+						</div>
+						<div class="row" style="font-weight: bold;">
+							<h:outputText value="#{messageSource['etiqueta_estructura_puesto_cargo']}"/>
+						</div>
+						<div class="row" style="margin-bottom:10px;">
+							<h:outputText value="#{mbEstructura.detalleOficialia.puesto}"/>
+						</div>
+						<div class="row" style="font-weight: bold;">
+							<h:outputText value="#{messageSource['etiqueta_estructura_correo_electronico']}"/>
+						</div>
+						<div class="row">
+							<h:outputText value="#{mbEstructura.detalleOficialia.cuentaLDAP}@ine.mx"/>
+						</div>
+						<div class="row" style="font-weight: bold;">
+							<h:outputText value="#{messageSource['etiqueta_estructura_extension']}"/>
+						</div>
+						<div class="row">
+							<h:outputText value="#{mbEstructura.detalleOficialia.extensionTel != null 
+    							? mbEstructura.detalleOficialia.extensionTel : 'Sin extensión'}" />
+						</div>
+					</div>
+				</div>
+				</p:outputPanel>
+			</p:dialog>
+
+			<!-- DIALOG PARA AGREGAR SUBNIVELES -->
+			<p:dialog id="agregar_subnivel" widgetVar="agregar_subnivel" modal="true" styleClass="ventanaPersonaBusquedaAvanzada">
+
+				<p:outputPanel id="buscar_subnivel_form">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="row">
+										<p:outputLabel for="nombre_subnivel" value="#{messageSource['etiqueta_nombre']}" />
+									</div>
+									<div class="row">
+										<p:inputText 
+											validatorMessage="#{messageSource['mensaje_regex_solo_letras_acentos_espacios']}"
+											id="nombre_subnivel" value="#{mbEstructura.nombreSubnivel}">
+											<f:validateRegex pattern = "#{messageSource['regex_solo_letras_acentos_espacios']}" />
+											<pe:keyFilter regEx="#{messageSource['regex_letras_acentos_espacios_validate']}" />
+										</p:inputText>
+									</div>
+									<div class="row mensajesPorCampo">
+										<p:message globalOnly="true" id="mensaje_nombre_subnivel" for="nombre_subnivel" />
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="row">
+										<p:outputLabel for="apellidos_subnivel" value="#{messageSource['etiqueta_apellidos']}" />
+									</div>
+									<div class="row">
+										<p:inputText validatorMessage="#{messageSource['mensaje_regex_solo_letras_acentos_espacios']}"
+													 id="apellidos_subnivel" value="#{mbEstructura.apellidosSubnivel}">
+											<f:validateRegex pattern = "#{messageSource['regex_solo_letras_acentos_espacios']}" />
+											<pe:keyFilter regEx="#{messageSource['regex_letras_acentos_espacios_validate']}" />
+										</p:inputText>
+									</div>
+									<div class="row mensajesPorCampo">
+										<p:message globalOnly="true" id="mensaje_apellidos_subnivel" for="apellidos_subnivel" />
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12 botonesAcomodo">
+								<p:commandButton value="Buscar" id="btn_buscar_subnivel"
+												 process="buscar_subnivel_form"
+												 update="buscar_subnivel_form,agregar_subnivel_form,mensaje_general_info,mensaje_general_advertencia,mensaje_general_exito"
+												 actionListener="#{mbEstructura.buscarSubnivel}" />
+						</div>
+					</div>
+					
+				</p:outputPanel>
+				<p:spacer height="10"/>
+				<p:outputPanel id="agregar_subnivel_form">
+					<div class="row">
+						<p:dataTable id="datatable_buscar_subnivel" var="empleado"
+									paginator="true" rows="10" paginatorPosition="bottom"
+									value="#{mbEstructura.listaBusquedaSubnivel}"
+									selection="#{mbEstructura.subnivelSeleccionado}"
+									sortBy="#{empleado.cuentaLDAP}"
+									rowKey="#{empleado.cuentaLDAP}-#{empleado.nombre}"
+									emptyMessage=" "
+									scrollable="true">
+							
+							<f:facet name="header">
+					        	Subnivel
+					    	</f:facet>
+									
+							<p:column selectionMode="single"
+								style="width:35px;text-align:center" />
+							<p:column headerText="#{messageSource['etiqueta_cuenta_institucional']}">
+								<h:outputText value="#{empleado.cuentaLDAP}" />
+							</p:column>
+							<p:column headerText="#{messageSource['etiqueta_nombre']}">
+								<h:outputText value="#{empleado.nombre}" />
+							</p:column>
+							<p:column headerText="#{messageSource['etiqueta_apellidos']}">
+								<h:outputText value="#{empleado.apellidos}" />
+							</p:column>
+							<p:column headerText="#{messageSource['etiqueta_puesto']}">
+								<h:outputText value="#{empleado.puesto}" />
+							</p:column>
+						</p:dataTable>
+						<p:messages globalOnly="true" id="mensaje_datatable_buscar_subnivel"
+								for="datatable_buscar_subnivel"/>
+					</div>
+					<div class="row">
+						<div class="col-md-9">
+							<div class="row">
+								<h:outputText value= "#{messageSource['etiqueta_estructura_visualizar_nombre_subarea']}" />
+								&nbsp;
+						        <p:selectBooleanCheckbox value="#{mbEstructura.mostrarSubarea}">
+						        	<p:ajax event="change" update="mostrar_subnivel" listener="#{mbEstructura.isMostrarSubarea}"/>
+						        </p:selectBooleanCheckbox>
+							</div>				
+							
+							<p:outputPanel id="mostrar_subnivel">
+								<div class="row">
+									<p:outputLabel for="nombre_nivel_area_subnivel" value="#{messageSource['etiqueta_estructura_capturar_nombre_subarea']}" rendered="#{mbEstructura.mostrarSubarea}"/>
+								</div>
+								<div class="row">
+									<p:inputText
+										validatorMessage="#{messageSource['mensaje_regex_solo_letras_acentos_espacios']}"
+										id="nombre_nivel_area_subnivel" value="#{mbEstructura.nombreNivelAreaSubnivel}" rendered="#{mbEstructura.mostrarSubarea}">
+										<f:validateRegex pattern = "#{messageSource['regex_solo_letras_acentos_espacios']}" />
+										<pe:keyFilter regEx="#{messageSource['regex_letras_acentos_espacios_validate']}" />
+									</p:inputText>
+								</div>
+								<div class ="row">
+									<p:messages globalOnly="true" id="mensaje_nombre_nivel_area_subnivel" rendered="#{mbEstructura.mostrarSubarea}"
+										for="nombre_nivel_area_subnivel" />
+								</div>
+							</p:outputPanel>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12 botonesAcomodo" style="padding-top: 10px;">
+							<p:commandButton value="#{messageSource['etiqueta_boton_cancelar']}"
+											 process="agregar_subnivel_form"
+											 actionListener="#{mbEstructura.ocultarDialogSubnivel}"
+							/>
+							&nbsp;
+							<p:commandButton value="#{messageSource['etiqueta_boton_agregar']}"
+											 id="btn_agregar_subnivel" process="agregar_subnivel_form"
+											 update="agregar_subnivel_form,form_tabla_estructura,buscar_titular_form,mensaje_general_info,mensaje_general_advertencia,mensaje_general_exito"
+											 actionListener="#{mbEstructura.agregarSubnivel}" />
+						</div>
+					</div>
+				</p:outputPanel>
+
+			</p:dialog>
+
+			<!-- DIALOG DE OFICIALÍA DE PARTES -->
+			<p:dialog widgetVar="agregar_oficialia_form" modal="true" resizable="false" id="agregar_oficialia_form" styleClass="ventanaPersonaBusqueda">
+				
+				<div class="row">
+					<p:dataTable id="datatable_buscar_oficialia" var="empleado" 
+								 paginator="true" rows="10" paginatorPosition="bottom"
+								 value="#{mbEstructura.listaBusquedaOficialia}"
+								 selection="#{mbEstructura.oficialiasSeleccionadas}"
+								 rowKey="#{empleado.cuentaLDAP}-#{empleado.nombre}"
+								 sortBy="#{empleado.cuentaLDAP}"
+								 scrollable="true">
+						
+						<f:facet name="header">
+					        #{messageSource['etiqueta_estructura_oficialia']}
+					    </f:facet>
+								 
+						<p:column selectionMode="multiple"
+							style="width:35px;text-align:center" />
+						<p:column headerText="#{messageSource['etiqueta_cuenta_institucional']}">
+							<h:outputText value="#{empleado.cuentaLDAP}" />
+						</p:column>
+						<p:column headerText="#{messageSource['etiqueta_nombre']}">
+							<h:outputText value="#{empleado.nombre}" />
+						</p:column>
+						<p:column headerText="#{messageSource['etiqueta_apellidos']}">
+							<h:outputText value="#{empleado.apellidos}" />
+						</p:column>
+						<p:column headerText="#{messageSource['etiqueta_puesto']}">
+							<h:outputText value="#{empleado.puesto}" />
+						</p:column>
+						<p:column headerText="#{messageSource['etiqueta_area']}">
+							<h:outputText value="#{empleado.nombreArea}" />
+						</p:column>
+					</p:dataTable>
+					<p:messages globalOnly="true" id="mensaje_datatable_buscar_oficialia"
+								for="datatable_buscar_oficialia" />
+				</div>
+				
+				<div class="row">
+					<div class="col-md-12 botonesAcomodo">
+						<p:commandButton value="#{messageSource['etiqueta_boton_cancelar']}"
+							onclick="PF('buscar_oficialia').hide();"	
+							process="agregar_oficialia_form"
+							actionListener="#{mbEstructura.ocultarDialogOficialia}"
+						/>
+						&nbsp;
+						<p:commandButton value="#{messageSource['etiqueta_boton_agregar']}"
+							id="btn_agregar_oficilia" process="agregar_oficialia_form"
+							update="form_tabla_oficialia,datatable_buscar_oficialia,mensaje_general_info,mensaje_general_advertencia,mensaje_general_exito,mensaje_datatable_buscar_oficialia"
+							actionListener="#{mbEstructura.agregarOficialia}">
+						</p:commandButton>
+					</div>
+				</div>
+			</p:dialog>
+			
+			<!-- DIALOG PARA CONFIRMACIÓN GENERAL -->
+			<p:confirmDialog global="true" styleClass="ventanaConfirmacion">
+				<p:commandButton value="#{messageSource['etiqueta_boton_no']}" styleClass="ui-confirmdialog-no" type="button" />
+				<p:commandButton value="#{messageSource['etiqueta_boton_si']}" styleClass="ui-confirmdialog-yes" type="button" style="background-color: white !important; color: #d5007f !important; border: 1px solid #d5007f !important;"/>
+			</p:confirmDialog>
+			
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+	start-state="validaRolUsuario" parent="parent-flow">
+
+	<var name="mbRegPuntos" class="mx.ine.acuerdos.mb.MBRegistroPuntos" />
+
+	<input name="idNumAcuerdo" type="java.lang.String"/>
+
+
+  	<!-- Validamos los roles del usuario del lado del MB -->
+ 	 <decision-state id="validaRolUsuario">
+		<if test="mbRegPuntos.validaRoles()" then="registroPunto" else="home_view" />
+	</decision-state> 
+
+	
+	<!-- Pantalla Registro Punto de Acuerdo -->
+	<view-state id="registroPunto" view="regristro_Punto_CG.xhtml">
+		<on-entry>
+			<evaluate expression="mbRegPuntos.init(idNumAcuerdo)"></evaluate>
+		</on-entry>
+		<transition on="irLista" to="listaCG"/>
+	</view-state>
+
+	<!-- Pantalla ListadoCG -->
+	<subflow-state id="listaCG" subflow="seguimiento/bandeja_cg">
+	 	<input name="parametro" value="mbRegPuntos.parametroFlujo"/>   
+	</subflow-state>
+
+	<!-- Pantalla Home -->
+	<subflow-state id="home_view" subflow="home"> </subflow-state>
+
+
+</flow>
+
+

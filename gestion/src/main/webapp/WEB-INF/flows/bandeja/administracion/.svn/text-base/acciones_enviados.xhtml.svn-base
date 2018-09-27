@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sec="http://www.springframework.org/security/tags">
+
+
+	<!-- Acciones para el Documento -->
+
+	<div id="div_row_acciones" class="row">
+
+
+		<div id="icon_acciones" class="col-xs-1" style="width: 40px; padding-left: 5px;">
+			<h:graphicImage rendered="#{mbBandejaEnviados.enviadoSeleccionado.numEnviadoFirma ne 0 and mbBandejaEnviados.enviadoSeleccionado.numEnviadoValidacion ne 0 and mbBandejaEnviados.enviadoSeleccionado.dtoDocumento.tipoCaptura ne 3}" 
+							name="bo_negro.png" library="img/bandeja" class="pull-center img-responsive" />
+			<h:graphicImage rendered="#{mbBandejaEnviados.enviadoSeleccionado.numEnviadoFirma eq 0 and mbBandejaEnviados.enviadoSeleccionado.dtoDocumento.tipoCaptura ne 3}" 
+							name="bo_firma.png" library="img/bandeja" class="pull-center img-responsive" />
+			<h:graphicImage rendered="#{mbBandejaEnviados.enviadoSeleccionado.numEnviadoValidacion eq 0 and mbBandejaEnviados.enviadoSeleccionado.numEnviadoFirma ne 0 and mbBandejaEnviados.enviadoSeleccionado.dtoDocumento.tipoCaptura ne 3}" 
+							name="bo_valida.png" library="img/bandeja" class="pull-center img-responsive" />
+			<h:graphicImage rendered="#{mbBandejaEnviados.enviadoSeleccionado.dtoDocumento.tipoCaptura eq 3}" name="iconos_adjunto.png" library="img/bandeja" class="pull-center img-responsive" />
+			
+		</div>
+
+		<div id="acciones_nombre" class="col-xs-5">
+			<div class="contenido_acciones_nombre">
+				<h:outputLabel value="#{mbBandejaEnviados.enviadoSeleccionado.dtoDocumento.noDocumento}" />
+			</div>
+		</div>
+
+		<div id="acciones_menu" class="col-xs-2" style="width: 100px;">
+
+			<p:commandButton 	id="listaAcciones" value="#{messageSource['mensaje_menu_acciones']}" type="button"
+								styleClass="menu_acciones"
+								disabled="#{mbBandejaEnviados.enviadoSeleccionado == null}"
+								style="font-size:12px;height:30px !important;" />
+
+			<p:tieredMenu 		overlay="true" trigger="listaAcciones" my="left top"
+								at="left bottom" styleClass="menu_acciones_der" style="width:150px;">
+
+				<p:menuitem value="Eliminar Enviado" actionListener="#{mbBandejaEnviados.eliminarEnviado}" 
+	        				update=":formBorradores:panelIzq, :formBorradores:tablaEnviados, :formBorradores:mensaje_general_info" />
+
+			</p:tieredMenu>
+		
+		</div>
+
+		<div id="acciones_historial" class="col-xs-2"  style="width: 120px;">
+			<div class="contenido_historial">
+			<!-- <p:commandLink styleClass="fa fa-clock-o" value="&nbsp;#{messageSource['mensaje_ver_historial_borrador']}" title="#{messageSource['mensaje_ver_historial_borrador']}"
+				actionListener="#{mbHistorial.consultarHistorial(mbBandejaEnviados.enviadoSeleccionado.dtoDocumento.idDocumento)}"
+				update="formBorradores:dialogHistorial" /> -->
+			<p:commandLink styleClass="fa fa-sticky-note-o link_detalle" value="&nbsp; Detalle documento" title="&nbsp; Detalle documento"
+				actionListener="#{mbBandejaEnviados.mostrarDialogDetalle}"
+				update=":formBorradores:dialogDetalleDoc" />
+			</div>
+		</div>
+
+	</div>
+	<div id="row_anexo" class="row">
+		<div id="anexo" class="col-xs-1" style="#{mbBandejaEnviados.enviadoSeleccionado.dtoDocumento.contieneAnexos ne 0 ? 'background-color: #e2e2e2;' : ''} width: 100px;">
+			<c:if test="#{mbBandejaEnviados.enviadoSeleccionado.dtoDocumento.contieneAnexos ne 0}">
+				<span>
+					<i class="fa fa-paperclip" style="font-size: 18px; color:#000000 !important"/><h:outputText value="&nbsp;" style="text-decoration: none"/>
+					<h:outputText value="#{messageSource['mensaje_ver_anexos']}" style="color:#000000 !important"/>
+				</span>
+			</c:if>
+			
+		</div>
+		<div id="anexo" class="col-xs-1" style="#{mbBandejaEnviados.enviadoSeleccionado.dtoDocumento.contieneAnexos ne 0 ? 'background-color: #cccccc;' : ''} width: 30px; text-align: center; padding-top: 9px;">
+			<c:if test="#{mbBandejaEnviados.enviadoSeleccionado.dtoDocumento.contieneAnexos ne 0}">
+				<p:commandLink 	actionListener="#{mbBandejaEnviados.mostrarDialogAnexos}"
+								update=":formBorradores:dialogVerAnexosEnviados" style="text-decoration: none">
+					
+					<i class="fa fa-download" style="color: black !important;"/>
+				
+				</p:commandLink>
+			</c:if>
+			
+		</div>
+		
+		<!-- <div id="anexo" class="col-xs-4">
+			<p:commandLink 	actionListener="#{mbBandejaEnviados.mostrarDialogAnexos}" 
+							update=":formBorradores:dialogVerAnexosEnviados" rendered="#{mbBandejaEnviados.enviadoSeleccionado.dtoDocumento.contieneAnexos ne 0}">
+				<h:outputText value="&#xf0c6; #{messageSource['mensaje_ver_anexos']}" styleClass="texto_adjunto"/>
+				<h:outputText value="&#xf019;" styleClass="icono_adjunto"/>
+			</p:commandLink>
+		</div> -->
+		<div id="estatus" class="col-xs-6">
+			<!-- <span> El documento fue enviado el día 21/10/2017 </span> -->
+		</div>
+	</div>
+
+	<!-- Notoficaciones Documentos-->
+	<div id="div_row_notificaciones" class="row">
+		<div id="div_notificaciones_opciones" class="col-xs-12">
+			<c:if test="#{mbBandejaEnviados.enviadoSeleccionado ne null}">
+				<h:outputText styleClass="titulo_instrucciones" value="No tiene notificaciones"/>
+			</c:if>
+
+		</div>
+	</div>
+
+
+
+</ui:composition>

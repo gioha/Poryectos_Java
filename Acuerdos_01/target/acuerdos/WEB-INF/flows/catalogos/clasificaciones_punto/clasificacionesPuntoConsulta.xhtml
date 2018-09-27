@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:ine="http://ine.mx/ui" xmlns:deceyec="http://ine.mx/ui"
+	template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+		<div class="container">
+
+
+			<!-- ############################################### FOMULARIO CONTENEDOR  #################################################### -->
+			<div class="row">
+				<div class="col-xs-12">
+					<p:growl for="growl" autoUpdate="true" redisplay="true"
+						showDetail="true" showSummary="true" />
+				</div>
+			</div>
+			<div id="div_card" class="card">
+				<div class="row">
+					<div class="col-xs-12">
+						<!-- ############################################### CAMINO DE MIGAJAS  ######################################################### -->
+						<ol class="breadcrumb migaja"
+							style="margin-top: 4px; margin-left -60px; background-color: #FFFFFF;">
+							<li><a href="${request.contextPath}/app/home"> <h:outputText
+										value="#{messageSource['lbl_home']}" />
+							</a></li>
+							<li><a href="${request.contextPath}/app/catalogos"> <h:outputText
+										value="#{messageSource['lbl_titulo_administracion_home']}" />
+							</a></li>
+							<li class="active">#{messageSource['lbl_titulo_clasificacionesPunto']}</li>
+						</ol>
+					</div>
+					<div class="col-xs-12">
+						<!-- ##################################################### TITULO PANTALLA  ###################################################### -->
+						<div class="lblTituloForm robotoRegular">
+							<span>#{messageSource['lbl_tituloPag_clasificacionesPunto']}</span>
+						</div>
+					</div>
+				</div>
+
+				<h:form id="clasificacionesPunto" enctype="multipart/form-data" >
+					<!-- ########################################################## LINEA GRIS  ###################################################### -->
+					<div class="col-xs-12 espaciador-top">
+						<hr style="border-top: 2px solid gray;" />
+					</div>
+
+					<!-- ################################ TABLA CONTENEDORA DEL CATALOGO DE CLASIFICADORES PUNTO  ##################################### -->
+					<div class="col-xs-12 col-xs-offset-0 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 espaciador-top">
+						<div class="text-center">
+							<p:dataTable id="tablaClasificadoresPunto" var="cpunto"
+								value="#{mbCClasificacionesCon.form.clasificacion}"
+								editable="false" widgetVar="tableWidget" 
+								>
+
+								<p:column headerText="Orden" style="width:70px">
+									<h:outputText value="#{cpunto.orden}" />
+								</p:column>
+
+								<p:column headerText="Clasificación" style="width: 400px;">
+									<h:outputText value="#{cpunto.descripcion}" />
+								</p:column>
+
+							</p:dataTable>
+						</div>
+					</div>
+				</h:form>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

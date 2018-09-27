@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+
+		<h:outputStylesheet name="bandeja_generales.css" library="css/modulos/bandeja" />
+		<!-- <h:outputStylesheet name="bandeja_resize.css" library="css/modulos/bandeja" /> -->
+		
+		<!-- <h:outputScript name="js/bandeja/bandeja.js" /> -->
+		
+		<!-- <script src="resize/src/ResizeSensor.js"></script>
+		<script src="resize/src/ElementQueries.js"></script> -->
+
+		<div id="contenedor_bandeja" class="container">
+		<h:form id="formBorradores" onkeypress="if (window.event.which == 13 ) {return false;}" >
+		
+			<!-- Growl para los avisos del usuario-->
+			<p:growl id="mensaje_general_info" showDetail="true" sticky="true" globalOnly="true" severity="info" />
+			<p:growl id="mensaje_general_advertencia" showDetail="true" sticky="true" globalOnly="true" severity="warn" />
+			<p:growl id="mensaje_general_exito" showDetail="true" sticky="true" globalOnly="true" severity="fatal" />
+
+			<!-- DIALOG PARA MOSTRAR LA CARGA -->
+			<p:dialog 	widgetVar="statusDialog" modal="true" draggable="false"
+						closable="false" resizable="false" showHeader="false">
+				<p:graphicImage name="/img/estructura/loader.gif" />
+			</p:dialog>
+			
+			<p:ajaxStatus 	onstart="PF('statusDialog').show()" 
+							onsuccess="PF('statusDialog').hide()"
+							onerror="PF('statusDialog').hide()"/>		
+
+			<!-- CABECERA DE LA BANDEJA -->
+			<h3 id="titulo_bandeja"> #{messageSource['etiqueta_bandeja_migasMenu']} </h3>
+			
+			<ui:include src="timer.xhtml" />
+
+			<!-- CUERPO DE LA BANDEJA -->
+			<pe:layout fullPage="false" style="height:100%;">
+		            
+		    <!-- BANDEJA IZQUIERDA -->
+			<pe:layoutPane 	id="layout_izq" position="west"
+							closable="false" size="15%">
+				<f:facet name="header">
+					<h:outputText value="Seguimiento"/>
+				</f:facet>
+			            
+		        <p:outputPanel id="panelIzq">
+					<ui:include src="menu_bandeja.xhtml" />
+					<!-- <p:commandButton action="modificarPrueba"></p:commandButton> -->
+				</p:outputPanel>
+		                
+			</pe:layoutPane>
+			
+			<!-- BANDEJA CENTRO-->
+			<pe:layoutPane 	id="layout_centro" position="center"
+							styleClass="c_layout_centro" >
+
+				<p:outputPanel id="panelCentro">
+
+					<c:if test="#{mbBandejaMenu.menuBandejaSeleccionado eq messageSource['vista_entrada']}">
+						<h:outputStylesheet name="bandeja_entrada.css" library="css/modulos/bandeja" />
+						<ui:include src="buscador.xhtml" />
+						<ui:include src="pestanas_entrada.xhtml" />
+						<ui:include src="tablas_recibidos.xhtml" />
+					</c:if>
+					
+					<c:if test="#{mbBandejaMenu.menuBandejaSeleccionado eq messageSource['vista_borradores']}">
+						<h:outputStylesheet name="bandeja_borradores.css" library="css/modulos/bandeja" />
+						<ui:include src="buscador.xhtml" />
+						<ui:include src="pestanas_borradores.xhtml" />
+						<ui:include src="lista_borradores.xhtml" />
+					</c:if>
+							
+					<c:if test="#{mbBandejaMenu.menuBandejaSeleccionado eq messageSource['vista_historico']}">
+						<h:outputStylesheet name="bandeja_historico.css" library="css/modulos/bandeja" />
+						<ui:include src="buscador.xhtml" />
+						<ui:include src="pestanas_historico.xhtml" />
+						<ui:include src="tablas_historico.xhtml" />
+					</c:if>
+					
+					<c:if test="#{mbBandejaMenu.menuBandejaSeleccionado eq messageSource['vista_enviados']}">
+						<h:outputStylesheet name="bandeja_enviados.css" library="css/modulos/bandeja" />
+						<ui:include src="buscador.xhtml" />
+						<ui:include src="pestanas_enviados.xhtml" />
+						<ui:include src="lista_enviados.xhtml"  />
+					</c:if>
+
+				</p:outputPanel>
+
+			</pe:layoutPane>
+
+			<!-- BANDEJA DERECHA-->
+			<pe:layoutPane id="layout_der" position="east"
+							closable="false" size="40%" minSize="500"> 
+
+				<p:outputPanel id="panelDer" autoUpdate="true">
+				
+					<c:if test="#{mbBandejaMenu.menuBandejaSeleccionado eq messageSource['vista_entrada'] and mbBEntrada.indicaSeleccionado ne null}">
+						<ui:include src="acciones_entrada.xhtml" />
+						<ui:include src="previo_entrada.xhtml" />
+					</c:if>
+					
+					<c:if test="#{mbBandejaMenu.menuBandejaSeleccionado eq messageSource['vista_borradores'] and mbBorradores.dtoBorradorSeleccionado ne null}">
+						<ui:include src="acciones_borradores.xhtml" />
+						<ui:include src="previo_borradores.xhtml" />
+					</c:if>
+							
+					<c:if test="#{mbBandejaMenu.menuBandejaSeleccionado eq messageSource['vista_historico'] and mbBHistorico.indicaSeleccionado ne null}">
+						<ui:include src="acciones_historico.xhtml" />
+						<ui:include src="previo_historico.xhtml" />
+					</c:if>
+					
+					<c:if test="#{mbBandejaMenu.menuBandejaSeleccionado eq messageSource['vista_enviados'] and mbBandejaEnviados.enviadoSeleccionado ne null}">
+						<ui:include src="acciones_enviados.xhtml" />
+						<ui:include src="previo_enviado.xhtml" />
+					</c:if>
+
+				</p:outputPanel>
+		                
+			</pe:layoutPane>
+			</pe:layout>
+
+			<!-- Dialog para eliminar Enviados Documentos-->
+			<ui:include src="dialog_detalle_documento.xhtml" />
+			
+			<!-- Dialog para eliminar Borrador Documentos-->
+			<ui:include src="dialog_eliminar_borrador.xhtml" />
+
+			<!-- Dialog para eliminar Enviados Documentos-->
+			<ui:include src="dialog_eliminar_enviado.xhtml" />
+				
+			<!-- Dialog para Enviar o Validar Documentos-->
+			<ui:include src="dialog_enviar_firma_validacion.xhtml" />
+			
+			<!-- Dialog para revisar Comentarios-->
+			<ui:include src="dialog_comentarios.xhtml" />
+			
+			<!-- Dialog para revisar Ediciones-->
+			<ui:include src="dialog_ediciones.xhtml" />
+			
+			<!-- Dialog para revisar Comentarios-->
+			<ui:include src="enviar_destinatario.xhtml" />
+			
+			<!-- Dialog para Anexos-->
+			<ui:include src="dialog_anexos.xhtml" />
+			
+			<!-- Dialog para Anexos Enviados-->
+			<ui:include src="dialog_anexos_enviados.xhtml" />
+			
+			<!-- Dialog para Anexos Entrada-->
+			<ui:include src="dialog_anexos_entrada.xhtml" />
+			
+			<!-- Dialog para Anexos Historico-->
+			<ui:include src="dialog_anexos_historico.xhtml" />
+<!-- 
+			Dialog para Historial
+			<ui:include src="dialog_historial_creacion.xhtml" />
+ -->			
+ 
+			<!-- Dialog para Historico Turnado-->
+			<!-- Para bande de entrada e historico-->
+			<!-- <ui:include src="dialog_historial_turnado.xhtml" /> -->
+			
+			<!-- Dialog Registrar Atención-->
+			<ui:include src="dialog_atencion.xhtml" />
+			
+			<!-- Dialog para el Turnado-->
+			<ui:include src="turnado/dialog_turnado.xhtml" />
+			
+			<!-- Dialog para el Turnado desde el historico-->
+			<ui:include src="turnado/dialog_turnado_historicos.xhtml" />
+			
+			<!-- Dialog para Resopnder Turnado-->
+			<ui:include src="turnado/dialog_confirmacion_cerrar_turnado.xhtml" />
+			
+			<!-- Dialog para Resopnder Turnado-->
+			<ui:include src="dialog_responder.xhtml" />
+					
+			<!-- Dialog para Historico Turnado-->
+			<ui:include src="dialog_confirmacion_concluido.xhtml" />
+			
+			<!-- Dialog para Historico Turnado-->
+			<ui:include src="dialog_reasignar.xhtml" />
+			
+			<!-- Dialog para Historico Turnado-->
+			<ui:include src="dialog_reasignar_historico.xhtml" />
+
+		</h:form>
+		</div>
+
+	</ui:define>
+
+</ui:composition>

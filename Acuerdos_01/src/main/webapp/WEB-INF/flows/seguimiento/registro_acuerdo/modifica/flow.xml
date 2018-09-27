@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+	start-state="validaRolUsuario" parent="parent-flow">
+    
+    <var name="mbModAcuerdos" class="mx.ine.acuerdos.mb.MBModificarAcuerdos" /> 
+ 
+ 	<input name="idNumAcuerdo" type="java.lang.String" />
+ 
+  	<!-- Validamos los roles del usuario del lado del MB -->
+ 	 <decision-state id="validaRolUsuario">
+		<if test="mbModAcuerdos.validaRoles()" then="modificarAcuerdo" else="home_view" />
+	</decision-state> 
+ 
+ 
+	<!-- Pantalla Registro Acuerdo -->
+	<view-state id="modificarAcuerdo" view="modificar_Acuerdo_CG.xhtml">
+
+   		<on-entry>
+			<evaluate expression="mbModAcuerdos.init(idNumAcuerdo)"></evaluate>
+		</on-entry> 
+
+		<transition on="regresarHome" to="regresaHome" />
+		<transition on="regresa" to="listaCG" />
+		<transition on="irLista" to="listaCG" /> 
+
+	</view-state>
+
+	<!-- Pantalla ListadoCG -->
+ 	<subflow-state id="listaCG" subflow="seguimiento/bandeja_cg">
+		<input name="parametro" value="mbModAcuerdos.form.acuerdosPrueba" />
+	</subflow-state>
+	
+	
+	<!-- Pantalla Home -->
+	<subflow-state id="home_view" subflow="home"> </subflow-state>
+
+	<!-- Estados terminales -->
+	<end-state id="regresarLista" view="externalRedirect:servletRelative:/seguimiento/bandeja_cg" />
+	<end-state id="regresaHome" view="externalRedirect:servletRelative:/home" />
+
+
+
+</flow>
+
+

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+
+	start-state="validarRolUsuario" parent="parent-flow">
+	<var name="mbSeguimientoPuntos" class="mx.ine.acuerdos.mb.MBSeguimientoPuntos" />
+	<var name="mbSeguimientoPuntosCG" class="mx.ine.acuerdos.mb.MBSeguimientoPuntosCG" />
+	<input name="idNumAcuerdo" type="java.lang.String" />
+	<input name="numeralia" type="java.lang.String" />
+
+	<!-- Validamos que sea un rol valido para esta pantalla -->
+	<decision-state id="validarRolUsuario">
+		<if test="mbSeguimientoPuntos.esRolValido()" then="validarRolCG"
+													 else="areaAccesoDenegado" />
+	</decision-state>
+
+	<!-- Si es un rol valido, verificamos si es de tipo CG --> 
+	<decision-state id="validarRolCG">
+		<if test="mbSeguimientoPuntos.validarRolCG()" then="seguimientoPuntoCG"
+													  else="seguimientoPunto" />
+	</decision-state>
+	
+ 	<!-- Si no es de CG, es es titular de area o area, validamos que tenga un area asignada -->
+	<decision-state id="validarAreaUsuario">
+		<if test="mbSeguimientoPuntos.tieneArea()" then="seguimientoPunto"
+								  		 		   else="areaAccesoDenegado" />
+	</decision-state>
+	
+	<!-- Pantalla de consulta y seguimiento del punto (lado CG) -->
+	<view-state id="seguimientoPuntoCG" view="seguimientoPuntoCG.xhtml">
+		<on-entry>
+			<evaluate expression="mbSeguimientoPuntosCG.init(idNumAcuerdo,numeralia)"></evaluate>
+		</on-entry>
+ 			<transition on="btnRegresarCG" to="bandejaCompromisosCG" />
+ 			<transition on="btnAceptarRechazoCG" to="seguimientoPuntoCG" />
+<!--  			<transition on="btnAceptarRechazoCG_1" to="seguimientoPuntoCG" />
+ 			<transition on="btnAceptarRechazoCG_2" to="bandejaCompromisosCG" /> -->
+ 			<transition on="btnReasignarPuntoCG" to="seguimientoPuntoCG" />
+ 			<transition on="btnAceptarCierreCG" to="seguimientoPuntoCG" />
+ 			<transition on="btnRechazarCierreCG" to="seguimientoPuntoCG" />
+ 			<transition on="btnGuardarRefrescar" to="seguimientoPuntoCG" />
+	</view-state>
+	
+	<!-- Pantalla de consulta y seguimiento del punto (lado area) -->
+	<view-state id="seguimientoPunto" view="seguimientoPunto.xhtml">
+		<on-entry>
+			<evaluate expression="mbSeguimientoPuntos.init(idNumAcuerdo,numeralia)"></evaluate>
+		</on-entry>
+ 			<transition on="btnRegresar" to="bandejaCompromisos" />
+ 			<transition on="btnGuardarRegresar" to="bandejaCompromisos" />
+	</view-state>
+
+ 	<subflow-state id="bandejaCompromisos" subflow="seguimiento/bandeja_cg">
+		<input name="parametro" value="mbSeguimientoPuntos.helpSegPunto.msjMovimiento" />
+	</subflow-state>
+	
+	 <subflow-state id="bandejaCompromisosCG" subflow="seguimiento/bandeja_cg">
+		<input name="parametro" value="mbSeguimientoPuntosCG.helpSegPunto.msjMovimiento" />
+	</subflow-state>
+
+   	<view-state id="areaAccesoDenegado"        
+				view="externalRedirect:servletRelative:/acceso_denegado"/>
+
+</flow>

@@ -1,0 +1,572 @@
+#---------------------------------------------------------------------------------
+# 							MENSAJES Y ETIQUETAS 
+#
+# Contiene los mensajes y etiquetas que se utilizan en el sistema
+#
+#  Estructura:
+#
+#  (Apartado)        (Sección)      
+#
+#   MENSAJES 
+#          ->         VALIDACIONES
+#          ->         MODULOS (NOMRE DEL MODULO)
+#
+#   ETIQUETAS 
+#          ->         VALIDACIONES
+#          ->         MODULOS (NOMRE DEL MODULO)
+#	
+#	CONSTANTES
+#	 	   ->         VALIDACIONES
+#          ->         MODULOS (NOMRE DEL MODULO)
+# 
+# Mensajes nomenclatura:  mensaje_"Sección"_"Descripción del mensaje"
+# Etiquetas nomenclatura: etiqueta_"Sección"_"Descripción del mensaje"
+# URL nomenclatura: url_"Sección"_"Descripción del mensaje"
+# Máscara nomenclatura: mascara_"Sección"_"Descripción del mensaje"
+# 
+#
+# Los acentos se deben de remplazar por el sguiente  unicode
+#
+# UNICODE: 
+# \u00e1 -> � 
+# \u00E9 -> � 
+# \u00ED -> � 
+# \u00F3 -> � 
+# \u00Fa -> � 
+# \u00C1 -> � 
+# \u00C9 -> � 
+# \u00CD -> � 
+# \u00D3 -> � 
+# \u00DA -> � 
+# \u00F1 -> � 
+# \u00D1 -> � 
+#---------------------------------------------------------------------------------
+
+
+#---------------------------------------------------------------------------------
+# 									MENSAJES 
+#---------------------------------------------------------------------------------
+
+####### LOGIN  ####### 
+mensaje_error_credenciales								 				= El usuario y/o contrase\u00f1a inv\u00e1lidos, intenta nuevamente
+mensaje_error_captcha													= Caracteres inv\u00e1lidos, intenta nuevamente
+
+mensaje_vacio_captcha									 				= No has ingresado el c\u00f3digo de seguridad, intenta nuevamente
+mensaje_vacio_password	 												= No has ingresado la contrase\u00f1a, intenta nuevamente
+mensaje_vacio_usuario		 											= No has ingresado el usuario, intenta nuevamente
+
+####### CONFIGURACION  #######
+etiqueta_configuracion_migasMenu										= Configuraci\u00f3n
+
+####### INSTRUCCIONES  #######
+mensaje_instrucciones_limiteAtencion									= S\u00f3lo puedes agregar hasta 5 instrucciones de atenci\u00f3n
+mensaje_instrucciones_limiteInformativa									= S\u00f3lo puedes agregar hasta 3 instrucciones informativas
+mensaje_instrucciones_eliminarEnUso										= La instrucci\u00f3n est\u00e1 en uso, no es posible eliminarla
+mensaje_instrucciones_cargarError										= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_instrucciones_eliminar											= \u00BFDeseas eliminar la Instrucci\u00f3n?
+mensaje_instrucciones_modificarEnUso									= La instrucci\u00f3n est\u00e1 en uso, no es posible modificarla
+mensaje_instrucciones_aceptarExito										= Las instrucciones se han guardado exitosamente
+mensaje_instrucciones_aceptarError										= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_instrucciones_cancelar											= Se perder\u00e1n los cambios \u00BFDeseas salir?
+mensaje_instrucciones_eliminarEnUso										= La instrucci\u00f3n est\u00e1 en uso, no es posible eliminarla
+mensaje_instrucciones_mayorCero											= El tiempo de respuesta debe ser mayor a cero
+
+####### CAPTURA DOCUMENTOS ########
+
+mensaje_error_opcion_duplicada 											= La opci\u00f3n seleccionada ya fue ingresada
+mensaje_error_opciones_duplicadas										= Las opciones seleccionadas ya fueron ingresadas
+mensaje_error_selecciona_opcion											= Selecciona al menos una opci\u00f3n, intenta nuevamente
+mensaje_error_campo_personas											= Debes ingresar cuando menos un nombre o apellido(s), y/o seleccionar un \u00E1rea.
+mensaje_error_opcion_en_ccp												= La opci\u00f3n seleccionada ya se encuentra en CCP
+mensaje_error_opciones_en_ccp											= Las opciones seleccionadas ya se encuentran en CCP
+mensaje_error_opcion_en_dest											= La opci\u00f3n seleccionada ya se encuentra como Destinatario
+mensaje_error_opciones_en_dest											= Las opciones seleccionadas ya se encuentran como Destinatarios
+mensaje_error_opcion_en_remit											= La opci\u00f3n seleccionada ya se encuentra como Remitente
+mensaje_error_opciones_en_remit											= Las opciones seleccionadas ya se encuentran como Remitentess
+mensaje_error_opcion_por_area											= No es posible agregar al Remitente, ya que pertenece a otra \u00e1rea
+mensaje_error_campo_por_area											= Selecciona al menos una \u00c1rea, intenta nuevamente
+mensaje_error_destinatario_por_area										= Ingresa al menos una \u00c1rea, intenta nuevamente
+
+
+####### FIRMA ########
+mensaje_firma_usuario													= El usuario
+mensaje_firma_usuarioFirmar												= no aprob\u00f3 para firma
+mensaje_firma_eliminarValidaciones										= El documento ya fue validado al editarlo se eliminar\u00e1n los cambios \u00BFDeseas continuar?
+mensaje_firma_editar													= Si editas el documento y debe ser firmado por mas personas tendras que firmarlo o regresarlo para liberarlo. �Deseas continuar?
+mensaje_firma_exitoComentario											= Se ha guardado el comentario exitosamente
+mensaje_firma_comentarioVacio											= Sin informaci\u00f3n, intenta nuevamente
+mensaje_firma_errorCargaIniciar											= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_firma_yaFirmo													= El documento ya fue firmado, no es posible editarlo. Puedes regresarlo al Remitente
+mensaje_firma_editando													= El documento se est\u00e1 editando por otro usuario
+mensaje_firma_errorEditar												= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_firma_seleccionaUno												= Selecciona al menos una opci\u00f3n
+mensaje_firma_exitoRegresar												= Los documentos se enviaron exitosamente
+mensaje_firma_errorRegresar												= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_firma_errorEliminarValidacion									= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_firma_validarFirmar												= El documento se regres\u00f3 al Remitente, no es posible firmarlo
+mensaje_firma_errorFirmar												= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_firma_exitoFirmar												= Los documentos se firmaron exitosamente
+mensaje_firma_seleccionOpcion											= Sin informaci\u00f3n, intenta nuevamente
+mensaje_firma_validarRegresarFirmado									= El documento se regres\u00f3 al Remitente, no es posible enviarlo al Destinatario
+mensaje_firma_exitoEnviarADestinatario									= Los documentos se enviaron exitosamente
+mensaje_firma_errorEnviarADestinatario									= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_firma_exitoRegresarFirmado										= Los documentos se enviaron exitosamente
+mensaje_firma_errorRegresarFirmado										= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_firma_validarRegresarVacio										= El documento ya fue firmado, Ingrese un comentario para justificar el regreso
+mensaje_firma_faltanPorFirmar											= No es posible enviarlo debido a que faltan firmantes
+
+####### BANDEJA BORRADORES  #######
+mensaje_registrar_atencion_concluir										= Concluir
+mensaje_registrar_atencion_rechazar										= Rechazar
+mensaje_registrar_atencion_reasignar									= Reasignar
+mensaje_registrar_atencion_atendiendo									= Atendiendo
+mensaje_registrar_atencion_enespera										= En espera
+mensaje_registrar_atencion_noenterado									= No enterado
+
+####### BANDEJA BORRADORES  #######
+mensaje_tabla_borradores_vacia											= Sin documentos para mostrar
+mensaje_confirmacion_eliminar_borrador									= \u00BFEst\u00e1s seguro que deseas eliminar el documento?
+mensaje_exito_eliminacion_borrador										= El documento se elimin\u00f3 correctamente
+mensaje_notificacion_comentado											= Comentado
+mensaje_notificacion_editado											= Editado
+mensaje_notificacion_firmado											= Firmado
+mensaje_notificacion_validado											= Validado
+mensaje_error_navegador_pdf												= No se puede visualizar el formato PDF, intenta nuevamente
+mensaje_solucion_navegador_pdf											= Para visualizar el documento, da clic en Descargar
+mensaje_titulo_eliminar_borrador										= Confirmaci\u00f3n
+mensaje_titulo_enviar_firma												= Firmar
+mensaje_titulo_enviar_validacion										= Validar
+mensaje_pestana_busqueda_por_area										= Personal de \u00e1rea
+mensaje_pestana_busqueda_por_titulares									= \u00c1reas relacionadas
+mensaje_no_busqueda_personas											= No has realizado ninguna b\u00fasqueda
+mensaje_no_busqueda_titulares											= No has realizado ninguna b\u00fasqueda
+mensaje_no_seleccion_personas											= Debe seleccionar alguna persona para poder agregar!!!
+mensaje_no_seleccion_titulares											= Debe seleccionar algun \u00E1rea para poder agregar!!!
+mensaje_no_agregado_personas											= No has realizado ninguna b\u00fasqueda
+mensaje_no_agregado_titulares											= Sin \u00e1reas para mostrar
+mensaje_confirmacion_concluir_documento									= \u00BFEst\u00e1s seguro de concluir el documento?
+
+mensaje_comentarios_leidos												= Comentarios le\u00eddos
+mensaje_comentarios_no_leidos											= Comentarios no le\u00eddos
+mensaje_comentarios														= Comentarios
+mensaje_comentarios_de													= Nombre
+mensaje_tabla_comentarios_vacia											= Sin comentarios para mostrar
+mensaje_tabla_modificaciones_vacia										= Sin ediciones para mostrar
+mensaje_editado_por														= Nombre
+mensaje_editado_fecha													= Fecha
+mensaje_editado_hora													= Hora
+mensaje_anexos															= Anexos
+mensaje_tabla_sin_anexos												= Sin documentos para mostrar
+mensaje_descripcion_anexos												= Documentos
+mensaje_descargar_anexos												= Descargar
+mensaje_ordenar_documentos												= Ordenar
+mensaje_ordenar_documentos_nombre										= Por Nombre
+mensaje_ordenar_documentos_fecha										= Por Fecha
+mensaje_ordenar_documentos_folio										= Por Folio
+mensaje_pestana_principal												= Principal
+mensaje_pestana_ccp														= CCP
+mensaje_pestana_turnados												= Turnados
+mensaje_pestana_borradores												= Borradores
+mensaje_pestana_enviados												= Enviados
+mensaje_menu_acciones													= Acciones \uf107
+mensaje_menu_enviar_validacion											= Enviar a Validaci\u00f3n
+mensaje_menu_enviar_destinatario										= Enviar a Destinatario
+mensaje_menu_enviar_destinatario_oficialia								= Env\u00edo a Destinatario y Oficial\u00eda
+mensaje_menu_enviar_destinatario_titular								= Env\u00edo a Destinatario y Titular
+mensaje_menu_enviar_destinatario_oficialia_titular						= Env\u00edo a Destinatario, Oficial\u00eda y Titular
+mensaje_menu_enviar_firma												= Enviar a Firma
+mensaje_menu_editar														= Editar
+mensaje_menu_firmar														= Firmar
+mensaje_menu_elimiar													= Eliminar
+mensaje_menu_turnar														= Turnar
+mensaje_menu_registrar_atencion											= Registrar Atenci\u00f3n
+mensaje_menu_responder													= Responder
+mensaje_ver_historial_borrador											= Ver historial
+mensaje_ver_anexos														= Ver anexos
+mensaje_revisar_comentarios												= Revisar Comentario
+mensaje_todos_comentarios												= Ver todos los comentarios
+mensaje_revisar_modificaciones											= Revisar Edici\u00f3n
+mensaje_revisar_firma													= Revisar Firma
+mensaje_revisar_validacion												= Revisar Validaci\u00f3n
+
+####### BANDEJA BORRADORES NUEVOS#######
+mensaje_estatus_envio_firmar											= Se envi\u00f3 a firmar 
+mensaje_estatus_regreso_firmar											= Regres\u00f3 firmado 
+mensaje_estatus_envio_validar											= Se envi\u00f3 a validar 
+mensaje_estatus_regreso_validar											= Regres\u00f3 validado 
+
+mensaje_exito_creacion_documento										= El documento ha sido creado
+mensaje_exito_envio_firma_documento										= El documento ha sido enviado a firmar
+mensaje_advertencia_sin_personas										= No has seleccionado ninguna persona.
+mensaje_advertencia_sin_area											= No has seleccionado ning\u00fan \u00e1rea.
+mensaje_exito_borrador_enviado											= Se envi\u00f3 el documento con \u00e9xito.
+mensaje_exito_borrador_enviar_validar									= Se envi\u00f3 el documento a validar con \u00e9xito.
+mensaje_advertencua_titular_seleccionado								= No es posible agregar el \u00e1rea a la que pertenece el Titular.
+
+####### BANDEJA ENVIADOS  #######
+mensaje_tabla_enviados_vacia											= Sin documentos para mostrar
+mensaje_confirmacion_eliminar_enviado									= \u00BFEst\u00e1s seguro que deseas eliminar el documento?
+mensaje_titulo_dialog_eliminar_enviado									= Confirmaci\u00f3n
+mensaje_exito_creacion_documento1										= El documento 
+mensaje_exito_creacion_documento2										=  se captur\u00f3 exitosamente.
+mensaje_exito_modificacion_documento1									= El documento 
+mensaje_exito_modificacion_documento2									= se modific\u00f3 exitosamente.
+
+####### ACR\u00d3NIMOS  #######
+mensaje_validacion_cajas 												= Faltan opciones por ingresar, intenta nuevamente
+mensaje_advertencia_no_inicializar										= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_advertencia_no_tiposDocumentos 									= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_advertencia_no_areas 											= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_advertencia_no_acronimo 										= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_exito_guardar_acronimo 											= La informaci\u00f3n se guard\u00f3 exitosamente
+mensaje_advertencia_no_guardar_acronimo 								= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_exito_editar_acronimo 											= La informaci\u00f3n se guard\u00f3 exitosamente
+mensaje_advertencia_no_editar_acronimo 									= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_advertencia_no_eliminar_acronimo 								= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_confirmacion_eliminar_acronimo 									= \u00BFEst\u00e1s seguro que deseas eliminar el acr\u00f3nimo?
+
+
+####### VALIDACI\u00d3N  #######
+mensaje_advertencia_no_documentos_validar 								= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_advertencia_no_guardar_comentario 								= Sin informaci\u00f3n, intenta nuevamente
+mensaje_exito_guardar_comentario 										= La informaci\u00f3n se guard\u00f3 exitosamente
+mensaje_advertencia_no_eliminar_comentario 								= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_info_seleccionar_accion 										= Selecciona al menos una opci\u00f3n
+mensaje_exito_regresar_remitente 										= Los documentos se enviaron exitosamente
+mensaje_advertencia_no_regresar_remitente 								= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_advertencia_seleccionar_regresar 								= Selecciona al menos una opci\u00f3n
+mensaje_exito_validar 													= Los documentos se validaron exitosamente
+mensaje_advertencia_no_validar 											= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_advertencia_seleccionar_validar 								= Selecciona al menos una opci\u00f3n
+mensaje_advertencia_no_validar 											= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_confirmacion_regresar_remitente_no_comentario 					= \u00BFDeseas regresar a Remitente sin ingresar un comentario o modificar el documento?
+mensaje_confirmacion_validar_no_comentario 								= \u00BFDeseas validar sin ingresar un comentario o modificar el documento?
+mensaje_confirmacion_cambios 											= \u00BFEst\u00e1s seguro que deseas continuar? Se considerar\u00e1 que realizaste cambios
+
+####### ESTRUCTURA  ######
+mensaje_advertencia_no_areas_organigrama 								= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_advertencia_organigrama_creado 									= El Organigrama ya fue creado
+mensaje_advertencia_organigrama_no_creado 								= No has creado el Organigrama
+mensaje_info_no_resultados 												= No se encontraron resultados
+mensaje_advertencia_no_titular 											= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_advertencia_no_oficialias 										= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_info_requeridos_apellido_nombre 								= Campos vac\u00edos, verifica la informaci\u00f3n
+mensaje_requerido_titular 												= Selecciona al menos una opci\u00f3n
+mensaje_requerido_oficialia 											= Selecciona al menos una opci\u00f3n
+mensaje_requerido_subnivel												= Selecciona al menos una opci\u00f3n
+mensaje_info_titular_repetido 											= La persona seleccionada ya fue agregada como Titular
+mensaje_advertencia_titular_subnivel 									= El Titular del \u00e1rea no se puede agregar como Subnivel
+mensaje_advertencia_padre_hijo_iguales 									= El Titular y el Subnivel es la misma persona
+mensaje_advertencia_relacion_padre_hijo_existe 							= La informaci\u00f3n ingresada ya existe
+mensaje_exito_guardar_organigrama 										= El Organigrama se guard\u00f3 exitosamente
+mensaje_advertencia_no_guardar_organigrama 								= Ocurri\u00f3 un error, intenta nuevamente
+mensaje_info_no_modificaciones_organigrama 								= No has ingresado modificaciones para guardar
+mensaje_exito_modificar_organigrama 									= El Organigrama se modific\u00f3 exitosamente
+mensaje_advertencia_no_modificar_organigrama 							= Ocurri\u00f3 un error, intenta nuevamente
+
+
+####### GENERALES  #######
+mensajes_generales_dato_requerido                      		 			= Dato requerido.
+etiqueta_generales_selecciona	                          				= Selecciona una opci\u00f3n
+
+####### CORRESPONSAL  #######
+validacion_mensajes_exito_captura_corresponsal	                	 	= El corresponsable se agregó correctamente.
+validacion_mensajes_error_captura_corresponsal	                	 	= No se pudo llevar a cabo la asignación del corresponsable.
+validacion_mensajes_exito_eliminar_corresponsal	                	 	= El corresponsable se ha eliminado correctamente.
+validacion_mensajes_error_eliminar_corresponsal	                	 	= No se pudo llevar a cabo la eliminación del corresponsable.
+validacion_mensajes_maximo_corresponsales								= Ya se cuenta con el máximo de corresponsables asignados
+busqueda_mensajes_sin_corresponsales_candidatos							= No se encontraron candidatos para ser corresponsables
+etiqueta_validacion_fecha_inicio										= Selecciona una fecha inicial
+etiqueta_validacion_fecha_fin											= Selecciona una fecha final
+
+####### PLANTILLAS  #######
+validacion_mensajes_exito_captura_plantilla								= La plantilla se agreg\u00f3 correctamente.
+validacion_mensajes_error_captura_plantilla	                	 		= No se pudo llevar a cabo la captura de la plantilla.
+validacion_mensaje_numero_platillas_maximo								= Se ha alcanzado el n\u00famero m\u00e1ximo de plantillas para este acrónimo
+validacion_mensajes_exito_eliminar_plantilla	                	 	= La plantilla se ha eliminado correctamente.
+validacion_mensajes_error_eliminar_plantilla	                	 	= No se pudo llevar a cabo la eliminación de la plantilla.
+
+#---------------------------------------------------------------------------------
+# 									ETIQUETAS 
+#---------------------------------------------------------------------------------
+
+####### ACR�NIMOS #######
+etiqueta_acronimos_acronimo												= Acr\u00f3nimo
+etiqueta_acronimos_posicion_numero										= \u00BFDeseas que el folio se complemente con ceros?
+etiqueta_acronimos_posicion_anio										= N\u00famero de posiciones para el a\u00f1o
+etiqueta_acronimos_vista_previa											= Tu acr\u00f3nimo quedar\u00eda as\u00ed:
+etiqueta_acronimos_lista_acronimos										= Lista de acr\u00f3nimos
+etiqueta_acronimos_instrucciones										= Instrucciones:
+etiqueta_acronimos_seleccionar_orden 									= Selecciona el orden de los elementos de acuerdo a como est\u00e1 formado el folio en tu \u00e1rea, para ello deber\u00e1s arrastrar los elementos a los recuadros punteados.
+etiqueta_acronimos_ejemplo												= Ejemplo: INE/UNICOM/2017/100, INE/UNICOM-100-2017
+etiqueta_acronimos_arrastra												= Arrastra a las l\u00edneas punteadas el orden que llevar\u00e1 tu n\u00famero
+
+####### HISTORIAL #######
+etiqueta_historial_titulo												= Historial de documento
+
+####### VALIDACI�N #######
+etiqueta_validacion_titulo												= Validaci\u00f3n de documento
+etiqueta_validacion_actualizacion										= Actualizaci\u00f3n.\u0020
+etiqueta_validacion_reloj_cero											= Al llegar a cero se actualizar\u00e1 la informaci\u00f3n
+etiqueta_validacion_seleccionar_documentos								= Selecciona los documentos que desees enviar a validaci\u00f3n.
+etiqueta_validacion_validar												= Validar
+etiqueta_validacion_regresar_remitente									= Regresar a remitente sin validar
+etiqueta_validacion_accion												= Acci\u00f3n
+etiqueta_no_documentos_validar											= No hay documentos para validar
+etiqueta_validacion_detalle_documento									= Detalle de documento
+
+####### INSTRUCCIONES  #######
+etiqueta_instrucciones_migasTipoPantalla								= Instrucciones
+etiqueta_instrucciones_tituloModulo 									= Instrucciones
+etiqueta_instrucciones_tituloSeccion1									= Crear Instrucciones
+etiqueta_instrucciones_tituloSeccion2									= Carga de Instrucciones
+etiqueta_instrucciones_tipoInstruccion									= Tipo de instrucci\u00f3n
+etiqueta_instrucciones_tipoAtencion										= Atenci\u00f3n
+etiqueta_instrucciones_tipoInformativa									= Informativa
+etiqueta_instrucciones_capturarInstruccion								= Instrucci\u00f3n
+etiqueta_instrucciones_notificacionCorreo								= \u00BFDeseas enviar notificaci\u00f3n por correo?
+etiqueta_instrucciones_notificacionSi									= S\u00ed
+etiqueta_instrucciones_notificacionNo									= No
+etiqueta_instrucciones_tiempoRespuesta									= Tiempo de respuesta
+etiqueta_instrucciones_InstruccionValorDefecto							= Capturar Instrucci\u00f3n
+etiqueta_instrucciones_tiempoValorDefecto								= \u00BFCu\u00e1ntos d\u00edas requieres para concretar la Instrucci\u00f3n?
+etiqueta_instrucciones_tituloTablaAtencion 								= Instrucci\u00f3n de atenci\u00f3n
+etiqueta_instrucciones_tituloTablaInstruccion							= Instrucci\u00f3n informativa
+etiqueta_instrucciones_tablaNumero										= No
+etiqueta_instrucciones_tablaInstruccion									= Instrucci\u00f3n
+etiqueta_instrucciones_eliminarInstruccion								= Eliminar instrucci\u00f3n
+etiqueta_instrucciones_editarInstruccion								= Editar instrucci\u00f3n
+etiqueta_instrucciones_notificacion										= Notificaci\u00f3n
+etiqueta_instrucciones_sinRegistros										= Sin Instrucciones para mostrar
+
+
+####### ORGANIGRAMA  #######
+etiqueta_estructura_migasMenu											= Organigrama
+etiqueta_estructura_captura												= CAPTURA
+etiqueta_estructura_consulta_modifica									= CONSULTA / MODIFICA
+etiqueta_estructura_organigrama											= Organigrama
+etiqueta_estructura_datos_generales										= Datos Generales
+etiqueta_estructura_titular												= Titular de \u00e1rea
+etiqueta_estructura_titular_ingresar									= Ingresa datos en cualquiera de los campos
+etiqueta_estructura_organigrama											= Organigrama
+etiqueta_estructura_oficialia											= Oficial\u00eda de partes
+etiqueta_estructura_oficialia_ingresar									= Ingresa datos en cualquiera de los dos campos (al menos 1).
+etiqueta_estructura_personal_oficialia									= Personal de Oficial\u00eda de partes
+etiqueta_estructura_agregar_subnivel									= Agregar subnivel
+etiqueta_estructura_eliminar											= Eliminar
+etiqueta_estructura_detalle												= Detalle
+etiqueta_estructura_visualizar_nombre_subarea							= \u00bfDesea que se visualice el nombre de la sub\u00e1rea en lugar de la persona?
+etiqueta_estructura_capturar_nombre_subarea								= Captura el nombre de la sub\u00e1rea
+etiqueta_estructura_registrar											= Registrar estructura
+etiqueta_estructura_datos_funcionario									= Datos del funcionario
+etiqueta_estructura_puesto_cargo										= Puesto o cargo
+etiqueta_estructura_area_adscripcion									= \u00c1rea de Adscripci\u00f3n
+etiqueta_estructura_correo_electronico									= Correo electr\u00f3nico
+etiqueta_estructura_extension											= Extensi\u00f3n
+
+####### BANDEJA  #######
+etiqueta_bandeja_migasMenu												= Bandeja de entrada
+menu_bandeja_entrada													= Bandeja Entrada
+menu_historico															= Hist\u00f3rico
+menu_borradores															= Borradores
+menu_enviados															= Enviados
+
+####### HISTORICO DEL TURNADO  #######
+mensaje_hturnado_titulo													= Turnado
+mensaje_hturnado_instrucciones											= Podr\u00e1s seleccionar instrucciones de un solo tipo para cada persona (Atenci\u00f3n o Informativas).
+mensaje_hturnado_instrucciones_atencion									= Instrucciones de Atenci\u00f3n
+mensaje_hturnado_instrucciones_informativas								= Instrucciones Informativas
+mensaje_hturnado_instrucciones_turnado									= Instrucciones para turnado
+mensaje_hturnado_tabla_vacia											= No hay personas para el turnado
+mensaje_hturnado_tabla_header_atencion									= Atenci\u00f3n
+mensaje_hturnado_tabla_header_informativas								= Informativas
+mensaje_hturnado_tabla_sin_instrucciones								= No hay instrucciones
+
+
+####### FIRMA  #######
+etiqueta_firma_migasMenu												= Firma de documentos
+etiqueta_firma_titulo													= Firma
+etiqueta_firma_seccionPendientesFirma									= Documentos pendientes de firma
+etiqueta_firma_instruccionPendientesFirma								= Selecciona los documentos que deseas firmar
+etiqueta_firma_tablaNumeroDocumento										= No. de documento
+etiqueta_firma_tablaRemitente											= Remitente
+etiqueta_firma_tablaFecha												= Fecha
+etiqueta_firma_tablaVaciaFirmar											= Sin documentos para mostrar
+etiqueta_firma_comboAccion												= Acci\u00f3n
+etiqueta_firma_comboFirma												= Firma
+etiqueta_firma_comboRegresar											= Regresar a Remitente
+etiqueta_firma_seccionFirma												= Firma
+etiqueta_firma_instruccionFirma											= Formatos v\u00e1lidos: *.cer *.key
+etiqueta_firma_certificado												= Certificado
+etiqueta_firma_llavePrivada												= Llave privada
+etiqueta_firma_contrasenia												= Contrase\u00f1a
+etiqueta_firma_botonFirmar												= Firmar
+etiqueta_firma_seccionPendienteEnvio									= Archivos firmados y pendientes de env\u00edo
+etiqueta_firma_instruccionPendienteEnvio								= Selecciona los archivos firmados
+etiqueta_firma_tablaVaciaFirmados										= Sin documentos para mostrar
+etiqueta_firma_comboEnviarDestOf										= Env\u00edo a Destinatario y Oficial\u00eda
+etiqueta_firma_comboEnviarDestTi										= Env\u00edo a Destinatario y Titular
+etiqueta_firma_comboEnviarDestOfTi										= Env\u00edo a Destinatario, Oficial\u00eda y Titular
+etiqueta_firma_comentarios												= Caracteres restantes
+etiqueta_firma_visualizar												= Visualizar
+etiqueta_firma_editar													= Editar
+etiqueta_firma_comentar													= Comentar
+etiqueta_firma_rechazar													= Rechazar documento, "No iba dirigido a mi"
+
+####### CAPTURA DE DOCUMENTO  #######
+etiqueta_captura_documento_migasMenu									= Captura de documento
+etiqueta_captura_documento												= Captura de documento
+etiqueta_lista_acronimos 												= Acr\u00f3nimos
+etiqueta_lista_tipoDocs 												= Tipo de documento
+etiqueta_area_activar	 												= Activar b\u00fasqueda por \u00e1rea relacionada
+etiqueta_area_desactivar 												= Desactivar b\u00fasqueda por \u00e1rea relacionada
+
+
+####### CLASIFICACION  #######
+etiqueta_recepcion														= Recepci\u00f3n
+etiqueta_recibe															= Recibe
+etiqueta_fecha_recepcion												= Fecha de recepci\u00f3n
+etiqueta_hora_recepcion													= Hora de recepci\u00f3n
+etiqueta_modo_recepcion													= Modo de recepci\u00f3n
+etiqueta_clasificacion_archivistica										= Clasificaci\u00f3n Achiv\u00edstica
+etiqueta_seccion														= Secci\u00f3n
+
+#-- CONSULTA LIMITADA --#
+roberto.shirasago														= 22
+armando.calleja															= cruzazul
+angela.inclan															= angydanosvacaciones
+jorge.torres															= torres
+tanya.cid																= tanys
+con_poder_ilimitado														= roberto.shirasago|angela.inclan|armando.calleja|jorge.torres
+etiqueta_vista_limitada_titulo											= Consultas BD 
+etiqueta_aceptar														= Aceptar
+etiqueta_cancelar														= Cancelar
+
+####### CLASIFICACION ####
+etiqueta_registro_fisicos												= Registro de documentos f\u00EDsicos.
+etiqueta_datos_recepcion												= Datos de recepci\u00f3n
+etiqueta_recibe															= Recibe
+etiqueta_fecha_recepcion												= Fecha de recepci\u00f3n
+etiqueta_hora_recepcion													= Hora de recepci\u00f3n
+etiqueta_folio_oficialia												= Folio de Oficial\u00EDa:
+
+####### CORRESPONSAL  #######
+etiqueta_corresponsal_migasTipoPantalla									= Corresponsables
+etiqueta_corresponsal													= Corresponsable
+etiqueta_corresponsales													= Corresponsables
+etiqueta_fecha_inicio													= Fecha inicial
+etiqueta_fecha_fin														= Fecha final
+etiqueta_nombres														= Nombre(s)
+etiqueta_apellidos														= Apellido(s)
+etiqueta_header_nombre													= Nombre
+etiqueta_header_apellidos												= Apellidos
+etiqueta_header_puesto													= Puesto
+etiqueta_header_area													= \u00C1�rea
+etiqueta_corresponsales_header_nombre									= Nombre
+etiqueta_corresponsales_header_fecha_inicial							= Fecha Inicial
+etiqueta_corresponsales_header_fecha_final								= Fecha Final
+etiqueta_corresponsales_header_eliminar									= Eliminar
+etiqueta_corresponsales_header_detalles									= Detalles
+etiqueta_tabla_vacia_corresponsales										= No tiene corresponsables asignados
+etiqueta_boton_buscar													= Buscar
+etiqueta_boton_cancelar													= Cancelar
+etiqueta_boton_agregar													= Agregar
+etiqueta_detalle_datos_corresponsal										= Datos del corresponsable
+etiqueta_detalle_puesto													= Puesto o cargo
+etiqueta_detalle_area													= \u00C1rea de adscripci\u00f3n
+etiqueta_detalle_correo													= Correo electr\u00f3nico
+etiqueta_detalle_extension												= Extensi\u00f3n
+etiqueta_lista_corresponsales											= Lista de corresponsables
+etiqueta_link_eliminar													= Eliminar
+etiqueta_link_detalle													= Detalle
+
+####### PLANTILLAS  #######
+etiqueta_plantillas_migasTipoPantalla									= Plantillas
+etiqueta_lista_plantillas_creadas										= Lista de plantillas creadas
+etiqueta_plantillas														= Plantillas
+etiqueta_crear_plantillas												= Crear plantillas
+etiqueta_tipo_documento													= Tipo de documento
+etiqueta_acronimo														= Acr\u00f3nimo
+etiqueta_nombre_plantilla												= Nombre de la plantilla
+etiqueta_boton_capturar													= Capturar
+etiqueta_tabla_vacia_plantillas											= No tiene plantillas creadas
+etiqueta_plantillas_header_nombre_documento								= Plantilla
+etiqueta_plantillas_header_eliminar										= Eliminar
+etiqueta_plantillas_header_editar										= Editar
+etiqueta_link_editar													= Editar
+
+####### VALIDACION  #######
+etiqueta_validacion_migasMenu											= Validaci\u00f3n de documentos
+
+####### REPORTES OFICIALIA #######
+etiqueta_mes_1															= Enero
+etiqueta_mes_2															= Febrero
+etiqueta_mes_3															= Marzo
+etiqueta_mes_4															= Abril
+etiqueta_mes_5															= Mayo
+etiqueta_mes_6															= Junio
+etiqueta_mes_7															= Julio
+etiqueta_mes_8															= Agosto
+etiqueta_mes_9															= Septiembre
+etiqueta_mes_10															= Octubre
+etiqueta_mes_11															= Noviembre
+etiqueta_mes_12															= Octubre
+
+####### OFICIALIA DE PARTES #######
+etiqueta_captura_documento_migasMenu									= Captura de documento
+
+####### BANDEJA  #######
+etiqueta_bandeja_oficialia_migasMenu									= Bandeja de entrada
+
+
+#---------------------------------------------------------------------------------
+# 								  CONSTANTES 
+#---------------------------------------------------------------------------------
+
+####### BANDEJA SEGUIMIENTO #######
+vista_entrada																= entrada
+vista_borradores															= borradores
+vista_enviados																= enviados
+vista_historico																= historico
+
+####### BANDEJA BORRADORES #######
+sin_notificacion_comentario													= 0
+con_notificacion_comentario													= 1
+
+sin_notificacion_edicion													= 0
+sin_notificacion_edicion													= 1
+
+sin_notificacion_validacion													= 0
+con_notificacion_validacion													= 1
+
+sin_notificacion_firma														= 0
+con_notificacion_firma														= 1
+
+####### BANDEJA SEGUIMIENTO ENTRADA#######
+recibido_seleccionado														= recibido
+ccp_seleccionado															= ccp
+info_seleccionado															= info
+atencion_seleccionado														= atencion
+
+mensaje_titulo_recibidos													= Recibidos
+mensaje_titulo_ccp															= Ccp (Con copia para)
+mensaje_titulo_atencion														= Atenci\u00f3n
+mensaje_titulo_info															= Informativos
+
+####### BANDEJA DE OFICIALIA  #######
+constante_bandejaOficialia_clasificar										= 1
+
+####### OFICIALIA DE PARTES(ELECTR�NICO) #######
+constante_OficialiaPartes_apartar											= A
+constante_OficialiaPartes_liberar											= L
+constante_OficialiaPartes_concluir											= C
+constante_oficialiaPartes_primerFolio										= 00001
+
+####### FIRMAR DOCUMENTOS  #######
+firma_pendiente_envio														= 0
+firma_estatus_no_regresado													= 0
+firma_estatus_regresado														= 1
+
+####### VALIDAR DOCUMENTOS  #######
+validacion_estatus_no_regresado												= 0
+validacion_estatus_regresado												= 1

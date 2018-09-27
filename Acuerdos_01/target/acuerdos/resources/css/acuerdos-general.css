@@ -1,0 +1,208 @@
+/***************  Estilos Look and Feel Nuevo.  ******************/
+.ui-inputfield, .ui-widget-content .ui-inputfield, .ui-widget-header .ui-inputfield {
+	box-shadow: none;
+}
+.ui-state-hover {
+    -moz-box-shadow: 0px 0px 5px #85b2cb, inset 0px 1px 0px #fff;
+    -webkit-box-shadow: 0px 0px 5px #85b2cb, inset 0px 1px 0px #fff;
+    box-shadow: 0px 0px 5px #85b2cb, inset 0px 1px 0px #fff;
+}
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+	background: #ffffff;
+}
+.ui-selectonemenu .ui-selectonemenu-trigger {
+	border-bottom: 1px solid #a8a8a8 !important;
+	width: 27px !important;
+	padding: 3px 4px !important;
+}
+.ui-inputfield.ui-state-focus, .ui-widget-content .ui-inputfield.ui-state-focus, .ui-widget-header .ui-inputfield.ui-state-focus {
+	box-shadow: 0px 0px 5px #85b2cb, inset 0 2px 2px #ffffff;
+}
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {
+	background: #aaaaaa;
+}
+.ui-selectonemenu-item.ui-state-hover {
+    background: #85b2cb;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    color: #ffffff;
+}
+.ui-shadow {
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+/********************************************************************/
+.layout-main {
+	margin-top: 129px;
+	margin-bottom: 168px;
+	border: 1px;
+}
+.breadcrumb {
+	background-color: #ffffff;
+	padding-left: 0;
+}
+.sombra {
+   float:left;
+   background-color: #A7A7A7;
+   margin: 10px 0 0 5px;
+}
+.sombra img {
+   display: block;
+   position: relative;
+  background-color: #fff;
+  margin: -6px 6px 6px -6px;
+}
+.push:hover {
+	position:relative;top:1px;left:1px;cursor:hand;cursor:pointer;clear:both;
+}
+.btn_acuerd {
+    background-image: url("#{facesContext.externalContext.request.contextPath}btn_Acuerdos.png") !important;
+}
+.lblTituloForm {
+	font-size: 30px;
+	color: #1b7986;
+}
+.lblNotas {
+	font-size: 10px;
+	color: #7f7f7f;
+}
+.lblInputs {
+	font-size: 13px;
+	color: #4e4e4e;
+}
+.inputsForm {
+	color: #4e4e4e;
+	border-bottom: 2px solid #d5007f;
+} 
+.inputsFormBus {
+	color: #4e4e4e;
+	border-bottom: 2px solid #d5007f;
+}  
+.inputsForm input {
+	color: #4e4e4e;
+	border-bottom: 2px solid #d5007f;
+}
+.lblSelectArchivo {
+	font-size: 13px;
+	color: #932c60;
+	font-weight: bold;
+}
+.btnAC {
+	background: #932c60;
+	font-size: 12px !important;
+	color: #ffffff;
+	border: 0px;
+	width: 95px;
+	height: 30px;
+}
+.btnVI {
+	background: #932c60;
+	font-size: 12px !important;
+	color: #ffffff;
+	border: 0px;
+	width: 150px;
+	height: 40px;
+}
+.ui-growl {
+    position:fixed;
+    top:35%;
+    right:40%;
+    width:301px;
+}
+.ui-icon-bullet {
+    background-position: -82px -145px;
+}
+.migaja {
+		background-color: #FFFFFF;
+}
+a.archivo-decarga {
+	color: #D5007F;
+	text-decoration: underline;
+	font-size: 12px;
+}
+.ui-icon-derecha{
+	background-image: url(img/btn_adelante.png)!important;
+	width:50px;
+	height: 50px;
+}
+.centrar {
+	position: absolute;
+	/*nos posicionamos en el centro del navegador*/
+	top:40%;
+	left:25%;
+	/*determinamos una anchura*/
+	width:1000px;
+	/*indicamos que el margen izquierdo, es la mitad de la anchura*/
+	margin-left:50px;
+	/*determinamos una altura*/
+	height:600px;
+	/*indicamos que el margen superior, es la mitad de la altura*/
+	margin-top:-100px;
+	border:1px solid #000000;
+	padding:2px;
+}
+.inputsForm.ui-selectonemenu {
+	border-bottom: none;
+}
+.inputsForm.ui-selectonemenu label {
+	border-bottom: 2px solid #d5007f;
+}
+span.inputsForm {
+	border-bottom: none;
+}
+.espaciador {
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+.espaciador-top {
+	margin-top: 30px;
+}
+.espaciador-bottom {
+	margin-bottom: 30px;
+}
+.espaciador-md-top {
+	margin-top: 40px;
+}
+.espaciador-lg-top {
+	margin-top: 50px;
+}
+.espaciador-xlg-top {
+	margin-top: 70px;
+}
+.espaciador-xs-top {
+	margin-top: 15px;
+}
+.centrar-contenido {
+	margin: 0 auto;
+}
+/***************  Botón FileUpload  ***************************/
+#contenedor-adjuntar-archivo .ui-fileupload-buttonbar {
+	background: transparent none;
+	border: none;
+}
+#contenedor-adjuntar-archivo .ui-fileupload-content {
+	display: none;
+}
+#contenedor-adjuntar-archivo .ui-fileupload-buttonbar {
+	padding: 0;
+}
+#contenedor-adjuntar-archivo .ui-fileupload-buttonbar .ui-button-text-icon-left .ui-button-text {
+	font-size: 1.8em;
+	padding: 0 1.2em;
+}
+#contenedor-adjuntar-archivo .ui-fileupload-choose.ui-button, .ui-fileupload-choose.ui-button .ui-widget,
+	.ui-fileupload-choose.ui-button .ui-state-default {
+	background-color: #932C60 !important;
+	border: 1px solid #932C60 !important;
+	color: #ffffff;
+}
+#contenedor-adjuntar-archivo .ui-icon {
+	display: none;
+}
+#contenedor-adjuntar-archivo .ui-state-default {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}

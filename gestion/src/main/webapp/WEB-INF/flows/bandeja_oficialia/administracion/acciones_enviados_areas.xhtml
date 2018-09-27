@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sec="http://www.springframework.org/security/tags">
+
+
+	<!-- Acciones para el Documento -->
+	
+	<p:remoteCommand name="clasificarDoc" action="clasificar"/>
+
+	<div id="div_row_acciones" class="row">
+
+
+		<div id="icon_acciones" class="col-xs-1" style="width: 40px; padding-left: 5px;">
+			<h:graphicImage rendered="true" name="bo_negro.png" library="img/bandeja" class="pull-center img-responsive" />
+		</div>
+
+		<div id="acciones_nombre" class="col-xs-5">
+			<h:outputLabel value="#{mbBandejaOficialiaComun.dtBandejaSeleccionados.dtoDocumento.noDocumento}" />	
+		</div>
+		
+		<div id="acciones_historial" class="col-xs-2"  style="width: 120px;">
+			
+			<p:commandLink styleClass="fa fa-sort-alpha-asc" value="&nbsp;Asignar folio" title="Asignar folio"
+						   disabled="#{mbBandejaOficialiaComun.dtBandejaSeleccionados.enClasificacion ne null}"
+						   actionListener="#{mbBandejaOficialiaComun.clasificarDocumento}"
+						   update=":formBorradores:panelIzq, :formBorradores:panelCentro, :formBorradores:panelDer,:formBorradores:mensaje_general_advertencia,menu_formulario"/>
+			
+		</div>
+	</div>
+		 
+	<div id="row_anexo" class="row" >
+	
+	<div id="anexo" class="col-xs-1" style="#{mbBandejaOficialiaComun.dtBandejaSeleccionados.dtoDocumento.contieneAnexos ne 0 ? 'background-color: #e2e2e2;' : ''} width: 100px;height: 30px">
+			<c:if test="#{mbBandejaOficialiaComun.dtBandejaSeleccionados.dtoDocumento.contieneAnexos ne 0}">
+				<span>
+					<i class="fa fa-paperclip" style="font-size: 18px; color:#000000 !important"/><h:outputText value="&nbsp;" style="text-decoration: none"/>
+					<h:outputText value="#{messageSource['mensaje_ver_anexos']}" style="color:#000000 !important"/>
+				</span>
+			</c:if>
+			
+			
+		</div>
+		<div id="anexoBoton" class="col-xs-1" style="width: 30px; text-align: center;">
+			<c:if test="#{mbBandejaOficialiaComun.dtBandejaSeleccionados.dtoDocumento.contieneAnexos ne 0}">
+				<p:commandButton value="&#xF00e;"
+								 actionListener="#{mbBandejaOficialiaComun.mostrarDialogAnexos}"
+								 update=":formBorradores:dialogVerAnexosEnvaidos" style="width: 30px; height: 30px !important;"/>
+			</c:if>
+			
+		</div>
+	
+		<div id="div_estatus" class="col-xs-8">
+		
+			
+				
+				<h:outputText 	value="Asignando: #{mbBandejaOficialiaComun.dtBandejaSeleccionados.dtoOficialiaClasificando.nombreCompleto}" styleClass="estatus"
+							rendered="#{mbBandejaOficialiaComun.dtBandejaSeleccionados.enClasificacion eq 1}"/>	
+				<h:outputText 	value=" Desde: #{mbBandejaOficialiaComun.dtBandejaSeleccionados.fechaOficialia}" styleClass="estatus"
+							rendered="#{mbBandejaOficialiaComun.dtBandejaSeleccionados.enClasificacion eq 1}"/>				
+							
+					
+			
+		
+		
+			
+		</div>
+		
+	</div>
+	<div id="row_remitentes" class="row" >
+		<div id="div_estatusR" class="col-xs-12">
+		
+			<h:outputText 	value="Remitente: " style="font-weight: bold;"/>	
+			<h:outputText 	value="#{mbBandejaOficialiaComun.listaDTORemitentes}" styleClass="estatusR" />	
+		</div>
+		<div id="div_estatusR" class="col-xs-12">
+		
+			<h:outputText 	value="Fecha de recepción: " style="font-weight: bold;"/>	
+			<h:outputText 	value="#{mbBandejaOficialiaComun.dtBandejaSeleccionados.fechaRecepcion}" styleClass="estatusR"> 
+				<f:convertDateTime pattern="dd/MM/yy " />
+			</h:outputText>	
+			<h:outputText 	value="#{mbBandejaOficialiaComun.dtBandejaSeleccionados.fechaRecepcion}" styleClass="estatusR"> 
+				<f:convertDateTime pattern="hh:mm aa" />
+			</h:outputText>
+		</div>
+		<div id="div_estatusR" class="col-xs-12">
+		
+			<h:outputText 	value="No. de documento: " style="font-weight: bold;"/>	
+			<h:outputText 	value="#{mbBandejaOficialiaComun.dtBandejaSeleccionados.dtoDocumento.noDocumento}" styleClass="estatusR" />	
+		</div>
+		
+		<div id="div_estatusR" class="col-xs-2"  style="text-align:right">
+			
+			<p:commandLink styleClass="fa fa-search-plus" value="Ampliar" title="Ampliar"
+							onclick="PF('dlgpdf').show();"
+								update="formBorradores:panelPDF"
+						   />
+			
+		</div>
+	</div>
+	
+	
+	
+
+
+</ui:composition>

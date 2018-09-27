@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+	  start-state="captura_estructura" parent="parent-flow">
+	  
+	<secured attributes="ROLE_GESTION4.ADMIN.OC, ROLE_GESTION4.ADMIN_AREA.OC, ROLE_GESTION4.CONSULTA_CAU.OC" match="any"/>
+
+	<var name="mbEstructura" class="mx.ine.gestion.mb.MBEstructura"/>
+	
+  	<!-- Pantalla de captura de estructura-->
+	<view-state id="captura_estructura" view="captura_estructura.xhtml">
+		<on-entry>
+			<evaluate expression='mbEstructura.inicializar("captura")'/>			
+			<set name="mbAdministrador.menuSelecionado" value="resourceBundle['id_modulo_organigrama']"/>
+		</on-entry>
+		
+		<transition on="cambiar_a_consulta" to="validarMandarAConsulta"/>
+		
+	</view-state>
+	
+	<decision-state id="validarMandarAConsulta">
+		
+		<if test="currentUser.authorities.contains( new org.springframework.security.core.authority.SimpleGrantedAuthority('ROLE_GESTION4.ADMIN_AREA.OC') )" 
+			then="consulta_estructura" else="captura_estructura"/>
+	
+	</decision-state>
+	
+	<subflow-state id="consulta_estructura" subflow="estructura/consulta"/>
+
+</flow>

@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+
+		<h:outputStylesheet library="css" name="modulos/corresponsable/corresponsable.css" />
+
+		<h:form id="form_corresponsales" enctype="multipart/form-data">
+
+			<p:growl id="mensaje_general_info" showDetail="true" sticky="true" globalOnly="true" severity="info"/>
+			<p:growl id="mensaje_general_advertencia" showDetail="true" sticky="true" globalOnly="true" severity="warn"/>
+			<p:growl id="mensaje_general_exito" showDetail="true" sticky="true" globalOnly="true" severity="fatal"/>
+
+			<div class="container">
+				
+				<h2 style="padding-bottom: 30px;">
+					<h:outputText value="Inicio" style="color: #999999"/>&nbsp;&nbsp;
+					<i class="fa fa-angle-right" aria-hidden="true" style="font-size: 18px; color: #999999"/>&nbsp;&nbsp;
+					<h:outputText value="#{messageSource['etiqueta_configuracion_migasMenu']}" style="color: #999999"/>&nbsp;&nbsp;
+					<i class="fa fa-angle-right" aria-hidden="true" style="font-size: 18px; color: #999999"/>&nbsp;&nbsp;
+					<h:outputText value="#{messageSource['etiqueta_corresponsal_migasTipoPantalla']}" style="font-weight: bold"/>
+				</h2>
+				<div class="row rowTituloPestanias">
+				<div class="col-xs-3 columnTituloPestanias " style="width: 19%; border:.5px solid white;">
+					<h3 class="h3TituloPestania">
+						<h:outputText value="Configuración" styleClass="tituloConfigHidden"/>
+					</h3>
+				</div>
+				<div class="col-xs-9 columnPestanias" style="width: 81%">
+					<div class="row" style="height: 51px !important; width: 95.8%; border-bottom: 3px solid #a0005f;">
+						
+						<div class="col-md-2 columnDerechaUltimaPestania" style="width: 141px; padding-top: 20px;">
+							<span class="pestaniaActiva">
+								<p:link value="Corresponsable" href="/app/configuracion/corresponsal/captura" style="color: white; font-weight: bold; text-decoration: none;"/>
+							</span>
+						</div>
+						
+						<div class="col-md-2 columnIzquierdaPestania" style="width: 93px; padding-right: 1px !important">
+							<span class="pestaniaInactiva">
+								<p:link value="Plantillas" href="/app/configuracion/plantillas/administracion" 
+										style="color: white; font-weight: bold; text-decoration: none;"/>
+							</span>
+						</div>
+						
+						<div class="col-md-2 columnIzquierdaPestania" style="width: 129px;">
+							<span class="pestaniaInactiva">
+								<p:link value="#{messageSource['etiqueta_instrucciones_tituloModulo']}" href="/app/configuracion/instrucciones/administracion" style="color: white; font-weight: bold; text-decoration: none;"/>
+							</span>
+						</div>
+						
+						<c:if test="#{sec:areAnyGranted('ROLE_GESTION4.ADMIN.OC, ROLE_GESTION4.ADMIN_AREA.OC')}">
+							<div class="col-md-2 columnIzquierdaPestania" style="width: 106px;">
+								<span class="pestaniaInactiva">
+									<p:link value="Acrónimos" href="/app/configuracion/acronimos/administracion" style="color: white; font-weight: bold; text-decoration: none;"/>
+								</span>
+							</div>
+						</c:if>
+						
+						<c:if test="#{sec:areAnyGranted('ROLE_GESTION4.OFICIALIA.OC, ROLE_GESTION4.ADMIN.OC, ROLE_GESTION4.CONSULTA_CAU.OC')}">
+							<div class="col-md-2 columnIzquierdaPestania" style="width: 175px; padding-top: 20px;">
+								<span class="pestaniaInactiva">
+									<p:link value="Remitentes externos"
+											href="/app/configuracion_oficialia/remitentes_ext/administracion"
+											style="color: white; font-weight: bold; text-decoration: none;" />
+								</span>
+							</div>
+						</c:if>
+						
+					</div>
+					
+					<div class="row" style="height: 36px; !important;"/>
+				</div>
+			</div>
+			
+			<h4>
+				<h:outputText value="Periodo del corresponsable" />
+			</h4>
+			<h5>
+				En caso que requieras que el corresponsable sea por un cierto periodo, elije las fechas por las cuales deseas que se registre.
+			</h5>
+			<p:outputPanel id="panelFechas">
+				<section><!-- Seccion de Corresponsal -->
+					<div class="row">
+						<div class="col-md-5">
+							<p:outputLabel value="#{messageSource['etiqueta_fecha_inicio'] }" style="padding-right: 10px;"/>
+						</div>
+						<div class="col-md-1" />
+						<div class="col-md-6">
+							<p:outputLabel value="#{messageSource['etiqueta_fecha_fin']}" style="padding-right: 10px;"/>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<div class="row">
+								<div class="col-md-2" style="padding-left: 0px;">
+									
+									<p:inputText id="diaInicioText" value="#{mbCorresponsal.form.diaInicio}" 
+												 style="width: 45px; height: 37px" maxlength="2" placeholder="día">
+										
+										<pe:keyFilter regEx="/[0-9]/" />
+										<f:validateLength minimum="1" />
+										
+										<p:ajax event="blur" process="@this" update="diaInicioTextMensaje diaInicioText"/>
+										
+									</p:inputText>
+	
+									<p:message id="diaInicioTextMensaje" for="diaInicioText" display="text"/>
+	
+								</div>
+								<div class="col-md-5" style="padding-left: 0px;">
+									<p:selectOneMenu style="width: 140px" value="#{mbCorresponsal.form.mesInicio}">
+										
+										<f:selectItem itemLabel="#{messageSource['mensaje_general_selecciona']}" itemValue="#{null}"/>
+										<f:selectItems  value="#{mbCorresponsal.listaMeses}" 
+														var="mes" itemValue="#{mes.numeroMes}" itemLabel="#{mes.nombreMes}" />
+										
+									</p:selectOneMenu>
+								</div>
+								<div class="col-md-4" style="padding-left: 10px;">
+									
+									<p:inputText id="anioInicioText" value="#{mbCorresponsal.form.anioInicio}" 
+												 size="4" style="height: 37px" maxlength="4" placeholder="año"
+												 validatorMessage="El año tiene que capturarse a 4 dígitos">
+										
+										<pe:keyFilter regEx="/[0-9]/" />
+										<f:validateLength minimum="4" />
+										
+										<p:ajax event="blur" process="@this" update="anioInicioTextMensaje anioInicioText"/>
+	
+									</p:inputText>
+									<p:message id="anioInicioTextMensaje" for="anioInicioText" display="text"/>
+									
+								</div>
+							</div>
+						</div>
+						<div class="col-md-2" />
+						<div class="col-md-4">
+							<div class="row">
+								<div class="col-md-2" style="padding-left: 0px;">
+									
+									<p:inputText id="diaFinText"  value="#{mbCorresponsal.form.diaFin}"
+												 style="width: 45px; height: 37px" maxlength="2" placeholder="día">
+										
+										<pe:keyFilter regEx="/[0-9]/" />
+										<f:validateLength minimum="1" />
+										
+										<p:ajax event="blur" process="@this" update="diaFinText"/>
+										
+									</p:inputText>
+	
+									<p:message id="diaFinTextMensaje" value="#{mbCorresponsal.form.mesFin}" for="diaFinText" display="text"/>
+									
+								</div>
+								<div class="col-md-5" style="padding-left: 0px;">
+									
+									<p:selectOneMenu style="width: 140px" value="#{mbCorresponsal.form.mesFin}">
+										
+										<f:selectItem itemLabel="#{messageSource['mensaje_general_selecciona']}" itemValue="#{null}"/>
+										<f:selectItems  value="#{mbCorresponsal.listaMeses}" 
+														var="mes" itemValue="#{mes.numeroMes}" itemLabel="#{mes.nombreMes}" />
+									
+									</p:selectOneMenu>
+	
+								</div>
+								<div class="col-md-4" style="padding-left: 10px;">
+									
+									<p:inputText id="anioFinText" value="#{mbCorresponsal.form.anioFin}"  
+												 size="4" style="height: 37px" maxlength="4" placeholder="año"
+												 validatorMessage="El año tiene que capturarse a 4 dígitos">
+										
+										<pe:keyFilter regEx="/[0-9]/" />
+										<f:validateLength minimum="2" />
+										
+										<p:ajax event="blur" process="@this" update="anioFinTextMensaje anioFinText"/>
+	
+									</p:inputText>
+									<p:message id="anioFinTextMensaje" for="anioFinText" display="text"/>
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</p:outputPanel>
+			
+			<h4>
+				<h:outputText value="Búsqueda de corresponsables" />
+			</h4>
+			<h5>
+				Ingresa el nombre o apellidos
+			</h5>
+			<p:outputPanel id="panelBusqueda">
+				<section><!-- Seccion de Corresponsal -->
+					<div class="row">
+						<div class="col-md-5">
+							<div class="row">
+								<h:outputLabel id="LabelNombreC" for="InputNombreC"
+									value="#{messageSource['etiqueta_nombres']}" style="font-size: 14px; font-family:roboto;" />
+							</div>
+							<div class="row">
+								<div class="md-inputfield">
+									<p:inputText id="InputNombreC"
+										value="#{mbCorresponsal.form.nombreCorresponsalCandidato}"
+										maxlength="50"
+										validatorMessage="#{messageSource['mensaje_regex_solo_letras_acentos_espacios']}"
+										style="width: 100%">
+										<!-- <p:ajax event="blur" process="@this" update="msgNombre" /> -->
+										<f:validateRegex
+											pattern="#{messageSource['regex_solo_letras_acentos_espacios']}" />
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-1" />
+						<div class="col-md-6">
+							<div class="row">
+								<h:outputLabel id="LabelApellidoC" for="InputApellidoC"
+									value="#{messageSource['etiqueta_apellidos']}" style="font-size: 14px; font-family:roboto;" />
+							</div>
+							<div class="row">
+								<p:inputText id="InputApellidoC"
+									value="#{mbCorresponsal.form.apellidosCorresponsalCandidato}"
+									maxlength="80" 
+									validatorMessage="#{messageSource['mensaje_regex_solo_letras_acentos_espacios']}"
+									style="width: 100%">
+									<!-- <p:ajax event="blur" process="@this" update="msgApellido" /> -->
+									<f:validateRegex
+										pattern="#{messageSource['regex_solo_letras_acentos_espacios']}" />
+								</p:inputText>
+							</div>
+	
+						</div>
+	
+					</div>
+	
+					<div class="row botonesAcomodo">
+						<div class="col-md-12">
+							<p:commandButton value="#{messageSource['etiqueta_boton_buscar']}"
+											 action="#{mbCorresponsal.buscarCorresponsalesCandidatos}"
+											 update="@form" process="@this panelBusqueda panelFechas" styleClass="btncentro boton" />
+						</div>
+					</div>
+	
+				</section>
+			</p:outputPanel>
+				
+			<!-- ******************************** Lista corresponsales Asignados **********************************  -->
+			<h4>
+				<h:outputLabel value="#{messageSource['etiqueta_lista_corresponsales']}" />
+			</h4>
+			<section>
+				<div class="row">
+					<p:dataTable id="tabla_corresponsales" var="corresponsal"	
+								 style="border: none !important;"				
+								 value="#{mbCorresponsal.listaCorresponsales}"
+								 rowKey="#{corresponsal.idPersona}" rows="10"
+								 emptyMessage=" ">
+
+						<p:column style="width:35px;text-align:left;border: none !important;" />
+						
+				
+						<p:column colspan="3" style="border: none !important;"	>
+							
+							<h:outputText styleClass="ui-treetable-toggler ui-icon ui-icon-bullet ui-c" style="float:left; font-family: Roboto"/>
+							<h:outputText value=" #{corresponsal.nombre} #{corresponsal.apellidos}" style="font-weight: bold; font-size: 13px; font-family: Roboto" /> &nbsp;
+							<h:outputText value="(#{corresponsal.puesto})" style="font-size: 13px; font-family: Roboto"/>
+
+						</p:column>
+						
+						<p:column style="border: none !important; text-align: center; width: 250px;">
+								<h:outputText value=" &#xF073; " rendered="#{!corresponsal.fechaInicio.isEmpty()}"/>
+								<h:outputText value=" #{corresponsal.fechaInicio}" style="font-size: 13px; font-family: Roboto"/>
+								<h:outputText value="&nbsp;-&nbsp;" style="font-size: 13px; font-family: Roboto" rendered="#{!corresponsal.fechaInicio.isEmpty()}"/>
+								<h:outputText value="&#xF073; " rendered="#{!corresponsal.fechaFin.isEmpty()}"/>
+								<h:outputText value=" #{corresponsal.fechaFin}" style="font-size: 13px; font-family: Roboto"/>
+						</p:column>
+						
+						<p:column style="border: none !important; text-align: center;">
+							
+							<h:outputText value="Periodo vencido" rendered="#{corresponsal.periodoVencido}" styleClass="texto_periodoVencido"/>
+							
+						</p:column>
+						
+						<p:column style="border: none !important; text-align: center; width: 100px;">
+							<p:commandLink action="#{mbCorresponsal.eliminarCorresponsal(corresponsal)}"
+										   styleClass="linksPersonasEncontradas" process="@this"
+										   update="@form">
+								
+								<p:confirm message="¿Estás seguro que deseas eliminar al corresponsable?" />
+								<i class="fa fa-user-times" aria-hidden="true"/>&nbsp;<h:outputText value="Eliminar" style="text-decoration: underline;"/>
+
+							</p:commandLink>
+						</p:column>
+						
+						<p:column style="border: none !important; text-align: center; width: 100px;">
+							<p:commandLink action="#{mbCorresponsal.detalleCorresponsal(corresponsal)}"
+										   styleClass="linksPersonasEncontradas" process="@this"
+										   update="@form" oncomplete="PF('detalle_estructura').show();">
+
+								<i class="fa fa-search" aria-hidden="true" />&nbsp;<h:outputText value="#{messageSource['etiqueta_link_detalle']}" style="text-decoration: underline;" />
+							</p:commandLink>
+						</p:column>
+
+					</p:dataTable>
+					<p:messages globalOnly="true" id="mensaje_tabla_corresponsales"
+						for="tabla_corresponsales" />
+				</div>
+			</section>
+
+		</div>
+
+		
+		<p:confirmDialog global="true" styleClass="ventanaConfirmacion">
+			<p:commandButton value="#{messageSource['etiqueta_boton_no']}" styleClass="ui-confirmdialog-no" type="button" />
+			<p:commandButton value="#{messageSource['etiqueta_boton_si']}" styleClass="ui-confirmdialog-yes" type="button" style="background-color: white !important; color: #d5007f !important; border: 1px solid #d5007f !important;"/>
+		</p:confirmDialog>
+
+			<!-- ************************************ Dialogo Tabla *************************************************  -->
+			<p:dialog id="dlgBuscarCorresponsal" styleClass="ventanaPersonaBusqueda"
+					  widgetVar="dlgBuscarCorresponsal" modal="true" resizable="false">
+
+				<p:outputPanel id="dialogo_corresponsal">
+					<div class="row">
+						<p:dataTable id="tabla_corresponsales_candidatos" var="empleado"	
+									widgetVar="dtWidgetVar_corresponsal_candidato"
+									value="#{mbCorresponsal.listaCorresponsalesCandidatos}"
+									rowKey="#{empleado.idPersona}" rows="10"
+									paginator="true"
+									paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+									paginatorPosition="bottom"
+									selectionMode="single"
+									selection="#{mbCorresponsal.form.corresponsalCandidatoSeleccionado}"
+									scrollable="true">
+
+							<p:ajax event="rowSelect"
+								listener="#{mbCorresponsal.onRowSelect}"
+								update=":form_corresponsales:btn_agregar_persona" />
+
+							<f:facet name="header">
+						        #{messageSource['etiqueta_corresponsales']}
+						    </f:facet>
+
+							<p:column style="width:35px;text-align:center" />
+
+							<p:column headerText="#{messageSource['etiqueta_header_nombre']}">
+								<h:outputText value="#{empleado.nombre}" />
+							</p:column>
+							<p:column headerText="#{messageSource['etiqueta_header_apellidos']}">
+								<h:outputText value="#{empleado.apellidos}" />
+							</p:column>
+							<p:column headerText="#{messageSource['etiqueta_header_puesto']}">
+								<h:outputText value="#{empleado.puesto}" />
+							</p:column>
+							<p:column headerText="#{messageSource['etiqueta_header_area']}">
+								<h:outputText value="#{empleado.area.descripcion}" />
+							</p:column>
+						</p:dataTable>
+						<p:messages globalOnly="true"
+							id="mensaje_tabla_corresponsales_candidatos"
+							for="tabla_corresponsales_candidatos" />
+					</div>
+
+					<div class="row ">
+						<div class="col-md-12 botonesAcomodo">
+
+							<p:commandButton value="#{messageSource['etiqueta_boton_cancelar']}" id="btn_eliminar_persona" onclick="PF('dlgBuscarCorresponsal').hide();"/>
+							&nbsp;
+							<p:commandButton value="#{messageSource['etiqueta_boton_agregar']}" id="btn_agregar_persona"
+										 	 rendered="true"
+										 	 disabled="#{!mbCorresponsal.isRowSelected or (mbCorresponsal.form.corresponsalCandidatoSeleccionado eq null)}"
+										 	 process="@this dlgBuscarCorresponsal"
+										 	 update="@form"
+										 	 actionListener="#{mbCorresponsal.agregarCorresponsal}" />
+						</div>
+					</div>
+				</p:outputPanel>
+			</p:dialog>
+
+			<!-- ************************************ Dialogo Detalle Corresponsal ***********************************  -->
+			<!-- DIALOG DE DETALLE DE CORRESPONSAL -->
+			<p:dialog widgetVar="detalle_estructura" modal="true"
+					  header="#{messageSource['etiqueta_detalle_datos_corresponsal']}" styleClass="detallePersona">
+
+				<p:outputPanel id="detalle_estructura_panel">
+					<div class="row">
+						<div class="col-md-5">
+							<div class="row">
+								<c:if test="#{mbCorresponsal.form.corresponsalDetalle.genero eq 'H'}">
+									<h:graphicImage style="width:100%;" name="#{messageSource['ruta_imagen_hombre']}" />
+								</c:if>
+								<c:if test="#{mbCorresponsal.form.corresponsalDetalle.genero eq 'M'}">
+									<h:graphicImage style="width:100%;" name="#{messageSource['ruta_imagen_mujer']}" />
+								</c:if>
+								<c:if test="#{empty mbCorresponsal.form.corresponsalDetalle.genero}">
+									<h:graphicImage style="width:100%;" name="#{messageSource['ruta_imagen_generica']}" />
+								</c:if>
+							</div>
+						</div>
+						<div class="col-md-7">
+							<div class="row"
+								style="margin-bottom: 10px; font-weight: bold; color: #d5007f;">
+								<h:outputText
+									value=" #{mbCorresponsal.form.corresponsalDetalle.tratamiento != null ? mbCorresponsal.form.corresponsalDetalle.tratamiento : ''}
+							 #{mbCorresponsal.form.corresponsalDetalle.nombre} #{mbCorresponsal.form.corresponsalDetalle.apellidos}" />
+							</div>
+							<div class="row" style="font-weight: bold;">
+								<h:outputText value="#{messageSource['etiqueta_detalle_puesto']}" />
+							</div>
+							<div class="row" style="margin-bottom: 10px;">
+								<h:outputText
+									value="#{mbCorresponsal.form.corresponsalDetalle.puesto}" />
+							</div>
+
+							<div class="row" style="font-weight: bold;">
+								<h:outputText value="#{messageSource['etiqueta_detalle_area']}" />
+							</div>
+							<div class="row" style="margin-bottom: 10px;">
+								<h:outputText
+									value="#{mbCorresponsal.form.corresponsalDetalle.area.descripcion}" />
+							</div>
+							<div class="row" style="font-weight: bold;">
+								<h:outputText value="#{messageSource['etiqueta_detalle_correo']}" />
+							</div>
+							<div class="row">
+								<h:outputText
+									value="#{mbCorresponsal.form.corresponsalDetalle.cuentaLDAP}@ine.mx" />
+							</div>
+							<div class="row" style="font-weight: bold;">
+								<h:outputText value="#{messageSource['etiqueta_detalle_extension']}" />
+							</div>
+							<div class="row" style="margin-bottom: 10px;">
+								<h:outputText
+									value="#{mbCorresponsal.form.corresponsalDetalle.extensionTel != null ? mbCorresponsal.form.corresponsalDetalle.extensionTel : 'Sin extensión'}" />
+							</div>
+						</div>
+					</div>
+				</p:outputPanel>
+			</p:dialog>
+			
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+					  closable="false" resizable="false" showHeader="false">
+				<p:graphicImage name="/img/estructura/loader.gif" />
+			</p:dialog>
+
+			<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" onerror="PF('statusDialog').hide()"/>
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

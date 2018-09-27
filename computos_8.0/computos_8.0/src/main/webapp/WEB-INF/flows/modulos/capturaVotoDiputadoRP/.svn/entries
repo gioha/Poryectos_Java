@@ -1,0 +1,40 @@
+10
+
+dir
+343377
+svn+ssh://giovanni.hernandez@10.0.1.85/repositorio/DIS-UNICOM/Sistemas%20Electorales/Configurables_2017/computosINE_8.0/trunk/computos/src/main/webapp/WEB-INF/flows/modulos/capturaVotoDiputadoRP
+svn+ssh://giovanni.hernandez@10.0.1.85/repositorio/DIS-UNICOM
+
+
+
+2017-06-06T16:10:42.995559Z
+258842
+clemencia.cuellar
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+b6cf43f3-9c2e-435a-add6-29cfb2289967
+
+capturar
+dir
+
+components
+dir
+
+consultar
+dir
+
+modificar
+dir
+

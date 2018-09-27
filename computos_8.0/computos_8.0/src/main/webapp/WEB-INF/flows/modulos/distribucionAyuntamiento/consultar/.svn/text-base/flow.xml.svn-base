@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+	  start-state="home_view" parent="parent-flow">
+	  
+	  <secured attributes="ROLE_COMPUTOS.ADMIN.PARAM.CAPTURA.OC, 
+						 ROLE_COMPUTOS.ADMIN.CAPTURA.OC, 
+						 ROLE_COMPUTOS.CONSEJERO.OC, 
+						 ROLE_COMPUTOS.CONSULTA.OC, 
+						 ROLE_COMPUTOS.CAU.OC, 
+						 ROLE_COMPUTOS.CAPTURA.JL, 
+						 ROLE_COMPUTOS.CONSULTA.JL, 
+						 ROLE_COMPUTOS.ADMIN.EXT.OPLE.JL,  
+						 ROLE_COMPUTOS.CAPTURA.JM, 
+						 ROLE_COMPUTOS.CONSULTA.JM,
+						 ROLE_COMPUTOS.PARTIDO.CONSULTA.JL, 
+						 ROLE_COMPUTOS.PARTIDO.CONSULTA.JM" match="any"/>
+	  
+	  <var name="constantes" class="mx.ine.computosINE.util.Constantes"/>
+
+	
+	<decision-state id="home_view">
+	  <on-entry>
+	  	<evaluate expression="mbDistGen.init(9)" />
+	  </on-entry>
+		  <if test="mbDistGen.distribucionRealizada()" then="consultar"
+														else="noconsultar" />	
+	</decision-state>
+	
+	<view-state id="consultar" view="distribucion.xhtml">
+		<on-entry>
+			<evaluate expression="mbDistGen.setPermiteConsultarDistribucion(true)" />
+			<evaluate expression="mbDistGen.setTipoCandidatura(constantes.AYUNTAMIENTO)" />
+			<evaluate expression="mbAdmin.dto.setIdModulo(12)"></evaluate>
+            <evaluate expression="mbAdmin.dto.setIdAccion(2)"></evaluate>
+		</on-entry>
+		<transition on="captura" to="capturar" />
+		<transition on="eliminadas" to="home_view" />
+		<transition on="noEliminadas" to="home_view" />
+	</view-state>
+	
+	<view-state id="noconsultar" view="distribucion.xhtml">
+		<on-entry>
+			<evaluate expression="mbDistGen.setPermiteConsultarDistribucion(false)" />
+			<evaluate expression="mbDistGen.setTipoCandidatura(constantes.AYUNTAMIENTO)" />
+			<evaluate expression="mbAdmin.dto.setIdModulo(12)"></evaluate>
+            <evaluate expression="mbAdmin.dto.setIdAccion(2)"></evaluate>
+		</on-entry>
+		<transition on="captura" to="capturar" />
+		<transition on="eliminadas" to="home_view" />
+		<transition on="noEliminadas" to="home_view" />
+	</view-state>
+	
+	<view-state id="capturar"
+		view="externalRedirect:servletRelative:/modulos/distribucionAyuntamiento/capturar"/>
+	  
+</flow>

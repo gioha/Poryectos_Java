@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sec="http://www.springframework.org/security/tags">
+	
+	<div id="row_lista_bandeja" class="row">
+ 		
+ 		<div id="col_lista_borradores" class="col-xs-12">
+ 		
+ 			<h:outputScript library="js" name="contextMenu.js" />
+
+			<p:dataTable id="tablaBorradores" widgetVar="tablaBorradores" styleClass="tabla_bandeja"
+						 var="borrador" value="#{mbBorradores.listaDTOBorradores}"
+						 rows="10" paginator="true" paginatorPosition="top"
+						 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						 selectionMode="single"
+						 selection="#{mbBorradores.dtoBorradorSeleccionado}"
+						 rowKey="#{borrador.idDocumento}"
+						 rowIndexVar="findex"
+						 emptyMessage="#{messageSource['mensaje_tabla_borradores_vacia']}">
+
+				<p:ajax event="rowSelect" listener="#{mbBorradores.seleccionarBorrador}"
+						update=":formBorradores:panelDer, :formBorradores:panelCentro, :formBorradores:panelIzq, menu_formulario" />
+						
+				<p:ajax event="contextMenu" listener="#{mbBorradores.seleccionarBorrador}"
+						update="formBorradores:menuAcciones, :formBorradores:panelDer, :formBorradores:panelCentro, :formBorradores:panelIzq, menu_formulario" oncomplete="PF('menuAcciones').show(currentEvent);"/>
+						
+				<p:column styleClass="#{borrador.noLeido eq messageSource['constante_documento_noLeido'] ? 'columna_franja_nuevo_noleidos':'columna_franja_nuevo'}" ></p:column>
+						
+				<p:column styleClass="columna_icono" >
+
+					<h:graphicImage rendered="#{borrador.numEnviadoValidacion eq 0 and borrador.numEnviadoFirma ne 0 and borrador.documento.tipoCaptura ne 3}" 
+									name="bo_valida.png" library="img/bandeja" class="pull-center img-responsive" />
+						
+					<h:graphicImage rendered="#{borrador.numEnviadoFirma eq 0 and borrador.documento.tipoCaptura ne 3}" name="bo_firma.png" library="img/bandeja"
+									class="pull-center img-responsive" />
+						
+					<h:graphicImage rendered="#{( (borrador.numEnviadoValidacion ne 0  ) and (borrador.numEnviadoFirma ne 0) and (borrador.documento.tipoCaptura ne 3) ) }" 
+									name="bo_negro.png" library="img/bandeja"
+									class="pull-center img-responsive" />
+						
+					<h:graphicImage rendered="#{borrador.documento.tipoCaptura eq 3}" name="iconos_adjunto.png" library="img/bandeja"
+									class="pull-center img-responsive" />
+
+				</p:column>
+				
+				<p:column style="width:160px;" styleClass="#{borrador.noLeido eq messageSource['constante_documento_noLeido'] ? 'columna_bandeja_noleido':'columna_bandeja'}" >
+					<span class="tabla_siglas">
+						 <h:outputText value="#{borrador.documento.noDocumento}" />
+						 <i class="#{borrador.documento.contieneAnexos eq 1 ? 'fa fa-paperclip':'sin_adjunto' }" aria-hidden="true"></i>
+					</span>
+					<span class="asunto">
+						 <h:outputText value="#{borrador.documento.asunto}" /> 
+						 <!-- <br/><h:outputText value="#{borrador.idDocumento}" /> -->
+					</span>
+				</p:column>
+				
+				<!-- <p:column styleClass="#{borrador.noLeido eq messageSource['constante_documento_noLeido'] ? 'columna_bandeja_noleido':'columna_bandeja'}" >
+					<i class="#{borrador.documento.contieneAnexos eq 1 ? 'fa fa-paperclip':'sin_adjunto' }" aria-hidden="true"></i><br />
+				</p:column> -->
+
+				<!-- <p:column styleClass="#{borrador.noLeido eq messageSource['constante_documento_noLeido'] ? 'columna_bandeja_noleido columna_enviado':'columna_bandeja columna_enviado'}" > -->
+				<p:column styleClass="columna_bandeja columna_enviado" >
+					<h:outputText value="Enviado" styleClass="texto_enviado" 
+								 rendered="#{(borrador.numEnviadoFirma ne 0 and borrador.numEnviadoFirma ne null) or (borrador.numEnviadoValidacion ne 0 and borrador.numEnviadoValidacion ne null)}"/>
+				</p:column>
+				
+				<p:column styleClass="#{borrador.noLeido eq messageSource['constante_documento_noLeido'] ? 'columna_bandeja_noleido columna_fecha':'columna_bandeja columna_fecha'}" >
+				<!-- <p:column styleClass="columna_bandeja columna_fecha"> -->
+					<h:outputText value="#{borrador.documento.fechaCreacion}" styleClass="tabla_bandeja_fecha" >
+						<f:convertDateTime pattern="dd/MM/yy " />
+					</h:outputText>
+					
+					<h:outputText value="#{borrador.documento.fechaCreacion}" styleClass="tabla_bandeja_hora">
+						<f:convertDateTime pattern="hh:mm aa" />
+					</h:outputText>
+				</p:column>
+				
+				<p:column styleClass="columna_bandeja columna_iconos">
+				
+					<h:outputText 	rendered="#{borrador.documento.tipoCaptura ne 3}"
+									class="#{borrador.conComentarios ne 0 ? 'fa fa-commenting con_comentarios': 'fa fa-commenting'}"
+									style="padding-right:5px;"
+									 />
+					
+					<h:outputText 	rendered="#{borrador.documento.tipoCaptura ne 3}"
+									class="#{borrador.conModificaciones ne 0 ? 'fa fa-pencil con_ediciones': 'fa fa-pencil'}"
+									style="padding-right:5px;"
+									 />
+									 
+					<h:outputText 	rendered="#{borrador.documento.tipoCaptura ne 3}"
+									class="#{borrador.conValidacion ne 0 ? 'fa fa-check con_validaciones': 'fa fa-check'}"
+									style="padding-right:5px;"
+									 />
+					
+					<p:graphicImage  	name="firma1.png" library="img/bandeja" 
+										styleClass="icon_con_firma" rendered="#{borrador.conFirma ne 0 and borrador.documento.tipoCaptura ne 3}"/>
+					 
+					<p:graphicImage  	name="firma2.png" library="img/bandeja" 
+										styleClass="icon_firma" rendered="#{borrador.conFirma eq 0 and borrador.documento.tipoCaptura ne 3}"/>
+
+				</p:column>
+
+			</p:dataTable>
+			
+			<p:contextMenu id="menuAcciones" widgetVar="menuAcciones" for="tablaBorradores">
+			
+	        		<p:menuitem value="#{messageSource['mensaje_menu_enviar_validacion']}"
+								actionListener="#{mbBorradores.mostrarDialogEnviarValidar()}"
+								rendered="#{mbBorradores.dtoBorradorSeleccionado.documento.tipoCaptura ne 3}"
+									disabled="#{(mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma ne null) or (mbBorradores.dtoBorradorSeleccionado.numEnviadoValidacion ne 0 and mbBorradores.dtoBorradorSeleccionado.numEnviadoValidacion ne null)}"
+								update=":formBorradores:dialog_enviar_fv :formBorradores:mensaje_general_exito :formBorradores:mensaje_general_exito :formBorradores:mensaje_general_info" />
+										
+					<p:menuitem value="#{messageSource['mensaje_menu_enviar_destinatario']}" 
+								disabled="#{(mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma ne 0) and (mbBorradores.dtoBorradorSeleccionado.documento.tipoCaptura ne 3)}"
+								update=":formBorradores:panelIzq, :formBorradores:panelCentro, :formBorradores:panelDer, :formBorradores:mensaje_general_exito :formBorradores:mensaje_general_exito :formBorradores:mensaje_general_info menu_formulario">
+										<f:actionListener binding="#{mbBorradores.enviarADestinatarios()}"/>
+										<f:actionListener binding="#{mbBandejaMenu.consultarMenu()}"/>
+					</p:menuitem>
+					
+					<p:menuitem value="#{messageSource['mensaje_menu_enviar_firma']}" ajax="true"
+								actionListener="#{mbBorradores.mostrarDialogEnviarFirmar()}"
+								rendered="#{mbBorradores.dtoBorradorSeleccionado.documento.tipoCaptura ne 3}"
+								disabled="#{(mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma ne null and mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma ne 0) or (mbBorradores.dtoBorradorSeleccionado.numEnviadoValidacion ne 0 and mbBorradores.dtoBorradorSeleccionado.numEnviadoValidacion ne null)}"
+								update=":formBorradores:mensaje_general_exito :formBorradores:mensaje_general_exito :formBorradores:mensaje_general_info :formBorradores:dialog_enviar_fv" />
+							
+			
+					<p:menuitem value="#{messageSource['mensaje_menu_editar']}" action="modificar" 
+								disabled="#{mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma ne null or mbBorradores.dtoBorradorSeleccionado.numEnviadoValidacion ne null}" />
+										
+					<p:menuitem value="#{messageSource['mensaje_menu_elimiar']}"
+								disabled="#{(mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma ne 0 and mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma ne null) or (mbBorradores.dtoBorradorSeleccionado.numEnviadoValidacion ne 0 and mbBorradores.dtoBorradorSeleccionado.numEnviadoValidacion ne null)}"
+								update=":formBorradores:panelIzq,:formBorradores:tablaBorradores :formBorradores:mensaje_general_exito :formBorradores:mensaje_general_exito :formBorradores:mensaje_general_info" >
+							 	<f:actionListener binding="#{mbBorradores.mostrarConfirmacionEliminarBorrador()}"/>
+					</p:menuitem>
+								
+    		</p:contextMenu>
+
+		</div>
+			 
+	</div>
+</ui:composition>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+	  start-state="validaRolUsuario" parent="parent-flow">
+	  
+	 
+	<!-- Validamos los roles del lado del front: SOLO LOS USUARIOS CON LOS ROLES DEFINIDOS ENTRARAN A ESTA PAGINA, LOS QUE NO LOS TENGAN LES MADARA ERROR --> 
+<!-- 	<secured attributes="ROLE_COMPUTOS.ADMIN.PARAM.CAPTURA.OC, 
+					 ROLE_COMPUTOS.ADMIN.CAPTURA.OC, 
+					 ROLE_COMPUTOS.CONSEJERO.OC, 
+					 ROLE_COMPUTOS.CONSULTA.OC, 
+					 ROLE_COMPUTOS.CAU.OC, 
+					 ROLE_COMPUTOS.CAPTURA.JL, 
+					 ROLE_COMPUTOS.CONSULTA.JL, 
+					 ROLE_COMPUTOS.ADMIN.EXT.OPLE.JL,  
+					 ROLE_COMPUTOS.CAPTURA.JM,
+					 ROLE_COMPUTOS.CONSULTA.JM, 
+					 ROLE_COMPUTOS.PARTIDO.CONSULTA.JL, 
+					 ROLE_COMPUTOS.PARTIDO.CONSULTA.JM" match="any"/> -->	 
+	  
+	  
+	<var name="mbHome" class="mx.ine.acuerdos.mb.MBHomeAcuerdos"/>  	
+  	
+  	
+  	<!-- Validamos los roles del usuario del lado del MB -->
+ 	 <decision-state id="validaRolUsuario">
+ 		
+		<if test="mbHome.validaRoles()" then="home_view"
+										else="home_view_bloqueado" 		/>
+														
+	</decision-state> 
+  	
+  	
+  	
+  	
+	<view-state id="home_view"  view="home.xhtml">
+ 		<on-entry> 
+ 			<evaluate expression="mbAdmin.obtenMenuAcuerdos()"></evaluate>
+ 			<evaluate expression="mbHome.inti()"></evaluate>
+ 			<evaluate expression="mbHome.setRolValido(true)"></evaluate> 
+ 		</on-entry> 	 
+ 		
+ 		
+		<transition on="irSesion"  to="sesion" />		
+		<transition on="irSeguimiento"  to="seguimiento" />
+		<transition on="irReportes"  to="reportes" />
+		<transition on="irConfiguracion"  to="configuracion" />
+		
+	</view-state>
+	
+	
+	<view-state id="home_view_bloqueado"  view="home.xhtml">
+ 		<on-entry> 
+ 			<evaluate expression="mbHome.inti()"></evaluate>
+ 			<evaluate expression="mbHome.setBloquerPantallaPorRol(true)"></evaluate>
+ 			<evaluate expression="mbHome.imprimeValidacion()"></evaluate> 
+ 		</on-entry> 	 
+	</view-state>
+	
+
+	<view-state id="sesion"        
+				view="externalRedirect:servletRelative:/sesiones/convocatoria"/>
+	<view-state id="seguimiento"        
+				view="externalRedirect:servletRelative:/seguimiento/bandeja_cg"/>
+	<view-state id="reportes"        
+				view="externalRedirect:servletRelative:/reportes"/>
+	<view-state id="configuracion"        
+				view="externalRedirect:servletRelative:/catalogos"/>
+	
+					
+	
+	
+</flow>

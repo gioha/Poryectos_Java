@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+	start-state="accesoDenegado" parent="parent-flow">
+
+	<!-- <var name="mbRegAcuerdos" class="mx.ine.acuerdos.mb.MBRegistroAcuerdos" /> -->
+
+	<!-- Pantalla Acceso Denegado -->
+	<view-state id="accesoDenegado" view="acceso_denegado.xhtml">
+
+<!-- 		<on-entry>
+			<evaluate expression="mbRegAcuerdos.init()"></evaluate>
+		</on-entry> -->
+
+		<transition on="regresarHome" to="regresaHome" />
+
+	</view-state>
+
+	<!-- Pantalla Home -->
+	<subflow-state id="home_view" subflow="home"> </subflow-state>
+
+	<!-- Estados terminales -->
+	<end-state id="regresaHome" view="externalRedirect:servletRelative:/home" />
+
+</flow>
+
+

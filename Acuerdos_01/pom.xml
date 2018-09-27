@@ -1,0 +1,509 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- Datos del paquete -->
+	<groupId>mx.ine</groupId>
+	<artifactId>acuerdos</artifactId>
+	<version>1.0</version>
+	<packaging>war</packaging>
+
+	<!-- Información del proyecto -->
+	<name>acuerdos</name>
+	<description>Aplicación que administra el registro y seguimiento de acuerdos de las sesiones del consejo general</description>
+
+	<!-- Versionado de dependencias -->
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<java-version>1.8</java-version>
+		<jboss-eap-version>7.0.7.GA</jboss-eap-version>
+		<servicios-ine-version>2.0</servicios-ine-version>
+		<simplecaptcha-version>1.2.1</simplecaptcha-version>
+
+		<jboss-logging-version>3.1.2.GA</jboss-logging-version>
+		<javaee-web-api-version>6.0</javaee-web-api-version>
+		<commons-fileupload-version>1.3.1</commons-fileupload-version>
+		
+		<spring-framework-version>4.3.13.RELEASE</spring-framework-version>
+		<spring-webflow-version>2.4.7.RELEASE</spring-webflow-version>
+		<spring-security-version>4.2.3.RELEASE</spring-security-version>
+		<spring-ldap-version>2.2.0.RELEASE</spring-ldap-version>
+		
+		<javax-el-version>1.0.6.Final-redhat-1</javax-el-version>
+		<javax-faces-version>2.2.12.redhat-1</javax-faces-version>
+		<jsf-api-version>2.2.3</jsf-api-version>
+		<jsf-impl-version>2.2.3</jsf-impl-version>
+
+		<primefaces-version>6.1</primefaces-version>
+		<primefaces-extensions-version>6.1.1</primefaces-extensions-version>
+
+		<hibernate-core-version>5.0.9.Final-redhat-1</hibernate-core-version>
+		<hibernate-entitymanager-version>5.0.9.Final-redhat-1</hibernate-entitymanager-version>
+		<hibernate-validator-version>5.2.4.Final-redhat-1</hibernate-validator-version>
+		<hibernate-envers-version>5.0.9.Final-redhat-1</hibernate-envers-version>
+		<recursos-web-version>3.0</recursos-web-version> 
+		<apache-http-componentes>4.2.1</apache-http-componentes> 		
+		<funciones-comunes-version>0.0.1</funciones-comunes-version>
+		<cxf-version>3.1.11</cxf-version>
+		<jackson-version>2.9.3</jackson-version>
+	    <ironjacamar-version>1.0.23.Final</ironjacamar-version>
+	    <commons-collections-version>3.2.1</commons-collections-version>
+	    <!-- <jasperreports-version>5.6.0</jasperreports-version> -->
+	</properties>
+
+	<!-- Dependencias -->
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.jboss.bom</groupId>
+                <artifactId>jboss-eap-javaee7</artifactId>
+                <version>${jboss-eap-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+			</dependency>
+		</dependencies> 
+	</dependencyManagement>
+
+	<dependencies>  
+		<!-- INE -->
+        <dependency>
+            <groupId>mx.ine</groupId>
+            <artifactId>servicios-ine</artifactId>
+            <version>${servicios-ine-version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+		<dependency>
+			<groupId>mx.ine</groupId>
+			<artifactId>funciones-comunes</artifactId>
+			<version>${funciones-comunes-version}</version>
+<!-- 			<scope>provided</scope> -->
+		</dependency>
+
+		<!-- Jar captcha -->
+		<dependency>
+			<groupId>nl.captcha</groupId>
+			<artifactId>simplecaptcha</artifactId>
+			<version>${simplecaptcha-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Logs de jboss, se usa para compilar solamente -->
+		<dependency>
+			<groupId>org.jboss.logging</groupId>
+			<artifactId>jboss-logging</artifactId>
+			<version>${jboss-logging-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+        <!-- Javax --> 
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-web-api</artifactId>
+			<version>${javaee-web-api-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+        <!-- Fileupload Manejo de archivos --> 
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>${commons-fileupload-version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>${commons-collections-version}</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${spring-framework-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring-framework-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring-framework-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.ldap</groupId>
+			<artifactId>spring-ldap-core</artifactId>
+			<version>${spring-ldap-version}</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${spring-framework-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${spring-framework-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring-framework-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring-framework-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-expression</artifactId>
+			<version>${spring-framework-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring-framework-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring-framework-version}</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+			<version>1.1.0.RELEASE</version>
+		</dependency>
+		
+		<!-- Spring Framework WebFlow -->
+		<dependency>
+			<groupId>org.springframework.webflow</groupId>
+			<artifactId>spring-faces</artifactId>
+			<version>${spring-webflow-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.webflow</groupId>
+			<artifactId>spring-webflow</artifactId>
+			<version>${spring-webflow-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Spring Security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${spring-security-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring-security-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring-security-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-ldap</artifactId>
+			<version>${spring-security-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+	      <groupId>org.springframework.integration</groupId>
+	      <artifactId>spring-integration-kafka</artifactId>
+	      <version>2.1.0.RELEASE</version>
+	    </dependency>
+	    
+		<!-- Faces Config -->
+		<dependency>
+			<groupId>org.jboss.spec.javax.el</groupId>
+	        <artifactId>jboss-el-api_3.0_spec</artifactId>
+	        <version>${javax-el-version}</version>
+	        <scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.spec.javax.faces</groupId>
+	        <artifactId>jboss-jsf-api_2.2_spec</artifactId>
+	        <version>${javax-faces-version}</version>
+	        <scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.faces</groupId>
+			<artifactId>jsf-api</artifactId>
+			<version>${jsf-api-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.faces</groupId>
+			<artifactId>jsf-impl</artifactId>
+			<version>${jsf-impl-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- PrimeFaces -->
+		<dependency>
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+			<version>${primefaces-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.primefaces.extensions</groupId>
+			<artifactId>primefaces-extensions</artifactId>
+			<version>${primefaces-extensions-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- Hibernate -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate-entitymanager-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate-core-version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernate-validator-version}</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- Tika -->
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-core</artifactId>
+			<version>1.10</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.tika</groupId>
+			<artifactId>tika-parsers</artifactId>
+			<version>1.10</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>1.8.10</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>fontbox</artifactId>
+			<version>1.8.10</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- POI -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.17</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.17</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml-schemas</artifactId>
+			<version>3.17</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-scratchpad</artifactId>
+			<version>3.17</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+	        <groupId>org.apache.httpcomponents</groupId>
+	        <artifactId>httpclient</artifactId>
+	        <version>${apache-http-componentes}</version>
+	        <scope>provided</scope>
+	    </dependency> 
+	    
+	    <dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
+			<version>${cxf-version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>			
+			<version>${cxf-version}</version>	
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-transports-http</artifactId>
+			<version>${cxf-version}</version>	
+		</dependency>
+		
+		<dependency>
+		  <groupId>org.apache.cxf</groupId>
+		  <artifactId>cxf-rt-rs-service-description</artifactId>
+		  <version>${cxf-version}</version>  
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-ws-policy</artifactId>
+			<version>${cxf-version}</version>	
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports -->
+		<dependency>
+		    <groupId>net.sf.jasperreports</groupId>
+		    <artifactId>jasperreports</artifactId>
+		    <version>6.5.1</version>
+		</dependency>
+
+		<!-- Dependencias por migración -->
+		<dependency>
+		    <groupId>org.javassist</groupId>
+		    <artifactId>javassist</artifactId>
+		    <version>3.18.1-GA</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>com.google.code.gson</groupId>
+		    <artifactId>gson</artifactId>
+		    <version>2.8.2</version>
+		</dependency>
+
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>3.7</version>
+		</dependency>
+
+	</dependencies>
+
+	<!-- Repositorios de Spring, Primefaces y MaterialPrime -->
+	<repositories>
+		<repository>
+			<id>springsource-repo</id>
+			<name>SpringSource Repository</name>
+			<url>http://repo.springsource.org/release</url>
+		</repository>
+
+		<repository>
+			<id>prime-repo</id>
+			<name>PrimeFaces Maven Repository</name>
+			<url>http://repository.primefaces.org</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>jboss-ga-repository</id>
+			<name>jboss-ga-repository</name>
+			<url>http://maven.repository.redhat.com/techpreview/all</url>
+		</repository>    	
+	</repositories>
+
+	<build>
+		<finalName>acuerdos</finalName>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.10</version>
+				<configuration>
+					<additionalProjectnatures>
+						<projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
+					</additionalProjectnatures>
+					<additionalBuildcommands>
+						<buildcommand>org.springframework.ide.eclipse.core.springbuilder</buildcommand>
+					</additionalBuildcommands>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<source>${java-version}</source>
+					<target>${java-version}</target>					
+					<compilerArgument>-Xlint:all</compilerArgument>
+					<showWarnings>true</showWarnings>
+					<showDeprecation>true</showDeprecation>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.6</version>				
+				<configuration>
+				   <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+				    <archive>
+						<manifestEntries>
+							<Logging-Profile>acuerdos-profile</Logging-Profile>
+						</manifestEntries>  
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

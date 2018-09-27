@@ -1,0 +1,131 @@
+.ui-widget-header {   
+    background: #932c60 !important;
+    color: #ffffff;
+    font-weight: bold;
+    text-shadow: 0px 1px 0px rgba(255, 255, 255, 0);
+}
+.ui-dialog .ui-dialog-titlebar {
+	background: #ffffff !important;
+}
+.radioButton{
+	margin-left: 130px;
+	border: 2px solid red;
+	
+}
+.myTable thead {
+	display:none;
+}
+/* .formRegPunto{
+	margin-top:80px; 
+	margin-right:-120px;
+	margin-bottom:150px;
+} */
+.alinearDerecha{
+	text-align: right;
+}
+.colorRojo{
+	color: red;
+}
+.ui-growl{
+    position:fixed;
+    top:35%;
+    right:40%;
+    width:301px;
+}
+.ui-picklist .ui-picklist-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+    /* height: 200px; */
+    width: 500px;
+}
+.tituloModal{
+		float:left;
+		margin-left: 50px;
+	}
+.cerrarModal{
+	float: right;
+	margin-right: 30px;		
+}
+#picklist-registro-puntos > .ui-picklist.ui-picklist-responsive {
+	width: 985px;
+	margin: 0 auto;
+}
+.btnPunto {
+	width: auto;
+}
+.separa-botones > button:first-child {
+	margin-right: 5px;
+}
+.separa-botones > button:last-child {
+	margin-left: 5px;
+}
+.inputsForm {
+	width: 100%;
+}
+.inputsForm.reducido {
+	width: 60%;
+}
+span.inputsForm > input {
+	width: 55%;
+}
+span.inputsForm > button {
+	width: 5%;
+}
+.lblInputs {
+	margin-bottom: 5px;
+}
+.contenModalElimAcu {
+		background-color: #FFFFFF;
+		height: 140px;
+		width: 100%;
+		border-radius: 10px;
+		/* border: 2px solid #A09F9F;*/
+		position: relative;
+		text-align:center;		
+	}
+
+.acciones-modal {
+	margin-top: 25px;
+	margin-bottom: 25px;
+	width: 100%;
+}
+.acciones-modal > form, #acciones-modal > button {
+	display: inline-block;
+}
+.acciones-modal > button {
+	color: #932C60 !important;
+	border-color: #932C60 !important;
+	border-width: 2px !important;
+}
+.acciones-modal > form > button > span {
+	padding: .3em 1.3em !important;
+	box-shadow: none !important;
+	border-width: 2px !important;
+	border-color: #932C60 !important;
+	background-color: #932C60 !important;
+	color: #ffffff !important;
+}
+.extracto-texto-punto {
+	font-weight: bold;
+}
+/* Etilo para el hover de las fila-->*/
+.ui-datatable tr.ui-datatable-even:hover, .ui-datatable tr.ui-datatable-odd:hover {
+    background: #EFD3EB;
+    border: hidden;	
+    box-shadow: none;		    
+}
+#picklist-registro-puntos > .ui-picklist.ui-picklist-responsive .ui-picklist-list-wrapper {
+	width: 443px;
+}
+@media screen and (max-width: 1200px) {
+	#picklist-registro-puntos > .ui-picklist.ui-picklist-responsive {
+		width: 100%;
+	}
+}
+.ui-dialog .ui-dialog-titlebar-close {
+	background-color: transparent;
+	box-shadow: none;
+	border-color: #ffffff;
+}

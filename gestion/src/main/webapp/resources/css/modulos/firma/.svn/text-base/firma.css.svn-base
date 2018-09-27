@@ -1,0 +1,96 @@
+/*-------------------------------------------------*/
+/* Hoja de Estilos para los Sistemas               */
+/*       	Institucinales                         */
+/*  v1.1.5 Release Date 05 de septiembre de 2017   */
+/*-------------------------------------------------*/
+
+/*************************** GENERALES *********************************/
+
+.linksPersonasEncontradas {
+	font-size: 13px !important;
+}
+
+.linksPersonasEncontradas.ui-commandlink  {
+	color: #706f6f;
+	text-decoration: none;
+}
+
+.linksPersonasEncontradas:hover {
+	color: #d6007e;
+}
+
+/*************************** GROWL *********************************/
+div[id="firmaAdministracion:mensaje_general_info_container"] > div {
+
+	background: #29abe2 !important;
+}
+
+div[id="firmaAdministracion:mensaje_general_advertencia_container"] > div {
+
+	background: #fcee21 !important;
+	color: black; 
+}
+
+div[id="firmaAdministracion:mensaje_general_advertencia_container"] > div .ui-growl-item {
+	border-bottom: 2px solid black!important;
+	border-top: 2px solid black!important;
+}
+
+div[id="firmaAdministracion:mensaje_general_exito_container"] > div {
+
+	background: #7ac943 !important;
+}
+
+
+/*************************** FILEUPLOAD *********************************/
+.ui-fileupload-buttonbar.ui-widget-header {
+	border: none;
+	padding: 0px !important;
+}
+
+.ui-fileupload-content.ui-widget-content {
+	border: none;
+}
+
+.ui-fileupload-simple .ui-button-icon-left.ui-icon,
+.ui-fileupload-choose .ui-button-icon-left.ui-icon {
+	background-image: none;
+	width: 0px;
+	height: 0px;
+}
+.ui-fileupload-simple .ui-button-text-icon-left .ui-button-text,
+.ui-fileupload-choose.ui-button-text-icon-left .ui-button-text {
+	padding: 11px 15px 0px 15px;
+}
+
+.ui-fileupload-simple .ui-button.ui-state-default,
+.ui-fileupload-choose.ui-button.ui-state-default {
+	background-color: #999999 !important;
+}
+
+.ui-fileupload-simple .ui-state-default.ui-state-hover,
+.ui-fileupload-choose.ui-state-default.ui-state-hover {
+	box-shadow: none !important;
+	border: none !important;
+	background-color: #575756 !important;
+}
+
+.ui-fileupload-simple .ui-fileupload-filename {
+	margin-left: 1.7em;
+	font-weight: bold;
+}
+
+/*************************** TIMER *********************************/
+
+.ui-timer.ui-widget-header {
+	padding: 0px 0px 5px!important;
+	border: none;
+}
+
+/*************************** DATATABLE *********************************/
+.ui-datatable .ui-datatable-empty-message {
+	text-align: center;
+	font-size: 15px;
+	font-weight: bold;
+	height: 110px;
+}

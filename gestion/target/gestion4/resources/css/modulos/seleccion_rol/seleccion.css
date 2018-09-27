@@ -1,0 +1,17 @@
+/*-------------------------------------------------*/
+/* Hoja de Estilos para los Sistemas               */
+/*       	Institucinales                         */
+/*  v1.0   Release Date 08 de noviembre de 2017    */
+/*-------------------------------------------------*/
+
+/*************************** GENERALES *********************************/
+#main {
+	top: 0px;
+	height: 100%;
+}
+
+.containerSeleccion {
+	width: 100%;
+	height: 50%;
+	background-color: #c6c6c6;
+}

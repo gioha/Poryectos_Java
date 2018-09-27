@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sec="http://www.springframework.org/security/tags">
+	
+	<div id="row_lista_bandeja" class="row">
+ 		<div id="col_lista_borradores" class="col-xs-12">
+ 			<h:outputScript library="js" name="contextMenu.js" />
+ 			
+ 			<c:if test="#{mbBEntrada.pestanaSeleccionada eq messageSource['mensaje_pestana_principal']}">
+ 			
+ 				<p:accordionPanel id="acordion_principal" activeIndex="0">
+ 					<p:ajax event="tabChange" listener="#{mbBEntrada.seleccionarTabAcordion}" update=":formBorradores:boton_menu_filtrar" />
+        			<!-- <p:ajax event="tabClose" listener="#{tabbedView.onTabClose}" update=":formBorradores:boton_menu_filtrar" /> -->
+	
+				 	<c:if test="#{mbBEntrada.usuario.verVersionT eq 1}">
+				        <p:tab title="#{messageSource['mensaje_titulo_recibidos']}">
+				            <ui:include src="lista_recibidos.xhtml" />
+				        </p:tab>
+				    </c:if>
+				    
+					<p:tab title="#{messageSource['mensaje_titulo_ccp']}">
+						<ui:include src="lista_ccp.xhtml" />
+					</p:tab>
+					
+				</p:accordionPanel>
+			</c:if>
+			 
+			<c:if test="#{mbBEntrada.pestanaSeleccionada eq messageSource['mensaje_pestana_turnados']}">
+				<p:accordionPanel id="acordion_turnados" activeIndex="0">
+					<p:ajax event="tabChange" listener="#{mbBEntrada.seleccionarTabAcordion}" update=":formBorradores:boton_menu_filtrar" />
+					<p:tab title="#{messageSource['mensaje_titulo_atencion']}">
+						<!-- #{messageSource['mensaje_titulo_atencion']} -->
+						<ui:include src="lista_atencion.xhtml" />
+					</p:tab>
+					<p:tab title="#{messageSource['mensaje_titulo_info']}">
+						<!-- #{messageSource['mensaje_titulo_info']} -->
+						<ui:include src="lista_info.xhtml" />
+					</p:tab>
+				</p:accordionPanel>	    
+	 		</c:if>
+			
+		</div>
+	</div>
+	
+</ui:composition>

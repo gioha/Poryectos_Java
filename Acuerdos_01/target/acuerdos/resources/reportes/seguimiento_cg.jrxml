@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="seguimiento_cg" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e26ad9d6-4c82-4838-9209-57586394ed93">
+	<property name="ireport.zoom" value="1.2100000000000097"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="logoIne" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="acuerdo" class="java.lang.String">
+		<fieldDescription><![CDATA[acuerdo]]></fieldDescription>
+	</field>
+	<field name="punto" class="java.lang.String">
+		<fieldDescription><![CDATA[punto]]></fieldDescription>
+	</field>
+	<field name="fecha" class="java.util.Date">
+		<fieldDescription><![CDATA[fecha]]></fieldDescription>
+	</field>
+	<field name="tematica" class="java.lang.String">
+		<fieldDescription><![CDATA[tematica]]></fieldDescription>
+	</field>
+	<field name="anio" class="java.lang.String">
+		<fieldDescription><![CDATA[anio]]></fieldDescription>
+	</field>
+	<field name="area" class="java.lang.String">
+		<fieldDescription><![CDATA[area]]></fieldDescription>
+	</field>
+	<field name="estatus" class="java.lang.String">
+		<fieldDescription><![CDATA[estatus]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="24" width="555" height="20" uuid="d4a5117a-c895-460d-9f68-7c87a0840aaa"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporte de Seguimiento de Acuerdos y Puntos]]></text>
+			</staticText>
+			<image>
+				<reportElement x="0" y="0" width="125" height="79" uuid="1928db20-128f-484b-8c0b-8f76c581066b"/>
+				<imageExpression><![CDATA[$P{logoIne}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="17" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="26" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="100" height="26" backcolor="#CCCCCC" uuid="5ba1804c-da6e-485b-b05f-92fa13257ddc"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+					<topPen lineWidth="0.5" lineColor="#999999"/>
+					<leftPen lineWidth="0.5" lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineColor="#999999"/>
+					<rightPen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[año]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="100" y="0" width="95" height="26" backcolor="#CCCCCC" uuid="ac594f99-e65f-4a3a-8e45-2496f94ed7df"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+					<topPen lineWidth="0.5" lineColor="#999999"/>
+					<leftPen lineWidth="0.5" lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineColor="#999999"/>
+					<rightPen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Número de acuerdo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="195" y="0" width="89" height="26" backcolor="#CCCCCC" uuid="60c9bc2b-11ba-423e-8135-e03c81bf8374"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+					<topPen lineWidth="0.5" lineColor="#999999"/>
+					<leftPen lineWidth="0.5" lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineColor="#999999"/>
+					<rightPen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Punto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="284" y="0" width="168" height="26" backcolor="#CCCCCC" uuid="387a4acf-ffec-43fc-9d4b-ea8665b138a0"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+					<topPen lineWidth="0.5" lineColor="#999999"/>
+					<leftPen lineWidth="0.5" lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineColor="#999999"/>
+					<rightPen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Área]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="452" y="0" width="103" height="26" backcolor="#CCCCCC" uuid="a65b1380-aecb-44e1-ae37-1e9aa4670b52"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+					<topPen lineWidth="0.5" lineColor="#999999"/>
+					<leftPen lineWidth="0.5" lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineColor="#999999"/>
+					<rightPen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Clasificación]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="fb705b17-6d58-44f7-888b-ff939c24a9e5"/>
+				<box leftPadding="3">
+					<topPen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{anio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="95" height="20" uuid="c3ca6e6d-d791-43ca-8086-24650860aecf"/>
+				<box leftPadding="3">
+					<topPen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{acuerdo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="195" y="0" width="89" height="20" uuid="a2edb94e-cfd0-4a7e-b4ea-3ac4069654b4"/>
+				<box leftPadding="3">
+					<topPen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{punto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="284" y="0" width="168" height="20" uuid="24c6889c-6072-48ca-9087-be6c02ae958c"/>
+				<box leftPadding="3">
+					<topPen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{area}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="452" y="0" width="103" height="20" uuid="c58ffb55-4e2a-48a2-8c48-53e98a386368"/>
+				<box leftPadding="3">
+					<topPen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{estatus}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="452" y="0" width="101" height="20" uuid="c0ac858a-9212-44a1-b7cf-17b33fb60eb1"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

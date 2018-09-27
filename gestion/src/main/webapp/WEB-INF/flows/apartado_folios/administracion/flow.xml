@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+	  start-state="validaRegistroEnGestion" parent="parent-flow">
+
+	<var name="mbApartado" class="mx.ine.gestion.mb.MBApartadoFolios"/>
+
+	<!-- Vista principal del apartado de folios -->
+	<view-state id="vista_aparta_folio" view="administracion_apartado_folios.xhtml">
+		
+		<on-entry>
+			<evaluate expression="mbApartado.inicializarPantalla()"/>
+		</on-entry>
+		
+	</view-state>
+
+	<!-- Validación para revisar que el usuario con el se este accediendo ya se encuentre registrado en el Organigrama -->
+	<decision-state id="validaRegistroEnGestion">
+		
+		<on-entry>
+			<set name="mbAdministrador.menuSelecionado" value="100"/>
+		</on-entry>
+		
+		<if test="currentUser.principal.usuarioNoRegistradoEnGestion" then="vsErrorNoRegistrado" else="vista_aparta_folio"/>
+
+	</decision-state>
+
+</flow>

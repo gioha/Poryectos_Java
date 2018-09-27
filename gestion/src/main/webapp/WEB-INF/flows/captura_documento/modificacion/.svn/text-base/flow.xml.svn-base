@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+	start-state="validaRegistroEnGestion" parent="parent-flow">
+
+	<secured
+		attributes="ROLE_GESTION4.ADMIN.OC, ROLE_GESTION4.ADMIN_AREA.OC, ROLE_GESTION4.SEGUIMIENTO.OC, ROLE_GESTION4.SEGUIMIENTO_REST.OC, ROLE_GESTION4.CONSULTA_CAU.OC, ROLE_GESTION4.OFICIALIA.OC"
+		match="any" />
+	<var name="mbModificacionDoc" class="mx.ine.gestion.mb.MBModificacionDocumento" />
+
+	<input name="idDocumento" value="mbModificacionDoc.idDocumento" />
+
+	<!-- Pantalla de Ejemplo -->
+	<view-state id="modificacionDocumento" view="modificacion_documento.xhtml">
+		<on-entry>
+			<evaluate expression="mbModificacionDoc.init()" />
+		</on-entry>
+		<transition on="capturaExitosa" to="capturaExitosa" />
+		<transition on="back" to="back" />
+		<on-exit>
+			<evaluate expression="mbModificacionDoc.borrarTemporales()" />
+		</on-exit>
+		
+	</view-state>
+
+	<!-- Validación para revisar que el usuario con el se este accediendo ya 
+		se encuentre registrado en el Organigrama -->
+	<decision-state id="validaRegistroEnGestion">
+
+		<on-entry>
+			<set name="mbAdministrador.menuSelecionado" value="resourceBundle['id_modulo_captura_documentos']" />
+		</on-entry>
+
+		<if test="currentUser.principal.usuarioNoRegistradoEnGestion" then="vsErrorNoRegistrado"
+			else="modificacionDocumento" />
+
+	</decision-state>
+
+	<subflow-state id="capturaExitosa" subflow="bandeja/administracion">
+
+		<!-- <input name="idDocumento" value="5" /> -->
+		<input name="tipoCaptura" value="M" />
+		
+		<transition on="back" to="back" />
+
+	</subflow-state>
+	
+
+	<end-state id="back" />
+</flow>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:ine="http://www.ine.mx/ui" xmlns:deceyec="http://ine.mx/ui">
+
+
+	<div class="ui-g">
+
+		<!-- Botón guardar y cancelar de la vista de capturar -->
+		<p:outputPanel id="btnsGuardarCancelarCap"
+			rendered="#{mbGeneradorActa.isRendered(mbGeneradorActa.accionCapturar)}"
+			styleClass="ui-g-12">
+
+			<sec:authorize
+				ifAnyGranted="ROLE_COMPUTOS.ADMIN.PARAM.CAPTURA.OC, ROLE_COMPUTOS.ADMIN.CAPTURA.OC, ROLE_COMPUTOS.CAPTURA.JL, ROLE_COMPUTOS.CAPTURA.JM, ROLE_COMPUTOS.ADMIN.EXT.OPLE.JL">
+				<p:commandButton id="guardaCap"
+					value="#{messageSource['etiqueta_boton_guardar']}"
+					style="margin-bottom:10px;" onclick="rc();"
+					rendered="#{mbGeneradorActa.botonGuardar}" />
+
+
+				<p:remoteCommand name="rc"
+					actionListener="#{mbGeneradorActa.bloqueaPantalla()}"
+					onstart="PF('progress').block()"
+					onsuccess="magia();" />
+				
+				<!-- Aquí se encuentra la magia del guardado -->
+				<p:remoteCommand name="magia" actionListener="#{mbGeneradorActa.guardaDatos()}"
+					onstart="PF('progress').block()"
+					onsuccess="PF('progress').unblock()"
+					update="@form" />
+
+				<!-- 				<p:commandButton id="cancelaCap" -->
+				<!-- 					value="#{messageSource['etiqueta_boton_cancelar']}" -->
+				<!-- 					style="margin-bottom:10px;" action="cancelar" /> -->
+			</sec:authorize>
+		</p:outputPanel>
+
+
+		<!-- Boton guardar y cancelar de la vista de modificar -->
+		<p:outputPanel id="btnsGuardarCancelarMod"
+			rendered="#{mbGeneradorActa.isRendered(mbGeneradorActa.accionModificar)}"
+			styleClass="ui-g-12">
+
+			<sec:authorize
+				ifAnyGranted="ROLE_COMPUTOS.ADMIN.PARAM.CAPTURA.OC, ROLE_COMPUTOS.ADMIN.CAPTURA.OC, ROLE_COMPUTOS.CAPTURA.JM, ROLE_COMPUTOS.ADMIN.EXT.OPLE.JL">
+				<p:commandButton id="guardaMod"
+					value="#{messageSource['etiqueta_boton_guardar']}"
+					style="margin-bottom:10px;"
+					actionListener="#{mbGeneradorActa.guardaDatos()}" update="@form"
+					disabled="#{mbGeneradorActa.editable.intValue() != 1}"
+					onstart="PF('progress').block()"
+					onsuccess="PF('progress').unblock()"
+					rendered="#{mbGeneradorActa.botonModificar}" />
+
+				<!-- 				<p:commandButton id="cancelaMod" -->
+				<!-- 					value="#{messageSource['etiqueta_boton_cancelar']}" -->
+				<!-- 					style="margin-bottom:10px;" /> -->
+
+			</sec:authorize>
+		</p:outputPanel>
+
+	</div>
+
+
+	<!-- 	<p:dialog widgetVar="dialogoUsuario" resizable="true" width="300" height="500"> -->
+
+	<!-- 		<p:outputLabel value="Rol de usuario: " for="rol" /> -->
+	<!--  		<p:outputLabel id="rol" value="#{mbGeneradorActa.usuario.getRolUsuario()}" /> -->
+	<!--  		<br /> -->
+
+	<!--  		<p:outputLabel value="Proceso Electoral: " for="proceso" /> -->
+	<!--  		<p:outputLabel id="proceso" value="#{mbGeneradorActa.usuario.getIdProcesoElectoral()}" /> -->
+	<!--  		<br /> -->
+
+	<!--  		<p:outputLabel value="Detalle: " for="detalle" /> -->
+	<!--  		<p:outputLabel id="detalle" value="#{mbGeneradorActa.usuario.getIdDetalleProceso()}" /> -->
+	<!--  		<br /> -->
+
+	<!--  		<p:outputLabel value="Estado: " for="estado" /> -->
+	<!--  		<p:outputLabel id="estado" value="#{mbGeneradorActa.usuario.getIdEstadoSeleccionado()}" /> -->
+	<!--  		<br /> -->
+
+	<!--  		<p:outputLabel value="Municipio: " for="municipio" /> -->
+	<!--         <p:outputLabel id="municipio" value="#{mbGeneradorActa.usuario.getIdMunicipioSeleccionado()}" /> -->
+	<!--         <br /> -->
+
+	<!--         <p:outputLabel value="Ambito detalle: " for="ambito" /> -->
+	<!--  		<p:outputLabel id="ambito" value="#{mbGeneradorActa.usuario.getAmbitoDetalleProceso()}" /> -->
+	<!--  		<br /> -->
+
+	<!--  		<p:outputLabel value="Correo Electronico: " for="correo" /> -->
+	<!--  		<p:outputLabel id="correo" value="#{mbGeneradorActa.usuario.getCorreoElectronico()}" /> -->
+	<!--         <br /> -->
+
+	<!--         <p:outputLabel value="Nombre estado: " for="nombreE" /> -->
+	<!--  		<p:outputLabel id="nombreE" value="#{mbGeneradorActa.usuario.getNombreEstado()}" /> -->
+	<!--         <br /> -->
+
+	<!--         <p:outputLabel value="Nombre municipio: " for="nMunicipio" /> -->
+	<!--  		<p:outputLabel id="nMunicipio" value="#{mbGeneradorActa.usuario.getNombreMunicipio()}" /> -->
+	<!--         <br /> -->
+
+	<!--         <p:outputLabel value="Nombre de usuario: " for="nUser" /> -->
+	<!--  		<p:outputLabel id="nUser" value="#{mbGeneradorActa.usuario.getNombreUsuario()}" /> -->
+	<!--         <br /> -->
+
+	<!--         <p:outputLabel value="User Name: " for="userName" /> -->
+	<!--  		<p:outputLabel id="userName" value="#{mbGeneradorActa.usuario.getUsername()}" /> -->
+	<!--         <br /> -->
+
+	<!--         <p:outputLabel value="ID Sistema: " for="idSistema" /> -->
+	<!--  		<p:outputLabel id="idSistema" value="#{mbGeneradorActa.usuario.getIdSistema()}" /> -->
+	<!--         <br /> -->
+
+	<!--         <c:forEach items="#{mbGeneradorActa.usuario.getRolesLdap()}" var="user"> -->
+
+	<!--         <p:outputLabel value="#{user}" /> -->
+
+	<!--         </c:forEach> -->
+
+	<!--         <p:outputLabel value="**********************************************" /> -->
+
+	<!--         <p:outputLabel value="Fecha: " for="fech" /> -->
+	<!--         <p:outputLabel id="fech" value="#{mbGeneradorActa.datos.fechaHora}" /> -->
+
+	<!--         <p:outputLabel value="Ubicacion: " for="lug" /> -->
+	<!--         <p:outputLabel id="lug" value="#{mbGeneradorActa.datos.ubicacionComputo}" /> -->
+
+	<!--         <c:forEach items="#{mbGeneradorActa.datos.consejeros}" var="consej"> -->
+
+	<!--         	<p:outputLabel value="Nombre Con: " /> -->
+	<!--         	<p:outputLabel value="#{consej.nombre}" /> -->
+	<!--         	<br /> -->
+
+	<!--         	<p:outputLabel value="Apellido paterno Con: " /> -->
+	<!--         	<p:outputLabel value="#{consej.aPaterno}" /> -->
+	<!--         	<br /> -->
+
+	<!--         	<p:outputLabel value="Apellido materno Con: " /> -->
+	<!--         	<p:outputLabel value="#{consej.aMaterno}" /> -->
+	<!--         	<br /> -->
+
+	<!--         	<p:outputLabel value="Calidad Con: " /> -->
+	<!--         	<p:outputLabel value="#{consej.calidad}" /> -->
+	<!--         	<br /> -->
+
+	<!--         </c:forEach> -->
+
+
+	<!--         <c:forEach items="#{mbGeneradorActa.datos.representantes}" var="repr"> -->
+
+	<!--         	<p:outputLabel value="Nombre Rep: " /> -->
+	<!--         	<p:outputLabel value="#{repr.nombre}" /> -->
+	<!--         	<br /> -->
+
+	<!--         	<p:outputLabel value="Apellido paterno Rep: " /> -->
+	<!--         	<p:outputLabel value="#{repr.aPaterno}" /> -->
+	<!--         	<br /> -->
+
+	<!--         	<p:outputLabel value="Apellido materno Rep: " /> -->
+	<!--         	<p:outputLabel value="#{repr.aMaterno}" /> -->
+	<!--         	<br /> -->
+
+	<!--         	<p:outputLabel value="Calidad Rep: " /> -->
+	<!--         	<p:outputLabel value="#{repr.calidad}" /> -->
+	<!--         	<br /> -->
+
+	<!--         </c:forEach> -->
+
+
+	<!-- 	</p:dialog> -->
+
+
+</ui:composition>

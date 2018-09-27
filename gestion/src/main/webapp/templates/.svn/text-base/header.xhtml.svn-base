@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+
+	<script>
+		function login() {
+			$("#logginSubmmit").submit();
+		}
+	</script>
+
+	<!-- HEADER-->
+	<div class="id-sistema-header">
+		<div class="row" style="margin: 0px;">
+			<div class="header">
+
+				<a href="${request.contextPath}/app/home">
+					<div class="logoSistema">
+						<h:outputLabel class="siglasSistema" value="Gesti&oacute;n" />
+					</div>
+				</a>
+				<div class="nombre-sistema">
+					Sistema integral de gesti&oacute;n <br /> de documentos
+				</div>
+
+				<a id="index" href="index.html"/>
+				<c:if test="#{SPRING_SECURITY_CONTEXT == null}">
+					
+					<h:outputLink value="javascript:void(0)" onclick="PF('dlgLogin').show();" title="Da clic para iniciar sesión">
+						
+						<div class="login" />
+						<i class="fa fa-user-circle imagenLogin " aria-hidden="true" />
+						<h:outputLabel styleClass="textoImagenLogin" value="Iniciar sesi&oacute;n" />
+
+					</h:outputLink>
+					
+				</c:if>
+				<c:if test="#{SPRING_SECURITY_CONTEXT != null}">
+					
+					<h:outputLabel value="&#xf2be;" styleClass="imagenUsuario"/>			
+					
+					<h:outputLabel value="#{SPRING_SECURITY_CONTEXT.authentication.principal.nombreUsuario}" style="color:white; width: 200px;" styleClass="textoUsuario"/>
+					
+					<h:outputLink value="${request.contextPath}/j_spring_security_logout" title="login">
+						
+						<div class="login" />
+						<i class="fa fa-times-circle imagenLogin " aria-hidden="true" />
+						<h:outputLabel styleClass="textoImagenLogin" value="Cerrar sesi&oacute;n" />
+
+					</h:outputLink>
+				</c:if>
+			</div>
+		</div>
+
+		<c:if test="#{SPRING_SECURITY_CONTEXT != null and mbAdministrador.noMostrarMenu ne 'SI'}">
+			<div class="barraNavegacion">
+				<ui:include src="/templates/menu.xhtml" />
+			</div>
+		</c:if>
+	</div>
+
+	<!-- FIN DEL HEADER -->
+	<!-- LOGGIN -->
+
+	<p:dialog closeOnEscape="true" visible="${not empty param.error}"
+			  id="dlgLogin" widgetVar="dlgLogin" resizable="false" draggable="true"
+			  position="center" closable="true" modal="true" styleClass="loginStyle">
+			  
+		<form>
+
+			<div class="imgLogin" align="center">
+				<h:graphicImage styleClass="imgLogin" library="img" width="138.929 px;" name="logo-INE.png" />
+			</div>
+			
+			<div align="center">
+			
+				<!-- APARTADO DE ERRORES -->			
+				<c:if test="${not empty param.error}">
+				  
+					<h:panelGrid styleClass="errorLogin" columns="2">
+						
+						<i class="fa fa-exclamation-triangle " style="padding: 0px 7px; font-size: 25px;"/>
+						
+						<h:outputLabel styleClass="errorLoginMessage" value="#{sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message}" 
+									   rendered="#{sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message != null and 
+									   (!sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message.contains('Bad credentials') and 
+									   !sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message.contains('connect timed out') and
+									   !sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message.contains('CommunicationException'))}"/>
+									   
+						<h:outputLabel styleClass="errorLoginMessage" value='Usuario y/o contraseña inválidos, intenta nuevamente.' 
+									   rendered="#{sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message != null and sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message.contains('Bad credentials')}"/>
+									   
+						<h:outputLabel styleClass="errorLoginMessage" value='El tiempo de respuesta para el inicio de sesión se ha agotado, verifique su conexión e intente de nuevo por favor.' 
+									   rendered="#{sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message != null and (sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message.contains('connect timed out') or sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message.contains('CommunicationException'))}"/>
+									   
+						<h:outputLabel styleClass="errorLoginMessage" value="Se ha agotado el tiempo de sesión, ingresa nuevamente." rendered="#{sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message == null and
+																																				(param.error eq 'caducaSesion' or param.error eq 'sesionInvalida' or param.error eq 1)}"/>
+					</h:panelGrid>
+	
+				</c:if>
+
+				<h:panelGrid styleClass="dlgLogin" columns="1" cellpadding="5">
+					
+					<h:outputLabel value="Usuario:" styleClass="labelLogin" />
+					
+					<p:inputText id="username" name="username" styleClass="txtLogin" tabindex="1"
+								 onkeyup=" document.getElementById('j_username').value=this.value;" autocomplete="off"/>
+								 
+					<h:outputLabel value="Contrase&ntilde;a:" styleClass="labelLogin" />
+					
+					<p:password id="password" name="password" styleClass="txtLogin" tabindex="2"
+								onkeyup="document.getElementById('j_password').value=this.value;" />
+					<h:outputLabel value="Control de seguridad" styleClass="labelLogin" />
+
+					<h:panelGrid columns="2" cellpadding="3">
+						
+						<p:graphicImage value="captcha/captcha.png" alt="captcha"
+										id="captchaimg"
+										style="background-image: url('#{resource['img:backgroundcaptcha.png']}'); align-content: center;     margin-left: -4px;" />
+
+						<p:inputText id="captcha" name="captcha" styleClass="txtCaptcha" tabindex="3"
+									 onkeyup="document.getElementById('j_captcha').value=this.value;" autocomplete="off"/>
+
+						<h:panelGrid columns="4" cellpadding="2">
+							<p:commandLink id="quees">
+								<h:outputLabel id="captchalbl" styleClass="linkLabel"
+									style="margin-left: -10px;" value="¿Qué es esto?" />
+							</p:commandLink>
+							<p:overlayPanel id="imagePanel" for="quees" hideEffect="fade">
+								<p:media value="loop_captcha.mov" player="flash" />
+							</p:overlayPanel>
+							<!-- <p:commandLink id="readcaptcha">
+								<i class="fa fa-volume-up linkImg" style="font-size: 17px;"
+									aria-hidden="true" />
+							</p:commandLink> -->
+							<p:commandLink id="refreshcaptcha">
+								<i class="fa fa-repeat linkImg" style="font-size: 17px;" aria-hidden="true"> <p:ajax event="click" update="captchaimg" /></i>
+							</p:commandLink>
+						</h:panelGrid>
+					</h:panelGrid>
+
+					<f:facet name="footer">
+						
+						<div align="center" style="width: 270.522px;">
+							<p:commandButton id="botonLogin" type="submit" onclick="login()" tabindex="4"
+											 styleClass="botonLogin" value="Iniciar Sesión" />
+						</div>
+						<div align="center" class="divAyuda">
+							<a href="#"> <h:outputLabel id="ayuda" styleClass="linkLabel"
+									value="¿Necesitas ayuda?" />
+							</a>
+						</div>
+						<div align="center" class="divpoliticas">
+							<a href="#"> <h:outputLabel style="margin-bottom: 15px;"
+									id="politicas" value="Pol&iacute;ticas de privacidad"
+									styleClass="linkLabel" />
+							</a>
+						</div>
+
+					</f:facet>
+
+				</h:panelGrid>
+			</div>
+		</form>
+	</p:dialog>
+
+	<form id="logginSubmmit" method="post"
+		action="${request.contextPath}/j_spring_security_check">
+		<p:password id="j_password" name="j_password" />
+		<p:inputText id="j_username" name="j_username" />
+		<p:inputText id="j_captcha" name="j_captcha" />
+	</form>
+	<!-- FIN DEL LOGGIN -->
+
+
+</ui:composition>
+
+</html>

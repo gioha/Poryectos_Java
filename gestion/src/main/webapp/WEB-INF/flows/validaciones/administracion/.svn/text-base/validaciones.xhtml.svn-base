@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sf="http://www.springframework.org/tags/faces"
+				xmlns:sec="http://www.springframework.org/security/tags"
+				template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+	
+	<h:outputStylesheet library="css" name="modulos/validacion/validacion.css" />
+
+	<h:form id="validacionAdministracion" >
+		<script>
+		 $( function() {
+			 $('.timer-start').hide();
+			 $('.timer-start2').hide();
+		 });
+		</script>
+
+		<p:remoteCommand name="actualizar" actionListener="#{mbValidacion.actualizar}" update="documentosAValidar,menu_formulario" />
+	
+		<h:outputScript name="js/firma/forge.min.js" />
+		<h:outputScript name="js/firma/pki.js" />
+		<h:outputScript name="js/firma/tripledes.js" />
+		<h:outputScript name="js/firma/JSgLib.js" />
+		<h:outputScript name="js/firma/sgdata.js" />
+		<h:outputScript name="js/firma/ineCrypt.js" />
+		<h:outputScript name="js/firma/firmaElectronicaPautas.js" /> 
+		
+		<!-- GROWL PARA MOSTRAR LOS MENSAJES GENERALES -->
+		
+		<p:growl id="mensaje_general_info" showDetail="true" sticky="true" globalOnly="true" severity="info"/>
+		<p:growl id="mensaje_general_advertencia" widgetVar="msgWarning" showDetail="true" sticky="true" globalOnly="true" severity="warn"/>
+		<p:growl id="mensaje_general_exito" widgetVar="msgExito" showDetail="true" sticky="true" globalOnly="true" severity="fatal"/>
+		
+		<!-- DIALOG PARA MOSTRAR LA CARGA -->
+		<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+			<p:graphicImage name="/img/estructura/loader.gif" />
+		</p:dialog>
+
+		<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+		
+		<div class="container">
+			<h2>
+				<h:outputText value="Inicio" style="color: #999999"/>&nbsp;&nbsp;
+				<i class="fa fa-angle-right" aria-hidden="true" style="font-size: 18px; color: #999999"/>&nbsp;&nbsp;
+				<h:outputText value="#{messageSource['etiqueta_validacion_migasMenu']}" style="font-weight: bold"/>&nbsp;&nbsp;
+			</h2>
+			<h3>
+				<h:outputText value = "#{messageSource['etiqueta_validacion_titulo']}" />
+			</h3>
+			<h4>
+				<h:outputText value = "#{messageSource['etiqueta_informacion_documento']}"  />
+			</h4>
+	
+				<section style="padding: 0px 40px 1px">
+					
+					<div class="row" style="border-bottom: 1px solid #cccccc; font-family: Roboto; margin-right: 0px; margin-left: 0px; padding: 3px 0px 7px 0px !important;">
+						
+						<div class="col-md-1" style="width: 90px; text-align: center; border-left: 1px solid #cccccc; font-size: 17px;">
+						
+							<pe:timer id="cronometroActualizaciones"
+									  widgetVar="cronometroActualizaciones" format="mm:ss"
+									  immediate="true"
+									  update="documentosAValidar,menu_formulario" singleRun="false"
+									  timeout="300"
+									  listener="#{mbValidacion.actualizar}"
+									  oncomplete="if (PF('cronometroActualizaciones') != undefined) { PF('cronometroActualizaciones').start(); }" /> 
+						
+						</div>	 
+						
+						<div class="col-md-1" style="width: 40px; text-align: center; border-left: 1px solid #cccccc; padding-left: 0px; padding-right: 0px;">
+						
+							<p:commandLink id = "timer-stop" 								
+										   styleClass="timer-stop fa fa-stop-circle"
+										   style="color: #000000; margin-left: 10px; margin-right: 10px; font-size: 20px; text-decoration: none;"
+										   onclick="PF('cronometroActualizaciones').restart();   $('.timer-start').show(); $('.timer-stop').hide();" 
+										   oncomplete="PF('cronometroActualizaciones').pause();"
+										   onsuccess="PF('cronometroActualizaciones').pause();">
+										   
+							</p:commandLink> 
+							<p:commandLink  id = "timer-start" 
+											styleClass="timer-start fa fa-play-circle"
+											style="color: #000000; margin-left: 10px; margin-right: 10px; font-size: 20px; text-decoration: none;"
+											onclick="PF('cronometroActualizaciones').start(); $('.timer-stop').show(); $('.timer-start').hide();">
+							</p:commandLink>
+						
+						</div>
+						
+						<div class="col-md-1" style="width: 40px; text-align: center; border-left: 1px solid #cccccc; padding-left: 0px; padding-right: 0px;">
+						
+							<p:commandLink id = "timer-pause"
+										   styleClass="timer-pause fa fa-pause-circle"
+										   style="margin-left: 10px; margin-right: 10px; font-size: 20px; text-decoration: none;"
+										   onclick="PF('cronometroActualizaciones').pause(); $('.timer-start2').show(); $('.timer-pause').hide();">
+							</p:commandLink>
+							<p:commandLink  id = "timer-start2" 
+											styleClass="timer-start2 fa fa-play-circle"
+											style="margin-left: 10px; margin-right: 10px; font-size: 20px; text-decoration: none;"
+											onclick="PF('cronometroActualizaciones').start(); $('.timer-pause').show(); $('.timer-start2').hide();">
+							</p:commandLink>
+						
+						</div>
+						
+						<div class="col-md-1" style="width: 40px; text-align: center; border-left: 1px solid #cccccc; border-right: 1px solid #cccccc; padding-left: 0px; padding-right: 0px;">
+						
+							<p:commandLink styleClass="fa fa-refresh" value=""
+										   id = "timer-restart"
+										   style="color:#000000;margin-left: 10px; margin-right: 10px; font-size: 20px; text-decoration: none;"
+										   onclick="PF('cronometroActualizaciones').restart();$('.timer-pause, .timer-stop').show();$('.timer-start, .timer-start2').hide();">
+							</p:commandLink>
+						
+						</div>
+						
+						<div class="col-md-8" style="text-align: left">
+						
+							<h:outputText value="#{messageSource['etiqueta_validacion_actualizacion']}" style="color:#D5007F; font-weight: bold"/>
+							<h:outputText value="#{messageSource['etiqueta_validacion_reloj_cero']}" />
+						
+						</div>
+					
+					</div>
+					
+				</section>
+
+				<h5 style="padding: 20px 40px 2px">
+					#{messageSource['etiqueta_validacion_seleccionar_documentos']}
+				</h5>
+
+				<p:outputPanel id="documentosAValidar" >
+				
+					<section>
+
+						<p:dataTable 	id="checkboxDT" var="lis" value="#{mbValidacion.dtoValidacion}" 
+										selection="#{mbValidacion.dtoDocumentosSeleccionados}" rowKey="#{lis.idDocumento}" 
+										style="margin-bottom:0; font-size: 13px !important;"
+										rows="15" paginator="true" rowIndexVar="index" 
+										paginatorTemplate=" {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" emptyMessage="#{messageSource['etiqueta_no_documentos_validar']}" 
+										paginatorPosition="bottom" >
+        					
+        					<f:facet name="header"></f:facet>
+        					
+					        <p:ajax event = "rowSelect" listener = "#{mbValidacion.cambiarALeido}" onsuccess="actualizar()" />
+					        <p:ajax event = "rowSelectCheckbox" listener = "#{mbValidacion.cambiarALeido}" onsuccess="actualizar()" />
+					        <p:ajax event = "toggleSelect" listener = "#{mbValidacion.cambiarALeidos}" onsuccess="actualizar()"/>
+					 
+					        <p:column style="color:#ff8000;width:30px;text-align: center">
+						        <h:outputLink rendered="#{lis.estatusRegresado == '1'}" style="color:#ff8000;width:30px;text-align: center; font-size: 18px;" id="fade" value="#">
+							        <h:outputText styleClass="fa fa-bell" />
+							    </h:outputLink>
+							    <pe:tooltip id="tooltipInfo" widgetVar="tooltipInfo"
+		                    			value="El usuario #{lis.dtoPersonaRegreso.nombre} #{lis.dtoPersonaRegreso.apellidos} no quiso validar"
+		                    			for="fade"
+		                    			showEffectLength="0"
+		                    			showEvent="mouseover" hideEvent="mouseout"
+		                    			showEffect="fadeIn" hideEffect="fadeIn"
+		                    			position="top"
+		                    			atPosition="top right" myPosition="bottom left">
+		                    	</pe:tooltip>
+
+					        </p:column>
+					        <p:column selectionMode="multiple" style="width:4%;text-align:center"/>
+					        
+       				        <p:column headerText="#{messageSource['etiqueta_numero_documento']}" styleClass="#{lis.noLeido.intValue() > 0 ? 'validacion-no-leida' : 'validacion-leida'}" style="text-align:left">
+   					           	<p:commandLink value="#{lis.dtoDocumento.noDocumento} #{lis.idDocumento}" oncomplete=""
+					            	id="link_visualizar_documento"
+					            	onsuccess="actualizar()"
+					            	actionListener="#{mbValidacion.visualizarDocumento(lis,true)}"
+					            	style="#{lis.conVisualizacion != 0 ? 'color:#2313EA !important;' : ''}text-decoration: underline;">
+					            </p:commandLink>
+					        </p:column>
+					        
+					        <p:column headerText="#{messageSource['etiqueta_remitente']}" styleClass="#{lis.noLeido.intValue() > 0 ? 'validacion-no-leida' : 'validacion-leida'}" style="text-align:left">
+					           	<h:outputText rendered="#{empty lis.dtoPersonaRemitente.nombreNivelArea}" value="#{lis.dtoPersonaRemitente.nombreCompleto}" />
+			                 	<h:outputText rendered="#{lis.dtoPersonaRemitente.nombreNivelArea != null}" value="#{lis.dtoPersonaRemitente.nombreNivelArea}" />
+					        </p:column>
+					        <p:column headerText="#{messageSource['etiqueta_fecha']}" styleClass="#{lis.noLeido.intValue() > 0 ? 'validacion-no-leida' : 'validacion-leida'}" style="width:10%;text-align:left">
+					            <h:outputText value="#{lis.fechaValidacion}" />
+					        </p:column>
+					       
+					        <p:column style="width:40%;text-align: center">
+					            
+					            <i class="fa fa-info-circle" aria-hidden="true" style="font-size: 20px; "/>
+					            <p:spacer width="5"/>
+					           	<p:commandLink value="#{messageSource['etiqueta_informacion']}" oncomplete=""
+					            	id="link_informacion_documento" 
+					            	update="validacionAdministracion:documentosAValidar, validacionAdministracion:inf-doc-dialog, menu_formulario" 
+					            	actionListener="#{mbValidacion.abrirInformacionDocumento(lis)}">
+					            </p:commandLink>
+					            <p:spacer width="15"/>
+					            
+					            <i class="fa fa-pencil" aria-hidden="true" style="#{lis.conModificaciones eq 1 ? 'color:#2313EA;' : ''} font-size: 20px; "/>
+					            <p:spacer width="5"/>
+					            <p:commandLink value="#{messageSource['etiqueta_editar']}"
+					               id="link_editar_documento"
+					               onsuccess="actualizar()"
+					               actionListener="#{mbValidacion.validarEditar(lis,false)}"
+					               style="#{lis.conModificaciones eq 1 ? 'color:#2313EA !important;' : ''} "/>
+					            <p:spacer width="15"/>
+					            
+								<i class="fa fa-comment" aria-hidden="true" style="#{lis.dtoComentario ne null ? 'color:#2313EA !important;' : ''} font-size: 20px; "/>
+								
+					            <p:spacer width="5"/>
+					            
+					            <p:commandLink value="#{messageSource['etiqueta_comentar']}" title="Comentario"
+					            			   id="link_comentario_documento"
+					            			   actionListener="#{mbValidacion.verComentario(lis)}"
+					            			   style="#{lis.dtoComentario ne null ? 'color:#2313EA !important;' : ''}"
+					            			   update="validacionAdministracion:documentosAValidar, validacionAdministracion:panelComentario, menu_formulario"/>
+    							<p:spacer width="15"/>
+
+					        </p:column>
+					    </p:dataTable>
+					    
+					    <!-- DIALOGO PARA LOS COMENTARIOS -->
+					    <p:dialog resizable="false" widgetVar="dlg1" height="50%" modal="true" width="40%">
+					    	<p:outputPanel id="panelComentario"> 
+						    	<div class="row">
+									<div class="col-md-12">
+										<div class="row" style="text-align:center">
+											<p:inputTextarea 	id="editor" value="#{mbValidacion.comentarioActual}"
+																rows="15" cols="60" width="600"
+																counter="contador" maxlength="500"
+																counterTemplate="{0} #{messageSource['etiqueta_firma_comentarios']}"
+																widgetVar="editorWidget" />
+										</div>
+										<div class="row" style="text-align:center">
+											<h:outputText id="contador" />
+										</div>
+										<div class="row botonesAcomodo">
+											<p:commandButton rendered="#{mbValidacion.comentarioActual ne ''}" value="Eliminar" oncomplete="" title="Eliminar" styleClass = "smallButton" 
+									            id="boton_comentario_eliminar" process="validacionAdministracion"
+									             update="validacionAdministracion:panelComentario validacionAdministracion:checkboxDT validacionAdministracion:mensaje_general_info validacionAdministracion:mensaje_general_advertencia validacionAdministracion:mensaje_general_exito" 
+									            onclick="PF('dlg1').hide();"
+									            	actionListener="#{mbValidacion.eliminarComentario}">
+									        </p:commandButton>
+    										<p:commandButton value = "#{messageSource['etiqueta_boton_aceptar']}" oncomplete = "" title = "#{messageSource['etiqueta_boton_aceptar']}" styleClass = "smallButton" 
+									            id="boton_comentario_documento" process="validacionAdministracion"
+									             update="validacionAdministracion:panelComentario validacionAdministracion:checkboxDT " 
+									            onclick="PF('dlg1').hide();"
+									            	actionListener="#{mbValidacion.guardarComentario}">
+									        </p:commandButton>
+										</div>
+									</div> 
+								</div>
+	    					</p:outputPanel>
+						</p:dialog>
+					     
+					    <div class="row">
+							<div class="col-md-12">
+								<div class="row">
+									<h:outputLabel for="firmaOpcion" value="#{messageSource['etiqueta_validacion_accion']}" />
+								</div>
+								<div class="row">
+									<p:selectOneMenu id="firmaOpcion" value="#{mbValidacion.comboValidacion}" required="true" autoWidth="false" style="width:30%">
+										<p:ajax event="change" update="boton-aceptar" />
+										<f:selectItem itemLabel="#{messageSource['mensaje_general_selecciona']}" itemValue="0" />
+										<f:selectItem itemLabel="#{messageSource['etiqueta_validacion_validar']}" itemValue="1" />
+										<f:selectItem itemLabel="#{messageSource['etiqueta_validacion_regresar_remitente']}" itemValue="2" />										
+
+									</p:selectOneMenu>
+
+								</div>
+								<div class="row botonesAcomodo">
+									<p:outputPanel id="boton-aceptar">
+										<p:commandButton rendered="#{mbValidacion.comboValidacion ne '0'}" 
+											value="#{messageSource['etiqueta_boton_aceptar']}" 
+											title="#{messageSource['etiqueta_boton_aceptar']}" 
+								            id="boton_enviar_documento" process="validacionAdministracion"
+										    update="validacionAdministracion:documentosAValidar,confirmacion_validar,confirmacion_regresar,mensaje_general_info,mensaje_general_advertencia,mensaje_general_exito" 
+										   	actionListener="#{mbValidacion.accionesValidacion(false)}"
+										   	>
+										 </p:commandButton>
+									 </p:outputPanel>
+								</div>
+							</div>
+						</div>
+					
+				</section>
+			</p:outputPanel>
+
+			<p:confirmDialog id = "confirmacion_validar" widgetVar="confirmacion_regresar" styleClass="ventanaConfirmacion">
+			
+				<f:facet name="message">
+			        #{messageSource['mensaje_confirmacion_regresar_remitente_no_comentario']}
+			    </f:facet>
+			
+				<p:commandButton value="No" onclick="PF('confirmacion_regresar').hide();"
+					type="button" />
+			
+				<p:commandButton value="Sí" style="background-color: white !important; color: #d5007f !important; border: 1px solid #d5007f !important;"
+								 actionListener="#{mbValidacion.accionesValidacion(true)}" update="documentosAValidar,mensaje_general_info,mensaje_general_advertencia,mensaje_general_exito"
+								 oncomplete="PF('confirmacion_regresar').hide();" />
+
+			</p:confirmDialog>
+			
+			<p:confirmDialog id ="confirmacion_regresar" widgetVar="confirmacion_validar" styleClass="ventanaConfirmacion">
+				
+				<f:facet name="message">
+			       #{messageSource['mensaje_confirmacion_validar_no_comentario']}
+			    </f:facet>
+				
+				<p:commandButton value="No" onclick="PF('confirmacion_validar').hide();"
+					type="button" />
+				<p:commandButton value="Sí" style="background-color: white !important; color: #d5007f !important; border: 1px solid #d5007f !important;"
+								 actionListener="#{mbValidacion.accionesValidacion(true)}" update="documentosAValidar,mensaje_general_info,mensaje_general_advertencia,mensaje_general_exito"
+								 oncomplete="PF('confirmacion_validar').hide();" />
+
+			</p:confirmDialog>
+			
+			<p:confirmDialog widgetVar="confirmacion_editar" styleClass="ventanaConfirmacion">
+				
+				<f:facet name="message">
+			       #{messageSource['mensaje_confirmacion_cambios']}
+			    </f:facet>
+
+				<p:commandButton value="No" onclick="PF('confirmacion_editar').hide()"
+					type="button" />
+				<p:commandButton value="Sí" style="background-color: white !important; color: #d5007f !important; border: 1px solid #d5007f !important;"
+								 actionListener="#{mbValidacion.visualizarDocumento(mbValidacion.validacionParaEdicion,false)}" 
+								 update="documentosAValidar,mensaje_general_info,mensaje_general_advertencia,mensaje_general_exito"
+				
+								 oncomplete="PF('confirmacion_editar').hide();actualizar();console.log('click actualizar')" />
+
+			</p:confirmDialog>
+
+
+		</div>
+		
+		<!-- Dialog para el detalle del documento-->
+		<ui:include src="detalle_documento.xhtml" />
+
+	</h:form>
+</ui:define>
+</ui:composition>

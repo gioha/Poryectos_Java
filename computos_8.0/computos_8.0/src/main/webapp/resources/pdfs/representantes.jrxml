@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="representantes" pageWidth="560" pageHeight="595" whenNoDataType="AllSectionsNoDetail" columnWidth="560" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.callouts" value="##Wed Apr 04 11:47:10 CDT 2012"/>
+	<parameter name="P_SUBREPORTE_REPRESENTANTES" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false"/>
+	<parameter name="P_DATA_SUBREPORTE_REPRESENTANTES" class="net.sf.jasperreports.engine.JRDataSource" isForPrompting="false"/>
+	<parameter name="P_SUBREPORT_PARAMS_REPRESENTANTES" class="java.util.Map" isForPrompting="false"/>
+	<parameter name="P_TITULO_REPRESENTANTES" class="java.lang.String"/>
+	<parameter name="P_TITULO_RENGLON" class="java.lang.String"/>
+	<parameter name="P_TIPO_ASOCIACION_CI" class="java.lang.Integer"/>
+	<parameter name="P_DESCRIPCION_CALIDAD" class="java.lang.String"/>
+	<field name="tipoAsociacion" class="java.lang.Integer"/>
+	<field name="emblemaAsociacion" class="java.lang.String"/>
+	<field name="nombreAsociacion" class="java.lang.String"/>
+	<field name="nombreCompleto" class="java.lang.String"/>
+	<field name="calidad" class="java.lang.String"/>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="50" y="0" width="461" height="11" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_TITULO_REPRESENTANTES}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="398" y="15" width="120" height="10" backcolor="#FAD5D9"/>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["FIRMA"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="518" y="15" width="42" height="10" backcolor="#FAD5D9"/>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["P/S *"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="137" y="15" width="261" height="10" backcolor="#FAD5D9"/>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["NOMBRE"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="0" y="15" width="137" height="10" backcolor="#FAD5D9"/>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["" + $P{P_TITULO_RENGLON}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="137" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{tipoAsociacion}!=null &&
+$F{tipoAsociacion}.intValue()==$P{P_TIPO_ASOCIACION_CI}.intValue() &&
+$F{emblemaAsociacion}==null)?
+    $F{nombreAsociacion}
+    :" "]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center">
+				<reportElement key="image-1" x="59" y="2" width="16" height="16">
+					<printWhenExpression><![CDATA[$F{emblemaAsociacion}!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemaAsociacion}]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="137" y="0" width="261" height="10" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{nombreCompleto}!=null)?(" " + $F{nombreCompleto}):null]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="398" y="0" width="120" height="10" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" "]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="518" y="0" width="42" height="10" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[($F{calidad}!=null)?$F{calidad}:null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="137" y="10" width="261" height="10" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="398" y="10" width="120" height="10" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" "]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="518" y="10" width="42" height="10" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" "]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="11" splitType="Stretch">
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="423" y="1" width="137" height="10" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="5" isBold="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_DESCRIPCION_CALIDAD}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

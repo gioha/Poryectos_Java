@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:ine="http://www.ine.mx/ui" xmlns:deceyec="http://ine.mx/ui">
+
+	<!-- LISTADO DE LAS ASOCIACIONES PARA CAPTURAR SUS VOTOS -->
+				
+	<p:outputPanel id="votosPanelForeach">
+
+			<div class="ui-g">
+				<h2>
+					<!-- Votos contabilizados - Sección unNumeroDeSeccion -->
+					#{messageSource['etiqueta_capturavotos_votos_contabilizados']} - #{messageSource['etiqueta_capturavotos_seccion']} #{mbCapturaVotos.dto.actaCasilla.id.seccion} 
+					<!-- - Casilla nombreCasilla - unaCandidatura -->
+					- #{messageSource['etiqueta_capturavotos_casilla']} #{mbCapturaVotos.dto.actaCasilla.nombreCasilla} - <c:if test="#{mbCapturaVotos.candidatura eq 'AYUNTAMIENTO'}" >#{messageSource['etiqueta_capVotos_cand_ayuntamiento']}</c:if><c:if test="#{mbCapturaVotos.candidatura eq 'GOBERNADOR'}" >#{messageSource['etiqueta_capVotos_cand_gobernador']}</c:if><c:if test="#{mbCapturaVotos.candidatura eq 'DIPUTADO_MR'}" >#{messageSource['etiqueta_capVotos_cand_dipMR']}</c:if><c:if test="#{mbCapturaVotos.candidatura eq 'REGIDURIA_MR'}" >#{messageSource['etiqueta_capVotos_cand_regMR']}</c:if>
+				</h2>
+				<!-- <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /> -->
+	
+				<c:forEach var="asociacion" items="${mbCapturaVotos.dto.asociaciones}" varStatus="status1" >
+					
+					<div class="ui-g-12">
+						<div class="row">
+						
+							<!-- NOMBRE DE LA ASOCIACION POLITICA -->
+							
+							<c:choose>
+							
+								<c:when test="${asociacion.tipoAsociacion eq 1 or asociacion.tipoAsociacion eq 3 or asociacion.tipoAsociacion eq -1 or asociacion.tipoAsociacion eq -2}">
+									<div class="ui-g-5 ui-md-5">
+								    	<h:outputText value="${asociacion.nombreAsociacion}" />
+								    </div>
+								</c:when> 
+								
+								<c:when test="${asociacion.tipoAsociacion eq 4  and asociacion.nombreAsociacion eq null}">
+									<div class="ui-g-5 ui-md-5">
+								    	<h:outputText value="${asociacion.nombreCandidato}" />
+								    </div>
+								</c:when> 
+								    
+						    </c:choose>
+						    
+						    <!-- LOGOTIPO DE LA ASOCIACION POLITICA -->
+						
+							<c:choose>  
+							
+								<!-- PARTIDOS POLITICOS Y COALCICIONES -->
+	 							<c:when test="${asociacion.tipoAsociacion eq 1 or asociacion.tipoAsociacion eq 3}">
+								    <div class="ui-g-2 ui-md-2">
+								    	<p:graphicImage value="#{mbCapturaVotos.imagen}" 
+														height="30" 
+														cache="false" >
+											<f:param name="emblema" value="${asociacion.emblema}" />
+										</p:graphicImage>
+								    </div>
+								</c:when>  
+								
+								<!-- CANDIDATOS INDEPENDIENTES -->
+	 							<c:when test="${asociacion.tipoAsociacion eq 4}">
+									<div class="ui-g-2 ui-md-2">
+								    	<p:graphicImage url="/resources/image/id_CI.png"
+														height="30" 
+														cache="false" >
+										</p:graphicImage>
+								    </div>
+								</c:when> 
+								
+								<!-- CANDIDATOS NO REGISTRADOS -->
+	 							<c:when test="${asociacion.tipoAsociacion eq -1}">
+								    <div class="ui-g-2 ui-md-2">
+								    	<p:graphicImage url="/resources/image/noregistrados.png"
+														height="30" 
+														cache="false" >
+										</p:graphicImage>
+								    </div>
+								</c:when> 
+								
+								<!-- VOTOS NULOS -->
+		 						<c:when test="${asociacion.tipoAsociacion eq -2}">
+								    <div class="ui-g-2 ui-md-2">
+								    	<p:graphicImage url="/resources/image/votos_nulos.png"
+														height="30" 
+														cache="false" >
+										</p:graphicImage>
+								    </div>
+								</c:when> 
+								
+							</c:choose> 
+							
+							
+							<!-- VOTOS -->
+	 						<div class="ui-g-2 ui-md-2">
+								<c:if test="#{mbCapturaVotos.accion ne 'CONSULTA'}" ><span class="requerido"></span> </c:if>#{messageSource['etiqueta_votos']} &nbsp;&nbsp;      
+								<p:inputText 
+											 id="id#{status1.index}"
+											 value="#{asociacion.votos}" 
+											 disabled="#{mbCapturaVotos.dto.actaCasilla.idEstatus eq 3 or mbCapturaVotos.dto.actaCasilla.idEstatus eq 4 or mbCapturaVotos.accion eq 'CONSULTA'}"	
+										     maxlength="4" 
+										     required="true"
+										     requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+										     style="width:50px;"
+										     autocomplete="off"
+										     >
+			
+									<!-- onkeypress="if (event.keyCode==35 || event.keyCode > 57) return false;" -->
+			
+									<pe:keyFilter regEx="/[0-9]/" />
+									<p:ajax process="@this" event="change" update="@this"/>
+								</p:inputText>
+								
+						    </div>
+						    
+						    <!-- VOTOS ACUMULADOS -->
+	 						<div class="ui-g-3 ui-md-3">
+						    	#{messageSource['etiqueta_votos_acumulados']}: &nbsp;&nbsp;
+							    <h:outputText value="${asociacion.votosAcumulados}" />
+						    </div> 
+						    
+						    <div class="ui-g-12" style="padding: 0;">
+						    	<div class="ui-g-7 ui-md-7"></div>
+							    <div class="ui-g-3 ui-md-3">
+							    	<p:messages for="id#{status1.index}" autoUpdate="true" closable="true" />
+							    </div>
+							</div>
+						    
+					    </div>
+					    <div class="divider"></div>
+					</div>
+					
+					
+					<!-- PARTE DE LA IMPRESION DE LAS SUBCOALICIONES -->
+					
+					<c:if test="#{asociacion.tipoAsociacion eq 3}" >
+						<c:forEach var="subcoalicion" items="${asociacion.subcoaliciones}" varStatus="status2" >
+					
+
+							<div class="ui-g-12">
+								<div class="row">
+								
+									<!-- NOMBRE DE LA SUBCOALICION -->
+									
+									<div class="ui-g-5 ui-md-5">
+								    	<h:outputText value="${subcoalicion.siglas}" />
+								    </div>
+								    
+								    
+								    <!-- LOGOTIPO DE LA SUBCOALICION -->
+									
+								    <div class="ui-g-2 ui-md-2">
+								    	<p:graphicImage value="#{mbCapturaVotos.imagen}" 
+														height="30" 
+														cache="false" >
+											<f:param name="emblema" value="${subcoalicion.emblema}" />
+										</p:graphicImage>
+								    </div> 
+										
+									
+									<!-- VOTOS -->
+			 						
+			 						<div class="ui-g-2 ui-md-2">
+										<c:if test="#{mbCapturaVotos.accion ne 'CONSULTA'}" ><span class="requerido"></span> </c:if>#{messageSource['etiqueta_votos']} &nbsp;&nbsp;
+										<p:inputText 
+													 id="id#{subcoalicion.cveSubcoalicion}"
+													 value="#{subcoalicion.votos}" 
+													 disabled="#{mbCapturaVotos.dto.actaCasilla.idEstatus eq 3 or mbCapturaVotos.dto.actaCasilla.idEstatus eq 4 or mbCapturaVotos.accion eq 'CONSULTA' }"
+												     maxlength="4" 
+												     required="true"
+												     requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+												     style="width:50px;"
+												     autocomplete="off">
+												     <!-- onkeypress="if (event.keyCode==35 || event.keyCode > 57) return false;" -->
+					
+											<pe:keyFilter regEx="/[0-9]/" />
+											<p:ajax process="@this" event="change" update="@this"/>
+										</p:inputText>
+								    </div>
+								    
+								    
+								    <!-- VOTOS ACUMULADOS -->
+			 						
+			 						<div class="ui-g-3 ui-md-3">
+								    	#{messageSource['etiqueta_votos_acumulados']}: &nbsp;&nbsp;
+									    <h:outputText value="${subcoalicion.votosAcumulados}" />
+								    </div> 
+								    
+	    						    <div class="ui-g-12" style="padding: 0;">
+								    	<div class="ui-g-7 ui-md-7"></div>
+									    <div class="ui-g-3 ui-md-3">
+									    	<p:messages for="id#{subcoalicion.cveSubcoalicion}" autoUpdate="true" closable="true" />
+									    </div>
+									</div>
+								    
+							    </div>
+							    <div class="divider"></div>
+							</div>
+							
+					
+						</c:forEach>	<!-- FIN DEL FOR EACH DE LAS SUBCOALICIONES -->
+					</c:if>
+					
+					
+				</c:forEach> <!-- FIN DEL FOR EACH DE LAS ASOCIACIONES PADRES (PARTIDOS, INDEPENDIENTES, COALICIONES, NO REG Y NULLOS) -->
+				
+			</div>
+		
+		
+	</p:outputPanel>
+
+
+</ui:composition>

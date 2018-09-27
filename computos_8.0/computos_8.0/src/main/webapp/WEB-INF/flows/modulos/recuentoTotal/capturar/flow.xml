@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+	  start-state="validaVersion" parent="parent-flow">
+	
+	<!-- SEGURIDAD -->
+	<secured attributes="ROLE_COMPUTOS.ADMIN.EXT.OPLE.JL" match="any"/>
+			
+	<!-- MB -->
+	<var name="mbModulo" class="mx.ine.computosINE.mb.MBRecuentoTotal"/>
+	<var name="constantes" class="mx.ine.computosINE.util.Constantes"/>
+	
+	<!-- VALIDA VERSION -->
+	<decision-state id="validaVersion">
+		<if test="mbAdmin.validaVersion(messageSource['constante_version_rol_jl'])" 
+			then="capturar" 
+			else="vsErrorVersion"/>
+	</decision-state>
+	
+	<!-- VALIDA MODULO ABIERTO -->
+	<decision-state id="validaModulo">
+		<if test="mbAdmin.validaModuloAbierto(28)" 
+			then="capturar" 
+			else="vsErrorModuloCerrado"/>
+	</decision-state>
+
+	<view-state id="capturar" view="capturar.xhtml">
+		<on-entry>
+			<evaluate expression="mbAdmin.dto.setIdModulo(28)"/>
+			<evaluate expression="mbAdmin.dto.setIdAccion(1)"/>
+			<evaluate expression="mbModulo.inicializa()"/>
+		</on-entry>
+		<transition on="captura" to="capturar"/>
+		<transition on="cancelar" to="capturar"/>
+	</view-state>
+</flow> 

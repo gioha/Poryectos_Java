@@ -1,0 +1,94 @@
+10
+
+dir
+343377
+svn+ssh://giovanni.hernandez@10.0.1.85/repositorio/DIS-UNICOM/Sistemas%20Electorales/Configurables_2017/computosINE_8.0/trunk/computos/src/main/webapp/WEB-INF/flows/modulos
+svn+ssh://giovanni.hernandez@10.0.1.85/repositorio/DIS-UNICOM
+
+
+
+2017-07-12T16:27:11.895249Z
+268778
+luisadrian.sanchez
+has-props
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+b6cf43f3-9c2e-435a-add6-29cfb2289967
+
+capturaVotoAyuntamiento
+dir
+
+capturaVotoDiputadoMR
+dir
+
+capturaVotoDiputadoRP
+dir
+
+capturaVotoGobernador
+dir
+
+capturaVotoRegiduriaMR
+dir
+
+capturaVotoRegiduriaRP
+dir
+
+componentesCapturaVotos
+dir
+
+componentesGeneracionActas
+dir
+
+distribucionAyuntamiento
+dir
+
+distribucionDiputadoMR
+dir
+
+distribucionDiputadoRP
+dir
+
+distribucionGobernador
+dir
+
+distribucionRegiduriaMR
+dir
+
+distribucionRegiduriaRP
+dir
+
+generacionActaAyuntamiento
+dir
+
+generacionActaDipRPEstatal
+dir
+
+generacionActaDiputadosMR
+dir
+
+generacionActaDiputadosRP
+dir
+
+generacionActaGobernador
+dir
+
+generacionActaRegiduriaMR
+dir
+
+generacionActaRegiduriaRP
+dir
+
+recuentoTotal
+dir
+

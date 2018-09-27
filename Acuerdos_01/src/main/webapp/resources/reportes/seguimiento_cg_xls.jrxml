@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.4.3.final using JasperReports Library version 6.4.3  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="seguimiento_cg_ori" pageWidth="3366" pageHeight="5950" orientation="Landscape" columnWidth="3326" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="08407b12-f038-47d6-b33a-7220804a343c">
+	<property name="ireport.zoom" value="1.7715610000001139"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="logoIne" class="java.lang.String"/>
+	<parameter name="filtroClasificacion" class="java.lang.String"/>
+	<parameter name="filtroArea" class="java.lang.String"/>
+	<parameter name="filtroEstatus" class="java.lang.String"/>
+	<parameter name="filtroPunto" class="java.lang.String"/>
+	<parameter name="filtroAcuerdo" class="java.lang.String"/>
+	<parameter name="tipoDocumento" class="java.lang.String"/>
+	<parameter name="anio" class="java.lang.String"/>
+	<parameter name="mensaje" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="textoPunto" class="java.lang.String">
+		<fieldDescription><![CDATA[textoPunto]]></fieldDescription>
+	</field>
+	<field name="tematica" class="java.lang.String">
+		<fieldDescription><![CDATA[tematica]]></fieldDescription>
+	</field>
+	<field name="punto" class="java.lang.String">
+		<fieldDescription><![CDATA[punto]]></fieldDescription>
+	</field>
+	<field name="nombreAcuerdo" class="java.lang.String">
+		<fieldDescription><![CDATA[nombreAcuerdo]]></fieldDescription>
+	</field>
+	<field name="fecha" class="java.util.Date">
+		<fieldDescription><![CDATA[fecha]]></fieldDescription>
+	</field>
+	<field name="estatus" class="java.lang.String">
+		<fieldDescription><![CDATA[estatus]]></fieldDescription>
+	</field>
+	<field name="areaSiglas" class="java.lang.String">
+		<fieldDescription><![CDATA[areaSiglas]]></fieldDescription>
+	</field>
+	<field name="anio" class="java.lang.String">
+		<fieldDescription><![CDATA[anio]]></fieldDescription>
+	</field>
+	<field name="area" class="java.lang.String">
+		<fieldDescription><![CDATA[area]]></fieldDescription>
+	</field>
+	<field name="acuerdo" class="java.lang.String">
+		<fieldDescription><![CDATA[acuerdo]]></fieldDescription>
+	</field>
+	<field name="movimientosHistorico" class="java.lang.String">
+		<fieldDescription><![CDATA[movimientosHistorico]]></fieldDescription>
+	</field>
+	<field name="tipoSesion" class="java.lang.String"/>
+	<field name="fechaEmision" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="165" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="0" width="151" height="64" uuid="ccd1567d-2b87-4ca8-92c5-7b1d26ded315"/>
+				<imageExpression><![CDATA[$P{logoIne}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="151" y="0" width="651" height="64" uuid="9d65b93f-d3d2-4edb-a80b-74aefb39bd5e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporte de Seguimiento del Consejo General]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy HH:mm:ss">
+				<reportElement x="932" y="83" width="472" height="15" uuid="bad94ccb-c545-4563-82f2-896369ff93b7"/>
+				<box leftPadding="3" rightPadding="6"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="330" y="83" width="602" height="15" uuid="83da008a-bbfd-4039-9a72-20ca47db9e22"/>
+				<box rightPadding="3"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Creado: ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="98" width="932" height="40" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" uuid="c776aef8-88fb-4d0b-b290-436ed8c93e00"/>
+				<textFieldExpression><![CDATA[($P{filtroEstatus}==null?"":$P{filtroEstatus}.toString().equals("")?"":"Estatus: " + $P{filtroEstatus}+"\n")+
+($P{filtroArea}==null?"":$P{filtroArea}.toString().equals("")?"":"Área: "+$P{filtroArea}+"\n")+
+($P{filtroClasificacion}==null?"":$P{filtroClasificacion}.toString().equals("")?"":"Clasificación: " + $P{filtroClasificacion})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement stretchType="ElementGroupHeight" mode="Opaque" x="1711" y="139" width="247" height="26" backcolor="#CCCCCC" uuid="8984fb3d-cd97-4b47-adcf-e28aa620844f"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estatus]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2373" y="139" width="481" height="26" backcolor="#CCCCCC" uuid="1a969b75-3b69-49ca-b3c3-c5256df9605c"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+					<topPen lineWidth="0.5" lineColor="#999999"/>
+					<leftPen lineWidth="0.5" lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineColor="#999999"/>
+					<rightPen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Movimientos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="2255" y="139" width="118" height="26" backcolor="#CCCCCC" uuid="5e22c883-520a-4f9d-8ddf-da3f7ea00671"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+					<topPen lineWidth="0.5" lineColor="#999999"/>
+					<leftPen lineWidth="0.5" lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineColor="#999999"/>
+					<rightPen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Área Responsable]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="80" y="83" width="250" height="15" uuid="911b5267-cf2f-42fd-b34f-c96a7ecb2824"/>
+				<box leftPadding="3"/>
+				<textFieldExpression><![CDATA[$P{anio}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="83" width="80" height="15" uuid="6578a20c-5cb4-4f75-aca1-261301053490"/>
+				<box rightPadding="8"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Año:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="1958" y="139" width="297" height="26" backcolor="#CCCCCC" uuid="dff71059-8c8d-4b27-ba8c-e5d03eb805f1"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Clasificación]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="139" width="151" height="26" backcolor="#CCCCCC" uuid="6386e783-fefe-4d17-a6c0-d10acbc48355"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo de sesión y fecha]]></text>
+			</staticText>
+			<textField>
+				<reportElement mode="Opaque" x="932" y="139" width="779" height="26" backcolor="#CCCCCC" uuid="5ddb443c-c7f0-4e13-8ee2-19cf21fda05b"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{tipoDocumento}.toString().equals("Resolución")?("Punto Resolutivo"):"Punto de " + $P{tipoDocumento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="151" y="139" width="179" height="26" backcolor="#CCCCCC" uuid="95162db5-51b9-49cf-b3b8-2354fae70fb8"/>
+				<box>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Número de " + $P{tipoDocumento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="330" y="139" width="602" height="26" backcolor="#CCCCCC" uuid="def62c95-c7ec-49e4-8eb2-3d1b57f172db"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="0.5" lineColor="#999999"/>
+					<topPen lineWidth="0.5" lineStyle="Solid" lineColor="#999999"/>
+					<leftPen lineWidth="0.5" lineStyle="Solid" lineColor="#999999"/>
+					<bottomPen lineWidth="0.5" lineStyle="Solid" lineColor="#999999"/>
+					<rightPen lineWidth="0.5" lineStyle="Solid" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Nombre de " + $P{tipoDocumento}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" evaluationTime="Auto">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="151" y="0" width="179" height="20" isPrintWhenDetailOverflows="true" uuid="709759c0-923e-49c4-9994-83fd70478d32">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+					<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+					<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+				</reportElement>
+				<box leftPadding="3">
+					<topPen lineColor="#999999"/>
+					<bottomPen lineWidth="0.0" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{acuerdo}==null?"":$F{acuerdo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="330" y="0" width="602" height="20" isPrintWhenDetailOverflows="true" uuid="7577fb36-0427-45d9-a7ba-108a0aa1f331">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+					<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+					<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+				</reportElement>
+				<box leftPadding="3">
+					<topPen lineColor="#999999"/>
+					<bottomPen lineWidth="0.0" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombreAcuerdo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto" isBlankWhenNull="false">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="932" y="0" width="779" height="20" isPrintWhenDetailOverflows="true" uuid="c0df42bc-5aee-45f1-a2b8-e548e9dde391">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+					<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+					<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+				</reportElement>
+				<box leftPadding="3">
+					<topPen lineColor="#999999"/>
+					<bottomPen lineWidth="0.0" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{textoPunto}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1711" y="0" width="247" height="20" isPrintWhenDetailOverflows="true" uuid="ad5651b1-08ef-4f1b-b79e-c89a20b5423c">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+					<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+					<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+				</reportElement>
+				<box leftPadding="3">
+					<topPen lineColor="#999999"/>
+					<bottomPen lineWidth="0.0" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estatus}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="1958" y="0" width="297" height="20" isPrintWhenDetailOverflows="true" uuid="84e0d631-8847-4b37-b2dd-f147c7144b71">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+					<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+					<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+				</reportElement>
+				<box leftPadding="3">
+					<topPen lineColor="#999999"/>
+					<bottomPen lineWidth="0.0" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tematica}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="2255" y="0" width="118" height="20" isPrintWhenDetailOverflows="true" uuid="a034441d-c967-48df-a00b-35018061cc55">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+					<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+					<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+				</reportElement>
+				<box leftPadding="3">
+					<topPen lineColor="#999999"/>
+					<bottomPen lineWidth="0.0" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{areaSiglas}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="2373" y="0" width="481" height="20" isPrintWhenDetailOverflows="true" uuid="02a7becc-0945-48c1-9752-9cfbf01581ae">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+					<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+					<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+				</reportElement>
+				<box leftPadding="3">
+					<topPen lineColor="#999999"/>
+					<bottomPen lineWidth="0.0" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{movimientosHistorico}==null?"":$F{movimientosHistorico}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" evaluationTime="Auto">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="151" height="20" isPrintWhenDetailOverflows="true" uuid="f1dfd8dd-7cd0-45a5-b7f8-e02619471b94">
+					<property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+					<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+					<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+				</reportElement>
+				<box leftPadding="3">
+					<topPen lineColor="#999999"/>
+					<bottomPen lineWidth="0.0" lineColor="#999999"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tipoSesion}.toString().equals("") && $F{fechaEmision}.toString().equals("")?"": $F{tipoSesion}+"\n"+"("+$F{fechaEmision}+")"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="41">
+			<textField>
+				<reportElement x="0" y="0" width="932" height="30" uuid="e289602f-2360-4967-a945-9d83ff87b1c2"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{mensaje}==null?"":$P{mensaje}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

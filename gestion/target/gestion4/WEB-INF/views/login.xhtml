@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+		
+		<h:outputStylesheet library="css" name="modulos/inicio_sistema/inicio_sistema.css" />
+		
+		<h:form id="formLogin" style="height: 85%">
+
+			<div class="contenedorLogin">
+				
+				<div class="row" style="padding-bottom: 20px; padding-top: 0px;">
+					
+					<div class="col-md-12">
+						
+						<p:graphicImage library="img" name="actualizaciones.jpg"/>
+					
+					</div>
+				
+				</div>
+				
+				<div class="row" style="padding-left: 50px; padding-bottom: 20px;">
+					
+					<div class="col-md-12">
+					
+						<h:outputLabel value="LIBERACIONES:" styleClass="tituloInicio"/>
+					
+					</div>
+				
+				</div>
+				
+				<div class="row" style="padding-left: 50px;">
+					
+					<div class="col-md-1" style="width: 50px; padding-right: 0px;">
+						<i id="flecha1" class="fa fa-check vinieta bounceInLeft animated" aria-hidden="true"/> &nbsp;
+					</div>
+					<div class="col-md-11">
+						 <div id="tarea1" class="texto fadeInDown animated"> Módulo de Organigrama</div>
+					</div>
+				
+				</div>
+				
+				<div class="row" style="padding-left: 50px; padding-bottom: 20px;">
+					
+					<div class="col-md-1" style="width: 50px; padding-right: 0px;">
+						<i id="flecha2" class="fa fa-check vinieta bounceInLeft animated" aria-hidden="true"/> &nbsp;
+					</div>
+					<div class="col-md-11">
+						 <div id="tarea2" class="texto fadeInDown animated"> Módulo de Configuración, apartado 'Instrucciones'</div>
+					</div>
+				
+				</div>
+				
+				<div class="row" style="padding-left: 50px; padding-bottom: 20px;">
+					
+					<div class="col-md-12">
+					
+						<h:outputLabel value="ACTUALIZACIONES:" styleClass="tituloInicio"/>
+					
+					</div>
+				
+				</div>
+				
+				<div class="row" style="padding-left: 40px;">
+					
+					<div class="col-md-12">
+						
+						<div class="col-md-1" style="width: 50px; padding-right: 0px;">
+							<i id="flecha3" class="fa fa-check vinieta bounceInLeft animated" aria-hidden="true"/> &nbsp;
+						</div>
+						<div class="col-md-11">
+							 <div id="tarea3" class="texto fadeInDown animated"> Nuevo diseño para mensajes informativos, de advertencia, etc. dentro de los módulos</div>
+						</div>
+						
+					</div>
+				
+				</div>
+				
+				<div class="row" style="padding-left: 40px;">
+					
+					<div class="col-md-12">
+					
+						<div class="col-md-1" style="width: 50px; padding-right: 0px;">
+							<i id="flecha4" class="fa fa-check vinieta bounceInLeft animated" aria-hidden="true"/> &nbsp;
+						</div>
+						<div class="col-md-11">
+							 <div id="tarea4" class="texto fadeInDown animated"> Ubicación de usuarios dentro del sistema (Migas) </div>
+						</div>
+						
+					</div>
+				
+				</div>
+				
+				<div class="row" style="padding-left: 40px;">
+					
+					<div class="col-md-12">
+						
+						<div class="col-md-1" style="width: 50px; padding-right: 0px;">
+							<i id="flecha5" class="fa fa-check vinieta bounceInLeft animated" aria-hidden="true"/> &nbsp;
+						</div>
+						<div class="col-md-11">
+							 <div id="tarea5" class="texto fadeInDown animated"> Actualización de pantallas 'responsivas' (pantallas que se visualizan en diferentes resoluciones) </div>
+						</div>
+						
+					</div>
+				
+				</div>
+			
+			</div>
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>

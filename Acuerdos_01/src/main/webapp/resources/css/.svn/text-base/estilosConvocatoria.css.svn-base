@@ -1,0 +1,89 @@
+footer {
+	z-index: 1;
+}
+
+.ui-selectonemenu-trigger {
+    width: 29px !important;
+    background-color: floralwhite;
+}
+
+.claseConvocatoria thead {
+	display: none;
+}
+
+#idOrdenDelDia thead {
+	display: none;
+}
+
+.ui-fileupload-buttonbar {
+	background-color: white;
+	border: none;
+}
+
+.ui-fileupload-content {
+    border: none;
+}
+
+.ui_tpicker_time_label {
+    display: none;
+}
+
+.ui_tpicker_time {
+    display: none;
+}
+
+.ui_tpicker_hour_label {
+	margin-top: 15px;
+}
+
+.ui-datepicker {
+	z-index: 0 !important;
+}
+
+.ui-timepicker-div > .ui-widget-header {
+	background: #932C60;
+	color: #ffffff;
+}
+
+#contenedor-adjuntar-archivo .ui-widget {
+    font-size: 0.85em;
+}
+
+#contenedor-adjuntar-zip .ui-widget {
+    font-size: 0.85em;
+}
+
+#contenedor-adjuntar-zip .ui-fileupload-buttonbar {
+	background: transparent none;
+	border: none;
+}
+
+#contenedor-adjuntar-zip .ui-fileupload-content {
+	display: none;
+}
+
+#contenedor-adjuntar-zip .ui-fileupload-buttonbar {
+	padding: 0;
+}
+
+#contenedor-adjuntar-zip .ui-fileupload-buttonbar .ui-button-text-icon-left .ui-button-text {
+	font-size: 1.8em;
+	padding: 0 1.2em;
+}
+
+#contenedor-adjuntar-zip .ui-fileupload-choose.ui-button, .ui-fileupload-choose.ui-button .ui-widget,
+						 .ui-fileupload-choose.ui-button .ui-state-default {
+	background-color: #932C60 !important;
+	border: 1px solid #932C60 !important;
+	color: #ffffff;
+}
+
+#contenedor-adjuntar-zip .ui-icon {
+	display: none;
+}
+
+#contenedor-adjuntar-zip .ui-state-default {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}

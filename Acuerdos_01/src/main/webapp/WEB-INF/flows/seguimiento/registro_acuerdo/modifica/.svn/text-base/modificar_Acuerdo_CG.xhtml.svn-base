@@ -1,0 +1,667 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sf="http://www.springframework.org/tags/faces"
+				xmlns:sec="http://www.springframework.org/security/tags"
+				template="/templates/template.xhtml">
+
+
+<ui:define name="CONTENT">
+	<style>
+		.inputsForm {
+			width: 100%;
+		}
+		.inputsForm.reducido {
+			width: 60%;
+		}
+		span.inputsForm > input {
+			width: 55%;
+		}
+		span.inputsForm > button {
+			width: 5%;
+		}
+		.lblInputs {
+			margin-bottom: 5px;
+		}
+		.lblInputs img {
+			margin-left: 10px;
+		}
+		#informacion-documento label {
+			font-weight: normal;
+		}
+		#informacion-documento > div > div {
+			margin-bottom: 10px;
+		}
+	</style>
+	<div class="container">
+ 		<h:form id="form_modificar_acuerdo" >
+			<div class="row">
+				<div class="col-xs-12">
+					<p:growl for="growl"
+						autoUpdate="true" 
+						redisplay="true" 
+						showDetail="true" 
+						showSummary="true"/>
+				</div>
+			</div>
+			<p:outputPanel id="modificarAcuerdo">
+				<div class="row">
+					<div class="col-xs-12 espaciador-xs-top">
+						<!-- ##################################### CAMINO DE MIGAJAS  ##################################### -->
+						<ol class="breadcrumb migaja">
+							<li>
+								<a href="${request.contextPath}/app/home"> 
+									<h:outputText value="#{messageSource['lbl_home']}" />
+								</a>
+							</li>
+							<li>
+								<a href="${request.contextPath}/app/seguimiento/bandeja_cg"> 
+									<h:outputText value="#{messageSource['lbl_acuerdo_migaja']}" />
+								</a>
+							</li>
+							<li class="active">#{messageSource['lbl_titulo_modificar']}</li>
+						</ol>
+					</div>
+					<div class="col-xs-12">
+						<!-- ##################################### TITULO PANTALLA  ##################################### -->
+						<div class="lblTituloForm robotoRegular">
+							<span>#{messageSource['lbl_titulo_modificar']}</span>
+						</div>
+					</div>
+					<!-- ##################################### MENSAJE CAMPÓS REQUERIDOS  ##################################### -->
+					<div class="col-xs-12 lblNotas robotoRegular text-right">
+						<span>#{messageSource['lbl_dato_req1']}</span> 
+						<span style="color:red">#{messageSource['etiqueta_simbolo_asterisco']}</span>
+						<span>#{messageSource['lbl_dato_req2']}</span>
+					</div>
+				</div>
+				<!-- <div class="row">
+					##################################### TIPO DE DOCUMENTO  #####################################				
+					<div class="col-xs-12">
+						<div class="lblInputs robotoRegular">
+							<span style="color:red">#{messageSource['etiqueta_simbolo_asterisco']}</span>
+							<h4><span><strong>#{messageSource['lbl_tipo_documento']}:</strong>&nbsp;&nbsp;<h:outputLabel value="#{mbModAcuerdos.form.acuerdoOreolucion}" /> </span></h4>
+								<h:graphicImage id="ayuda1" name="ayuda01.png" 
+						 		             styleClass="" 
+						 		             library="img"
+						 		             onclick="PF('dlg2').show();"
+						 		             />
+								    <p:tooltip id="toolTipContent1" for="ayuda1" position="bottom">
+								        <p:graphicImage name="/img/registroAcuerdo/ayuda_num_acuerdo.png" />
+								    </p:tooltip>
+						</div>
+						<div>
+							<span><h3><h:outputLabel value="#{mbModAcuerdos.form.acuerdoOreolucion}" /> </h3></span>						
+						</div>
+					  	<div class="ui-g-12" style="padding: 0;">
+					    	<div class="ui-g-7 ui-md-7"></div>
+						    <div class="ui-g-3 ui-md-3"   style="height: 10px;">
+						    	<p:messages for="tipoDocumento" autoUpdate="true" closable="true" />
+						    </div> 
+						</div>
+					</div>
+				</div> -->
+				<div class="row">
+					<!-- ##################################### NUMERO DEL ACUERDO  ##################################### -->				
+					<div class="col-xs-12 col-md-6 espaciador-top">
+						<div id="informacion-documento" class="lblInputs robotoRegular">
+							<!-- <span style="color:red">#{messageSource['etiqueta_simbolo_asterisco']}</span> -->
+							<p:outputPanel id="panelLblAc">
+								<c:if test="#{mbModAcuerdos.form.getLblIniciales()=='1'}">
+									<div>
+										<strong>#{messageSource['lbl_tipo_documento']}:</strong>&nbsp;&nbsp;
+										<h:outputLabel value="#{mbModAcuerdos.form.acuerdoOreolucion}" />
+									</div>
+									<div class="espaciador-xlg-top">
+										<strong>#{messageSource['lbl_num_acuerdo_modifica']}:</strong>&nbsp;&nbsp;
+										<h:outputLabel value="#{mbModAcuerdos.form.acuerdo.idNumAcuerdo}" />
+									</div>
+								</c:if>
+							</p:outputPanel>
+							<p:outputPanel id="panelLblRes">
+								<c:if test="#{mbModAcuerdos.form.getLblIniciales()=='6'}">
+									<div>
+										<strong>#{messageSource['lbl_tipo_documento']}:</strong>&nbsp;&nbsp;
+										<h:outputLabel value="#{mbModAcuerdos.form.acuerdoOreolucion}" />
+									</div>
+									<div class="espaciador-xlg-top">
+										<strong>#{messageSource['lbl_num_Resolicion']}:</strong>&nbsp;&nbsp;
+										<h:outputLabel value="#{mbModAcuerdos.form.acuerdo.idNumAcuerdo}" />
+									</div>
+								</c:if>
+							</p:outputPanel>
+	<!-- 							<h:graphicImage id="ayuda1" name="ayuda01.png" 
+						 		             styleClass="" 
+						 		             library="img"
+						 		             onclick="PF('dlg2').show();"
+						 		             />
+								    <p:tooltip id="toolTipContent1" for="ayuda1" position="bottom">
+								        <p:graphicImage name="/img/registroAcuerdo/ayuda_num_acuerdo.png" />
+								    </p:tooltip> -->
+						</div>
+					</div>
+					<!-- ##################################### NOMBRE DEL ACUERDO  ##################################### -->					
+					<div class="col-xs-12 col-md-6 espaciador-top">
+						<div class="lblInputs robotoRegular">
+							<p:outputPanel id="panelLblNomAc">
+								<c:if test="#{mbModAcuerdos.form.getLblIniciales()=='1'}">
+									<div>
+										<span style="color:red">#{messageSource['etiqueta_simbolo_asterisco']}</span>
+										<span>#{messageSource['lbl_nom_acuerdo']}</span>
+									</div>
+								</c:if>
+							</p:outputPanel>
+							<p:outputPanel id="panelLblNomRes">
+								<c:if test="#{mbModAcuerdos.form.getLblIniciales()=='6'}">
+									<div>
+										<span style="color:red">#{messageSource['etiqueta_simbolo_asterisco']}</span>
+										<span>#{messageSource['lbl_nom_Resolicion']}</span>
+									</div>
+								</c:if>
+							</p:outputPanel>							
+	<!-- 					<h:graphicImage id="ayuda2" name="ayuda01.png" 
+				 		             styleClass="" 
+				 		             library="img"/>
+				 		             
+						    <p:tooltip id="toolTipContent2" for="ayuda2" position="bottom">
+						        <p:graphicImage name="/img/registroAcuerdo/ayuda_nom_acuerdo.png" />
+						 	</p:tooltip>	 -->						
+						</div>
+	<!-- 				<div class="row">
+							<p:inputTextarea id="nombreAcuerdo" 
+											placeholder="#{messageSource['txt_fondo_nom_ac']}"   
+											rows="5" 
+											cols="83"  
+											autoResize="false"  
+											size="25"
+											style="font-size: small;"
+											styleClass="inputsForm"
+											required="true"
+											counterTemplate="{0} caracteres faltantes."
+											counter="display1"
+											requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+											 
+											maxlength="2000"
+											value="#{mbModAcuerdos.form.acuerdo.nombre}" 
+											onkeyup="this.value=this.value.toUpperCase();"
+											onblur="this.value=verificarPalabras(this.value)"
+											
+											>
+									   		<p:keyFilter regEx="/[0-9A-Za-zÑñáéíóúÁÉÍÓÚüÜ',:;. ]/" preventPaste="false"/>
+										    <f:validateRegex pattern="^([0-9A-Za-zÑñáéíóúÁÉÍÓÚüÜ',:;. ]*)|([+-]?)$" />
+										   <f:validateLength maximum="2000" />
+										   <f:validateLength minimum="4" />
+										   <p:ajax update="nombreAcuerdo" />
+							</p:inputTextarea>
+							<div class="lblNotas robotoRegular">
+								<h:outputText id="display1" />
+							</div>
+						</div> -->
+						<p:outputPanel id="paneInputNomAc">
+							<c:if test="#{mbModAcuerdos.form.getLblIniciales()=='1'}">
+								<div>
+									<p:inputTextarea id="nombreAcuerdo" 
+										placeholder="#{messageSource['txt_fondo_nom_ac']}"   
+										rows="5" 
+										cols="83"  
+										autoResize="false"
+										size="25"  
+										style="font-size: small;"
+										styleClass="inputsForm"
+										required="true"
+										counterTemplate="{0} caracteres faltantes."
+										counter="display1"
+										requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+										maxlength="2000"
+										value="#{mbModAcuerdos.form.acuerdo.nombre}"  
+										onkeyup="this.value=this.value.toUpperCase();"
+										onblur="this.value=verificarPalabras(this.value); setTimeout(function() { $('[id$=msjNomAc]').hide(1000); }, 500);"
+										>
+										<!-- <p:keyFilter regEx="/[0-9A-Za-zÑñáéíóúÁÉÍÓÚüÜ',:;. ]/" preventPaste="false"/> -->
+		 	 							   		<!-- <f:validateRegex pattern="^([0-9A-Za-zÑñáéíóúÁÉÍÓÚüÜ',:;. ]*)|([+-]?)$" /> -->
+								   		<f:validateLength maximum="2000" />
+								   		<!-- <f:validateLength minimum="4" /> -->
+								   		<!-- <p:ajax update="nombreAcuerdo" /> -->
+									</p:inputTextarea>
+									<div class="lblNotas robotoRegular">
+										<h:outputText id="display1" />
+									</div>
+								</div>
+							</c:if>
+						</p:outputPanel>
+						<p:outputPanel id="paneInputNomRs">
+							<c:if test="#{mbModAcuerdos.form.getLblIniciales()=='6'}">
+								<div class="row">
+									<p:inputTextarea id="nombreAcuerdo" 
+											placeholder="#{messageSource['txt_fondo_nom_Rs']}"   
+											rows="5" 
+											cols="83"  
+											autoResize="false"
+											size="25"  
+											style="font-size: small;"
+											styleClass="inputsForm"
+											required="true"
+											counterTemplate="{0} caracteres faltantes."
+											counter="display1"
+											requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+											maxlength="2000"
+											value="#{mbModAcuerdos.form.acuerdo.nombre}"  
+											onkeyup="this.value=this.value.toUpperCase();"
+											onblur="this.value=verificarPalabras(this.value); setTimeout(function() { $('[id$=msjNomAc]').hide(1000); }, 500);"
+											>
+											<!-- <p:keyFilter regEx="/[0-9A-Za-zÑñáéíóúÁÉÍÓÚüÜ',:;. ]/" preventPaste="false"/> -->
+	   	 							   		<!-- <f:validateRegex pattern="^([0-9A-Za-zÑñáéíóúÁÉÍÓÚüÜ',:;. ]*)|([+-]?)$" /> -->
+									   		<f:validateLength maximum="2000" />
+									   		<!-- <f:validateLength minimum="4" /> -->
+									   		<!-- <p:ajax update="nombreAcuerdo" /> -->
+									</p:inputTextarea>
+									<div class="lblNotas robotoRegular">
+										<h:outputText id="display1" />
+									</div>
+								</div>
+							</c:if>
+						</p:outputPanel>
+					  	<div class="ui-g-12 col-md-9" style="padding: 0;">
+					    	<!-- <div class="ui-g-7 ui-md-7"></div> -->
+						    <div class="ui-g-3 ui-md-3"   style="height: 10px;">
+						    	<p:messages id="msjNomAc" for="nombreAcuerdo" autoUpdate="true" closable="true" />
+						    </div> 
+						</div>
+					</div>
+					<!-- ##################################### FECHA DE SESION  ##################################### -->				
+					<div class="col-xs-12 col-md-6 espaciador-top">
+						<div class="lblInputs robotoRegular">
+							<span style="color:red">#{messageSource['etiqueta_simbolo_asterisco']}</span>
+							<span>#{messageSource['lbl_fecha_sesion']}</span>
+							<h:graphicImage id="ayuda3" name="ayuda01.png" 
+			 		             styleClass="" 
+			 		             library="img"/>
+							<p:tooltip id="toolTipContent3" for="ayuda3" position="bottom">
+						        <p:graphicImage name="/img/registroAcuerdo/ayuda_fecha_sesion.png" />
+							</p:tooltip>							
+						</div>
+						<div>
+					        <p:calendar id="button" 
+			        			locale="es"
+			        			size="30"
+			        			navigator="true"
+			         			maxdate="#{mbModAcuerdos.form.fechaFormateada}"
+			         			minDate="#{mbModAcuerdos.form.fechaFormateada}"							        			
+			        			value="#{mbModAcuerdos.form.acuerdo.fechaSesion}"
+			        			showOn="button"
+			        			styleClass="inputsForm reducido"
+			        			pattern="dd/MM/yyyy"
+			        			readonlyInput="true"
+			        			style="font-size: small;"
+			        			placeholder="#{messageSource['txt_fondo_calendario']}"
+			        			required="true"
+			        			requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+			        			onblur="setTimeout(function() { $('[id$=msjFS]').hide(1000); }, 500);" />
+						</div>
+					  	<div class="ui-g-12 col-md-6" style="padding: 0;">
+					    	<!-- <div class="ui-g-7 ui-md-7"></div> -->
+						    <div class="ui-g-3 ui-md-3"   style="height: 10px;">
+						    	<p:messages id="msjFS" for="button" autoUpdate="true" closable="true" />
+						    </div> 
+						</div>					
+					</div >
+					<!-- ##################################### LIGA DEL ACUERDO  ##################################### -->					
+					<div class="col-xs-12 col-md-6 espaciador-top">
+						<div class="lblInputs robotoRegular">
+							<p:outputPanel id="panelLblLigAc">
+								<c:if test="#{mbModAcuerdos.form.getLblIniciales()=='1'}">
+									<div>
+										<!-- <span style="color:red">#{messageSource['etiqueta_simbolo_asterisco']}</span> -->
+										<span>#{messageSource['lbl_liga_acuerdo']}</span>
+										<!-- <h:graphicImage id="ayuda4" name="ayuda01.png" 
+								 		             styleClass="" 
+								 		             library="img"/>
+										<p:tooltip id="toolTipFade1" for="ayuda4" value="#{messageSource['mensaje_fondo_liga']}" position="left"/>	 -->						
+									</div>
+								</c:if>
+							</p:outputPanel>
+							<p:outputPanel id="panelLblLigRes">
+								<c:if test="#{mbModAcuerdos.form.getLblIniciales()=='6'}">
+									<div>
+										<!-- <span style="color:red">#{messageSource['etiqueta_simbolo_asterisco']}</span> -->
+										<span>#{messageSource['lbl_liga_Resolicion']}</span>
+										<!-- <h:graphicImage id="ayuda4" name="ayuda01.png" 
+								 		             styleClass="" 
+								 		             library="img"/>
+										<p:tooltip id="toolTipFade1" for="ayuda4" value="#{messageSource['mensaje_fondo_liga_Rs']}" position="left"/> -->							
+									</div>
+								</c:if>
+							</p:outputPanel>
+						</div>
+	<!-- 				<div class="row">
+							<p:inputText id="ligaAcuerdo"
+										placeholder="#{messageSource['txt_fondo_liga_ac']}"
+										style="font-size: small;" 
+										size="80"
+										styleClass="inputsForm"
+										required="false"
+										validatorMessage="#{messageSource['mensaje_valida_liga_acuerdo']}" 
+										maxlength="300"
+										value="#{mbModAcuerdos.form.acuerdo.ligaAcuerdo}" 
+										>
+								        <p:keyFilter regEx="/[^\s]/" preventPaste="false"/>
+								        <f:validateRegex pattern="^((((http(s?)):\/\/)|(www)))(([^(\/)]{2})[0-9a-zA-Z.\-_\/?#+%|]+)([^(\/)]{2})" />
+								        <f:validateLength maximum="300" />
+								        <p:ajax  event="blur" update = "ligaAcuerdo" /> 
+								</p:inputText>
+						</div> -->
+						<p:outputPanel id="panelLblLigAcF">
+							<c:if test="#{mbModAcuerdos.form.getLblIniciales()=='1'}">
+								<div>
+									<p:inputText id="ligaAcuerdo" 
+										placeholder="#{messageSource['txt_fondo_liga_ac']}" 
+										style="font-size: small;"
+										size="80"
+										styleClass="inputsForm"
+										required="false"
+										validatorMessage="#{messageSource['mensaje_valida_liga_acuerdo']}" 
+										maxlength="300"
+										value="#{mbModAcuerdos.form.acuerdo.ligaAcuerdo}"
+										>
+		  	 							   <p:keyFilter regEx="/[^\s]/" preventPaste="false"/> 
+		  	 							   <f:validateRegex pattern="^((((http(s?)):\/\/)|(www)))(([^(\/)]{2})[0-9a-zA-Z.\-_\/?#+%|]+)" />
+		  	 							   <f:validateLength maximum="300" />
+								   	   <!-- <p:ajax  event="blur" update = "ligaAcuerdo" /> -->
+								   	   <p:ajax event="blur"  listener="#{mbModAcuerdos.validaURL}"
+												update="msjLiga btnAceptar parentPanelLA" />
+								   	   
+									</p:inputText>
+									<p:outputPanel id="parentPanelLA">
+											<p:panel widgetVar="myPanelLA"
+												rendered="#{mbModAcuerdos.form.ligaValida}"
+												style="border:  0px !important; background: #FfFfFf; ">
+												<div>
+														<p:outputLabel id="lbl_ligaNovalida"
+															value="#{messageSource['mensaje_liga_NoValida']}"
+															style="color: #B1251E;" />
+												</div>
+											</p:panel>
+									</p:outputPanel>	
+								</div>						
+							</c:if>
+						</p:outputPanel>
+						<p:outputPanel id="panelLblLigRsF">
+							<c:if test="#{mbModAcuerdos.form.getLblIniciales()=='6'}">
+								<div>
+									<p:inputText id="ligaAcuerdo" 
+										placeholder="#{messageSource['txt_fondo_liga_Rs']}" 
+										style="font-size: small;"
+										size="80"
+										styleClass="inputsForm"
+										required="false"
+										validatorMessage="#{messageSource['mensaje_valida_liga_acuerdo']}" 
+										maxlength="300"
+										value="#{mbModAcuerdos.form.acuerdo.ligaAcuerdo}"
+										>
+		  	 							   <p:keyFilter regEx="/[^\s]/" preventPaste="false"/> 
+		  	 							   <f:validateRegex pattern="^((((http(s?)):\/\/)|(www)))(([^(\/)]{2})[0-9a-zA-Z.\-_\/?#+%|]+)" />
+		  	 							   <f:validateLength maximum="300" />
+								   	   <!-- <p:ajax  event="blur" update = "ligaAcuerdo" /> -->
+								   	    <p:ajax event="blur"  listener="#{mbModAcuerdos.validaURL}"
+												update="msjLiga btnAceptar parentPanelLA" />
+								   	   
+									</p:inputText>
+									<p:outputPanel id="parentPanelLA">
+											<p:panel widgetVar="myPanelLA"
+												rendered="#{mbModAcuerdos.form.ligaValida}"
+												style="border:  0px !important; background: #FfFfFf; ">
+												<div>
+														<p:outputLabel id="lbl_ligaNovalida"
+															value="#{messageSource['mensaje_liga_NoValida']}"
+															style="color: #B1251E;" />
+												</div>
+											</p:panel>
+									</p:outputPanel>										
+								</div>						
+							</c:if>
+						</p:outputPanel>
+						<div class="ui-g-12 col-md-6" style="padding: 0;">
+					  		<div class="ui-g-7 ui-md-7"></div>
+						  	<div class="ui-g-3 ui-md-3"   style="height: 10px;">
+						  		<p:messages id="msjLiga" for="ligaAcuerdo" autoUpdate="true" closable="true" />
+						  	</div> 
+						</div>
+					</div>
+					<!-- ##################################### TIPO DE SESION  ##################################### -->				
+					<div class="col-xs-12 col-md-6 espaciador-top">
+						<div class="lblInputs robotoRegular">
+							<span style="color:red">#{messageSource['etiqueta_simbolo_asterisco']}</span>
+							<span>#{messageSource['lbl_tipo_sesion']}</span>
+							<h:graphicImage id="ayuda5" name="ayuda01.png" 
+					 		             styleClass="" 
+					 		             library="img"/>
+							<p:tooltip id="toolTipContent5" for="ayuda5" position="bottom">
+							        <p:graphicImage name="/img/registroAcuerdo/ayuda_tipo_sesion.png" />
+							</p:tooltip>
+						</div>
+						<div>
+		    				<p:selectOneMenu id="tipoSesion" 
+	       						 value="#{mbModAcuerdos.form.acuerdo.idTipoSesion}" 
+	             				 requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+	             				 required="true"
+	             				 styleClass="inputsForm reducido"
+	             				 onstart="PF('progress').block()" 
+				 				 onsuccess="PF('progress').unblock()"
+						         style="font-size: small;"
+						         onchange="setTimeout(function() { $('[id$=msjTS]').hide(1000); }, 500);">
+			                        <f:selectItem itemLabel="Selecciona una opción"
+							          	itemValue="" />
+	                   				<f:selectItems 	value="#{mbModAcuerdos.form.tiposSesiones}" 
+	                     				var="tipoSesion" 
+	                   					itemValue="#{tipoSesion.idTipoSesion}" 
+	                     				itemLabel="#{tipoSesion.descripcion}"/>      
+		                  	</p:selectOneMenu>
+						</div>
+						<div>
+						  	<div class="ui-g-12 col-md-6" style="padding: 0;">
+						    	<!-- <div class="ui-g-7 ui-md-7"></div> -->
+							    <div class="ui-g-3 ui-md-3"   style="height: 10px;">
+							    	<p:messages id="msjTS"  for="tipoSesion" autoUpdate="true" closable="true" />
+							    </div> 
+							</div>
+						</div>						
+					</div>
+					<!-- ##################################### ADJUNTAR ACUERDO  ##################################### -->
+					<div class="col-xs-12 col-md-6 espaciador-top">
+						<div class="lblInputs robotoRegular">
+							<p:outputPanel id="panelLblAdjAc">
+								<c:if test="#{mbModAcuerdos.form.getLblIniciales()=='1'}">
+									<div class="container">
+										<div class="row lblInputs">
+											<span style="color:red">#{messageSource['etiqueta_simbolo_asterisco']}</span>
+											<span>#{messageSource['lbl_adj_acuerdo1']}</span>
+										</div>
+									</div>
+								</c:if>
+							</p:outputPanel>
+							<p:outputPanel id="panelLblAdjRes">
+								<c:if test="#{mbModAcuerdos.form.getLblIniciales()=='6'}">
+									<div class="container">
+										<div class="row lblInputs">
+											<span style="color:red">#{messageSource['etiqueta_simbolo_asterisco']}</span>
+											<span>#{messageSource['lbl_adj_Resolicion']}</span>
+										</div>
+									</div>
+								</c:if>
+							</p:outputPanel>							
+						</div>
+						<!-- <div class="col-md-2">
+							<div class="row lblNotas robotoRegular" style="text-align: center;">&nbsp;&nbsp;&nbsp;
+								<span class="lblSelectArchivo robotoBold">#{messageSource['lbl_sel_archivo']}</span> 
+							</div>
+						</div> -->
+						<div id="contenedor-adjuntar-archivo" class="lblNotas robotoRegular">
+							<p:fileUpload 
+								id="adjuntarAcuerdo"
+								auto="true" 
+								required="true" 
+								label="#{messageSource['lbl_sel_archivo']}"
+								dragDropSupport="false"
+								onstart = "start();"
+								multiple="false"
+								invalidSizeMessage="#{messageSource['lbl_tam_arc_no_valido']}"
+								invalidFileMessage="#{messageSource['lbl_archivo_no_valido']}"									
+								update ="parentPanel2 pnlAuxValidateFile pnlAux2ValidateFile aux2ValidateFile  pnlAux3ValidateFile aux3ValidateFile"
+								style = "width: 400px;"
+								styleClass="inputsForm"
+								fileUploadListener="#{mbModAcuerdos.agregaAcuerdoAdjunto}"
+								mode="advanced" 
+								requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}" 
+								oncomplete="stop(); setTimeout(function() { $('[id$=pnlAux2ValidateFile]').hide(1000); }, 3000); setTimeout(function() { $('[id$=pnlAux3ValidateFile]').hide(1000); }, 3000);"
+								>  
+							</p:fileUpload>
+				            <p:outputPanel style = "width: 400px;" id="parentPanel2" rendered="#{mbModAcuerdos.form.nomArch ne null}">
+				            	<c:if test="#{mbModAcuerdos.form.acuerdoFile == null}">
+				            		<a href="${request.contextPath}/#{mbModAcuerdos.form.rutaPrevisualizacion}" target="_blank" class="archivo-decarga robotoRegular">
+								    	<h:outputText value="#{mbModAcuerdos.form.nomArch}" />
+								    </a>
+				            	</c:if>
+				            	<c:if test="#{mbModAcuerdos.form.acuerdoFile != null}">
+				            		#{mbModAcuerdos.form.nomArch}
+				            	</c:if>
+				            </p:outputPanel>
+							&nbsp;&nbsp;&nbsp;&nbsp;<span>#{messageSource['lbl_tam_max_tipo_arch']}</span>
+							
+							
+							<p:outputPanel id="pnlAuxValidateFile">
+									<p:inputText id="auxValidateFile" required="true"
+												 requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+												 value="#{mbModAcuerdos.form.nomArch}"
+												 style="display: none;"
+												 >  
+									</p:inputText>
+							</p:outputPanel> 
+							
+						</div>
+						
+							<p:outputPanel id="pnlAux2ValidateFile" style="border:  0px !important; background: #FfFfFf; ">
+									<h:outputText required="true" id="aux2ValidateFile" value="#{messageSource['lbl_formato_No_Valido']}" rendered="#{mbModAcuerdos.form.nomArchExt == ''}" style="color: #B1251E;"/>
+							</p:outputPanel> 
+							
+							<p:outputPanel id="pnlAux3ValidateFile" style="border:  0px !important; background: #FfFfFf; ">
+									<h:outputText required="true" id="aux3ValidateFile" value="#{messageSource['lbl_tam_arc_no_valido']}" rendered="#{mbModAcuerdos.form.tamNoPermitido}" style="color: #B1251E;"/>
+							</p:outputPanel> 
+<!-- 	   				  	<div class="ui-g-12 col-md-12" style="padding: 0;">
+						    <div class="ui-g-7 ui-md-7"></div>
+						    <div class="ui-g-3 ui-md-3"   style="height: 10px;">
+						    	<p:messages for="archivoadj" autoUpdate="true" closable="true" />
+						    </div> 
+						</div> -->
+						
+							<div class="ui-g-12 col-md-6" style="padding: 0;">
+								<div class="ui-g-3 ui-md-3">
+									 <p:messages id="msjFileAdj" for="auxValidateFile"
+										autoUpdate="true" closable="false" /> 
+								</div>
+							</div>
+							<div class="ui-g-12 col-md-6" style="padding: 0;">
+								<div class="ui-g-3 ui-md-3">
+									 <p:messages id="msjFileAdj2" for="aux2ValidateFile"
+										autoUpdate="true" closable="false" /> 
+								</div>
+							</div>
+							<div class="ui-g-12 col-md-6" style="padding: 0;">
+								<div class="ui-g-3 ui-md-3">
+									 <p:messages id="msjFileAdj3" for="aux3ValidateFile"
+										autoUpdate="true" closable="false" /> 
+								</div>
+							</div>						
+					</div>
+					<!-- ##################################### C/S ENGROSE  ##################################### -->
+					<div class="col-xs-12 col-md-6 lblInputs robotoRegular espaciador-top"> 
+						 <p:selectBooleanCheckbox id="invalidarPanel" style="cursor: pointer;" value="#{mbModAcuerdos.form.hayEngrose}" >
+						    	 <p:ajax listener="#{mbModAcuerdos.bsdModAc.hayEngrose(mbModAcuerdos.form)}" />
+						</p:selectBooleanCheckbox> 
+						<span>#{messageSource['lbl_con_engrose']}</span> 
+					</div>
+					<!-- ##################################### BOTONES ACEPTAR Y CANCELAR  ##################################### -->			
+					<div class="col-xs-12 espaciador-top">
+						<div class="row_estructura row_botones">
+		 					<div class="text-center">
+							    <p:commandButton id="btn_cancelar"
+				                     value="#{messageSource['etiqueta_boton_cancelar']}" 
+				 			         ajax="false" 
+				 			         immediate="true" 
+				 			         action="regresa" 
+				 			         styleClass="btnAC robotoBold" />&nbsp;&nbsp;&nbsp;
+		 						 <p:commandButton id="btnAceptar" 
+						             action="#{mbModAcuerdos.modificarAcuerdo}"
+						 			 disabled="#{mbModAcuerdos.form.datosReqCompletos or mbModAcuerdos.form.isLigaValida()}"
+						 			 value="#{messageSource['etiqueta_boton_aceptar']}" 				 
+						 		  	 process="@form"
+						 			 update="@form" 
+									 onstart="PF('progress').block()" 
+									 onsuccess="PF('progress').unblock()"
+									 styleClass="btnAC robotoBold"
+									 actionListener="#{mbModAcuerdos.agregaAdjuntos}"/> 
+							</div> 
+						</div>
+					</div>
+				</div>
+			</p:outputPanel>
+		</h:form>
+	</div>
+		<!-- Scripts  -->
+		<h:outputScript library="js" name="verificaPalabras.js" />		
+		<script type="text/javascript">
+        PrimeFaces.locales['es'] = {
+                closeText: 'Cerrar',
+                prevText: 'Anterior',
+                nextText: 'Siguiente',
+                monthNames: ['Enero','Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+                dayNames: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
+                dayNamesShort: ['Dom','Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+                dayNamesMin: ['D','L','M','M','J','V','S'],
+                weekHeader: 'Semana',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: '',
+                timeOnlyTitle: 'Sólo hora',
+                timeText: 'Tiempo',
+                hourText: 'Hora',
+                minuteText: 'Minuto',
+                secondText: 'Segundo',
+                currentText: 'Fecha actual',
+                ampm: false,
+                month: 'Mes',
+                week: 'Semana',
+                day: 'Día',
+                allDayText : 'Todo el día'
+        };
+        
+		function start() {
+			PF('statusDialog').show();
+		};
+
+		function stop() {
+			PF('statusDialog').hide();
+			$('.extracto-texto-punto').each(function() {
+				var texto = $(this).text();
+				console.log(texto);
+				var arregloTexto = texto.split('.-');
+				console.log(arregloTexto);
+				$(this).text(arregloTexto[0])
+				$(this).after(' .- ' + arregloTexto[1]);
+			});
+		}        
+        </script>
+        <p:dialog modal="true" widgetVar="statusDialog" header="Cargando..."
+			draggable="false" closable="false" resizable="false">
+			<p:graphicImage name="/img/loader.gif"/>
+		</p:dialog>
+	</ui:define>
+
+</ui:composition>

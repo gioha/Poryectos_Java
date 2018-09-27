@@ -1,0 +1,203 @@
+/* Estilos aplicados a la vista de Reportes de Oficialía */
+/* Estilos predeterminados */
+#contenedor_reportes_of {
+	background-color: white;
+}
+
+h1 {
+	font-family: Roboto;
+	font-size: 30px;
+	margin: 0px;
+	margin-left: 10px;
+}
+
+h3 {
+	color: #D5007F;
+	font-family: Roboto;
+	font-size: 20px;
+	margin: 0px;
+	padding: 0px;
+	margin-left: 10px;
+}
+
+hr {
+	border-top: 1px solid #D5007F; 
+	height: 1px;
+	margin-top: 10px;
+	margin-bottom: 0px;
+}
+
+p.instrucciones {
+	color:#999999;
+	font-family: Roboto;
+	font-size: 12px;
+	margin-left: 10px;
+}
+
+label {
+	color:black;
+	font-family: Roboto;
+	font-size: 15px;	
+}
+
+textarea {
+	width: 90%;
+}
+
+.estilo-radio-btn {
+	padding-top: 5px;
+}
+
+/* Estilos aplicados por Miguel Ortiz */
+/* Estilos generales */
+/*************************** GROWL *********************************/
+div[id="formReportesOf:mensaje_general_info_container"] > div {
+	background: #29abe2 !important;
+}
+
+div[id="formReportesOf:mensaje_general_advertencia_container"] > div {
+	background: #fcee21 !important;
+	color: black; 
+}
+
+div[id="formReportesOf:mensaje_general_advertencia_container"] > div .ui-growl-item {
+	border-bottom: 2px solid black!important;
+	border-top: 2px solid black!important;
+}
+
+div[id="formReportesOf:mensaje_general_exito_container"] > div {
+	background: #7ac943 !important;
+}
+
+.expans-horiz-100 {
+	width: 100%;
+}
+
+.expans-horiz-75 {
+	width: 75%;
+}
+
+.expans-horiz-50 {
+	width: 50%;
+}
+
+.espaciador-row {
+	margin-top: 15px;
+}
+
+.espaciador-h3 {
+	margin-top: 40px;
+}
+
+.centrar-componente {
+	text-align: center;
+}
+
+.expans-fecha {
+	width: 13%;
+    height: 37px !important;
+}
+
+.expans-fecha-mes {
+	width: 33%;
+}
+
+.reajuste_acronimo {
+    padding-right: 0px;
+    padding-left: 50px;
+}
+
+.reajuste_anio {
+    padding: 0px 0px;
+	margin-left: -41px;
+    margin-right: 31px;
+    width: 115px;
+}
+
+.ui-inputfield {
+	width: 75%;
+}
+
+/* Lista de personas seleccionadas */
+.ui-datatable thead th {
+	border-top: none !important;
+}
+
+.ui-datatable-tablewrapper {
+	border-bottom: none !important;
+}
+
+.fuente-default {
+	font-size: 13px;
+	font-family: Roboto;
+}
+
+.decoracion_links {
+	text-decoration: underline;
+}
+
+/* Tabla de personas encontradas */
+.tabla-checks {
+	width: 35px;
+	text-align: center;
+}
+
+.separador-dialog {
+	border-top: 3px solid #999999;
+}
+
+/* Lista de filtros del reporte  */
+.ui-selectmanycheckbox label {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.filtros-predef {
+	border-right: 1px solid rgb(213, 0, 127);
+	padding-left: 25px;
+}
+
+.filtros-seleccion {
+	padding-left: 20px;
+}
+
+/* Detalle de persona (Datos del funcionario) */
+.titulo-detalle {
+	margin-bottom: 10px;
+	font-weight: bold;
+	color: #d5007f;
+}
+
+.titulo-campo {
+	font-weight: bold;
+}
+
+.contenido-campo {
+	margin-bottom: 10px;
+}
+
+/* Vista del reporte (Resultados de búsqueda) */
+.tabla-reportes {
+	text-align: center;	
+}
+
+.tabla-reportes thead th {
+	background: rgb(217, 0, 128) !important;
+	color: #FFFFFF !important;
+	text-shadow: none !important;
+	border-right: 2px solid #FFFFFF !important;
+}
+
+.tabla-reportes thead th span {
+	font-size: .65em;
+}
+
+.tabla-reportes tbody td {
+	font-size: .8em;
+	border-right: 2px solid #FFFFFF !important;
+	background: #F2F2F2;
+}
+
+.correcion-bottom {
+	 margin-bottom: 25px;
+}

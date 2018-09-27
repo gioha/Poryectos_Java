@@ -1,0 +1,494 @@
+@media only screen and (min-width:768px) {
+	#headDegradado {
+		top: 0;
+		width: 100%;
+		height: 400px;
+		margin: 0px 0px;
+		background: rgba(213, 0, 128, 1);
+		background: -moz-linear-gradient(left, rgba(213, 0, 128, 1) 0%,
+			rgba(213, 0, 128, 1) 16%, rgba(0, 0, 0, 1) 100%);
+		background: -webkit-gradient(left top, right top, color-stop(0%, rgba(213, 0, 128, 1
+			)), color-stop(16%, rgba(213, 0, 128, 1)),
+			color-stop(100%, rgba(0, 0, 0, 1)));
+		background: -webkit-linear-gradient(left, rgba(213, 0, 128, 1) 0%,
+			rgba(213, 0, 128, 1) 16%, rgba(0, 0, 0, 1) 100%);
+		background: -o-linear-gradient(left, rgba(213, 0, 128, 1) 0%,
+			rgba(213, 0, 128, 1) 16%, rgba(0, 0, 0, 1) 100%);
+		background: -ms-linear-gradient(left, rgba(213, 0, 128, 1) 0%,
+			rgba(213, 0, 128, 1) 16%, rgba(0, 0, 0, 1) 100%);
+		background: linear-gradient(to right, rgba(213, 0, 128, 1) 0%,
+			rgba(213, 0, 128, 1) 16%, rgba(0, 0, 0, 1) 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d50080',
+			endColorstr='#000000', GradientType=1);
+		height: 72px;
+		padding-bottom: 17px;
+		z-index: 1;
+		position: fixed;
+	}
+	#headArea {
+		padding-top: 3px;
+		padding-bottom: 3px;
+		color: #ffffff;
+		font-family: Roboto;
+		font-size: 32px;
+	}
+	#headLineaBlanca {
+		font-family: Roboto-Black;
+		font-size: 32px;
+		border-left: 2px solid #FFFFFF;
+		color: #d5007f;
+		height: 39px;
+		width: 1%;
+	}
+	#dvheadArea {
+		margin-top: 20px;
+		/* 	margin-left: 10px; */
+		float: left;
+	}
+	#headDep {
+		margin-top: 20px;
+		/* 	margin-left: 5px; */
+		float: left;
+	}
+	#headDep1 {
+		color: #ffffff;
+		font-family: Roboto;
+		font-size: 16px;
+	}
+	#headDep2 {
+		color: #ffffff;
+		font-family: Roboto;
+		font-size: 16px;
+	}
+	#headLogo {
+		margin-top: 10px;
+		/* 	margin-right: 340px; */
+		float: right;
+	}
+	#headSesion {
+	    width: 120px;
+	    background-color: #d5007f;
+	    border-radius: 5px;
+	    text-align: center;
+	    margin: auto;
+	    margin-top: -6px;
+	    float: right;
+	}
+	#headUserSesion {
+		height: 35px;
+		margin-top: 28px;
+/* 		right: 70px; */
+/* 		float: right; */
+		width: 80px;
+
+		float: left;
+/* 		border-radius: 5px solid white; */
+		color: white;
+	}
+	
+	.centerUserText {
+	    text-align: right;
+	    /* border: 3px solid green; */
+	    color: white;
+	    margin-top: 28px;
+	}
+	.centerUserText > label {
+		margin-right: 20px;
+	}
+	
+	#textoImagenLogin {
+		font-size: 15.2px;
+		/* 	margin-left: 17px; */
+		margin-top: 6px;
+		font-family: Helvetica;
+		font-weight: lighter;
+		right: 84px;
+		color: white;
+		z-index: 278;
+	}
+	#imagLogo {
+		display: block;
+		margin-right: auto;
+		margin-left: auto;
+		float: none;
+	}
+	#headLoginText {
+		font-family: Roboto-Black;
+		font-size: 25px;
+		margin-right: auto;
+		margin-left: auto;
+		float: none;
+		color: #932C60;
+		margin-left: auto;
+		float: none;
+	}
+
+	/* CSS Login */
+	.dlgLogin {
+		border-radius: 3px;
+		border: 7px solid black;
+		background: white;
+	}
+	.divDialog {
+		margin: 30px;
+	}
+	.txtTituloLogin {
+		font-family: Roboto-Black;
+		font-weight: bold;
+		font-size: 24px;
+		color: #d5007f;
+	}
+	.errorLogin {
+		margin-bottom: 0px;
+		font-weight: bold;
+		font-family: Roboto;
+		font-size: 10px;
+		margin-left: 2px;
+		border: 2px solid #e15b2e;
+		border-radius: 5px;
+		border-collapse: inherit;
+		color: rgba(236, 16, 16, 0.92);
+		width: 255px;
+		padding: 2px;
+		padding-left: 8px;
+		margin-left: 2px;
+	}
+	.inner-addon {
+		position: relative;
+	}
+	.left-addon .glyphicon {
+		margin-top: 3px;
+		left: 20px;
+	}
+	/* style icon */
+	.inner-addon .glyphicon {
+		position: absolute;
+		padding: 5px;
+		pointer-events: none;
+	}
+	.right-addon .glyphicon {
+		right: 0px;
+	}
+
+	/* add padding  */
+	.left-addon input {
+		margin-left: 20px;
+		margin-top: 7px;
+		width: 250px;
+		padding-left: 23px;
+	}
+	.right-addon input {
+		padding-right: 30px;
+	}
+	.textSeguridad {
+		font-family: Roboto;
+		font-size: 11px;
+		margin-left: 5px;
+		margin-top: 10px;
+	}
+	.imgCaptcha {
+		width: 110px;
+		border-radius: 3px;
+		height: 18 px;
+		margin-left: -2;
+		float: right;
+		font-size: 10 px;
+		/* 		border: 1px solid red; */
+	}
+	.divTxtCaptch {
+		borde: 1px solid red;
+	}
+	.divQuees {
+		margin-top: 10px;
+	}
+	.txtQuees {
+		width: 98px;
+		font-size: 9.5px;
+		margin-left: 5px;
+		margin-top: 10px;
+		font-family: Roboto;
+		color: #d5007f;
+	}
+	.divAudio {
+		margin-top: 4px;
+		margin-left: -25px;
+		/* 	border: 1px solid green; */
+	}
+	.divRefresh {
+		margin-top: 4px;
+		margin-left: -75px;
+	}
+	.btnLogin {
+		margin-top: 10px !important;
+		margin-bottom: 15px !important;
+		margin-left: 5px;
+		color: white !important;
+		background: #D5007F !important;
+		width: 250px !important;
+		height: 28px !important;
+		outline: none !important;
+		border: 0px !important;
+		font-weight: lighter !important;
+		font-family: Helvetica !important;
+		font-size: 15px !important;
+		color: white !important;
+	}
+	.txtFoot {
+		font-family: Roboto;
+		font-size: 10px;
+		color: #d5007f;
+	}
+	.lineaFoo {
+		margin-top: -10px;
+		margin-bottom: 5px;
+	}
+	.ui-dialog .ui-dialog-titlebar {
+		background: white;
+	}
+}
+
+@media only screen and (max-width:767px) {
+#headDegradado {
+		top: 0;
+		width: 100%;
+		height: 400px;
+		margin: 0px 0px;
+		background: rgba(213, 0, 128, 1);
+		background: -moz-linear-gradient(left, rgba(213, 0, 128, 1) 0%,
+			rgba(213, 0, 128, 1) 16%, rgba(0, 0, 0, 1) 100%);
+		background: -webkit-gradient(left top, right top, color-stop(0%, rgba(213, 0, 128, 1
+			)), color-stop(16%, rgba(213, 0, 128, 1)),
+			color-stop(100%, rgba(0, 0, 0, 1)));
+		background: -webkit-linear-gradient(left, rgba(213, 0, 128, 1) 0%,
+			rgba(213, 0, 128, 1) 16%, rgba(0, 0, 0, 1) 100%);
+		background: -o-linear-gradient(left, rgba(213, 0, 128, 1) 0%,
+			rgba(213, 0, 128, 1) 16%, rgba(0, 0, 0, 1) 100%);
+		background: -ms-linear-gradient(left, rgba(213, 0, 128, 1) 0%,
+			rgba(213, 0, 128, 1) 16%, rgba(0, 0, 0, 1) 100%);
+		background: linear-gradient(to right, rgba(213, 0, 128, 1) 0%,
+			rgba(213, 0, 128, 1) 16%, rgba(0, 0, 0, 1) 100%);
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d50080',
+			endColorstr='#000000', GradientType=1);
+		height: 72px;
+		padding-bottom: 17px;
+		z-index: 1;
+		position: fixed;
+	}
+	#headArea {
+		padding-top: 3px;
+		padding-bottom: 3px;
+		color: #ffffff;
+		font-family: Roboto;
+		font-size: 26px;
+	}
+	#headLineaBlanca {
+		font-family: Roboto-Black;
+		font-size: 32px;
+		border-left: 2px solid #FFFFFF;
+		color: #d5007f;
+		height: 39px;
+		width: 1%;
+	}
+	#dvheadArea {
+		margin-top: 12px;
+		/* 	margin-left: 10px; */
+		float: left;
+	}
+	#headDep {
+		margin-top: 20px;
+		/* 	margin-left: 5px; */
+		float: left;
+	}
+	#headDep1 {
+		color: #ffffff;
+		font-family: Roboto;
+		font-size: 12px;
+	}
+	#headDep2 {
+		color: #ffffff;
+		font-family: Roboto;
+		font-size: 12px;
+	}
+	#headLogo {
+		margin-top: 10px;
+		/* 	margin-right: 340px; */
+		float: right;
+	}
+	#headSesion {
+	    width: 120px;
+	    background-color: #d5007f;
+	    border-radius: 5px;
+	    text-align: center;
+	    margin: auto;
+	    margin-top: -6px;
+	    float: right;
+	}
+	#headUserSesion {
+		height: 35px;
+		margin-top: 28px;
+/* 		right: 70px; */
+/* 		float: right; */
+		width: 80px;
+
+		float: left;
+/* 		border-radius: 5px solid white; */
+		color: white;
+	}
+	
+	.centerUserText {
+	    text-align: center;
+	    /* border: 3px solid green; */
+	    color: white;
+	    margin-top: 28px;
+	}
+	
+	#textoImagenLogin {
+		font-size: 15.2px;
+		/* 	margin-left: 17px; */
+		margin-top: 6px;
+		font-family: Helvetica;
+		font-weight: lighter;
+		right: 84px;
+		color: white;
+		z-index: 278;
+	}
+	#imagLogo {
+		display: block;
+		margin-right: auto;
+		margin-left: auto;
+		float: none;
+	}
+	#headLoginText {
+		font-family: Roboto-Black;
+		font-size: 25px;
+		margin-right: auto;
+		margin-left: auto;
+		float: none;
+		color: #932C60;
+		margin-left: auto;
+		float: none;
+	}
+
+	/* CSS Login */
+	.dlgLogin {
+		border-radius: 3px;
+		border: 7px solid black;
+		background: white;
+	}
+	.divDialog {
+		margin: 30px;
+	}
+	.txtTituloLogin {
+		font-family: Roboto-Black;
+		font-weight: bold;
+		font-size: 24px;
+		color: #d5007f;
+	}
+	.errorLogin {
+		margin-bottom: 0px;
+		font-weight: bold;
+		font-family: Roboto;
+		font-size: 10px;
+		margin-left: 2px;
+		border: 2px solid #e15b2e;
+		border-radius: 5px;
+		border-collapse: inherit;
+		color: rgba(236, 16, 16, 0.92);
+		width: 255px;
+		padding: 2px;
+		padding-left: 8px;
+		margin-left: 2px;
+	}
+	.inner-addon {
+		position: relative;
+	}
+	.left-addon .glyphicon {
+		margin-top: 7px;
+		left: 20px;
+	}
+	/* style icon */
+	.inner-addon .glyphicon {
+		position: absolute;
+		padding: 5px;
+		pointer-events: none;
+	}
+	.right-addon .glyphicon {
+		right: 0px;
+	}
+
+	/* add padding  */
+	.left-addon input {
+		margin-left: 20px;
+		margin-top: 7px;
+		width: 250px;
+		padding-left: 23px;
+	}
+	.right-addon input {
+		padding-right: 30px;
+	}
+	.textSeguridad {
+		font-family: Roboto;
+		font-size: 11px;
+		margin-left: 5px;
+		margin-top: 10px;
+	}
+	.imgCaptcha {
+		width: 110px;
+		border-radius: 3px;
+		height: 18 px;
+		margin-left: -2;
+		float: right;
+		font-size: 10 px;
+		/* 		border: 1px solid red; */
+	}
+	.divTxtCaptch {
+		borde: 1px solid red;
+	}
+	.divQuees {
+		margin-top: 10px;
+	}
+	.txtQuees {
+		width: 98px;
+		font-size: 9.5px;
+		margin-left: 5px;
+		margin-top: 10px;
+		font-family: Roboto;
+		color: #d5007f;
+	}
+	.divAudio {
+		margin-top: 4px;
+		margin-left: -25px;
+		/* 	border: 1px solid green; */
+	}
+	.divRefresh {
+		margin-top: 4px;
+		margin-left: -75px;
+	}
+	.btnLogin {
+		margin-top: 10px !important;
+		margin-bottom: 15px !important;
+		margin-left: 5px;
+		color: white !important;
+		background: #D5007F !important;
+		width: 250px !important;
+		height: 28px !important;
+		outline: none !important;
+		border: 0px !important;
+		font-weight: lighter !important;
+		font-family: Helvetica !important;
+		font-size: 15px !important;
+		color: white !important;
+	}
+	.txtFoot {
+		font-family: Roboto;
+		font-size: 10px;
+		color: #d5007f;
+	}
+	.lineaFoo {
+		margin-top: -10px;
+		margin-bottom: 5px;
+	}
+	.ui-dialog .ui-dialog-titlebar {
+		background: white;
+	}
+}

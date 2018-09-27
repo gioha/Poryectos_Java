@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:ine="http://ine.mx/ui" xmlns:deceyec="http://ine.mx/ui"
+	template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+		<style>
+			.inputsForm label, .ui-corner-all {
+				color: #4e4e4e;
+			}
+			.inputsForm.reducido {
+				width: 30%;
+			}
+		</style>
+	  <div class="container">
+		<h:form id="reporte_seguimiento" >
+			<!-- Ccs's -->
+			<!-- <h:outputStylesheet library="css" name="tablas-estilo-reportes.css"/> -->
+			<h:outputStylesheet library="css" name="tablas-estilo-reportes.css" />
+			<p:growl 
+			for="growl" 
+			autoUpdate="true" 
+			redisplay="true"
+			showDetail="true" 
+			showSummary="true" />
+			<div id="div_card" class="card">
+				<h3></h3>
+				<ol class="breadcrumb"
+					style="margin-top: -20px; background-color: #FFFFFF;">
+					<li><a href="${request.contextPath}/app/home"> <h:outputText
+								value="#{messageSource['lbl_home']}" />
+					</a></li>
+					<li class="inactive">#{messageSource['lbl_reportes']}</li>
+					<!-- <li class="active">#{messageSource['lbl_reportes']}</li> -->
+				</ol>
+				
+				
+				<div class="lblTituloForm robotoRegular">
+					<span>#{messageSource['lbl_reportes']}</span>
+				</div>
+
+			<div class="row">
+			
+				<!--
+			######SELECCIONAMOS EL TIPO DE REPORTE ###########################################
+				-->
+				<h:form>
+						<div class="col-xs-12 tituloModal robotoRegular espaciador-xs-top">
+							
+							<font color="red">* </font>
+							<h:outputLabel for="paneltablas"
+								value="#{messageSource['lbl_seleccion_reporte']}" />
+						</div>
+						<div class="col-xs-12">
+							
+							<p:selectOneMenu  styleClass="inputsForm reducido" value="#{mbReporteSeguimiento.menu}">
+								
+								<f:selectItem itemLabel="#{messageSource['lbl_reporte_selecciona_opcion']}" 
+											  itemValue="0"
+								/>
+								
+									<f:selectItems value="#{mbReporteSeguimiento.modulosReportes}" var="modulo"
+													itemValue="#{modulo.acciones.get(0).url}" 
+													itemLabel="#{modulo.nombre}" 
+								/>
+									
+								<f:ajax listener="#{mbReporteSeguimiento.seleccionarReporte}" /> 
+							
+							</p:selectOneMenu>
+							
+						</div>
+					
+	<!-- ##################################### TABLA INFORMATIVA  ##################################### -->
+								<style>
+								.ui-panelgrid > * > tr, .ui-panelgrid > * > tr > td.ui-panelgrid-cell {
+								    border: none !important;
+								}
+								</style>
+							
+								<div class="col-xs-12">
+									<p:panelGrid style="margin:30px auto 0; width: 75%; box-shadow: 7px 10px 5px #303030;" >
+									    
+									        <p:row>
+									            <p:column colspan="7" style="background-color: #932C60; color: #ffffff; text-align: left; height: 65px; font-size: 14px;" >
+									            	<span class="robotoRegular" >#{messageSource['lbl_titulo_tabla_gral_reportes']}</span>
+									            </p:column>
+									        </p:row>
+									    
+	 								    <p:row>
+									    	 <p:column rowspan="5"  style="width: 5%; "></p:column>
+									        <p:column style="width: 70%; color: #4e4e4e; height: 50px; font-size: 14px;" >
+									        
+									        	<span class="robotolight" >#{messageSource['txt_fondoRepR1']}</span>
+									        </p:column>
+									        <p:column rowspan="5"  style="width: 25%">
+									        	<h:graphicImage name="reportes_Gral.png" styleClass="" library="img/reportesGral" class="pull-center img-responsive  " />
+									        </p:column>
+									    </p:row>
+									 
+									    <p:row>
+									        <p:column style="width: 65%; color: #4e4e4e; height: 40px; font-size: 14px;" >
+									        
+									        	<h:graphicImage name="check.png" styleClass="" library="img/reportesGral" class="pull-left img-responsive  " />&nbsp;&nbsp;
+									        	<span class="robotolight" >#{messageSource['txt_fondoRepR2']}</span>
+									        </p:column>
+									    </p:row>
+									    <p:row>
+									        <p:column style="width: 65%; color: #4e4e4e; height: 40px; font-size: 14px;" >
+									       
+									        	<h:graphicImage name="check.png" styleClass="" library="img/administracionHome" class="pull-left img-responsive  " />&nbsp;&nbsp;
+									        	<span class="robotolight" >#{messageSource['txt_fondoRepR3']}</span>
+									        </p:column>
+									    </p:row>
+									    <p:row>
+									        <p:column style="width: 65%; color: #4e4e4e; height: 60px; font-size: 14px;" >
+									        
+									        	<span class="robotolight" >#{messageSource['txt_fondoRepR5']}</span>
+									        </p:column>
+									    </p:row>
+									    <f:facet name="footer"></f:facet>
+									</p:panelGrid>
+								</div>
+						</h:form>
+				</div>
+			</div>
+		</h:form>
+	  </div>
+	</ui:define>
+</ui:composition>

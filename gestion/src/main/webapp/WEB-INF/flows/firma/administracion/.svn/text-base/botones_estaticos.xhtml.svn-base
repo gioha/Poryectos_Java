@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sec="http://www.springframework.org/security/tags">
+	
+	<c:if test="${mbFirma.documentoDetalleHelper.tipoInfoDetalle == 'inicio'}">
+	<!-- Botones para el detalle del documento destinatarios, remitentes y ccp-->
+	
+		<div id="anexo" class="col-xs-1" style="background-color: #e2e2e2; width: 90px;">
+		
+			<span>
+				<i class="fa fa-paperclip" style="font-size: 18px; color:#000000 !important"/><h:outputText value="&nbsp;" style="text-decoration: none"/><h:outputText value="#{messageSource['mensaje_ver_anexos']}" style="color:#000000 !important"/>
+			</span>
+			
+		</div>
+		<div id="anexo2" class="col-xs-1" style="text-align: center; padding-right: 43px">
+			
+			<p:commandButton id="btn-ver-anexos" value="&#xF061;"
+		    			     onclick="$('.inf-doc-panel-class').hide('slide', {direction: 'left'}, 500);"
+		    			     oncomplete="$('.inf-doc-panel-class').hide().show('slide', {direction: 'right'}, 500);"
+		    			     update="inf-doc-panel-completo" 
+		    			     actionListener="#{mbFirma.verAnexos()}" style="width: 30px; height: 30px !important;"/>
+			
+		</div>
+		
+		<div id="historial" class="col-xs-1" style="background-color: #e2e2e2; width: 80px;">
+			
+			<span>
+				<h:outputText value="&nbsp;" style="text-decoration: none"/><h:outputText value="Ver Historial" style="color:#000000 !important"/>
+			</span>
+			
+		</div>
+		<div id="historial2" class="col-xs-1" style="text-align: center;">
+			
+			<p:commandButton id="boton-ver-historial" value="&#xF061;"
+					    	 onclick="$('.inf-doc-panel-class').hide('slide', {direction: 'left'}, 500);"
+					    	 oncomplete="$('.inf-doc-panel-class').hide().show('slide', {direction: 'right'}, 500);"
+					    	 update="inf-doc-panel-completo" 
+					    	 actionListener="#{mbFirma.verHistorial()}" style="width: 30px; height: 30px !important;"/>
+			
+		</div>
+	</c:if>
+	
+	<c:if test="${mbFirma.documentoDetalleHelper.tipoInfoDetalle == 'historial'}">
+	<!-- Botones para el historial-->
+		<div id="anexo2" class="col-xs-1" style="width: 30px; text-align: center;">
+
+			 <p:commandButton id="btn-regresar-historial" value="&#xF060;"
+					    	  onclick="$('.inf-doc-panel-class').hide('slide', {direction: 'right'}, 500);"
+					    	  oncomplete="$('.inf-doc-panel-class').hide().show('slide', {direction: 'left'}, 500);"
+					    	  update="inf-doc-panel-completo" 
+					    	  actionListener="#{mbFirma.regresarInicio()}" style="width: 30px; height: 30px !important;"/>
+			
+		</div>
+	
+	   	<div id="anexo" class="col-xs-1" style="background-color: #e2e2e2; width: 70px;">
+	
+			<span>
+				<h:outputText value="&nbsp;&nbsp;&nbsp;" style="text-decoration: none"/><h:outputText value="Regresar" style="color:#000000 !important"/>
+			</span>
+			
+		</div>
+	</c:if>
+	
+
+	<c:if test="${mbFirma.documentoDetalleHelper.tipoInfoDetalle == 'comentarios'}">
+	<!-- Botones para los comentarios del documento-->
+		<div id="anexo2" class="col-xs-1" style="width: 30px; text-align: center;">
+
+			<p:commandButton id="btn-regresar-comentario" value="&#xF060;"
+					    	 onclick="$('.inf-doc-panel-class').hide('slide', {direction: 'right'}, 500);"
+					    	 oncomplete="$('.inf-doc-panel-class').hide().show('slide', {direction: 'left'}, 500);"
+					    	 update="inf-doc-panel-completo" 
+					    	 actionListener="#{mbFirma.verHistorial()}" style="width: 30px; height: 30px !important;"/>
+			
+		</div>
+	
+	   	<div id="anexo" class="col-xs-1" style="background-color: #e2e2e2; width: 70px;">
+	
+			<span>
+				<h:outputText value="&nbsp;&nbsp;&nbsp;" style="text-decoration: none"/><h:outputText value="Regresar" style="color:#000000 !important"/>
+			</span>
+			
+		</div>
+	</c:if>
+	
+
+	<c:if test="${mbFirma.documentoDetalleHelper.tipoInfoDetalle == 'comentario'}">
+	<!-- Botones para un comentario específico detalle del documento-->
+		<div id="anexo2" class="col-xs-1" style="width: 30px; text-align: center;">
+			
+			 <p:commandButton id="btn-regresar-comentario" value="&#xF060;"
+					    	  onclick="$('.inf-doc-panel-class').hide('slide', {direction: 'right'}, 500);"
+					    	  oncomplete="$('.inf-doc-panel-class').hide().show('slide', {direction: 'left'}, 500);"
+					    	  update="inf-doc-panel-completo" 
+					    	  actionListener="#{mbFirma.verHistorial()}" style="width: 30px; height: 30px !important;"/>
+			
+		</div>
+	
+	   	<div id="anexo" class="col-xs-1" style="background-color: #e2e2e2; width: 70px;">
+	
+			<span>
+				<h:outputText value="&nbsp;&nbsp;&nbsp;" style="text-decoration: none"/><h:outputText value="Regresar" style="color:#000000 !important"/>
+			</span>
+			
+		</div>
+	</c:if>
+
+
+	<c:if test="${mbFirma.documentoDetalleHelper.tipoInfoDetalle == 'anexos'}">
+	<!-- Botones para los anexos del documento-->
+		<div id="anexo2" class="col-xs-1" style="width: 30px; text-align: center;">
+		
+			 <p:commandButton id="btn-regresar-anexos" value="&#xF060;"
+					     	  onclick="$('.inf-doc-panel-class').hide('slide', {direction: 'right'}, 500);"
+					    	  oncomplete="$('.inf-doc-panel-class').hide().show('slide', {direction: 'left'}, 500);"
+					    	  update="inf-doc-panel-completo" 
+					    	  actionListener="#{mbFirma.regresarInicio()}" style="width: 30px; height: 30px !important;"/>
+
+		</div>
+	
+	   	<div id="anexo" class="col-xs-1" style="background-color: #e2e2e2; width: 70px;">
+	
+			<span>
+				<h:outputText value="&nbsp;&nbsp;&nbsp;" style="text-decoration: none"/><h:outputText value="Regresar" style="color:#000000 !important"/>
+			</span>
+			
+		</div>
+	</c:if>
+</ui:composition>

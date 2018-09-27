@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sf="http://www.springframework.org/tags/faces"
+				xmlns:sec="http://www.springframework.org/security/tags"
+				template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+		<h:outputStylesheet library="css" name="modulos/remitentes_externos/remitentes_externos.css" />
+
+	<h:form id="idFormRemitentesExt" onkeypress="if(window.event.which == 13) {return false;}" enctype="multipart/form-data">
+		<!-- GROWLS -->
+		<p:growl id="mensaje_general_info"		  showDetail="true" sticky="true" globalOnly="true" severity="info" />
+		<p:growl id="mensaje_general_advertencia" showDetail="true" sticky="true" globalOnly="true" severity="warn" />
+		<p:growl id="mensaje_general_exito"		  showDetail="true" sticky="true" globalOnly="true" severity="fatal" />
+
+		<div class="container">
+			<h2 style="padding-bottom: 30px;">
+				<h:outputText value="Inicio" style="color: #999999;" />
+				&nbsp;&nbsp;
+				<i class="fa fa-angle-right" style="font-size: 18px; color: #999999;" />
+				&nbsp;&nbsp;
+				<h:outputText value="#{messageSource['etiqueta_configuracion_migasMenu']}" style="color: #999999;" />
+				&nbsp;&nbsp;
+				<i class="fa fa-angle-right" style="font-size: 18px; color: #999999;"/>
+				&nbsp;&nbsp;
+				<h:outputText value="Remitentes externos" style="font-weight: bold;" />
+			</h2>
+
+			<!-- COMIENZA MENU TAB -->
+			<div class="row rowTituloPestanias">
+				<div class="col-xs-3 columnTituloPestanias" style="width: 19%; border: 0.5px solid white;">
+					<h3 class="h3TituloPestania">
+						<h:outputText value="Configuración" styleClass="tituloConfigHidden" />
+					</h3>
+				</div>
+
+				<div class="col-xs-9 columnPestanias" style="width: 81%;">
+					<div class="row" style="height: 51px !important; width: 95.8%; border-bottom: 3px solid #a0005f;">
+					
+						<c:if test="#{sec:areAnyGranted('ROLE_GESTION4.ADMIN.OC, ROLE_GESTION4.CONSULTA_CAU.OC')}">
+							<div class="col-md-2 columnDerechaUltimaPestania" style="width: 143px;">
+								<span class="pestaniaInactiva">
+									<p:link value="Corresponsable" href="/app/configuracion/corresponsal/captura" style="color: white; font-weight: bold; text-decoration: none;"/>
+								</span>
+							</div>
+						</c:if>
+					
+						<c:if test="#{sec:areAnyGranted('ROLE_GESTION4.ADMIN.OC, ROLE_GESTION4.CONSULTA_CAU.OC')}">
+							<div class="col-md-2 columnIzquierdaPestania" style="width: 94px; padding-right: 1px !important">
+								<span class="pestaniaInactiva">
+									<p:link value="Plantillas" href="/app/configuracion/plantillas/administracion" 
+												   style="color: white; font-weight: bold; text-decoration: none;"/>
+								</span>
+							</div>
+						</c:if>
+						
+						<c:if test="#{sec:areAnyGranted('ROLE_GESTION4.ADMIN.OC, ROLE_GESTION4.CONSULTA_CAU.OC')}">
+							<div class="col-md-2 columnIzquierdaPestania" style="width: 130px; padding-top: 20px;">
+								<span class="pestaniaInactiva">
+									<p:link value="#{messageSource['etiqueta_instrucciones_tituloModulo']}" href="/app/configuracion/instrucciones/administracion" style="color: white; font-weight: bold; text-decoration: none;"/>
+								</span>
+							</div>
+						</c:if>
+						
+						<c:if test="#{sec:areAnyGranted('ROLE_GESTION4.ADMIN.OC, ROLE_GESTION4.CONSULTA_CAU.OC')}">
+							<div class="col-md-2 columnIzquierdaPestania" style="width: 106px;">
+								<span class="pestaniaInactiva">
+									<p:link value="Acrónimos" href="/app/configuracion/acronimos/administracion" style="color: white; font-weight: bold; text-decoration: none;"/>
+								</span>
+							</div>
+						</c:if>
+					
+						<div class="col-md-2 columnIzquierdaPestania" style="width: 175px; padding-top: 20px;">
+							<span class="pestaniaActiva">
+								<p:link value="Remitentes externos"
+										href="/app/configuracion_oficialia/remitentes_ext/administracion"
+										style="color: white; font-weight: bold; text-decoration: none;" />
+							</span>
+						</div>
+					
+					</div>
+
+					<div class="row" style="height: 36px; !important;" />
+				</div>
+			</div>
+
+			<h4>
+				<h:outputText value="Datos del remitente externo" />
+			</h4>
+			<h5>
+				Los datos con (<span style="color:red;">*</span>) son requeridos
+			</h5>
+
+			<!-- COMIENZA DATOS DEL REMITENTE EXTERNO -->
+			<p:outputPanel id="idPanelDatosRemitenteExt">
+				<section>
+					<div class="row">
+						<div class="col-sm-5">
+							<p:outputLabel style="color: red;">*&nbsp;</p:outputLabel>
+							<h:outputLabel for="idInputNombre" value="Nombre completo" />
+						</div>
+
+						<div class="col-sm-1" />
+
+						<div class="col-sm-5">
+							<p:outputLabel style="color: red;">*&nbsp;</p:outputLabel>
+							<h:outputLabel for="idInputDependencia" value="Dependencia" />
+						</div>
+
+						<div class="col-sm-1" />
+					</div>
+
+					<div class="row">
+						<div class="col-sm-5">
+							<p:inputText id="idInputNombre" value="#{mbRemitentesExt.dtoRemitenteExt.nombreRemitente}"
+										 onkeyup="this.value=validarCaracterEspecial(this.value).toUpperCase();"
+										 onblur="this.value=this.value.trim();"
+										 styleClass="expans-horiz-100" maxlength="50">
+								<pe:keyFilter regEx="#{messageSource['regex_letras_espacios']}" />
+							</p:inputText>
+						</div>
+						
+						<div class="col-sm-1" />
+						
+						<div class="col-sm-5">
+							<p:inputText id="idInputDependencia" value="#{mbRemitentesExt.dtoRemitenteExt.dependencia}"
+										 onkeyup="this.value=validarCaracterEspecial(this.value).toUpperCase()"
+										 onblur="this.value=this.value.trim();"
+										 styleClass="expans-horiz-100" maxlength="50">
+								<pe:keyFilter regEx="#{messageSource['regex_dependencia']}" />
+							</p:inputText>
+						</div>
+
+						<div class="col-sm-1" />
+					</div>
+	
+					<div class="row espaciador-row">
+						<div class="col-sm-5">
+							<p:outputLabel style="color: red;">*&nbsp;</p:outputLabel>
+							<h:outputLabel for="idSelectArea" value="Área" />
+						</div>
+		
+						<div class="col-sm-7" />
+					</div>
+
+					<div class="row">
+						<div class="col-sm-5">
+							<c:if test="#{mbRemitentesExt.listaAreas.size() > 1}">
+								<p:selectOneMenu id="idSelectArea" value="#{mbRemitentesExt.dtoRemitenteExt.idArea}"
+												 styleClass="expans-horiz-100">
+									<f:selectItem itemValue="" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+									<f:selectItems value="#{mbRemitentesExt.listaAreas}" var="areaOf"
+												   itemValue="#{areaOf.idArea}"
+												   itemLabel="#{areaOf.descripcion}" />
+									<p:ajax listener="#{mbRemitentesExt.recuperarRemitentesExt('Seleccionar')}" update="idTablaRemitentesExt"/>
+								</p:selectOneMenu>
+							</c:if>
+							<c:if test="#{mbRemitentesExt.listaAreas.size() eq 1}">
+								<h:outputText value="#{mbRemitentesExt.listaAreas.get(0).descripcion}"></h:outputText>
+							</c:if>
+						</div>
+
+						<div class="col-sm-7" />
+					</div>
+
+					<div class="row espaciador-row">
+						<div class="col-sm-12 espaciador-row botonesAcomodo">
+							<p:commandButton value="Agregar"
+											 process="idPanelDatosRemitenteExt"
+											 action="#{mbRemitentesExt.agregarRemitente}"
+											 update="mensaje_general_advertencia idPanelDatosRemitenteExt idTablaRemitentesExt" />
+						</div>
+					</div>
+				</section>
+			</p:outputPanel>
+			<!-- TERMINA DATOS DEL REMITENTE EXTERNO -->
+
+			<h4>
+				<h:outputText value="Lista de remitentes externos" />
+			</h4>
+			<h5>
+				Recuerda que para que se guarden los cambios hay que dar clic en el botón Aceptar
+			</h5>
+
+			<!-- COMIENZA LISTA DE REMITENTES EXTERNOS -->
+			<p:outputPanel id="idPanelRemitentesExt">
+				<section>
+					<p:spacer height="10" />
+
+					<div class="row centrar-componente">
+						<div class="col-sm-1" />
+
+						<div class="col-sm-10">
+							<p:dataTable id="idTablaRemitentesExt" var="remitenteExt" paginator="true" rows="10"
+										 value="#{mbRemitentesExt.listaRemitentesExt}"
+										 rowKey="#{remitenteExt.idRemitente}" emptyMessage="No hay remitentes externos"
+										 scrollable="true" paginatorPosition="bottom" editable="true"
+										 styleClass="tablaAtencion">
+
+								<p:ajax event="rowEdit" listener="#{mbRemitentesExt.editarRemitenteExt(remitenteExt)}"
+														update="idFormRemitentesExt:mensaje_general_advertencia" />
+
+								<f:facet name="header">
+									Remitentes
+								</f:facet>
+
+								<p:column headerText="Nombre">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{remitenteExt.nombreRemitente}" />
+										</f:facet>
+										<f:facet name="input">
+											<p:inputText value="#{remitenteExt.nombreRemitente}"
+														 styleClass="expans-horiz-95"
+														 onkeyup="this.value=validarCaracterEspecial(this.value).toUpperCase()"
+														 onblur="this.value=this.value.trim();">
+												<pe:keyFilter regEx="#{messageSource['regex_letras_espacios']}" />
+											</p:inputText>
+										</f:facet>
+						           </p:cellEditor>
+								</p:column>
+
+								<p:column headerText="Dependencia">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{remitenteExt.dependencia}" />
+										</f:facet>
+										<f:facet name="input">
+											<p:inputText value="#{remitenteExt.dependencia}"
+														 styleClass="expans-horiz-95"
+														 onkeyup="this.value=validarCaracterEspecial(this.value).toUpperCase()"
+														 onblur="this.value=this.value.trim();">
+												<pe:keyFilter regEx="#{messageSource['regex_numeros_letras_espacios']}" />
+											</p:inputText>
+										</f:facet>
+						           </p:cellEditor>
+								</p:column>
+
+								<p:column headerText="Eliminar" styleClass="expans-horiz-10">
+									<p:commandLink action="#{mbRemitentesExt.eliminarRemitenteExt(remitenteExt)}"
+												   update="idTablaRemitentesExt" disabled="#{mbRemitentesExt.listaRemitentesExtAsig.contains(remitenteExt.idRemitente)}">
+										<p:confirm message="¿Deseas eliminar al Remitente  externo?" />
+										<i class="fa fa-fw fa-remove" style="color: #d5007f"/>
+									</p:commandLink>
+									<p:confirmDialog global="true" styleClass="ventanaConfirmacion">
+										<p:commandButton value="#{messageSource['etiqueta_boton_no']}" styleClass="ui-confirmdialog-no" type="button" />
+										<p:commandButton value="#{messageSource['etiqueta_boton_si']}" styleClass="ui-confirmdialog-yes" type="button"
+														 style="background-color: white !important; color: #d5007f !important; border: 1px solid #d5007f !important;" />
+									</p:confirmDialog>
+				    			</p:column>
+
+				    			<p:column headerText="Editar" styleClass="expans-horiz-10">
+									<p:rowEditor rendered="#{not mbRemitentesExt.listaRemitentesExtAsig.contains(remitenteExt.idRemitente)}" />
+								</p:column>
+							</p:dataTable>
+						</div>
+
+						<div class="col-sm-1" />
+					</div>
+
+					<div class="row espaciador-row botonesAcomodo">
+						<div class="col-sm-12 espaciador-row">
+						<p:commandButton value="Cancelar"
+										 actionListener="#{mbRemitentesExt.recuperarRemitentesExt('Cancelar')}"
+										 update="idPanelDatosRemitenteExt idPanelRemitentesExt">
+							<p:confirm message="Se perderán todos los cambios ¿Deseas cancelar?" />
+						</p:commandButton>
+						<p:confirmDialog global="true" styleClass="ventanaConfirmacion">
+							<p:commandButton value="#{messageSource['etiqueta_boton_no']}" styleClass="ui-confirmdialog-no" type="button" />
+							<p:commandButton value="#{messageSource['etiqueta_boton_si']}" styleClass="ui-confirmdialog-yes" type="button"
+											 style="background-color: white !important; color: #d5007f !important; border: 1px solid #d5007f !important;" />
+						</p:confirmDialog>
+						&nbsp;
+						<p:commandButton value="Aceptar"
+										 action="#{mbRemitentesExt.cargarRemitentesExt}"
+										 update="mensaje_general_advertencia mensaje_general_exito"
+										 disabled="#{sec:areAnyGranted('ROLE_GESTION4.CONSULTA_CAU.OC')}">
+						</p:commandButton>
+						</div>
+					</div>
+				</section>
+			</p:outputPanel>
+			<!-- TERMINA LISTA DE REMITENTES EXTERNOS -->
+
+		</div>
+	</h:form>
+
+	<script type="text/javascript">
+		function validarCaracterEspecial(cadena) {
+			if(cadena != "") {
+				cadena = cadena.replace(/¬/g, "");
+				cadena = cadena.replace(/\^/g, "");
+				cadena = cadena.replace(/`/g, "");
+				cadena = cadena.replace(/~/g, "");
+				cadena = cadena.replace(/\\/g, "");
+				cadena = cadena.replace(/@/g, "");
+				return cadena;
+			} else {
+				return "";
+			}
+		}
+	</script>
+	</ui:define>
+</ui:composition>

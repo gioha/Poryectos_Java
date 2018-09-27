@@ -1,0 +1,1311 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sf="http://www.springframework.org/tags/faces"
+				xmlns:sec="http://www.springframework.org/security/tags"
+				template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+		<h:outputStylesheet library="css" name="modulos/oficialia_partes/oficialia_partes.css" />
+
+		<h:form id="capturaDocumentoOficialia" onkeypress="if(window.event.which == 13) {return false;}" enctype="multipart/form-data">
+			<!-- MODAL QUE SE EJECUTA AL OCURRIR UN EVENTO AJAX -->
+			<!-- 
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+					  closable="false" resizable="false" showHeader="false">
+				<p:graphicImage name="/img/estructura/loader.gif" />
+			</p:dialog>
+
+			<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" onerror="PF('statusDialog').hide()" />
+			 -->
+
+			<h2 style="padding-bottom: 30px;">
+				<h:outputText value="Inicio" style="color: #999999;" />
+				&nbsp;&nbsp;
+				<i class="fa fa-angle-right" style="font-size: 18px; color: #999999;" />
+				&nbsp;&nbsp;
+				<h:outputText value="#{messageSource['etiqueta_captura_documento_migasMenu']}" style="color: #999999;" />
+				&nbsp;&nbsp;
+				<i class="fa fa-angle-right" style="font-size: 18px; color: #999999;" />
+				&nbsp;&nbsp;
+				<h:outputText value="#{messageSource['etiqueta_miga_tipoPantallaCaptura']}" style="font-weight: bold;"/>
+			</h2>
+
+			<p:outputPanel id="mensajes_generales">
+				<p:growl id="mensaje_general_info" showDetail="true" sticky="true" globalOnly="true" severity="info" />
+				<p:growl id="mensaje_general_advertencia" showDetail="true" sticky="true" globalOnly="true" severity="warn" />
+				<p:growl id="mensaje_general_exito" showDetail="true" sticky="true" globalOnly="true" severity="fatal" />
+			</p:outputPanel>
+
+			<p:remoteCommand name="Regresar" action="regresarBandeja" />
+
+			<div class="container">
+				<!-- COMIENZA SECCIÓN FOLIO Y CARGA DE DOCUMENTO -->
+				<h3>
+					<h:outputLabel value="Oficialía de partes" />
+				</h3>
+				<h4>
+					<h:outputLabel id="infoDoc" value="Folio y carga de documento" />
+				</h4>
+				<h5>
+					Los datos con (<span style="color: red;">*</span>) son requeridos
+				</h5>
+
+				<p:outputPanel id="panelInformacionDocumento">
+					<section>
+						<div class="row">
+	
+							<c:if test="${mbOficialiaPartesFisicos.totalAreas > '1'}">
+								<div class="col-md-5">
+									<div class="row">
+										<p:outputLabel style="color: red;">*&nbsp;</p:outputLabel>
+										<h:outputLabel id="areaLabel" value="Área" />
+									</div>
+	
+									<div class="row">
+										<p:selectOneMenu id="area"
+														 value="#{mbOficialiaPartesFisicos.areaSeleccionada}"
+														 autoWidth="false"
+														 style="width: 100%;">
+	
+											<f:selectItem itemValue="SinArea" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+											<f:selectItems value="#{mbOficialiaPartesFisicos.dtoCaptura.listaDTOAreas}" var="areas" 
+														   itemValue="#{areas.idArea}-#{areas.tipoArea}-#{areas.siglas}"
+														   itemLabel="#{areas.descripcion}" />
+	
+											<p:ajax event="change" update="folio, panelExterno, panelDestinatario"
+													listener="#{mbOficialiaPartesFisicos.apartarFolio}" />
+										</p:selectOneMenu>
+									</div>
+								</div>
+							</c:if>
+	
+							<c:if test="${mbOficialiaPartesFisicos.totalAreas eq '1'}">
+								<div class="col-md-5">
+									<div class="row">
+										<h:outputLabel id="areaLabel" value="Área:" />
+										&nbsp;
+										<h:outputLabel id="unArea" value="#{mbOficialiaPartesFisicos.areaSel.descripcion}" />
+									</div>
+								</div>
+							</c:if>
+						</div>
+						<br />
+	
+						<div class="row">
+							<div class="col-md-6">
+								<div class="row">
+									<h:outputLabel for="folio" value="Folio apartado de Oficialía" />
+								</div>
+	
+								<div class="row">
+									<h:outputLabel id="folio" value="#{mbOficialiaPartesFisicos.dtoApartado.folioOficialia}" styleClass="shape" />
+								</div>
+							</div>
+						</div>
+						<br />
+	
+						<div class="row">
+							<div class="col-md-12">
+								<div class="row">
+									<p:outputLabel style="color: red;">*&nbsp;</p:outputLabel>
+									<h:outputLabel for="adjuntarDocumento" value="Adjuntar documento" />
+								</div>
+	
+								<div class="row">
+									<h:outputText id="adjuntarDocumento"
+												  value="Formatos válidos: *.pdf con un tamaño máximo de 50 MB."
+												  styleClass="instruccionesRedaccion" />
+								</div>
+							</div>
+	
+							<div class="row">
+								<div class="col-md-12" style="padding-right: 0px; padding-rigth: 50px;">
+									<p:fileUpload id="idUploadDocumento"
+												  allowTypes="/(\.|\/)(pdf)$/"
+												  fileUploadListener="#{mbOficialiaPartesFisicos.adjuntarDocumento}"
+												  invalidFileMessage="Formato inválido, favor de verificar el archivo "
+												  invalidSizeMessage="Tamaño inválido, favor de verificar el archivo "
+												  process="@this" update="panelInformacionDocumento mensaje_general_advertencia" sizeLimit="50000000"
+												  label="Seleccionar archivo" styleClass="boton" auto="true"
+												  disabled="#{sec:areAnyGranted('ROLE_GESTION4.CONSULTA_CAU.OC')}">
+									</p:fileUpload>
+								</div>
+							</div>
+						</div>
+	
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<p:dataTable id="idTablaDocumentos" styleClass="tablaAnexos" style="width: 500px;"
+											 value="#{mbOficialiaPartesFisicos.dtoCaptura}"
+											 var="documento" emptyMessage=""
+			        						 rendered="#{mbOficialiaPartesFisicos.dtoCaptura.nombreDocumento ne null}">
+
+								    <p:column headerText="Nombre documento" style="width: 50%;">
+		        						<h:outputText value="#{documento.nombreDocumento}" />
+		    						</p:column>
+
+		    						<p:column headerText="Tamaño" style="width: 25%;">
+		    							<h:outputText value="#{mbOficialiaPartesFisicos.decimalFormat.format(documento.tamanioDocumento  / (1024*1024))} MB" />
+		    						</p:column>
+
+		    						<p:column headerText="Eliminar" style="text-align: center; width: 25%;">
+			        						<p:commandLink value="&#xf00d;" style="text-decoration: none"
+			        									   action="#{mbOficialiaPartesFisicos.eliminarDocumento}"
+			        									   immediate="true" update="@form" />
+		    						</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+					</section>
+				</p:outputPanel>
+				<!-- TERMINA SECCIÓN FOLIO Y CARGA DE DOCUMENTO -->
+
+				<!-- COMIENZA SECCIÓN DATOS DEL DOCUMENTO -->
+				<h4>
+					<h:outputLabel value="Datos del documento" />
+				</h4>
+
+				<h5>
+					Los datos con (<span style="color: red;">*</span>) son requeridos
+				</h5>
+
+				<p:outputPanel id="panelDatosDocumento">
+					<section>
+						<div class="row">
+							<div class="col-md-5">
+								<div class="row">
+									<p:outputLabel style="color: red;">*&nbsp;</p:outputLabel>
+									<h:outputLabel for="Asunto" value="Asunto:" />
+								</div>
+
+								<div class="row">
+									<p:inputTextarea id="Asunto" style="width: 100%;"
+													 value="#{mbOficialiaPartesFisicos.dtoDocumento.asunto}"
+													 onkeyup="this.value=validarCaracterEspecial(this.value);">
+										<pe:keyFilter regEx="#{messageSource['regex_numeros_letras_espacios']}" />
+									</p:inputTextarea>
+									<p:watermark for="Asunto" value="Escriba el asunto del documento" />
+								</div>
+							</div>
+						</div>
+						<br />
+
+						<div class="row">
+							<div class="col-md-5">
+								<div class="row">
+									<p:outputLabel style="color: red;">*&nbsp;</p:outputLabel>
+									<h:outputLabel for="tipoDocumento" value="Tipo de documento" />
+								</div>
+
+								<div class="row">
+									<p:selectOneMenu id="tipoDocumento"
+													 style="width: 100%;"
+													 value="#{mbOficialiaPartesFisicos.dtoDocumento.idTipoDocumento}">
+										<f:selectItem itemValue="0" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+										<f:selectItems value="#{mbOficialiaPartesFisicos.dtoCaptura.listaDTOTipoDocumento}" var="tipo"
+													   itemValue="#{tipo.idTipoDocumento}"
+													   itemLabel="#{tipo.descripcion}" />
+									</p:selectOneMenu>
+								</div>
+							</div>
+						</div>
+						<br />
+
+						<div class="row">
+							<div class="col-md-3">
+								<div class="row">
+									<h:outputLabel for="noDocumento" value="Número de documento" />
+								</div>
+
+								<div class="row">
+									<p:inputText id="noDocumento" value="#{mbOficialiaPartesFisicos.dtoDocumento.noDocumento}"
+												 maxlength="60"
+												 disabled="#{mbOficialiaPartesFisicos.conNumero}"
+												 onkeyup="this.value=validarCaracterEspecial(this.value);">
+										<pe:keyFilter regEx="#{messageSource['regex_documento_folio']}" />
+									</p:inputText>
+									<p:watermark for="noDocumento" value="Ingrese número" />
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<p:spacer width="35" />
+
+								<div class="row">
+									<p:selectBooleanCheckbox value="#{mbOficialiaPartesFisicos.conNumero}">
+						        		<p:ajax update="noDocumento" listener="#{mbOficialiaPartesFisicos.bloquearNumeroDocumento}" />
+						        	</p:selectBooleanCheckbox>
+									&nbsp;
+									<h:outputLabel id="sinNoDocumentoLabel" value="Sin número de documento" />
+								</div>
+							</div>
+						</div>
+						<br />
+
+						<div class="row">
+							<div class="col-md-12">
+								<div class="row">
+									<p:outputLabel style="color: red;">*&nbsp;</p:outputLabel>
+									<h:outputLabel for="fechaDocumento" value="Fecha del documento" />
+								</div>
+
+								<div class="row" >
+        							<p:calendar id="fechaDocumento" value="#{mbOficialiaPartesFisicos.dtoDocumento.fechaCreacion}"
+        										maxdate="#{mbOficialiaPartesFisicos.fechaFormat}"
+        										locale="es" navigator="true" pattern="dd/MMMM/yyyy" />
+								</div>
+							</div>
+						</div>
+					</section>
+				</p:outputPanel>
+				<!-- TERMINA SECCIÓN DATOS DEL DOCUMENTO -->
+
+				<!-- COMIENZA SECCIÓN REMITENTE(S) -->
+				<h4>
+					<h:outputLabel value="Remitente" />
+				</h4>
+				<h5>
+					Ingrese datos en cualquiera de los campos
+				</h5>
+
+				<p:outputPanel id="panelRemitente">
+					<section>
+						<div class="row">
+							<div class="col-md-5">
+								<div class="row">
+									<h:outputLabel for="tipoRemitente" value="Tipo" />
+								</div>
+
+								<div class="row">
+									<p:selectOneRadio id="tipoRemitente" value="#{mbOficialiaPartesFisicos.dtoCombosRemitentes.tipo}">
+							            <f:selectItem itemLabel="Interno" itemValue="I" />
+							            <f:selectItem itemLabel="Externo" itemValue="E" />
+
+							            <p:ajax event="change" update="panelRemitente" process="@this"
+							            		listener="#{mbOficialiaPartesFisicos.mostrarCamposRemitentes}" />
+							        </p:selectOneRadio>
+								</div>
+							</div>
+						</div>
+
+						<p:outputPanel id="panelInterno" rendered="#{not mbOficialiaPartesFisicos.dtoCombosRemitentes.mostrarInternoExterno}">
+							<div class="row">
+								<div class="col-md-5">
+									<div class="row">
+										<h:outputLabel for="nombreRemitente" value="Nombre(s)" />
+									</div>
+
+									<div class="row">
+										<p:inputText id="nombreRemitente" value="#{mbOficialiaPartesFisicos.dtoCombosRemitentes.nombre}"
+													 style="width: 100%;"
+													 onkeyup="this.value=validarCaracterEspecial(this.value);">
+											<pe:keyFilter regEx="#{messageSource['regex_letras_espacios']}" />
+										</p:inputText>
+									</div>
+								</div>
+
+								<div class="col-md-1"/>
+
+								<div class="col-md-5">
+									<div class="row">
+										<h:outputLabel for="apellidosRemitente" value="Apellidos" />
+									</div>
+
+									<div class="row">
+										<p:inputText id="apellidosRemitente" value="#{mbOficialiaPartesFisicos.dtoCombosRemitentes.apellidos}"
+													 style="width: 100%;"
+													 onkeyup="this.value=validarCaracterEspecial(this.value);">
+										<pe:keyFilter regEx="#{messageSource['regex_letras_espacios']}" />
+									</p:inputText>
+									</div>
+								</div>
+							</div>
+							<br />
+
+							<div class="row">
+								<div class="col-md-5">
+									<div class="row">
+										<h:outputLabel for="tipoAreaRemitente" value="Tipo de área" />
+									</div>
+
+									<div class="row">
+										<p:selectOneMenu id="tipoAreaRemitente"
+														 style="width: 100%;"
+														 value="#{mbOficialiaPartesFisicos.dtoCombosRemitentes.tipoAreaSeleccionada}">
+
+											<f:selectItem itemValue="0" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+											<f:selectItems value="#{mbOficialiaPartesFisicos.dtoCaptura.listaDTOTipoArea}" var="tipoArea"
+														   itemValue="#{tipoArea.idTipoArea}"
+														   itemLabel="#{tipoArea.descripcion}" />
+
+											<p:ajax event="change" update="areaRemitente, entidadRemitente"
+													listener="#{mbOficialiaPartesFisicos.seleccionarArea(0)}" />
+										</p:selectOneMenu>
+									</div>
+								</div>
+
+								<div class="col-md-1"/>
+
+								<div class="col-md-5">
+									<div class="row">
+										<h:outputLabel for="entidadRemitente" value="Entidad" />
+									</div>
+
+									<div class="row">
+										<p:selectOneMenu id="entidadRemitente"
+														 style="width: 100%;"
+														 value="#{mbOficialiaPartesFisicos.dtoCombosRemitentes.entidadSeleccionada}"
+														 disabled="#{mbOficialiaPartesFisicos.dtoCombosRemitentes.habilitarEstados}">
+
+											<f:selectItem itemValue="" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+											<f:selectItems value="#{mbOficialiaPartesFisicos.dtoCombosRemitentes.listaEstados}" var="estados"
+														   itemValue="#{estados.idEstado}"
+														   itemLabel="#{estados.nombreEstado}" />
+
+											<p:ajax event="change" update="areaRemitente"
+													listener="#{mbOficialiaPartesFisicos.seleccionarEstado(0)}" />
+										</p:selectOneMenu>
+									</div>
+								</div>
+							</div>
+							<br />
+
+							<div class="row">
+								<div class="col-md-5">
+									<div class="row">
+										<h:outputLabel for="areaRemitente" value="Área" />
+									</div>
+
+									<div class="row">
+										<p:selectOneMenu id="areaRemitente" 
+														 style="width: 100%;"
+														 value="#{mbOficialiaPartesFisicos.dtoCombosRemitentes.areaSeleccionada}">
+
+											<f:selectItem itemValue="0" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+											<f:selectItems value="#{mbOficialiaPartesFisicos.dtoCombosRemitentes.listaAreas}" var="areas"
+														   itemValue="#{areas.idArea}"
+														   itemLabel="#{areas.descripcion}" />
+										</p:selectOneMenu>
+									</div>
+								</div>
+							</div>
+							<br />
+
+							<div class="row">
+								<div class="col-md-12 botonesAcomodo">
+										<p:commandButton value="Buscar"
+														 process="@this panelInterno"
+														 update="dialogo_personasRemitente mensaje_general_advertencia mensaje_general_info"
+														 action="#{mbOficialiaPartesFisicos.consultarRemitentes}" />
+								</div>
+							</div>
+						</p:outputPanel>
+						
+						<p:outputPanel id="panelExterno" rendered="#{mbOficialiaPartesFisicos.dtoCombosRemitentes.mostrarInternoExterno}">
+							<div class="row">
+								<div class="col-md-5">
+									<div class="row">
+										<h:outputLabel for="nombreExterno" value="Nombre" />
+									</div>
+
+									<div class="row">
+										<p:inputText id="nombreExterno" value="#{mbOficialiaPartesFisicos.dtoCaptura.nombreRemitenteExt}"
+													 disabled="#{mbOficialiaPartesFisicos.dtoCaptura.habilitarComponente}"
+													 style="width: 100%;"
+													 onkeyup="this.value=validarCaracterEspecial(this.value);">
+											<pe:keyFilter regEx="#{messageSource['regex_letras_espacios']}" />
+										</p:inputText>
+									</div>
+								</div>
+
+								<div class="col-md-1"/>
+
+								<div class="col-md-5">
+									<div class="row">
+										<h:outputLabel for="dependenciaExterno" value="Dependencia" />
+									</div>
+
+									<div class="row">
+										<p:inputText id="dependenciaExterno" value="#{mbOficialiaPartesFisicos.dtoCaptura.dependenciaRemitenteExt}"
+													 disabled="#{mbOficialiaPartesFisicos.dtoCaptura.habilitarComponente}"
+													 style="width: 100%;"
+													 onkeyup="this.value=validarCaracterEspecial(this.value);">
+											<pe:keyFilter regEx="#{messageSource['regex_numeros_letras_espacios']}" />
+										</p:inputText>
+									</div>
+								</div>
+							</div>
+							<br />
+
+							<div class="row">
+								<div class="col-md-12 botonesAcomodo">
+										<p:commandButton value="Buscar"
+														 process="@this panelExterno"
+														 update="dialogRemitentesExtEncontrados mensaje_general_advertencia mensaje_general_info"
+														 action="#{mbOficialiaPartesFisicos.recuperarRemitentesExt}"
+														 disabled="#{mbOficialiaPartesFisicos.dtoCaptura.habilitarComponente}" />
+								</div>
+							</div>
+						</p:outputPanel>
+
+						<!-- TABLA DE REMITENTES -->
+						<div class="row">
+							<div class="col-md-12">
+								<p:dataTable id="tablaRemitentes" var="remitenteASeleccionar"
+											 value="#{mbOficialiaPartesFisicos.dtoCombosRemitentes.personas}"
+											 emptyMessage=""
+											 styleClass="personasEncontradas">
+
+								    <p:column>
+								    	<div class="row" style="padding: 3px 0px 0px 0px;">
+								    		<h:outputText styleClass="ui-treetable-toggler ui-icon ui-icon-bullet ui-c"
+								    					  style="float: left; font-family: Roboto;" />
+											<h:outputText value="#{remitenteASeleccionar.nombreCompleto}"
+														  style="font-weight: bold; font-size: 13px; font-family: Roboto;" />
+		        						</div>
+
+		        						<div class="row" style="padding: 0px 0px 3px 0px;">
+		        							&nbsp;&nbsp;&nbsp;&nbsp;
+		        							<h:outputText value="#{remitenteASeleccionar.puesto}" style="font-size: 13px;" />
+		        						</div>
+		    						</p:column>
+
+		    						<p:column>
+		    						 	<p:commandLink action="#{mbOficialiaPartesFisicos.setPersonaDetalle(remitenteASeleccionar)}"
+		    						 				   process="@this" update="capturaDocumentoOficialia:detalle_estructura"
+		    						 				   oncomplete="PF('detalle_estructura').show();" styleClass="linksPersonasEncontradas">
+		    						 		<i class="fa fa-search" />
+		    						 		&nbsp;
+		    						 		<h:outputText value="Detalle" style="text-decoration: underline;" />
+		    						 	</p:commandLink>
+		        						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		        						<p:commandLink action="#{mbOficialiaPartesFisicos.eliminarRemitente(remitenteASeleccionar)}"
+		        									   update="tablaRemitentes" process="@this"
+		        									   styleClass="linksPersonasEncontradas" >
+		        							<i class="fa fa-user-times" />
+		        							&nbsp;
+		        							<h:outputText value="Eliminar" style="text-decoration: underline;" />
+		        						</p:commandLink>
+		    						 </p:column>
+								</p:dataTable>
+							</div>
+						</div>
+
+						<!-- TABLA DE REMITENTES EXTERNOS -->
+						<div class="row">
+							<div class="col-md-12">
+								<p:dataTable id="idTablaRemitentesExt" styleClass="personasEncontradas"
+											 var="remitenteExt"
+											 value="#{mbOficialiaPartesFisicos.dtoCaptura.remitentesExtAgregados}"
+											 emptyMessage="" >
+
+									<p:column>
+								    	<div class="row" style="padding: 3px 0px 0px 0px;">
+								    		<h:outputText styleClass="ui-treetable-toggler ui-icon ui-icon-bullet ui-c"
+								    					  style="float: left; font-family: Roboto;" />
+											<h:outputText value="#{remitenteExt.nombreRemitente}"
+														  style="font-weight: bold; font-size: 13px; font-family: Roboto;" />
+		        						</div>
+
+		        						<div class="row" style="padding: 0px 0px 3px 0px;">
+		        							&nbsp;&nbsp;&nbsp;&nbsp;
+		        							<h:outputText value="#{remitenteExt.dependencia}" style="font-size: 13px;" />
+		        						</div>
+		    						</p:column>
+
+		    						 <p:column>
+		    						 	<p:commandLink action="#{mbOficialiaPartesFisicos.dtoCaptura.setRemitenteExt(remitenteExt)}"
+		    						 				   process="@this" update="capturaDocumentoOficialia:idDetallePersonaExt"
+		    						 				   oncomplete="PF('dialogPersonaExt').show();" styleClass="linksPersonasEncontradas">
+		    						 		<i class="fa fa-search" />
+		    						 		&nbsp;
+		    						 		<h:outputText value="Detalle" style="text-decoration: underline;" />
+		    						 	</p:commandLink>
+		        						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		        						<p:commandLink action="#{mbOficialiaPartesFisicos.eliminarRemitenteExt(remitenteExt)}"
+		        									   update="idTablaRemitentesExt" process="@this"
+		        									   styleClass="linksPersonasEncontradas">
+		        							<i class="fa fa-user-times" />
+		        							&nbsp;
+		        							<h:outputText value="Eliminar" style="text-decoration: underline;" />
+		        						</p:commandLink>
+		    						 </p:column>
+								</p:dataTable>
+							</div>
+						</div>
+					</section>
+				</p:outputPanel>
+				<!-- TERMINA SECCIÓN REMITENTE(S) -->
+
+				<!-- COMIENZA SECCIÓN DESTINATARIO(S) -->
+				<h4>
+					<h:outputLabel value="Destinatario" />
+				</h4>
+				<h5>
+					Ingrese datos en cualquiera de los campos
+				</h5>
+
+				<p:outputPanel id="panelDestinatario">
+					<section>
+						<div class="row">
+							<div class="col-md-5">
+								<div class="row">
+									<h:outputLabel for="nombreDestinatario" value="Nombre(s)" />
+								</div>
+
+								<div class="row">
+									<p:inputText id="nombreDestinatario" value="#{mbOficialiaPartesFisicos.dtoCombosDestinatarios.nombre}"
+												 disabled="#{mbOficialiaPartesFisicos.dtoCaptura.habilitarComponente}"
+												 style="width: 100%;"
+												 onkeyup="this.value=validarCaracterEspecial(this.value);">
+										<pe:keyFilter regEx="#{messageSource['regex_letras_espacios']}" />
+									</p:inputText>
+								</div>
+							</div>
+
+							<div class="col-md-1" />
+
+							<div class="col-md-5">
+								<div class="row">
+									<h:outputLabel for="apellidosDestinatario" value="Apellidos" />
+								</div>
+
+								<div class="row">
+									<p:inputText id="apellidosDestinatario" value="#{mbOficialiaPartesFisicos.dtoCombosDestinatarios.apellidos}"
+												 disabled="#{mbOficialiaPartesFisicos.dtoCaptura.habilitarComponente}"
+												 style="width: 100%;"
+												 onkeyup="this.value=validarCaracterEspecial(this.value);">
+										<pe:keyFilter regEx="#{messageSource['regex_letras_espacios']}" />
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+						<br />
+
+						<div class="row">
+							<div class="col-md-5">
+								<div class="row">
+									<h:outputLabel for="nombreAreaDestinatario" value="Área:" />
+									&nbsp;
+									<h:outputLabel id="nombreAreaDestinatario"
+												   value="#{mbOficialiaPartesFisicos.dtoCombosDestinatarios.nombreAreaDestinatario}" /> 
+								</div>
+							</div>
+						</div>
+						<br />
+
+						<div class="row">
+							<div class="col-md-12 botonesAcomodo">
+								<p:commandButton value="Buscar" 
+												 process="@this panelDestinatario"
+												 disabled="#{mbOficialiaPartesFisicos.dtoCaptura.habilitarComponente}"
+												 update="dialogo_personasDestinatarios mensaje_general_advertencia mensaje_general_info"
+												 action= "#{mbOficialiaPartesFisicos.consultarDestinatarios}" />
+							</div>
+						</div>
+
+						<!-- TABLA DE DESTINATARIOS -->
+						<div class="row">
+							<div class="col-md-12">
+								<p:dataTable id="tablaDestinatario" styleClass="personasEncontradas"
+											 var="destinatarioASeleccionar"
+											 value="#{mbOficialiaPartesFisicos.dtoCombosDestinatarios.personas}" 
+											 emptyMessage="">
+
+								    <p:column>
+								    	<div class="row" style="padding: 3px 0px 0px 0px;">
+								    		<h:outputText styleClass="ui-treetable-toggler ui-icon ui-icon-bullet ui-c"
+								    					  style="float: left; font-family: Roboto;" />
+											<h:outputText value="#{destinatarioASeleccionar.nombreCompleto}"
+														  style="font-weight: bold; font-size: 13px; font-family: Roboto;" />
+		        						</div>
+		        						<div class="row" style="padding: 0px 0px 3px 0px;">
+		        							&nbsp;&nbsp;&nbsp;&nbsp;
+		        							<h:outputText value="#{destinatarioASeleccionar.puesto}" style="font-size: 13px;" />
+		        						</div>
+		    						</p:column>
+
+									<p:column>
+		    						 	<p:commandLink action="#{mbOficialiaPartesFisicos.setPersonaDetalle(destinatarioASeleccionar)}"
+		    						 				   process="@this" update="capturaDocumentoOficialia:detalle_estructura"
+		    						 				   oncomplete="PF('detalle_estructura').show();" styleClass="linksPersonasEncontradas">
+		    						 		<i class="fa fa-search" />
+		    						 		&nbsp;
+		    						 		<h:outputText value="Detalle" style="text-decoration: underline;" />
+		    						 	</p:commandLink>
+		        						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		        						<p:commandLink action="#{mbOficialiaPartesFisicos.eliminarDestinatario(destinatarioASeleccionar)}"
+		        									   update="tablaDestinatario" process="@this"
+		        									   styleClass="linksPersonasEncontradas">
+		        							<i class="fa fa-user-times" />
+		        							&nbsp;
+		        							<h:outputText value="Eliminar" style="text-decoration: underline;" />
+		        						</p:commandLink>
+		    						 </p:column>
+								</p:dataTable>
+							</div>
+						</div>
+					</section>
+				</p:outputPanel>
+				<!-- TERMINA SECCIÓN DESTINATARIO(S) -->
+
+				<!-- COMIENZA SECCIÓN COPIA(S) DE CONOCIMIENTO -->
+				<h4>
+					<h:outputLabel value="C.c.p." />
+				</h4>
+				<h5>
+					Ingrese datos en cualquiera de los campos
+				</h5>
+
+				<p:outputPanel id="panelCcp">
+					<section>
+						<div class="row">
+							<div class="col-md-5">
+								<div class="row">
+									<h:outputLabel for="nombreCcp" value="Nombre(s)" />
+								</div>
+
+								<div class="row">
+									<p:inputText id="nombreCcp" value="#{mbOficialiaPartesFisicos.dtoCombosCcp.nombre}"
+												 style="width: 100%;"
+												 onkeyup="this.value=validarCaracterEspecial(this.value);">
+										<pe:keyFilter regEx="#{messageSource['regex_letras_espacios']}" />
+									</p:inputText>
+								</div>
+							</div>
+
+							<div class="col-md-1" />
+
+							<div class="col-md-5">
+								<div class="row">
+									<h:outputLabel for="apellidosCcp" value="Apellidos" />
+								</div>
+
+								<div class="row">
+									<p:inputText id="apellidosCcp" value="#{mbOficialiaPartesFisicos.dtoCombosCcp.apellidos}"
+												 style="width: 100%;"
+												 onkeyup="this.value=validarCaracterEspecial(this.value);">
+										<pe:keyFilter regEx="#{messageSource['regex_letras_espacios']}" />
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+						<br />
+
+						<div class="row">
+							<div class="col-md-5">
+								<div class="row">
+									<h:outputLabel for="tipoAreaCcp" value="Tipo de área" />
+								</div>
+
+								<div class="row">
+									<p:selectOneMenu id="tipoAreaCcp"
+													 style="width: 100%;"
+													 value="#{mbOficialiaPartesFisicos.dtoCombosCcp.tipoAreaSeleccionada}">
+
+										<f:selectItem itemValue="0" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+										<f:selectItems value="#{mbOficialiaPartesFisicos.dtoCaptura.listaDTOTipoArea}" var="tipoArea"
+													   itemValue="#{tipoArea.idTipoArea}"
+													   itemLabel="#{tipoArea.descripcion}" />
+
+										<p:ajax event="change" update="areaCcp, entidadCcp"
+												listener="#{mbOficialiaPartesFisicos.seleccionarArea(2)}" />
+									</p:selectOneMenu>
+								</div>
+							</div>
+
+							<div class="col-md-1" />
+
+							<div class="col-md-5">
+								<div class="row">
+									<h:outputLabel for="entidadCcp" value="Entidad" />
+								</div>
+
+								<div class="row">
+									<p:selectOneMenu id="entidadCcp" 
+													 style="width: 100%;"
+													 value="#{mbOficialiaPartesFisicos.dtoCombosCcp.entidadSeleccionada}"
+													 disabled="#{mbOficialiaPartesFisicos.dtoCombosCcp.habilitarEstados}">
+
+										<f:selectItem itemValue="" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+										<f:selectItems value="#{mbOficialiaPartesFisicos.dtoCombosCcp.listaEstados}" var="estados"
+													   itemValue="#{estados.idEstado}"
+													   itemLabel="#{estados.nombreEstado}" />
+
+										<p:ajax event="change" update="areaCcp"
+												listener="#{mbOficialiaPartesFisicos.seleccionarEstado(2)}" />
+									</p:selectOneMenu>
+								</div>
+							</div>
+						</div>
+						<br />
+
+						<div class="row">
+							<div class="col-md-5">
+								<div class="row">
+									<h:outputLabel for="areaCcp" value="Área" />
+								</div>
+
+								<div class="row">
+									<p:selectOneMenu id="areaCcp" 
+													 style="width: 100%;"
+													 value="#{mbOficialiaPartesFisicos.dtoCombosCcp.areaSeleccionada}">
+
+										<f:selectItem itemValue="0" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+										<f:selectItems value="#{mbOficialiaPartesFisicos.dtoCombosCcp.listaAreas}" var="areas"
+													   itemValue="#{areas.idArea}"
+													   itemLabel="#{areas.descripcion}" />
+									</p:selectOneMenu>
+								</div>
+							</div>
+						</div>
+						<br />
+
+						<div class="row">
+							<div class="col-md-12 botonesAcomodo">
+								<p:commandButton value="Buscar" 
+												 process="@this panelCcp"
+												 update="dialogo_personasCCP mensaje_general_advertencia mensaje_general_info"
+												 action= "#{mbOficialiaPartesFisicos.consultarCcp}" />											 
+							</div>
+						</div>
+
+						<!-- TABLA CON LOS CCP -->
+						<div class="row">
+							<div class="col-md-12">
+								<p:dataTable id="tablaCCP" styleClass="personasEncontradas"
+											 var="ccpASeleccionar"
+											 value="#{mbOficialiaPartesFisicos.dtoCombosCcp.personas}"
+											 emptyMessage="" >
+
+									<p:column>
+								    	<div class="row" style="padding: 3px 0px 0px 0px;">
+								    		<h:outputText styleClass="ui-treetable-toggler ui-icon ui-icon-bullet ui-c"
+								    					  style="float: left; font-family: Roboto;" />
+											<h:outputText value="#{ccpASeleccionar.nombreCompleto}"
+														  style="font-weight: bold; font-size: 13px; font-family: Roboto;" />
+		        						</div>
+
+		        						<div class="row" style="padding: 0px 0px 3px 0px;">
+		        							&nbsp;&nbsp;&nbsp;&nbsp;
+		        							<h:outputText value="#{ccpASeleccionar.puesto}" style="font-size: 13px;" />
+		        						</div>
+		    						</p:column>
+
+		    						 <p:column>
+		    						 	<p:commandLink action="#{mbOficialiaPartesFisicos.setPersonaDetalle(ccpASeleccionar)}"
+		    						 				   process="@this" update="capturaDocumentoOficialia:detalle_estructura"
+		    						 				   oncomplete="PF('detalle_estructura').show();" styleClass="linksPersonasEncontradas">
+		    						 		<i class="fa fa-search" />
+		    						 		&nbsp;
+		    						 		<h:outputText value="Detalle" style="text-decoration: underline;" />
+		    						 	</p:commandLink>
+		        						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		        						<p:commandLink action="#{mbOficialiaPartesFisicos.eliminarCCP(ccpASeleccionar)}"
+		        									   update="tablaCCP" process="@this"
+		        									   styleClass="linksPersonasEncontradas">
+		        							<i class="fa fa-user-times" />
+		        							&nbsp;
+		        							<h:outputText value="Eliminar" style="text-decoration: underline;" />
+		        						</p:commandLink>
+		    						 </p:column>
+								</p:dataTable>
+							</div>
+						</div>
+					</section>
+				</p:outputPanel>
+				<!-- TERMINA SECCIÓN COPIA(S) DE CONOCIMIENTO -->
+
+				<!-- COMIENZA SECCIÓN ANEXOS -->
+				<h4>
+					<h:outputLabel value="Anexos" />
+				</h4>
+				<h5>
+					#{messageSource['etiqueta_formatos_validos_anexo']}
+				</h5>
+
+				<p:outputPanel id="panelAnexos">
+					<section>
+						<div class="row" >
+							<div class="col-md-12">
+								<p:fileUpload id="idUploadAnexos"
+											  allowTypes="/(\.|\/)(pdf|xls|ppt|xlsx|pptx|txt|zip|docx|doc)$/"
+											  fileUploadListener="#{mbOficialiaPartesFisicos.adjuntarAnexo}"
+											  invalidFileMessage="Formato inválido, favor de verificar el archivo "
+											  invalidSizeMessage="Tamaño inválido, favor de verificar el archivo "
+											  process="@this" update="panelAnexos mensaje_general_advertencia" sizeLimit="50000000"
+											  label="Seleccionar archivo" styleClass="boton" auto="true"
+											  disabled="#{sec:areAnyGranted('ROLE_GESTION4.CONSULTA_CAU.OC')}">
+								</p:fileUpload>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-12" align="center">
+								<p:dataTable styleClass="tablaAnexos" style="width: 500px;"
+											 value="#{mbOficialiaPartesFisicos.dtoCaptura.docsAnexos}"
+											 var="docAnexo" emptyMessage=""
+											 rendered="#{mbOficialiaPartesFisicos.dtoCaptura.docsAnexos.size() ne 0}">
+
+								    <p:column headerText="Nombre anexo" style="width: 50%;">
+		        						<h:outputText value="#{docAnexo.nombreOriginal}" />
+		    						</p:column>
+
+		    						<p:column headerText="Tamaño" style="width: 25%;">
+		    							<h:outputText value="#{mbOficialiaPartesFisicos.decimalFormat.format(docAnexo.size  / (1024*1024))} MB" />
+		    						</p:column>
+
+		    						<p:column headerText="Eliminar" style="text-align: center; width: 25%;">
+		        						<p:commandLink value="&#xf00d;" style="text-decoration: none" 
+		        									   action="#{mbOficialiaPartesFisicos.eliminarAnexo(docAnexo)}"
+		        									   immediate="true" update="@form" />
+		    						</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+					</section>
+				</p:outputPanel>
+				<!-- TERMINA SECCIÓN ANEXOS -->
+
+				<!-- COMIENZA SECCIÓN DATOS DE RECEPCIÓN -->
+				<h4>
+					<h:outputLabel value="Datos de recepción" />
+				</h4>
+				<h5>
+					Los datos con (<span style="color:red">*</span>) son requeridos
+				</h5>
+
+				<p:outputPanel id="panelRecepcion">
+					<section>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="row">
+									<h:outputLabel for="recibe" value="Recibe" />
+								</div>
+
+								<div class="row">
+									<h:outputLabel id="recibe" style="font-weight: 100;" value="#{mbOficialiaPartesFisicos.usuarioLogueado.nombreUsuario}" />
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="row">
+									<h:outputLabel for="modoRecepcion" value="Modo de recepción" />
+								</div>
+
+								<div class="row">
+									<h:outputLabel id="modoRecepcion" style="font-weight: 100;" value="Físico" />
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-3">
+								<div class="row">
+									<p:outputLabel style="color: red;">*&nbsp;</p:outputLabel>
+									<h:outputLabel for="fechaRecepcion" value="Fecha de Recepción" />
+								</div>
+
+								<div class="row" >
+        							<p:calendar id="fechaRecepcion" value="#{mbOficialiaPartesFisicos.dtoCaptura.fechaRecepcion}"
+        										maxdate="#{mbOficialiaPartesFisicos.fechaFormat}"
+        										locale="es" navigator="true" pattern="dd/MMMM/yyyy" />
+								</div>
+							</div>
+
+							<div class="col-md-6">
+								<div class="row">
+									<h:outputLabel for="horaRecepcion" value="Hora de recepción" />
+								</div>
+
+								<div class="row" >
+									<pe:inputNumber id="horaRecepcion" value="#{mbOficialiaPartesFisicos.dtoCaptura.hrRecepcion}"
+													minValue="0" maxValue="23"
+													onkeyup="this.value=validarCaracterEspecial(this.value);">
+	               					</pe:inputNumber>
+
+	               					<p:spacer width="5" />
+									<h:outputLabel value=":" />
+									<p:spacer width="5" />
+
+	               					<pe:inputNumber id="minutosRecepcion" value="#{mbOficialiaPartesFisicos.dtoCaptura.minRecepcion}"
+	               									minValue="0" maxValue="59"
+													onkeyup="this.value=validarCaracterEspecial(this.value);">
+	               					</pe:inputNumber>
+								</div>
+							</div>
+						</div>
+					</section>
+				</p:outputPanel>
+				<!-- TERMINA SECCIÓN DATOS DE RECEPCIÓN -->
+
+				<!-- COMIENZA SECCIÓN CLASIFICACIÓN ARCHIVÍSTICA -->
+				<h4>
+					<h:outputLabel value="Clasificación archivística" />
+				</h4>
+				<h5>
+					Los datos con (<span style="color: red;">*</span>) son requeridos
+				</h5>
+
+				<p:outputPanel id="panelClasificacion">
+					<section>
+						<div class="row">
+							<div class="col-md-5">
+								<div class="row">
+									<p:outputLabel style="color: red;">*&nbsp;</p:outputLabel>
+									<h:outputLabel for="seccionOpcion" value="Sección" />
+								</div>
+
+								<div class="row">			
+									<p:selectOneMenu id="seccionOpcion" autoWidth="false" style="width: 100%;"
+													 value="#{mbOficialiaPartesFisicos.dtoCaptura.seccionSeleccionada}">
+
+										<f:selectItem itemValue="0" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+										<f:selectItems value="#{mbOficialiaPartesFisicos.dtoCaptura.listaDTOSecciones}" var="secciones"
+													   itemValue="#{secciones.idSeccion}"
+													   itemLabel="#{secciones.numeroSeccion} #{secciones.descripcion}" />
+
+										 <p:ajax event="change" update="categoriaOpcion" process="@this"
+										 		 listener="#{mbOficialiaPartesFisicos.consultarCategoria}" />
+									</p:selectOneMenu>
+								</div>
+							</div>
+						</div>
+						<br />
+
+						<div class="row">
+							<div class="col-md-5">
+								<div class="row">
+									<p:outputLabel style="color: red;">*&nbsp;</p:outputLabel>
+									<h:outputLabel for="categoriaOpcion" value="Categoría" />
+								</div>
+
+								<div class="row">			
+									<p:selectOneMenu id="categoriaOpcion" autoWidth="false" style="width: 100%;"
+													 value="#{mbOficialiaPartesFisicos.dtoCaptura.categoriaSeleccionada}">
+
+										<f:selectItem itemValue="0" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+										<f:selectItems value="#{mbOficialiaPartesFisicos.dtoCaptura.listaDTOCategorias}" var="categoria"
+													   itemValue="#{categoria.idCategoria}"
+													   itemLabel="#{categoria.numeroCategoria} #{categoria.descripcion}" />
+									</p:selectOneMenu>
+								</div>
+							</div>
+						</div>
+						<br />
+
+						<div class="row botonesAcomodo">
+							<p:outputPanel id="botonfin">
+								<div class="col-md-12">
+									<p:commandButton value="Aceptar"
+													 update="@form"
+													 action="#{mbOficialiaPartesFisicos.cargarDocumento}"
+											 		 disabled="#{sec:areAnyGranted('ROLE_GESTION4.CONSULTA_CAU.OC')}" />
+								</div>
+							</p:outputPanel>
+						</div>
+					</section>
+				</p:outputPanel>
+				<!-- TERMINA SECCIÓN CLASIFICACIÓN ARCHIVÍSTICA -->
+
+				<!-- DIALOG DE REMITENTES -->
+				<p:dialog id="dlgbuscarPersonaRemitente" widgetVar="dlgbuscarPersonaRemitente"
+						  modal="true" resizable="false" styleClass="ventanaPersonaBusqueda">
+					<p:outputPanel id="dialogo_personasRemitente">
+
+						<div class="row">
+							<p:dataTable id="tabla_personasRemitente" var="empleado" paginator="true" rows="10"
+										 selection="#{mbOficialiaPartesFisicos.dtoCombosRemitentes.personasSeleccionadas}"
+										 value="#{mbOficialiaPartesFisicos.dtoCombosRemitentes.personasBusquedasEncontradas}"
+										 rowKey="#{empleado.idPersona}"
+										 scrollable="true" paginatorPosition="bottom">
+
+								<f:facet name="header">
+							        Remitente
+							    </f:facet>
+
+								<p:column selectionMode="multiple" style="width: 35px; text-align: center;" />
+
+								<p:column headerText="Nombre">
+									<h:outputText value="#{empleado.nombre}" />
+								</p:column>
+
+								<p:column headerText="Apellidos">
+									<h:outputText value="#{empleado.apellidos}" />
+								</p:column>
+
+								<p:column headerText="Puesto">
+									<h:outputText value="#{empleado.puesto}" />
+								</p:column>
+
+								<p:column headerText="Área" rendered="#{mbCapturaDoc.filtros.idAreaRemitente == null or mbCapturaDoc.filtros.idAreaRemitente == 0}">
+									<h:outputText value="#{empleado.area.descripcion}" />
+								</p:column>
+							</p:dataTable>
+						</div>
+
+						<div class="row">
+							<div class="col-md-12 botonesAcomodo">
+								<p:commandButton value="Cancelar" type="button"
+												 onclick="PF('dlgbuscarPersonaRemitente').hide();" />
+								&nbsp;	
+								<p:commandButton value="Agregar"
+												 process="@this dialogo_personasRemitente"
+												 update="panelRemitente panelInterno dialogo_personasRemitente mensaje_general_info mensaje_general_advertencia"
+												 actionListener="#{mbOficialiaPartesFisicos.agregarRemitente}" />
+							</div>
+						</div>
+					</p:outputPanel>
+				</p:dialog>			
+
+				<!-- DIALOG DE REMITENTES EXTERNOS -->
+				<p:dialog id="dialogRemitentesExtEncontrados" widgetVar="dialogRemitentesExtEncontrados"
+						  modal="true" resizable="false" styleClass="ventanaPersonaBusqueda">
+					<p:outputPanel id="panelRemitentesExtEncontrados">
+
+						<div class="row">
+							<p:dataTable id="tablaRemitentesExtEncontrados" var="persona" paginator="true" rows="10"
+										 selection="#{mbOficialiaPartesFisicos.dtoCaptura.remitentesExtSeleccionados}"
+										 value="#{mbOficialiaPartesFisicos.dtoCaptura.remitentesExtEncontrados}"
+										 rowKey="#{persona.idRemitente}"
+										 scrollable="true" paginatorPosition="bottom">
+
+								<f:facet name="header">
+							        Remitente externo
+							    </f:facet>
+
+								<p:column selectionMode="multiple" style="width: 35px; text-align: center;" />
+
+								<p:column headerText="Nombre">
+									<h:outputText value="#{persona.nombreRemitente}" />
+								</p:column>
+
+								<p:column headerText="Dependencia">
+									<h:outputText value="#{persona.dependencia}" />
+								</p:column>
+							</p:dataTable>
+						</div>
+
+						<div class="row">
+							<div class="col-md-12 botonesAcomodo">
+								<p:commandButton value="Cancelar" type="button"
+												 onclick="PF('dialogRemitentesExtEncontrados').hide();" />
+								&nbsp;	
+								<p:commandButton value="Agregar"
+												 process="@this panelRemitentesExtEncontrados"
+												 update="panelRemitente panelExterno dialogo_personasRemitente mensaje_general_info mensaje_general_advertencia"
+												 actionListener="#{mbOficialiaPartesFisicos.agregarRemitenteExt}" />
+							</div>
+						</div>
+					</p:outputPanel>
+				</p:dialog>
+				
+				<!-- DIALOG DE DESTINATARIOS -->
+				<p:dialog id="dlgbuscarPersonaDestinatario" widgetVar="dlgbuscarPersonaDestinatario"
+						  modal="true" resizable="false" styleClass="ventanaPersonaBusqueda">
+					<p:outputPanel id="dialogo_personasDestinatarios">
+
+						<div class="row">
+							<p:dataTable id="tabla_personasDestinatarios" var="empleadoD" paginator="true" rows="10"
+										 selection="#{mbOficialiaPartesFisicos.dtoCombosDestinatarios.personasSeleccionadas}"
+										 value="#{mbOficialiaPartesFisicos.dtoCombosDestinatarios.personasBusquedasEncontradas}"
+										 rowKey="#{empleadoD.idPersona}"
+										 scrollable="true" paginatorPosition="bottom">
+
+								<f:facet name="header">
+							        Destinatario
+							    </f:facet>
+
+								<p:column selectionMode="multiple" style="width: 35px; text-align: center;" />
+
+								<p:column headerText="Nombre">
+									<h:outputText value="#{empleadoD.nombre}" />
+								</p:column>
+
+								<p:column headerText="Apellidos">
+									<h:outputText value="#{empleadoD.apellidos}" />
+								</p:column>
+
+								<p:column headerText="Puesto">
+									<h:outputText value="#{empleadoD.puesto}" />
+								</p:column>
+
+								<p:column headerText="Área" rendered="#{mbCapturaDoc.filtros.idAreaDestinatario == null or mbCapturaDoc.filtros.idAreaDestinatario == 0}">
+									<h:outputText value="#{empleadoD.area.descripcion}" />
+								</p:column>
+							</p:dataTable>
+						</div>
+
+						<div class="row">
+							<div class="col-md-12 botonesAcomodo">
+								<p:commandButton value="Cancelar" type="button"
+												 onclick="PF('dlgbuscarPersonaDestinatario').hide();" />
+								&nbsp;
+								<p:commandButton value="Agregar" id="btn_agregar_persona"
+												 process="@this dlgbuscarPersonaDestinatario panelDestinatario"
+												 update="panelDestinatario dialogo_personasDestinatarios mensaje_general_info mensaje_general_advertencia"
+												 actionListener="#{mbOficialiaPartesFisicos.agregarDestinatario}" />
+							</div>
+						</div>
+					</p:outputPanel>
+				</p:dialog>
+				
+				<!-- DIALOG DE CCP -->
+				<p:dialog id="dlgbuscarPersonaCCP" widgetVar="dlgbuscarPersonaCCP"
+						  modal="true" resizable="false" styleClass="ventanaPersonaBusqueda">
+					<p:outputPanel id="dialogo_personasCCP">
+
+						<div class="row">
+							<p:dataTable id="tabla_personasCCP" var="empleadoC" paginator="true" rows="10"
+										 selection="#{mbOficialiaPartesFisicos.dtoCombosCcp.personasSeleccionadas}"
+										 value="#{mbOficialiaPartesFisicos.dtoCombosCcp.personasBusquedasEncontradas}"
+										 rowKey="#{empleadoC.idPersona}"
+										 scrollable="true" paginatorPosition="bottom">
+
+								<f:facet name="header">
+							        CCP
+							    </f:facet>
+
+								<p:column selectionMode="multiple" style="width: 35px; text-align: center;" />
+
+								<p:column headerText="Nombre">
+									<h:outputText value="#{empleadoC.nombre}" />
+								</p:column>
+
+								<p:column headerText="Apellidos">
+									<h:outputText value="#{empleadoC.apellidos}" />
+								</p:column>
+
+								<p:column headerText="Puesto">
+									<h:outputText value="#{empleadoC.puesto}" />
+								</p:column>
+
+								<p:column headerText="Área" rendered="#{mbCapturaDoc.filtros.idAreaCCP == null or mbCapturaDoc.filtros.idAreaCCP == 0}">
+									<h:outputText value="#{empleadoC.area.descripcion}" />
+								</p:column>
+							</p:dataTable>
+						</div>
+
+						<div class="row">
+							<div class="col-md-12 botonesAcomodo">
+								<p:commandButton value="Cancelar" type="button"
+												 onclick="PF('dlgbuscarPersonaCCP').hide();" />
+								&nbsp;
+								<p:commandButton value="Agregar"
+												 process="@this dlgbuscarPersonaCCP panelCcp"
+												 update="panelCcp dialogo_personasCCP mensaje_general_info mensaje_general_advertencia"
+												 actionListener="#{mbOficialiaPartesFisicos.agregarCCP}" />
+							</div>
+						</div>
+					</p:outputPanel>
+				</p:dialog>
+
+				<!-- DIALOG DE DETALLE DE PERSONAS -->
+				<p:dialog id="detalle_estructura" widgetVar="detalle_estructura" modal="true" styleClass="detallePersona">
+					<div class="row tituloDetalle">
+						Datos funcionario
+					</div>
+
+					<div class="row">
+						<div class="col-md-5">
+							<div class="row">
+								<c:if test="#{mbOficialiaPartesFisicos.personaDetalle.genero eq 'H'}">
+									<h:graphicImage style="width: 100%;" name="#{messageSource['ruta_imagen_hombre']}" />
+								</c:if>
+								<c:if test="#{mbOficialiaPartesFisicos.personaDetalle.genero eq 'M'}">
+									<h:graphicImage style="width: 100%;" name="#{messageSource['ruta_imagen_mujer']}" />
+								</c:if>
+								<c:if test="#{empty mbOficialiaPartesFisicos.personaDetalle.genero}">
+									<h:graphicImage style="width: 100%;" name="#{messageSource['ruta_imagen_generica']}" />
+								</c:if>
+							</div>
+						</div>
+
+						<div class="col-md-7">
+							<div class="row" style="margin-bottom: 10px; font-weight: bold; color: #d5007f;">
+								<h:outputText value="#{mbOficialiaPartesFisicos.personaDetalle.nombreCompleto}"/>
+							</div>
+							<div class="row" style="font-weight: bold;">
+								<h:outputText value="Puesto o cargo"/>
+							</div>
+							<div class="row" style="margin-bottom: 10px;">
+								<h:outputText value="#{mbOficialiaPartesFisicos.personaDetalle.puesto}"/>
+							</div>
+							
+							<div class="row" style="font-weight: bold;">
+								<h:outputText value="Área de adscripción"/>
+							</div>
+							<div class="row" style="margin-bottom: 10px;">
+								<h:outputText value="#{mbOficialiaPartesFisicos.personaDetalle.area.descripcion}"/>
+							</div>
+							<div class="row" style="font-weight: bold;">
+								<h:outputText value="Correo electrónico"/>
+							</div>
+							<div class="row" style="margin-bottom: 10px;">
+								<h:outputText value="#{mbOficialiaPartesFisicos.personaDetalle.cuentaLDAP}@ine.mx"/>
+							</div>
+							<div class="row" style="font-weight: bold;">
+								<h:outputText value="Extensión"/>
+							</div>
+							<div class="row" style="margin-bottom: 10px;">
+								<h:outputText value="#{mbOficialiaPartesFisicos.personaDetalle.extensionTel != null ? mbOficialiaPartesFisicos.personaDetalle.extensionTel : 'Sin extensión'}"/>
+							</div>
+						</div>
+					</div>
+				</p:dialog>
+
+				<!-- DIALOG DE DETALLE DE PERSONAS EXTERNAS -->
+				<p:dialog id="idDetallePersonaExt" widgetVar="dialogPersonaExt" modal="true" styleClass="detallePersona" resizable="false">
+					<div class="row tituloDetalle">
+						Datos de la persona
+					</div>
+
+					<div class="row">
+						<div class="col-md-5">
+							<div class="row">
+								<h:graphicImage style="width: 100%;" name="#{messageSource['ruta_imagen_generica']}" />
+							</div>
+						</div>
+
+						<div class="col-md-7">
+							<div class="row" style="margin-bottom: 10px; font-weight: bold; color: #d5007f;">
+								<h:outputText value="#{mbOficialiaPartesFisicos.dtoCaptura.remitenteExt.nombreRemitente}"/>
+							</div>
+							<div class="row" style="font-weight: bold;">
+								<h:outputText value="Dependencia"/>
+							</div>
+							<div class="row" style="margin-bottom: 10px;">
+								<h:outputText value="#{mbOficialiaPartesFisicos.dtoCaptura.remitenteExt.dependencia}"/>
+							</div>
+						</div>
+					</div>
+				</p:dialog>
+				
+			</div>
+		</h:form>
+
+		<script type="text/javascript">
+			function validarCaracterEspecial(cadena) {
+				if(cadena != "") {
+					cadena = cadena.replace(/¬/g, "");
+					cadena = cadena.replace(/\^/g, "");
+					cadena = cadena.replace(/`/g, "");
+					cadena = cadena.replace(/~/g, "");
+					cadena = cadena.replace(/\\/g, "");
+					cadena = cadena.replace(/@/g, "");
+					return cadena;
+				} else {
+					return "";
+				}
+			}
+		</script>
+	</ui:define>
+</ui:composition>

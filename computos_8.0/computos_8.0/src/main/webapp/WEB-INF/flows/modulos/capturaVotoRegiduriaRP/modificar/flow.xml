@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+	  start-state="validaModuloAbierto" 
+	  parent="parent-flow">
+
+	<!-- Se quito el rol del OPLE: ROLE_COMPUTOS.ADMIN.EXT.OPLE.JL, ya que este no aplicaba -->
+	<!-- Se volvio agregar el rol del OPLE: ROLE_COMPUTOS.ADMIN.EXT.OPLE.JL -->
+	<secured attributes="ROLE_COMPUTOS.ADMIN.PARAM.CAPTURA.OC, 
+					 	 ROLE_COMPUTOS.ADMIN.CAPTURA.OC, 
+						 ROLE_COMPUTOS.CONSEJERO.OC, 
+						 ROLE_COMPUTOS.CONSULTA.OC, 
+						 ROLE_COMPUTOS.CAU.OC, 
+						 ROLE_COMPUTOS.ADMIN.EXT.OPLE.JL,
+						 ROLE_COMPUTOS.CAPTURA.JL, 
+						 ROLE_COMPUTOS.CONSULTA.JL, 
+						 ROLE_COMPUTOS.CAPTURA.JM, 
+						 ROLE_COMPUTOS.PARTIDO.CONSULTA.JL, 
+						 ROLE_COMPUTOS.PARTIDO.CONSULTA.JM,
+						 ROLE_COMPUTOS.CONSULTA.JM" match="any" />
+
+	<!--  
+	<decision-state id="validaVersion">
+		<if test="mbAdmin.validaVersionRolUsuario(mbAdmin.dto.usuario.rolUsuario)" then="validaModuloAbierto" else="vsErrorVersion"/>
+	</decision-state>
+	-->
+
+	<decision-state id="validaModuloAbierto">
+		<if test="mbCapturaRP.validaModuloAbierto('8') or !mbCapturaRP.validaModuloAbierto('8')" then="modifica" else="vsErrorModuloCerrado" />
+	</decision-state>
+
+	<view-state id="modifica" view="modifica.xhtml">
+		<on-entry>
+			<evaluate expression="mbCapturaRP.initModifica()" />
+			<evaluate expression="mbAdmin.dto.setIdModulo(8)" />
+			<evaluate expression="mbAdmin.dto.setIdAccion(3)" />
+			<evaluate expression="mbCapturaRP.inicializaForm()" />
+		</on-entry>
+
+		<transition on="captura"  to="captura" />
+		<transition on="consulta" to="consulta" />
+		<transition on="cancelar" to="modifica" />
+	</view-state>
+
+	<view-state id="consulta" view="externalRedirect:servletRelative:modulos/capturaVotoRegiduriaRP/consultar" />
+
+	<view-state id="captura" view="externalRedirect:servletRelative:modulos/capturaVotoRegiduriaRP/capturar" />
+</flow>

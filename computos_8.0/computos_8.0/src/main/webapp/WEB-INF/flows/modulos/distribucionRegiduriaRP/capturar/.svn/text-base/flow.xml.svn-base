@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+	  start-state="starter" parent="parent-flow">
+	  
+	  <!--  <var name="mbDist" class="mx.ine.computosINE.mb.MBDistribucion" />-->
+	  
+	  <action-state id="starter">
+	  	<evaluate expression="mbDist.init(16)" />
+	  	<transition to="distribuir"/>
+	  </action-state>
+	  	
+	  <decision-state id="home_view">
+		      <!--  <on-entry>-->
+			  <!--  <evaluate expression="mbDist"></evaluate>-->
+			  <!--  <evaluate expression="mbDist.init()" />-->
+			    <!--  <evaluate expression="mbDist.inicializa()" />-->
+			  <!-- <evaluate expression="mbDist.cargaAsociaciones()" />-->
+		  <!--  </on-entry>-->
+		  <if test="mbDist.actasCapturadasCompletas()" then="distribuir"
+														else="consultar" />	
+	</decision-state>
+	
+	<view-state id="distribuir" view="distribucion.xhtml">
+		<on-entry>
+			<evaluate expression="mbDist.setPermiteDistribucion(true)" />
+			<evaluate expression="mbAdmin.dto.setIdModulo(14)"></evaluate>
+            <evaluate expression="mbAdmin.dto.setIdAccion(1)"></evaluate>
+		</on-entry>
+		<transition on="cancelar" to="operacionCancelada" />
+		<transition on="generar" to="generacion" />
+		<transition on="success"  to="starter" />
+	</view-state>
+	
+	<view-state id="consultar" view="distribucion.xhtml">
+		<on-entry>
+			<evaluate expression="mbDist.setPermiteDistribucion(false)" />
+		</on-entry>
+		<transition on="cancelar" to="operacionCancelada" />
+		<transition on="generar" to="generacion" />
+		<transition on="success"  to="starter" />
+	</view-state>
+	
+	<action-state id="generacion">
+        <evaluate expression="mbDist.cargaAsociaciones()" />         
+        <!--  <transition to="generado" />-->
+        <transition on="cancelar" to="operacionCancelada" />
+		<transition on="generar" to="generacion" />             				
+    </action-state> 
+	
+	<view-state id="generado" view="distribucion.xhtml">
+        <on-entry>
+            <evaluate expression="mbDist.cargaAsociaciones()"/> 
+        </on-entry>
+        <transition on="cancelar" to="operacionCancelada" />
+		<transition on="generar" to="generacion" />
+    </view-state>
+	
+	<view-state id="operacionCancelada" view="distribucion.xhtml">  
+		<on-entry>        
+        	<evaluate expression="mbDist.cancelada()" />
+        </on-entry>
+        <transition on="cancelar" to="operacionCancelada" />
+		<transition on="generar" to="generacion" />            				
+    </view-state> 
+
+	  
+</flow>

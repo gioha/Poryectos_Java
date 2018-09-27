@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sec="http://www.springframework.org/security/tags">
+
+
+	<!-- Acciones para el Documento -->
+
+	<div id="div_row_acciones" class="row">
+
+
+		<div id="icon_acciones" class="col-xs-1"></div>
+
+		<div id="acciones_nombre" class="col-xs-5">
+			<span>Enviado- <h:outputText
+					value="#{mbBandejaOficialiaEnviados.enviadoSeleccionado.dtoDocumento.noDocumento}" /></span>
+		</div>
+
+		<div id="acciones_historial" class="col-xs-3">
+
+			<i class="fa fa-clock-o" aria-hidden="true"></i><span>Ver
+				historial</span>
+
+		</div>
+
+		<div id="acciones_menu" class="col-xs-2">
+
+			<p:menuButton value="Acciones" styleClass="menu_acciones"
+				disabled="#{mbBandejaOficialiaEnviados.enviadoSeleccionado == null}">
+
+				<p:menuitem value="Eliminar Enviado"/>
+					<!-- actionListener="#{}"
+					disabled="#{mbBandejaOficialia.tieneFirmaOValidacion ne 0}"
+					update=":formBorradores:tablaBorradores,:formBorradores:mensaje_general_info" /> -->
+
+			</p:menuButton>
+		
+		</div>
+
+
+	</div>
+	<div id="row_anexo" class="row">
+		<div id="anexo" class="col-xs-4">
+			<i class="fa fa-file-pdf-o" aria-hidden="true"></i> <span>UNICOM-00022-2017</span>
+			<i class="fa fa-download" aria-hidden="true"></i>
+		</div>
+		<div id="estatus" class="col-xs-6">
+			<span> El documento fue enviado el día 21/10/2017 </span>
+		</div>
+	</div>
+	
+	<div id="row_anexo" class="row">
+		<div id="estatus" class="col-xs-12">
+			<span> Remitente: <h:outputText
+					value="#{mbBandejaOficialia.dtoBorradorSeleccionado.documento.noDocumento}" /></span>
+		</div>
+	</div>
+	<div id="row_anexo" class="row">
+		<div id="estatus" class="col-xs-12">
+			<span> Fecha de Recepción: <h:outputText
+					value="#{mbBandejaOficialia.dtoBorradorSeleccionado.fechaHora}" /></span>
+		</div>
+	</div>
+	
+	<div id="row_anexo" class="row">
+		<div id="estatus" class="col-xs-12">
+			<span> No. de documento: <h:outputText
+					value="#{mbBandejaOficialia.dtoBorradorSeleccionado.documento.noDocumento}" /></span>
+		</div>
+	</div>
+
+	<!-- Notoficaciones Documentos-->
+	<div id="div_row_notificaciones" class="row">
+		
+		<!-- <div id="div_notificaciones_opciones" class="col-xs-12">
+
+			<c:if test="#{mbBandejaOficialia.dtoBorradorSeleccionado ne null}">
+
+				Notificación Comentario
+				<c:if
+					test="#{mbBandejaOficialia.dtoBorradorSeleccionado.conComentarios ne 0}">
+					<div class="row margen_fondo">
+						<div id="fondo_notificacion_comentarios" class="row">
+							<p:commandLink actionListener="#{mbBandejaOficialia.muestraComentarios}" update=":formBorradores:dialog_revisar_comentarios" >
+								<p:ajax></p:ajax>
+								<div id="row_notificacion_comentarios" class="row" >
+
+									<span class="nombre_notificacion"> <i
+										class="fa fa-commenting" aria-hidden="true"></i> Comentarios
+									</span> <span>| Revisar Comentarios</span>
+
+								</div>
+							</p:commandLink>
+						</div>
+					</div>
+				</c:if>
+
+
+				Notificación Modificación
+				<c:if
+					test="#{mbBandejaOficialia.dtoBorradorSeleccionado.conModificaciones ne 0}">
+					<div class="row margen_fondo">
+						<div id="fondo_notificacion_editado" class="row">
+							<h:commandLink>
+								<div id="row_notificacion_editado" class="row">
+
+									<span class="nombre_notificacion"><i
+										class="fa fa-pencil" aria-hidden="true"></i> Editado</span> <span>|
+										Revisar Ediciones</span>
+
+								</div>
+							</h:commandLink>
+						</div>
+					</div>
+				</c:if>
+
+				Notificación Firma
+				<c:if test="#{mbBandejaOficialia.dtoBorradorSeleccionado.conFirma ne 0}">
+					<div class="row margen_fondo">
+						<div id="fondo_notificacion_firmado" class="row">
+							<h:commandLink>
+								<div id="row_notificacion_firmado" class="row">
+
+									<span class="nombre_notificacion">
+									<h:graphicImage  name="icono_firma.png" library="img/bandeja"
+							class="" />
+									Firmado</span> <span>|
+										Revisar firma</span>
+
+								</div>
+							</h:commandLink>
+						</div>
+					</div>
+				</c:if>
+
+				Notificación Validacion 
+				
+				<c:if test="#{mbBandejaOficialia.dtoBorradorSeleccionado.conValidacion ne 0}">
+					<div class="row margen_fondo">
+						<div id="fondo_notificacion_validado" class="row">
+							<h:commandLink>
+								<div id="row_notificacion_validado" class="row">
+
+									<span class="nombre_notificacion"><i class="fa fa-check"
+										aria-hidden="true"></i> Validado</span> <span>| Revisar
+										validación</span>
+
+								</div>
+							</h:commandLink>
+						</div>
+					</div>
+				</c:if>
+			</c:if>
+
+		</div>
+ -->	</div>
+
+
+
+</ui:composition>

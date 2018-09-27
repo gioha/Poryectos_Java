@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sec="http://www.springframework.org/security/tags">
+
+	<script>
+		$( function() {
+			 $('.timer-start').hide();
+			 $('.timer-start2').hide();
+		});
+	</script>
+				
+	<section id="section_timer">
+		<div class="row" style="font-family: Roboto; margin-right: 0px; margin-left: 0px; padding: 3px 0px 7px 0px !important;">
+						
+			<div class="col-md-1" style="width: 90px; text-align: center; border-left: 1px solid #cccccc; font-size: 17px;">
+						
+				
+					<pe:timer 	id="cronometroActualizaciones"
+								widgetVar="cronometroActualizaciones" format="mm:ss"
+								immediate="true"
+								update="panelCentro, panelDer, panelIzq, menu_formulario" singleRun="false"
+								timeout="300"
+								listener="#{mbBandejaOficialiaComun.actualizarPantallaBandeja}"
+								oncomplete="if (PF('cronometroActualizaciones') != undefined) { PF('cronometroActualizaciones').start(); }" /> 
+				
+						
+			</div>	 
+						
+			<div class="col-md-1" style="width: 40px; text-align: center; border-left: 1px solid #cccccc; padding-left: 0px; padding-right: 0px;">
+						
+				<p:commandLink 	id = "timer-stop"  
+								styleClass="timer-stop fa fa-stop-circle"
+								style="color: #000000; margin-left: 10px; margin-right: 10px; font-size: 20px; text-decoration: none;"
+								onclick="PF('cronometroActualizaciones').restart();   $('.timer-start').show(); $('.timer-stop').hide();" 
+								oncomplete="PF('cronometroActualizaciones').pause();"
+								onsuccess="PF('cronometroActualizaciones').pause();">
+										   
+				</p:commandLink> 
+				
+				<p:commandLink  id = "timer-start" 
+								styleClass="timer-start fa fa-play-circle"
+								style="color: #000000; margin-left: 10px; margin-right: 10px; font-size: 20px; text-decoration: none;"
+								onclick="PF('cronometroActualizaciones').start(); $('.timer-stop').show(); $('.timer-start').hide();">
+				</p:commandLink>
+						
+			</div>
+						
+			<div class="col-md-1" style="width: 40px; text-align: center; border-left: 1px solid #cccccc; padding-left: 0px; padding-right: 0px;">
+						
+				<p:commandLink 	id = "timer-pause"
+								styleClass="timer-pause fa fa-pause-circle"
+								style="margin-left: 10px; margin-right: 10px; font-size: 20px; text-decoration: none;"
+								onclick="PF('cronometroActualizaciones').pause(); $('.timer-start2').show(); $('.timer-pause').hide();">
+				</p:commandLink>
+				
+				<p:commandLink  id = "timer-start2" 
+								styleClass="timer-start2 fa fa-play-circle"
+								style="margin-left: 10px; margin-right: 10px; font-size: 20px; text-decoration: none;"
+								onclick="PF('cronometroActualizaciones').start(); $('.timer-pause').show(); $('.timer-start2').hide();">
+				</p:commandLink>
+						
+			</div>
+						
+			<div class="col-md-1" style="width: 40px; text-align: center; border-left: 1px solid #cccccc; border-right: 1px solid #cccccc; padding-left: 0px; padding-right: 0px;">
+						
+				<p:commandLink 	styleClass="fa fa-refresh" value=""
+								id = "timer-restart"
+								style="color:#000000;margin-left: 10px; margin-right: 10px; font-size: 20px; text-decoration: none;"
+								onclick="PF('cronometroActualizaciones').restart();$('.timer-pause, .timer-stop').show();$('.timer-start, .timer-start2').hide();">
+				</p:commandLink>
+						
+			</div>
+						
+			<div class="col-md-8" style="text-align: left">
+						
+				<h:outputText value="#{messageSource['etiqueta_timer_actualizacion']}" style="color:#D5007F; font-weight: bold"/>
+				<h:outputText value="#{messageSource['etiqueta_timer_descripcion']}" />
+						
+			</div>
+					
+		</div>					
+	</section>
+
+</ui:composition>

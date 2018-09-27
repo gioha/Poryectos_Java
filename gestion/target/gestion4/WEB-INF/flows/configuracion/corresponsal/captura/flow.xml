@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+
+	    start-state="validaRegistroEnGestion1" parent="parent-flow">
+	    
+	<secured attributes="ROLE_GESTION4.ADMIN.OC, 
+						 ROLE_GESTION4.ADMIN_AREA.OC,
+						 ROLE_GESTION4.SEGUIMIENTO.OC,
+						 ROLE_GESTION4.SEGUIMIENTO_REST.OC,
+						 ROLE_GESTION4.CONSULTA_CAU.OC,
+						 ROLE_GESTION4.OFICIALIA.OC"
+						 match="any"/>
+	    
+	<var name="mbCorresponsal" class="mx.ine.gestion.mb.MBCorresponsal"/>	
+	
+	<!-- Pantalla de Administración -->
+	<view-state id="captura_corresponsal" view="captura_corresponsal.xhtml">
+	    
+	   	<on-entry>
+			<evaluate expression="mbCorresponsal.iniciar()"/>
+		</on-entry>
+	
+	</view-state>
+	
+	<!-- Validación para revisar que el usuario con el se este accediendo ya se encuentre registrado en el Organigrama -->
+	<decision-state id="validaRegistroEnGestion1">
+		
+		<on-entry>
+			<set name="mbAdministrador.menuSelecionado" value="resourceBundle['id_modulo_configuracion']"/>
+		</on-entry>
+		
+		<if test="currentUser.principal.usuarioNoRegistradoEnGestion" then="vsErrorNoRegistrado" else="captura_corresponsal"/>
+	
+	</decision-state>
+	
+</flow>

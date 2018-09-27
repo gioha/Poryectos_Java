@@ -1,0 +1,46 @@
+#---------------------------------------------------------------------------------
+#                              CONFIGURACIONES
+#
+# Contiene las constantes de las configuraciones del sistema que se este montando 							
+#
+#----------------------------------------------------------------------------------
+
+
+################################################################################
+# Configuracion general
+################################################################################
+application.host 	    = java:/util/urlApplication
+application.name 		= acuerdos
+application.id			= 100
+ldap.url		 		= java:/util/urlCentral
+bootstrap-servers		= localhost:9092
+topic					= test
+################################################################################
+# Datos del datasource de Base de Datos del servidor
+################################################################################
+dataSource.jndiName					= java:jboss/ACUERDOSjndi
+
+
+################################################################################
+# Datos de Hibernate
+################################################################################
+hibernate.dialect					= org.hibernate.dialect.Oracle10gDialect
+hibernate.show_sql					= false
+hibernate.format_sql				= true
+hibernate.jdbc.batch_size			= 20
+hibernate.pack.scan					= mx.ine.acuerdos.dto
+hibernate.pack.scan.servicios		= mx.org.ine.servicios.dto
+
+################################################################################
+# Datos de Almacenamiento
+################################################################################
+jndi.gluster.path			 		= java:/util/glusterFS
+
+################################################################################
+# Datos del web service
+################################################################################
+jndi.rest.ws						= java:/util/urlWS
+jndi.certPass.ws					= java:/util/ineCertPassword
+
+
+s

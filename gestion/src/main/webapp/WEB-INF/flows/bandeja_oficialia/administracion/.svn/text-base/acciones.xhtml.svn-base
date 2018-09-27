@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sec="http://www.springframework.org/security/tags">
+
+
+	<!-- Acciones para el Documento -->
+
+	<div id="div_row_acciones" class="row">
+
+
+		<div id="icon_acciones" class="col-xs-1"></div>
+
+		<div id="acciones_nombre" class="col-xs-5">
+			<span>Documento- <h:outputText
+					value="#{mbBandeja.dtoBorradorSeleccionado.documento.noDocumento}" /></span>
+		</div>
+
+		<div id="acciones_historial" class="col-xs-3">
+
+			<i class="fa fa-clock-o" aria-hidden="true"></i><span>Ver
+				historial</span>
+
+		</div>
+
+		<div id="acciones_menu" class="col-xs-2">
+
+			<p:menuButton value="Acciones" styleClass="menu_acciones"
+				disabled="#{mbBandeja.dtoBorradorSeleccionado == null}">
+
+				<p:menuitem value="Enviar a Validación"
+					actionListener="#{mbBandeja.mostrarEnviarValidar}"
+					disabled="#{mbBandeja.tieneFirmaOValidacion ne 0}"
+					update=":formBorradores:dialog_enviar_fv" />
+
+				<p:menuitem value="Enviar a Destinatario" />
+
+				<p:menuitem value="Enviar a Firma" id="enviar_firma" ajax="true"
+					actionListener="#{mbBandeja.mostrarEnviarFirmar}"
+					disabled="#{mbBandeja.tieneFirmaOValidacion ne 0}"
+					update=":formBorradores:dialog_enviar_fv" />
+
+				<p:menuitem value="Editar" action="modificar" />
+
+				<p:menuitem value="Firmar" actionListener="#{mbBandeja.firmar}"
+					disabled="#{mbBandeja.tieneFirmaOValidacion ne 0}" 
+					update=":formBorradores:panelCentro, :formBorradores:panelDer, :formBorradores:mensaje_general_exito" />
+
+				<p:menuitem value="Eliminar Borrador"
+					actionListener="#{mbBandeja.confirmarEliminarBorrador}"
+					disabled="#{mbBandeja.tieneFirmaOValidacion ne 0}"
+					update=":formBorradores:tablaBorradores,:formBorradores:mensaje_general_info" />
+
+			</p:menuButton>
+		
+		</div>
+
+
+	</div>
+	<div id="row_anexo" class="row">
+		<div id="anexo" class="col-xs-4">
+			<i class="fa fa-file-pdf-o" aria-hidden="true"></i> <span>UNICOM-00022-2017</span>
+			<i class="fa fa-download" aria-hidden="true"></i>
+		</div>
+		<div id="estatus" class="col-xs-6">
+			<span> El documento fue enviado a firma 21/10/2017 </span>
+		</div>
+	</div>
+	
+	<div id="row_anexo" class="row">
+		<div id="estatus" class="col-xs-12">
+			<span> Remitente: <h:outputText
+					value="#{mbBandejaOficialia.dtoBorradorSeleccionado.documento.noDocumento}" /></span>
+		</div>
+	</div>
+	<div id="row_anexo" class="row">
+		<div id="estatus" class="col-xs-12">
+			<span> Fecha de Recepción: <h:outputText
+					value="#{mbBandejaOficialia.dtoBorradorSeleccionado.fechaHora}" /></span>
+		</div>
+	</div>
+	<div id="row_anexo" class="row">
+		<div id="estatus" class="col-xs-12">
+			<span> Folio: <h:outputText
+					value="#{mbBandejaOficialia.dtoBorradorSeleccionado.documento.noDocumento}" /></span>
+		</div>
+	</div>
+	<div id="row_anexo" class="row">
+		<div id="estatus" class="col-xs-12">
+			<span> No. de documento: <h:outputText
+					value="#{mbBandejaOficialia.dtoBorradorSeleccionado.documento.noDocumento}" /></span>
+		</div>
+	</div>
+	
+	
+
+	
+
+
+</ui:composition>

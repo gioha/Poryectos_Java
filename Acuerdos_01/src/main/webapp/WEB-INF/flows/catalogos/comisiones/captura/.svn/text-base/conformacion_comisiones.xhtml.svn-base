@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/templates/template.xhtml">	
+<ui:define name="CONTENT">
+	 <c:if test="#{SPRING_SECURITY_CONTEXT != null}">
+	<h:outputStylesheet library="css" name="bandeja.css" />		
+	<div class="container">	
+	<!-- ##################################### CAMINO DE MIGAJAS  ##################################### -->
+		<div class="row">
+			<div class="col-xs-12 espaciador-xs-top">				
+				<ol class="breadcrumb migaja">
+					<li>
+						<a href="${request.contextPath}/app/home"> 
+							<h:outputText value="#{messageSource['lbl_home']}" />
+						</a>
+					</li>				
+					<li class="active">#{messageSource['lbl_acuerdo_migaja']}</li>
+				</ol>
+			</div>
+		</div>				
+	<!-- ##################################### ENCABEZADO DE LA PAGINA  ##################################### -->	
+		<div class="row">			
+				<div class="col-xs-12 tituloModal lblTituloForm robotoRegular">
+					#{messageSource['lbl_adm_com']}
+				</div>			
+		</div><br/>
+	<!-- ##################################### CONTENIDO DE LA PAGINA  ##################################### -->	
+		<p:outputPanel id="comisionSeleccionada" rendered="true" >
+			<div class="row">
+				<div class="col-xs-12 col-md-6 text-center">
+						<div class="row lblInputs">
+							<span class="colorRojo">*</span> <span><h:outputText class="lblElemAcuerdo robotoBold" value="Nombre de la Comisión"/></span>
+						</div>						
+						<p:inputText 	id="nombre" 											
+										styleClass="inputsForm" 											
+										value="#"
+										required="true" 
+										requiredMessage="#{messageSource['lbl_requerido']}"
+										onblur="this.value=verificarPalabras(this.value)"
+										onkeyup="this.value=this.value.toUpperCase();">
+						</p:inputText>
+				</div>	
+				<div class="col-xs-12 col-md-6 text-center">
+						<div class="row lblInputs">
+							<span class="colorRojo">*</span> <span><h:outputText class="lblElemAcuerdo robotoBold" value="Tipo de Comisión"/></span>
+						</div>					
+						<p:selectOneMenu 	id="tipoComision"
+											value="#"
+											requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+											required="true" 
+											styleClass="inputsForm"												
+											style="width: 47% ">
+
+								<f:selectItem 	itemLabel="Permanente"	itemValue="1" />
+								<f:selectItem 	itemLabel="Temporal"	itemValue="2" />
+															
+						</p:selectOneMenu>
+				</div>		
+			</div>				
+			<br/><br/>			
+		</p:outputPanel>
+		<p:outputPanel id="conformacion" rendered="true" >
+			<div class="row">
+			Conformacion de la Comision
+			</div>
+			<div class="row subtitulo">
+			<hr/>
+			</div>
+			
+			<div class="row">
+				<div class="col-xs-12 col-md-6 text-center">
+						<div class="row lblInputs">
+							<span class="colorRojo">*</span> <span><h:outputText class="lblElemAcuerdo robotoBold" value="Inicio de Periodo"/></span>
+						</div>						
+						<p:calendar id="button" locale="es"
+									maxdate="#{mbConformacion.form.fechaFormateada}"
+									minDate="#{mbConformacion.form.fechaFormateada}" size="30"
+									navigator="true"
+									value="#{mbConformacion.form.fechaMin}"
+									showOn="button" styleClass="inputsForm reducido" pattern="dd/MM/yyyy"
+									readonlyInput="true" style="font-size: small;"
+									placeholder="#{messageSource['txt_fondo_calendario']}"
+									required="true"
+									requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+									onblur="setTimeout(function() { $('[id$=msjFS]').hide(1000); }, 500);">
+						</p:calendar>
+				</div>	
+				<div class="col-xs-12 col-md-6 text-center">
+						<div class="row lblInputs">
+							<span><h:outputText class="lblElemAcuerdo robotoBold" value="Término de Periodo"/></span>
+						</div>					
+						<p:calendar id="button2" locale="es"
+									maxdate="#{mbConformacion.form.fechaFormateada}"
+									minDate="#{mbConformacion.form.fechaFormateada}" size="30"
+									navigator="true"
+									value="#{mbConformacion.form.fechaMin}"
+									showOn="button" styleClass="inputsForm reducido" pattern="dd/MM/yyyy"
+									readonlyInput="true" style="font-size: small;"
+									placeholder="#{messageSource['txt_fondo_calendario']}"
+									required="true"
+									requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+									onblur="setTimeout(function() { $('[id$=msjFS]').hide(1000); }, 500);">
+						</p:calendar>
+				</div>		
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-md-6 text-center">												
+						<!-- ##################################### ADJUNTAR ACUERDO  ##################################### -->
+						<div class="col-xs-12 col-md-6 espaciador-top">
+							<div class="lblInputs robotoRegular">
+								<p:outputPanel id="panelLblAdjAc">									
+										<div class="lblInputs">
+											<span style="color: red">#{messageSource['etiqueta_simbolo_asterisco']}</span>
+											<span>#{messageSource['lbl_adj_acuerdo1']}</span>
+										</div>									
+								</p:outputPanel>								
+							</div>						
+							<div id="contenedor-adjuntar-archivo" class="lblNotas robotoRegular">
+								<p:fileUpload id="archivoadj" auto="true" required="true"
+									label="#{messageSource['lbl_sel_archivo']}"
+									dragDropSupport="false" sizeLimit="262144000"
+									allowTypes="/(\.|\/)(pdf)$/" multiple="false"
+									invalidSizeMessage="#{messageSource['lbl_tam_arc_no_valido']}"
+									invalidFileMessage="#{messageSource['lbl_archivo_no_valido']}"
+									style="width: 400px;"
+									styleClass="inputsForm"
+									requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+									mode="advanced">
+								</p:fileUpload>
+								<!-- <p:outputPanel style="width: 400px;" id="parentPanel2"
+									rendered="#{mbRegAcuerdos.form.nomArch ne null}">
+					                #{mbRegAcuerdos.form.nomArch}
+					            </p:outputPanel> -->
+								&nbsp;&nbsp;&nbsp;&nbsp;<span>#{messageSource['lbl_tam_max_tipo_arch']}</span>
+							</div>
+							<div>
+								<div class="ui-g-12 col-md-12" style="padding: 0;">
+									<!-- <div class="ui-g-7 ui-md-7"></div> -->
+									<div class="ui-g-3 ui-md-3">
+										<p:messages for="archivoadj" autoUpdate="true" closable="true" />
+									</div>
+								</div>
+							</div>
+						</div>
+				</div>	
+				<div class="col-xs-12 col-md-6 text-center">										
+						<!-- ##################################### ADJUNTAR ACUERDO  ##################################### -->
+						<div class="col-xs-12 col-md-6 espaciador-top">
+							<div class="lblInputs robotoRegular">
+								<p:outputPanel id="panelLblAdjAc2">									
+										<div class="lblInputs">
+											<span style="color: red">#{messageSource['etiqueta_simbolo_asterisco']}</span>
+											<span>#{messageSource['lbl_adj_acuerdo1']}</span>
+										</div>									
+								</p:outputPanel>								
+							</div>						
+							<div id="contenedor-adjuntar-archivo" class="lblNotas robotoRegular">
+								<p:fileUpload id="archivoadj2" auto="true" required="true"
+									label="#{messageSource['lbl_sel_archivo']}"
+									dragDropSupport="false" sizeLimit="262144000"
+									allowTypes="/(\.|\/)(pdf)$/" multiple="false"
+									invalidSizeMessage="#{messageSource['lbl_tam_arc_no_valido']}"
+									invalidFileMessage="#{messageSource['lbl_archivo_no_valido']}"
+									style="width: 400px;"
+									styleClass="inputsForm"
+									requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+									mode="advanced">
+								</p:fileUpload>
+								<!-- <p:outputPanel style="width: 400px;" id="parentPanel3"
+									rendered="#{mbRegAcuerdos.form.nomArch ne null}">
+					                #{mbRegAcuerdos.form.nomArch}
+					            </p:outputPanel> -->
+								&nbsp;&nbsp;&nbsp;&nbsp;<span>#{messageSource['lbl_tam_max_tipo_arch']}</span>
+							</div>
+							<div>
+								<div class="ui-g-12 col-md-12" style="padding: 0;">
+									<!-- <div class="ui-g-7 ui-md-7"></div> -->
+									<div class="ui-g-3 ui-md-3">
+										<p:messages for="archivoadj" autoUpdate="true" closable="true" />
+									</div>
+								</div>
+							</div>
+						</div>
+				</div>		
+			</div>						
+		</p:outputPanel><br/><br/>
+		<p:outputPanel>
+			<div class="row">
+			Integrantes de la Comisión
+			</div>
+			<div class="row subtitulo">
+			<hr/>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-md-6 text-center">
+						<div class="row lblInputs">
+							<div><h:outputText class="lblElemAcuerdo robotoBold" value="Nombre(s)"/></div>
+							<p:inputText 	id="nombreIntegrante" 											
+											styleClass="inputsForm" 											
+											value="#"
+											required="true" 											
+											onblur="this.value=verificarPalabras(this.value)"
+											onkeyup="this.value=this.value.toUpperCase();">
+							</p:inputText>
+						</div>
+				</div>	
+				<div class="col-xs-12 col-md-6 text-center">					
+						<div class="row lblInputs">
+							<div><h:outputText class="lblElemAcuerdo robotoBold" value="Apellidos(s)"/></div>
+							<p:inputText 	id="apellidosIntegrante" 											
+											styleClass="inputsForm" 											
+											value="#"
+											required="true" 											
+											onblur="this.value=verificarPalabras(this.value)"
+											onkeyup="this.value=this.value.toUpperCase();">
+							</p:inputText>
+						</div>
+				</div>		
+			</div><br/>
+			<div class="row">
+				<div class="col-xs-12 col-md-6 text-center">
+						<div class="row lblInputs">
+							<div><h:outputText class="lblElemAcuerdo robotoBold" value="Area de Adscripcion"/></div>
+							<p:inputText 	id="areaIntegrante" 											
+											styleClass="inputsForm" 											
+											value="#"
+											required="true" 											
+											onblur="this.value=verificarPalabras(this.value)"
+											onkeyup="this.value=this.value.toUpperCase();">
+							</p:inputText>
+						</div>
+				</div>	
+				<div class="col-xs-12 col-md-6 text-center">					
+						<div class="row lblInputs">
+							<div><h:outputText class="lblElemAcuerdo robotoBold" value="Usuario"/></div>
+							<p:inputText 	id="usuarioIntegrante" 											
+											styleClass="inputsForm" 											
+											value="#"
+											required="true" 											
+											onblur="this.value=verificarPalabras(this.value)"
+											onkeyup="this.value=this.value.toUpperCase();">
+							</p:inputText>
+						</div>
+				</div>		
+			</div>
+		
+		</p:outputPanel>
+	</div>
+	</c:if>			
+	<h:outputScript library="js" name="verificaPalabras.js" />
+	<script>
+        PrimeFaces.locales['es'] = {
+                closeText: 'Cerrar',
+                prevText: 'Anterior',
+                nextText: 'Siguiente',
+                monthNames: ['Enero','Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+                dayNames: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
+                dayNamesShort: ['Dom','Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+                dayNamesMin: ['D','L','M','M','J','V','S'],
+                weekHeader: 'Semana',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: '',
+                timeOnlyTitle: 'Sólo hora',
+                timeText: 'Tiempo',
+                hourText: 'Hora',
+                minuteText: 'Minuto',
+                secondText: 'Segundo',
+                currentText: 'Fecha actual',
+                ampm: false,
+                month: 'Mes',
+                week: 'Semana',
+                day: 'Día',
+                allDayText : 'Todo el día'
+        };
+        
+    </script>		
+</ui:define>	
+</ui:composition>

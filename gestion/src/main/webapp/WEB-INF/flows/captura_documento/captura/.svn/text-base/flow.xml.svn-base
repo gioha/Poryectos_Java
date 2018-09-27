@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+	  start-state="validaRegistroEnGestion" parent="parent-flow">
+	  
+	<secured attributes="ROLE_GESTION4.ADMIN.OC, ROLE_GESTION4.ADMIN_AREA.OC, ROLE_GESTION4.SEGUIMIENTO.OC, ROLE_GESTION4.SEGUIMIENTO_REST.OC, ROLE_GESTION4.CONSULTA_CAU.OC, ROLE_GESTION4.OFICIALIA.OC" match="any"/>
+
+	<var name="mbCapturaDoc" class="mx.ine.gestion.mb.MBCapturaDocumento"/>
+	
+	<input name="idDocumentoRespondido" type="java.lang.Integer"/>
+	<input name="idHistoricoRecepcion" type="java.lang.Integer"/>
+	<input name="comentarioRespondido" type="java.lang.String"/>
+	<input name="idHistoricoRecepcion" type="java.lang.Integer"/>
+	<input name="recibido" type="mx.ine.gestion.dto.db.DTOBandejaERecibidosEntity"/>
+	<input name="atencion" type="mx.ine.gestion.dto.db.DTOBandejaEAtencionEntity"/>
+	<input name="hrecibido" type="mx.ine.gestion.dto.db.DTOHBandejaERecibidosEntity"/>
+	<input name="hatencion" type="mx.ine.gestion.dto.db.DTOHBandejaEAtencionEntity"/>
+	
+	
+	<!-- Pantalla de Captura -->
+	<view-state id="capturaDocumento" view="captura_documento.xhtml">
+		
+		<on-entry>
+			<evaluate expression="idDocumentoRespondido != null ? mbCapturaDoc.setIdDocumentoRespondido(idDocumentoRespondido) : mbCapturaDoc.setIdDocumentoRespondido(0)"/>
+			<evaluate expression="idHistoricoRecepcion != null ? mbCapturaDoc.setIdHistoricoRecepcion(idHistoricoRecepcion) : mbCapturaDoc.setIdHistoricoRecepcion(0)"/>
+			<evaluate expression="comentarioRespondido != null ? mbCapturaDoc.setComentarioRespondido(comentarioRespondido) : mbCapturaDoc.setComentarioRespondido('')"/>
+			<evaluate expression="recibido != null ? mbCapturaDoc.setRecibido(recibido) : mbCapturaDoc.setRecibido(null)"/>
+			<evaluate expression="atencion != null ? mbCapturaDoc.setAtencion(atencion) : mbCapturaDoc.setAtencion(null)"/>
+			<evaluate expression="hrecibido != null ? mbCapturaDoc.setHrecibido(hrecibido) : mbCapturaDoc.setHrecibido(null)"/>
+			<evaluate expression="hatencion != null ? mbCapturaDoc.setHatencion(hatencion) : mbCapturaDoc.setHatencion(null)"/>
+			<evaluate expression="mbCapturaDoc.inicializaPantalla()"/>
+		</on-entry>
+		
+		<transition on="capturaExitosa" to="capturaExitosa" />
+
+	</view-state>
+	
+	<!-- Validación para revisar que el usuario con el se este accediendo ya se encuentre registrado en el Organigrama -->
+	<decision-state id="validaRegistroEnGestion">
+		
+		<on-entry>
+			<set name="mbAdministrador.menuSelecionado" value="resourceBundle['id_modulo_captura_documentos']"/>
+		</on-entry>
+		
+		<if test="currentUser.principal.usuarioNoRegistradoEnGestion" then="vsErrorNoRegistrado" else="capturaDocumento"/>
+	
+	</decision-state>
+	
+	<!-- subflow captura exitosa -->
+	<subflow-state id="capturaExitosa" subflow="bandeja/administracion">
+
+		<input name="numeroDocumento" value="mbCapturaDoc.filtros.numeroDocumento" />
+		<input name="tipoCaptura" value="'C'" />
+		
+		<transition on="back" to="back" />
+
+	</subflow-state>
+
+</flow>

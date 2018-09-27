@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sec="http://www.springframework.org/security/tags">
+
+	<div id="row_pestana_bandeja" class="row">
+
+		<span id="pestana_borardores" class="pestana pestana_bandeja_selected" style="width: 120px; height: 28px;" >
+			<p:graphicImage library="img/bandeja" name="bo_blanco.png" width="15"/> Principal
+		</span>
+		
+		<div id="borradores_filtar" style="float:right;margin-right: 15px;">
+
+			<p:menuButton value="Ordenar" styleClass="menu_filtrar">
+				<p:menuitem value="#{messageSource['mensaje_ordenar_documentos_folio']}"
+					actionListener="#{mbBandejaOficialiaEnviados.ordenarDocumentosPorNombre}" update=":formBorradores:tablaEnviados"/>
+				<p:menuitem value="Por Fecha"
+					actionListener="#{mbBandejaOficialiaEnviados.ordenarDocumentosPorFecha}" update=":formBorradores:tablaEnviados"/>
+			</p:menuButton>
+
+		</div>
+	</div>
+
+</ui:composition>

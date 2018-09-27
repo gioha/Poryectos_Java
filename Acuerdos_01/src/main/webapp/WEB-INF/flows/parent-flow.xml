@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+      abstract="true">
+
+	<end-state id="esHome" view="externalRedirect:servletRelative:/app/home"/>
+
+	<view-state id="vsError" view="externalRedirect:servletRelative:/error" />
+
+	<global-transitions>
+		<transition on="home" to="esHome"/>			
+		<transition on-exception="java.lang.Exception" to="vsError">
+			<!-- Se puede ejecutar el método de una clase para darle formato al mensaje de error -->
+			<!-- <evaluate expression="mbAdministrador.imprimeError(flowExecutionException)"/> -->
+		</transition>
+	</global-transitions>
+
+</flow>

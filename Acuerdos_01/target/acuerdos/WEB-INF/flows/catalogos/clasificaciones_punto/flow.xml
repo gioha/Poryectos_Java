@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				   http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+	start-state="validaRolUsuario" parent="parent-flow">
+
+	<!-- <var name="mbHomeAdministracion" class="mx.ine.acuerdos.mb.MBHomeAdministracion"/> -->
+	<var name="mbCClasificacionesP" class="mx.ine.acuerdos.mb.MBCClasificaciones" />
+	<var name="mbCClasificacionesCon" class="mx.ine.acuerdos.mb.MBCClasificacionesConsulta" />
+
+	<!-- Validamos los roles del usuario del lado del MB -->
+	<decision-state id="validaRolUsuario">
+		<if test="mbCClasificacionesP.validaRoles()" then="validaCaptura"
+			                                          else="home_view" />
+	</decision-state>
+
+	<!-- Si es un rol Valido, verificamos si es de tipo captura -->
+	<decision-state id="validaCaptura">
+		<if test="mbCClasificacionesP.validarRolCaptura()" then="clasificacionesABC"
+			                                                else="clasificacionesConsulta" />
+	</decision-state>
+
+	<!-- Pantalla Consulta de clasificaciones -->
+	<view-state id="clasificacionesConsulta" view="clasificacionesPuntoConsulta.xhtml">
+		<on-entry>
+			<evaluate expression="mbCClasificacionesCon.init()"></evaluate>
+		</on-entry>
+	</view-state>
+
+	<!-- Pantalla ABC de clasificaciones -->
+	<view-state id="clasificacionesABC" view="clasificacionesPunto.xhtml">
+		<on-entry>
+			<evaluate expression="mbCClasificacionesP.init()"></evaluate>
+		</on-entry>
+		<!-- <transition on="irCatalogoUsuarios" to="catUsu"/> <transition on="irCatalogoCalsificacionesPunto" 
+			to="ccatalogoClasificacionesPunto"/> -->
+	</view-state>
+
+
+	<view-state id="home_view"        
+			view="externalRedirect:servletRelative:/home"/>
+
+	<!-- SUBFLOWS PARA EL REDIRECCIONAMIENTO A LAS DIFERENTES VISTAS DE CATALOGOS -->
+	<subflow-state id="catUsu" subflow="catalogos/usuarios/captura"></subflow-state>
+	<subflow-state id="catalogoComisiones" subflow="catalogos/comisiones"></subflow-state>
+	<subflow-state id="catalogoClasificacionesPunto" subflow="catalogos/clasificaciones_punto"></subflow-state>
+
+
+</flow>

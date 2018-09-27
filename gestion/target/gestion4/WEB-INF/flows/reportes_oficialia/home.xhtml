@@ -1,0 +1,417 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+	<h:outputStylesheet name="reportes_oficialia.css" library="css/modulos/reportes_oficialia" />
+	
+	<div id="contenedor_reportes_of" class="container">
+		
+		<h:form id="formBorradores" onkeypress="if (window.event.which == 13 ) {return false;}" >
+			<h1>Reportes</h1>
+			<br/>
+			<h3>Búsqueda de Documento</h3>
+			<hr/>
+			<div class="row">
+				<div class="col-sm-12">
+					<p class="instrucciones">Seleccione los criterios de búsqueda que requiera</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-4">
+					<h:outputLabel for="textFolioOficialia" value="Folio Oficialia" />
+				</div>
+				
+				<div class="col-sm-4">
+					<h:outputLabel for="textFolioOficialia" value="Folios" />
+				</div>
+				
+				<div class="col-sm-4">
+					<h:outputLabel for="textNumeroDocumento" value="Número de documento" />
+				</div>
+				
+			</div>
+			<div class="row">
+				<div class="col-sm-4">
+					<p:inputText id="textFolioOficialia" size="26" placeholder="Capture el folio de oficialia"/>
+				</div>
+				
+				<div class="col-sm-4">
+					<h:outputLabel for="textFolioInicio" value="De"/>
+					<p:inputText id="textFolioInicio" size="12" placeholder="INE/DEA/2017/" />
+					
+					<h:outputLabel for="textFolioFin" value="a" />
+					<p:inputText id="textFolioFin" size="12" placeholder="INE/DEA/2017/"/>
+				</div>
+				
+				<div class="col-sm-4">
+					<p:inputText id="textNumeroDocumento" size="26" placeholder="Capture el número de documento" />
+				</div>
+				
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-8">
+					<h:outputLabel for="areaAsunto" value="Asunto" />
+				</div>
+				
+				<div class="col-sm-4">
+					<h:outputLabel for="checkCopiasConocimiento" value="Copias de Conocimiento" />
+				</div>
+				
+			</div>
+			<div class="row">
+				<div class="col-sm-8">
+					<p:inputTextarea id="areaAsunto" rows="3" placeholder="Escriba el asunto del documento" />
+				</div>
+				
+				<div id="div_copias_conocimiento" class="col-sm-4">
+				
+					<p:selectManyCheckbox id="checkCopiasConocimiento" >
+            			<f:selectItem itemLabel="Si" itemValue="si" />
+            			<f:selectItem itemLabel="No" itemValue="no" />
+        			</p:selectManyCheckbox>
+				</div>
+				
+			</div>
+			
+		
+			<div class="row">
+				<div class="col-sm-4">
+					<h:outputLabel for="diaInicial" value="Fecha Inicial de registro" />
+				</div>
+				
+				<div class="col-sm-4">
+					<h:outputLabel for="diaInicial" value="Fecha Final del Registro" />
+				</div>
+				
+			</div>
+			<div class="row">
+				<div class="col-sm-4">
+					<p:selectOneMenu id="diaInicial"  >
+						
+			            <f:selectItem itemLabel="día" itemValue="" />
+			            <f:selectItem itemLabel="1" itemValue="1" />
+			            <f:selectItem itemLabel="2" itemValue="2" />
+			            <f:selectItem itemLabel="3" itemValue="3" />
+			        </p:selectOneMenu>
+			        
+			        <p:selectOneMenu id="mesInicial" >
+			        	<f:selectItems value="#{mbReportesOf.meses}"></f:selectItems>
+			            <!-- <f:selectItem itemLabel="Enero" itemValue="Enero" />
+			            <f:selectItem itemLabel="Febrero" itemValue="Febrero" />
+			            <f:selectItem itemLabel="Marzo" itemValue="Marzo" /> -->
+			        </p:selectOneMenu>
+			        
+			        <p:selectOneMenu id="anioInicial" >
+			        	<f:selectItems value="#{mbReportesOf.anios}"></f:selectItems>
+			            <!-- <f:selectItem itemLabel="día" itemValue="" /> -->
+			            <!-- <f:selectItem itemLabel="2000" itemValue="2000" />
+			            <f:selectItem itemLabel="2001" itemValue="2001" />
+			            <f:selectItem itemLabel="2003" itemValue="2002" /> -->
+			        </p:selectOneMenu>
+        			<!-- <p:autoComplete id="diaInicial" size="1" dropdown="true" completeMethod="#{mbReportesOf.cargarDias}" style="margin-right:40px;"/>
+        			<p:autoComplete id="mesInicial" size="9" dropdown="true" completeMethod="#{mbReportesOf.cargarMeses}" style="margin-right:40px;"/>
+        			<p:autoComplete id="anioInicial" size="4" dropdown="true" completeMethod="#{mbReportesOf.cargarAnio}" /> -->
+				</div>
+				
+				<div class="col-sm-4">
+					<p:selectOneMenu id="diaFinal" >
+			            <f:selectItem itemLabel="día" itemValue="" />
+			            <f:selectItem itemLabel="1" itemValue="1" />
+			            <f:selectItem itemLabel="2" itemValue="2" />
+			            <f:selectItem itemLabel="3" itemValue="3" />
+			        </p:selectOneMenu>
+			        
+			        <p:selectOneMenu id="mesFinal" >
+			            <f:selectItems value="#{mbReportesOf.meses}"></f:selectItems>
+			        </p:selectOneMenu>
+			        
+			        <p:selectOneMenu id="anioFinal" >
+			            <f:selectItems value="#{mbReportesOf.anios}"></f:selectItems>
+			            
+			        </p:selectOneMenu>
+        			<!-- <p:autoComplete id="diaFinal" size="1" dropdown="true" completeMethod="#{mbReportesOf.cargarDias}" style="margin-right:40px;"/>
+        			<p:autoComplete id="mesFinal" size="9" dropdown="true" completeMethod="#{mbReportesOf.cargarMeses}" style="margin-right:40px;"/>
+        			<p:autoComplete id="anioFinal" size="4" dropdown="true" completeMethod="#{mbReportesOf.cargarAnio}" /> -->
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-4">
+					<h:outputLabel for="selectTipoDocumento" value="Tipo de documento" />
+				</div>
+				
+				<div class="col-sm-4">
+						<h:outputLabel for="selectSeccion" value="Sección" />
+				</div>
+				
+				<div class="col-sm-4">
+					<h:outputLabel for="selectCategoria" value="Categoria" />
+				</div>
+				
+			</div>
+			<div class="row">
+				<div class="col-sm-4">
+					<p:selectOneMenu id="selectTipoDocumento" >
+			            <f:selectItem itemLabel="Seleccione tipo de documento" itemValue="" />
+			            <f:selectItem itemLabel="Oficio" itemValue="1" />
+			            <f:selectItem itemLabel="Atenta Nota" itemValue="2" />
+			            <f:selectItem itemLabel="3" itemValue="3" />
+			        </p:selectOneMenu>
+				</div>
+				
+				<div class="col-sm-4">
+					<p:selectOneMenu id="selectSeccion" >
+			            <f:selectItem itemLabel="Seleccione sección" itemValue="" />
+			            <f:selectItem itemLabel="1" itemValue="1" />
+			            <f:selectItem itemLabel="2" itemValue="2" />
+			            <f:selectItem itemLabel="3" itemValue="3" />
+			        </p:selectOneMenu>
+				</div>
+				
+				<div class="col-sm-4">
+					<p:selectOneMenu id="selectCategoria" >
+			            <f:selectItem itemLabel="Seleccione categoria" itemValue="" />
+			            <f:selectItem itemLabel="1" itemValue="1" />
+			            <f:selectItem itemLabel="2" itemValue="2" />
+			            <f:selectItem itemLabel="3" itemValue="3" />
+			        </p:selectOneMenu>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-4">
+					<h:outputLabel for="selectOrdenar" value="Ordenar por" />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-4">
+					<p:selectOneMenu id="selectOrdenar" >
+			            <f:selectItem itemLabel="Fecha de Registro" itemValue="" />
+			            <f:selectItem itemLabel="1" itemValue="1" />
+			            <f:selectItem itemLabel="2" itemValue="2" />
+			            <f:selectItem itemLabel="3" itemValue="3" />
+			        </p:selectOneMenu>
+				</div>
+			</div>
+			
+			<h3>Remitente</h3>
+			<hr/>
+			<div class="row">
+				<div class="col-sm-12">
+					<p class="instrucciones">Seleccione el Tipo e ingrese datos en cualquiera de los campos restantes</p>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-4">
+					<h:outputLabel for="radioTipo" value="Tipo" />
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-4">
+					<p:selectOneRadio id="radioTipo">
+            			<f:selectItem itemLabel="Interno" itemValue="interno" />
+            			<f:selectItem itemLabel="Externo" itemValue="externo" />
+        			</p:selectOneRadio>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-4">
+					<h:outputLabel for="textNombreRem" value="Nombre (s)" />
+				</div>
+				
+				<div class="col-sm-4">
+					<h:outputLabel for="textApellidosRem" value="Apellidos" />
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-4">
+					<p:inputText id="textNombreRem" />
+				</div>
+				
+				<div class="col-sm-4">
+					<p:inputText id="textApellidosRem" />
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-4">
+					<h:outputLabel for="selectTipoAreaRem" value="Tipo de área" />
+				</div>
+				
+				<div class="col-sm-4">
+					<h:outputLabel for="selectEstatusRem" value="Área" />
+				</div>
+				
+				<div class="col-sm-4">
+					<h:outputLabel for="selectEntidadRem" value="Entidad" />
+				</div>
+				
+			</div>
+			<div class="row">
+				<div class="col-sm-4">
+					<p:selectOneMenu id="selectTipoAreaRem" >
+			            <f:selectItem itemLabel="Seleccione tipo de área" itemValue="" />
+			            <f:selectItem itemLabel="Órganos Centrales" itemValue="1" />
+			            <f:selectItem itemLabel="Órganos Desconcentrados" itemValue="2" />
+			            <f:selectItem itemLabel="Órganos Público Local Electoral" itemValue="3" />
+			        </p:selectOneMenu>
+				</div>
+				
+				<div class="col-sm-4">
+					<p:selectOneMenu id="selectEstatusRem" >
+			            <f:selectItem itemLabel="Seleccione estatus" itemValue="" />
+			            <f:selectItem itemLabel="1" itemValue="1" />
+			            <f:selectItem itemLabel="2" itemValue="2" />
+			            <f:selectItem itemLabel="3" itemValue="3" />
+			        </p:selectOneMenu>
+				</div>
+				
+				<div class="col-sm-4">
+					<p:selectOneMenu id="selectEntidadRem" >
+			            <f:selectItem itemLabel="Seleccione entidades" itemValue="" />
+			            <f:selectItem itemLabel="1" itemValue="1" />
+			            <f:selectItem itemLabel="2" itemValue="2" />
+			            <f:selectItem itemLabel="3" itemValue="3" />
+			        </p:selectOneMenu>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<p:commandButton value="Buscar" styleClass="ui-priority-primary" />
+				</div>
+			</div>
+			
+			<h3>Destinatario</h3>
+			<hr/>
+			<div class="row">
+				<div class="col-sm-12">
+					<p class="instrucciones">Seleccione el Tipo e ingrese datos en cualquiera de los campos restantes</p>
+				</div>
+			</div>
+		
+			<div class="row">
+				<div class="col-sm-4">
+					<h:outputLabel for="textNombreDest" value="Nombre (s)" />
+				</div>
+				
+				<div class="col-sm-4">
+					<h:outputLabel for="textApellidosDest" value="Apellidos" />
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-4">
+					<p:inputText id="textNombreDest" />
+				</div>
+				
+				<div class="col-sm-4">
+					<p:inputText id="textApellidosDest" />
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-4">
+					<h:outputLabel for="selectTipoAreaDest" value="Tipo de área" />
+				</div>
+				
+				<div class="col-sm-4">
+					<h:outputLabel for="selectEstatusDest" value="Área" />
+				</div>
+				
+				<div class="col-sm-4">
+					<h:outputLabel for="selectEntidadDest" value="Entidad" />
+				</div>
+				
+			</div>
+			<div class="row">
+				<div class="col-sm-4">
+					<p:selectOneMenu id="selectTipoAreaDest" >
+			            <f:selectItem itemLabel="Seleccione tipo de área" itemValue="" />
+			            <f:selectItem itemLabel="Órganos Centrales" itemValue="1" />
+			            <f:selectItem itemLabel="Órganos Desconcentrados" itemValue="2" />
+			            <f:selectItem itemLabel="Órganos Público Local Electoral" itemValue="3" />
+			        </p:selectOneMenu>
+				</div>
+				
+				<div class="col-sm-4">
+					<p:selectOneMenu id="selectEstatusDest" >
+			            <f:selectItem itemLabel="Seleccione estatus" itemValue="" />
+			            <f:selectItem itemLabel="1" itemValue="1" />
+			            <f:selectItem itemLabel="2" itemValue="2" />
+			            <f:selectItem itemLabel="3" itemValue="3" />
+			        </p:selectOneMenu>
+				</div>
+				
+				<div class="col-sm-4">
+					<p:selectOneMenu id="selectEntidadDest" >
+			            <f:selectItem itemLabel="Seleccione entidades" itemValue="" />
+			            <f:selectItem itemLabel="1" itemValue="1" />
+			            <f:selectItem itemLabel="2" itemValue="2" />
+			            <f:selectItem itemLabel="3" itemValue="3" />
+			        </p:selectOneMenu>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<p:commandButton value="Buscar" styleClass="ui-priority-primary" />
+				</div>
+			</div>
+			
+			<h3>Creación de Reporte</h3>
+			<div class="row">
+				<div class="col-sm-12">
+					<p class="instrucciones">Seleccione los campos que deseé se desplieguen en el reporte</p>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-12">
+					<p:selectManyCheckbox id="grid" layout="grid" columns="2">
+				        <!-- <f:selectItems value="#{checkboxView.cities}" var="city" itemLabel="#{city}" itemValue="#{city}" /> -->
+				        <f:selectItem itemLabel="Todos" itemValue="1" />
+				        <f:selectItem itemLabel="Tipo de documento" itemValue="1" />
+				        <f:selectItem itemLabel="Folio de Oficialia" itemValue="2" />
+				        <f:selectItem itemLabel="Tipo de área" itemValue="2" />
+				        <f:selectItem itemLabel="Folios" itemValue="3" />
+				        <f:selectItem itemLabel="Área" itemValue="3" />
+				        
+				        <f:selectItem itemLabel="Número de documento" itemValue="1" />
+				        <f:selectItem itemLabel="Remitente" itemValue="1" />
+				        <f:selectItem itemLabel="Asunto" itemValue="2" />
+				        <f:selectItem itemLabel="Destinatario" itemValue="3" />
+				        <f:selectItem itemLabel="Copia de conocimiento" itemValue="3" />
+				        <f:selectItem itemLabel="Sección" itemValue="2" />
+				        
+				        <f:selectItem itemLabel="Fecha de registro" itemValue="3" />
+				        <f:selectItem itemLabel="Categoria" itemValue="2" />
+	    			</p:selectManyCheckbox>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-12">
+					<p:commandButton value="Buscar" styleClass="ui-priority-primary" />
+				</div>
+			</div>
+				
+		</h:form>
+	</div>
+	
+</ui:define>
+</ui:composition>

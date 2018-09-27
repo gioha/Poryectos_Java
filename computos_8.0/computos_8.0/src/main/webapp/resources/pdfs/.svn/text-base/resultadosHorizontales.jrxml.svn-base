@@ -1,0 +1,906 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resultadosHorizontales" pageWidth="560" pageHeight="595" whenNoDataType="AllSectionsNoDetail" columnWidth="560" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.callouts" value="##Wed Apr 04 11:47:10 CDT 2012"/>
+	<parameter name="P_SUBREPORTE_RESULTADOS_TOTALES" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false"/>
+	<parameter name="P_DATA_SUBREPORTE_RESULTADOS_TOTALES" class="net.sf.jasperreports.engine.JRDataSource" isForPrompting="false"/>
+	<parameter name="P_SUBREPORT_PARAMS_RESULTADOS_TOTALES" class="java.util.Map" isForPrompting="false"/>
+	<parameter name="P_TITULO_RESULTADOS_VOTACION" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_TITULO_RESULTADOS" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="P_TITULO_RENGLON" class="java.lang.String"/>
+	<parameter name="P_TITULO_COALICION" class="java.lang.String"/>
+	<parameter name="P_TITULO_CAND_NO_REG" class="java.lang.String"/>
+	<parameter name="P_TITULO_VOTOS_NULOS" class="java.lang.String"/>
+	<parameter name="P_TITULO_VOTOS_TOTALES" class="java.lang.String"/>
+	<parameter name="P_TIPO_ASOCIACION_PARTIDO" class="java.lang.Integer"/>
+	<parameter name="P_TIPO_ASOCIACION_COALICION" class="java.lang.Integer"/>
+	<parameter name="P_TIPO_ASOCIACION_CI" class="java.lang.Integer"/>
+	<parameter name="P_TIPO_ASOCIACION_VOTOS_NULOS" class="java.lang.Integer"/>
+	<parameter name="P_TIPO_ASOCIACION_CAND_NO_REG" class="java.lang.Integer"/>
+	<field name="tiposAsociaciones" class="java.util.List"/>
+	<field name="emblemasAsociaciones" class="java.util.List"/>
+	<field name="nombresAsociaciones" class="java.util.List"/>
+	<field name="totalesVotos" class="java.util.List"/>
+	<title>
+		<band height="14" splitType="Stretch">
+			<printWhenExpression><![CDATA[$P{P_TITULO_RESULTADOS_VOTACION}!=null]]></printWhenExpression>
+			<textField>
+				<reportElement mode="Opaque" x="0" y="3" width="560" height="10" backcolor="#FAD5D9"/>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="7" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["" + $P{P_TITULO_RESULTADOS_VOTACION}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="12" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="560" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_TITULO_RESULTADOS}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="49" splitType="Stretch">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="0" width="32" height="32" backcolor="#FAD5D9"/>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="Left">
+					<font fontName="Arial" size="4" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_TITULO_RENGLON}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="32" y="0" width="44" height="32" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>0]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tiposAsociaciones}.get(0)==null?
+    $P{P_TITULO_VOTOS_TOTALES}
+    :(((Integer)$F{tiposAsociaciones}.get(0)).intValue()==$P{P_TIPO_ASOCIACION_CAND_NO_REG}.intValue())?
+        $P{P_TITULO_CAND_NO_REG}
+        :(((Integer)$F{tiposAsociaciones}.get(0)).intValue()==$P{P_TIPO_ASOCIACION_VOTOS_NULOS}.intValue())?
+            $P{P_TITULO_VOTOS_NULOS}
+            :($F{nombresAsociaciones}.get(0)!=null && $F{emblemasAsociaciones}.get(0)==null)?
+                $F{nombresAsociaciones}.get(0)
+                :" "]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement key="image-0-1" x="45" y="6" width="20" height="20">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>0 &&
+((Integer)$F{tiposAsociaciones}.get(0)).intValue()==$P{P_TIPO_ASOCIACION_PARTIDO}.intValue() &&
+$F{emblemasAsociaciones}.get(0)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(0)]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement mode="Opaque" x="38" y="0" width="32" height="7" backcolor="#FAD5D9">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>0 &&
+    ((Integer)$F{tiposAsociaciones}.get(0)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue()]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="4" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_TITULO_COALICION}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement key="image-0-2" x="34" y="9" width="40" height="18">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>0 &&
+((Integer)$F{tiposAsociaciones}.get(0)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue() &&
+$F{emblemasAsociaciones}.get(0)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(0)]]></imageExpression>
+			</image>
+			<textField pattern="##,###,###" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="32" y="32" width="44" height="15" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{totalesVotos}.size()>0]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{totalesVotos}.get(0)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="76" y="0" width="44" height="32" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>1]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tiposAsociaciones}.get(1)==null?
+    $P{P_TITULO_VOTOS_TOTALES}
+    :(((Integer)$F{tiposAsociaciones}.get(1)).intValue()==$P{P_TIPO_ASOCIACION_CAND_NO_REG}.intValue())?
+        $P{P_TITULO_CAND_NO_REG}
+        :(((Integer)$F{tiposAsociaciones}.get(1)).intValue()==$P{P_TIPO_ASOCIACION_VOTOS_NULOS}.intValue())?
+            $P{P_TITULO_VOTOS_NULOS}
+            :($F{nombresAsociaciones}.get(1)!=null && $F{emblemasAsociaciones}.get(1)==null)?
+                $F{nombresAsociaciones}.get(1)
+                :" "]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement key="image-1-1" x="89" y="6" width="20" height="20">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>1 &&
+((Integer)$F{tiposAsociaciones}.get(1)).intValue()==$P{P_TIPO_ASOCIACION_PARTIDO}.intValue() &&
+$F{emblemasAsociaciones}.get(1)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(1)]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement mode="Opaque" x="82" y="0" width="32" height="7" backcolor="#FAD5D9">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>1 &&
+    ((Integer)$F{tiposAsociaciones}.get(1)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue()]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="4" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_TITULO_COALICION}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement key="image-1-2" x="78" y="9" width="40" height="18">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>1 &&
+((Integer)$F{tiposAsociaciones}.get(1)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue() &&
+$F{emblemasAsociaciones}.get(1)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(1)]]></imageExpression>
+			</image>
+			<textField pattern="##,###,###" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="76" y="32" width="44" height="15" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{totalesVotos}.size()>1]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{totalesVotos}.get(1)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="120" y="0" width="44" height="32" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>2]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tiposAsociaciones}.get(2)==null?
+    $P{P_TITULO_VOTOS_TOTALES}
+    :(((Integer)$F{tiposAsociaciones}.get(2)).intValue()==$P{P_TIPO_ASOCIACION_CAND_NO_REG}.intValue())?
+        $P{P_TITULO_CAND_NO_REG}
+        :(((Integer)$F{tiposAsociaciones}.get(2)).intValue()==$P{P_TIPO_ASOCIACION_VOTOS_NULOS}.intValue())?
+            $P{P_TITULO_VOTOS_NULOS}
+            :($F{nombresAsociaciones}.get(2)!=null && $F{emblemasAsociaciones}.get(2)==null)?
+                $F{nombresAsociaciones}.get(2)
+                :" "]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement key="image-2-1" x="133" y="6" width="20" height="20">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>2 &&
+((Integer)$F{tiposAsociaciones}.get(2)).intValue()==$P{P_TIPO_ASOCIACION_PARTIDO}.intValue() &&
+$F{emblemasAsociaciones}.get(2)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(2)]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement mode="Opaque" x="126" y="0" width="32" height="7" backcolor="#FAD5D9">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>2 &&
+    ((Integer)$F{tiposAsociaciones}.get(2)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue()]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="4" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_TITULO_COALICION}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center" vAlign="Top">
+				<reportElement key="image-2-2" x="122" y="9" width="40" height="18">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>2 &&
+((Integer)$F{tiposAsociaciones}.get(2)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue() &&
+$F{emblemasAsociaciones}.get(2)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(2)]]></imageExpression>
+			</image>
+			<textField pattern="##,###,###" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="120" y="32" width="44" height="15" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{totalesVotos}.size()>2]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{totalesVotos}.get(2)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="164" y="0" width="44" height="32" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>3]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tiposAsociaciones}.get(3)==null?
+    $P{P_TITULO_VOTOS_TOTALES}
+    :(((Integer)$F{tiposAsociaciones}.get(3)).intValue()==$P{P_TIPO_ASOCIACION_CAND_NO_REG}.intValue())?
+        $P{P_TITULO_CAND_NO_REG}
+        :(((Integer)$F{tiposAsociaciones}.get(3)).intValue()==$P{P_TIPO_ASOCIACION_VOTOS_NULOS}.intValue())?
+            $P{P_TITULO_VOTOS_NULOS}
+            :($F{nombresAsociaciones}.get(3)!=null && $F{emblemasAsociaciones}.get(3)==null)?
+                $F{nombresAsociaciones}.get(3)
+                :" "]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement key="image-3-1" x="177" y="6" width="20" height="20">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>3 &&
+((Integer)$F{tiposAsociaciones}.get(3)).intValue()==$P{P_TIPO_ASOCIACION_PARTIDO}.intValue() &&
+$F{emblemasAsociaciones}.get(3)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(3)]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement mode="Opaque" x="170" y="0" width="32" height="7" backcolor="#FAD5D9">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>3 &&
+    ((Integer)$F{tiposAsociaciones}.get(3)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue()]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="4" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_TITULO_COALICION}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement key="image-3-2" x="166" y="9" width="40" height="18">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>3 &&
+((Integer)$F{tiposAsociaciones}.get(3)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue() &&
+$F{emblemasAsociaciones}.get(3)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(3)]]></imageExpression>
+			</image>
+			<textField pattern="##,###,###" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="164" y="32" width="44" height="15" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{totalesVotos}.size()>3]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{totalesVotos}.get(3)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="208" y="0" width="44" height="32" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>4]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tiposAsociaciones}.get(4)==null?
+    $P{P_TITULO_VOTOS_TOTALES}
+    :(((Integer)$F{tiposAsociaciones}.get(4)).intValue()==$P{P_TIPO_ASOCIACION_CAND_NO_REG}.intValue())?
+        $P{P_TITULO_CAND_NO_REG}
+        :(((Integer)$F{tiposAsociaciones}.get(4)).intValue()==$P{P_TIPO_ASOCIACION_VOTOS_NULOS}.intValue())?
+            $P{P_TITULO_VOTOS_NULOS}
+            :($F{nombresAsociaciones}.get(4)!=null && $F{emblemasAsociaciones}.get(4)==null)?
+                $F{nombresAsociaciones}.get(4)
+                :" "]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement key="image-4-1" x="221" y="6" width="20" height="20">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>4 &&
+((Integer)$F{tiposAsociaciones}.get(4)).intValue()==$P{P_TIPO_ASOCIACION_PARTIDO}.intValue() &&
+$F{emblemasAsociaciones}.get(4)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(4)]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement mode="Opaque" x="214" y="0" width="32" height="7" backcolor="#FAD5D9">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>4 &&
+    ((Integer)$F{tiposAsociaciones}.get(4)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue()]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="4" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_TITULO_COALICION}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement key="image-4-2" x="210" y="9" width="40" height="18">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>4 &&
+((Integer)$F{tiposAsociaciones}.get(4)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue() &&
+$F{emblemasAsociaciones}.get(4)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(4)]]></imageExpression>
+			</image>
+			<textField pattern="##,###,###" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="208" y="32" width="44" height="15" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{totalesVotos}.size()>4]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{totalesVotos}.get(4)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="252" y="0" width="44" height="32" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>5]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tiposAsociaciones}.get(5)==null?
+    $P{P_TITULO_VOTOS_TOTALES}
+    :(((Integer)$F{tiposAsociaciones}.get(5)).intValue()==$P{P_TIPO_ASOCIACION_CAND_NO_REG}.intValue())?
+        $P{P_TITULO_CAND_NO_REG}
+        :(((Integer)$F{tiposAsociaciones}.get(5)).intValue()==$P{P_TIPO_ASOCIACION_VOTOS_NULOS}.intValue())?
+            $P{P_TITULO_VOTOS_NULOS}
+            :($F{nombresAsociaciones}.get(5)!=null && $F{emblemasAsociaciones}.get(5)==null)?
+                $F{nombresAsociaciones}.get(5)
+                :" "]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement key="image-5-1" x="265" y="6" width="20" height="20">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>5 &&
+((Integer)$F{tiposAsociaciones}.get(5)).intValue()==$P{P_TIPO_ASOCIACION_PARTIDO}.intValue() &&
+$F{emblemasAsociaciones}.get(5)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(5)]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement mode="Opaque" x="258" y="0" width="32" height="7" backcolor="#FAD5D9">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>5 &&
+    ((Integer)$F{tiposAsociaciones}.get(5)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue()]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="4" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_TITULO_COALICION}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement key="image-5-2" x="254" y="9" width="40" height="18">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>5 &&
+((Integer)$F{tiposAsociaciones}.get(5)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue() &&
+$F{emblemasAsociaciones}.get(5)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(5)]]></imageExpression>
+			</image>
+			<textField pattern="##,###,###" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="252" y="32" width="44" height="15" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{totalesVotos}.size()>5]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{totalesVotos}.get(5)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="296" y="0" width="44" height="32" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>6]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tiposAsociaciones}.get(6)==null?
+    $P{P_TITULO_VOTOS_TOTALES}
+    :(((Integer)$F{tiposAsociaciones}.get(6)).intValue()==$P{P_TIPO_ASOCIACION_CAND_NO_REG}.intValue())?
+        $P{P_TITULO_CAND_NO_REG}
+        :(((Integer)$F{tiposAsociaciones}.get(6)).intValue()==$P{P_TIPO_ASOCIACION_VOTOS_NULOS}.intValue())?
+            $P{P_TITULO_VOTOS_NULOS}
+            :($F{nombresAsociaciones}.get(6)!=null && $F{emblemasAsociaciones}.get(6)==null)?
+                $F{nombresAsociaciones}.get(6)
+                :" "]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement key="image-6-1" x="309" y="6" width="20" height="20">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>6 &&
+((Integer)$F{tiposAsociaciones}.get(6)).intValue()==$P{P_TIPO_ASOCIACION_PARTIDO}.intValue() &&
+$F{emblemasAsociaciones}.get(6)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(6)]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement mode="Opaque" x="302" y="0" width="32" height="7" backcolor="#FAD5D9">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>6 &&
+    ((Integer)$F{tiposAsociaciones}.get(6)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue()]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="4" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_TITULO_COALICION}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement key="image-6-2" x="298" y="9" width="40" height="18">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>6 &&
+((Integer)$F{tiposAsociaciones}.get(6)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue() &&
+$F{emblemasAsociaciones}.get(6)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(6)]]></imageExpression>
+			</image>
+			<textField pattern="##,###,###" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="296" y="32" width="44" height="15" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{totalesVotos}.size()>6]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{totalesVotos}.get(6)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="340" y="0" width="44" height="32" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>7]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tiposAsociaciones}.get(7)==null?
+    $P{P_TITULO_VOTOS_TOTALES}
+    :(((Integer)$F{tiposAsociaciones}.get(7)).intValue()==$P{P_TIPO_ASOCIACION_CAND_NO_REG}.intValue())?
+        $P{P_TITULO_CAND_NO_REG}
+        :(((Integer)$F{tiposAsociaciones}.get(7)).intValue()==$P{P_TIPO_ASOCIACION_VOTOS_NULOS}.intValue())?
+            $P{P_TITULO_VOTOS_NULOS}
+            :($F{nombresAsociaciones}.get(7)!=null && $F{emblemasAsociaciones}.get(7)==null)?
+                $F{nombresAsociaciones}.get(7)
+                :" "]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement key="image-7-1" x="353" y="6" width="20" height="20">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>7 &&
+((Integer)$F{tiposAsociaciones}.get(7)).intValue()==$P{P_TIPO_ASOCIACION_PARTIDO}.intValue() &&
+$F{emblemasAsociaciones}.get(7)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(7)]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement mode="Opaque" x="346" y="0" width="32" height="7" backcolor="#FAD5D9">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>7 &&
+    ((Integer)$F{tiposAsociaciones}.get(7)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue()]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="4" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_TITULO_COALICION}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement key="image-7-2" x="342" y="9" width="40" height="18">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>7 &&
+((Integer)$F{tiposAsociaciones}.get(7)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue() &&
+$F{emblemasAsociaciones}.get(7)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(7)]]></imageExpression>
+			</image>
+			<textField pattern="##,###,###" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="340" y="32" width="44" height="15" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{totalesVotos}.size()>7]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{totalesVotos}.get(7)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="384" y="0" width="44" height="32" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>8]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tiposAsociaciones}.get(8)==null?
+    $P{P_TITULO_VOTOS_TOTALES}
+    :(((Integer)$F{tiposAsociaciones}.get(8)).intValue()==$P{P_TIPO_ASOCIACION_CAND_NO_REG}.intValue())?
+        $P{P_TITULO_CAND_NO_REG}
+        :(((Integer)$F{tiposAsociaciones}.get(8)).intValue()==$P{P_TIPO_ASOCIACION_VOTOS_NULOS}.intValue())?
+            $P{P_TITULO_VOTOS_NULOS}
+            :($F{nombresAsociaciones}.get(8)!=null && $F{emblemasAsociaciones}.get(8)==null)?
+                $F{nombresAsociaciones}.get(8)
+                :" "]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement key="image-8-1" x="397" y="6" width="20" height="20">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>8 &&
+((Integer)$F{tiposAsociaciones}.get(8)).intValue()==$P{P_TIPO_ASOCIACION_PARTIDO}.intValue() &&
+$F{emblemasAsociaciones}.get(8)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(8)]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement mode="Opaque" x="390" y="0" width="32" height="7" backcolor="#FAD5D9">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>8 &&
+    ((Integer)$F{tiposAsociaciones}.get(8)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue()]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="4" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_TITULO_COALICION}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement key="image-8-2" x="386" y="9" width="40" height="18">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>8 &&
+((Integer)$F{tiposAsociaciones}.get(8)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue() &&
+$F{emblemasAsociaciones}.get(8)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(8)]]></imageExpression>
+			</image>
+			<textField pattern="##,###,###" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="384" y="32" width="44" height="15" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{totalesVotos}.size()>8]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{totalesVotos}.get(8)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="428" y="0" width="44" height="32" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>9]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tiposAsociaciones}.get(9)==null?
+    $P{P_TITULO_VOTOS_TOTALES}
+    :(((Integer)$F{tiposAsociaciones}.get(9)).intValue()==$P{P_TIPO_ASOCIACION_CAND_NO_REG}.intValue())?
+        $P{P_TITULO_CAND_NO_REG}
+        :(((Integer)$F{tiposAsociaciones}.get(9)).intValue()==$P{P_TIPO_ASOCIACION_VOTOS_NULOS}.intValue())?
+            $P{P_TITULO_VOTOS_NULOS}
+            :($F{nombresAsociaciones}.get(9)!=null && $F{emblemasAsociaciones}.get(9)==null)?
+                $F{nombresAsociaciones}.get(9)
+                :" "]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement key="image-9-1" x="441" y="6" width="20" height="20">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>9 &&
+((Integer)$F{tiposAsociaciones}.get(9)).intValue()==$P{P_TIPO_ASOCIACION_PARTIDO}.intValue() &&
+$F{emblemasAsociaciones}.get(9)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(9)]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement mode="Opaque" x="434" y="0" width="32" height="7" backcolor="#FAD5D9">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>9 &&
+    ((Integer)$F{tiposAsociaciones}.get(9)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue()]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="4" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_TITULO_COALICION}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement key="image-9-2" x="430" y="9" width="40" height="18">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>9 &&
+((Integer)$F{tiposAsociaciones}.get(9)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue() &&
+$F{emblemasAsociaciones}.get(9)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(9)]]></imageExpression>
+			</image>
+			<textField pattern="##,###,###" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="428" y="32" width="44" height="15" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{totalesVotos}.size()>9]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{totalesVotos}.get(9)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="472" y="0" width="44" height="32" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>10]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tiposAsociaciones}.get(10)==null?
+    $P{P_TITULO_VOTOS_TOTALES}
+    :(((Integer)$F{tiposAsociaciones}.get(10)).intValue()==$P{P_TIPO_ASOCIACION_CAND_NO_REG}.intValue())?
+        $P{P_TITULO_CAND_NO_REG}
+        :(((Integer)$F{tiposAsociaciones}.get(10)).intValue()==$P{P_TIPO_ASOCIACION_VOTOS_NULOS}.intValue())?
+            $P{P_TITULO_VOTOS_NULOS}
+            :($F{nombresAsociaciones}.get(10)!=null && $F{emblemasAsociaciones}.get(10)==null)?
+                $F{nombresAsociaciones}.get(10)
+                :" "]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement key="image-10-1" x="485" y="6" width="20" height="20">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>10 &&
+((Integer)$F{tiposAsociaciones}.get(10)).intValue()==$P{P_TIPO_ASOCIACION_PARTIDO}.intValue() &&
+$F{emblemasAsociaciones}.get(10)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(10)]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement mode="Opaque" x="478" y="0" width="32" height="7" backcolor="#FAD5D9">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>10 &&
+    ((Integer)$F{tiposAsociaciones}.get(10)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue()]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="4" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_TITULO_COALICION}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement key="image-10-2" x="474" y="9" width="40" height="18">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>10 &&
+((Integer)$F{tiposAsociaciones}.get(10)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue() &&
+$F{emblemasAsociaciones}.get(10)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(10)]]></imageExpression>
+			</image>
+			<textField pattern="##,###,###" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="472" y="32" width="44" height="15" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{totalesVotos}.size()>10]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{totalesVotos}.get(10)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToTallestObject" x="516" y="0" width="44" height="32" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>11]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{tiposAsociaciones}.get(11)==null?
+    $P{P_TITULO_VOTOS_TOTALES}
+    :(((Integer)$F{tiposAsociaciones}.get(11)).intValue()==$P{P_TIPO_ASOCIACION_CAND_NO_REG}.intValue())?
+        $P{P_TITULO_CAND_NO_REG}
+        :(((Integer)$F{tiposAsociaciones}.get(11)).intValue()==$P{P_TIPO_ASOCIACION_VOTOS_NULOS}.intValue())?
+            $P{P_TITULO_VOTOS_NULOS}
+            :($F{nombresAsociaciones}.get(11)!=null && $F{emblemasAsociaciones}.get(11)==null)?
+                $F{nombresAsociaciones}.get(11)
+                :" "]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement key="image-11-1" x="529" y="6" width="20" height="20">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>11 &&
+((Integer)$F{tiposAsociaciones}.get(11)).intValue()==$P{P_TIPO_ASOCIACION_PARTIDO}.intValue() &&
+$F{emblemasAsociaciones}.get(11)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(11)]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement mode="Opaque" x="522" y="0" width="32" height="7" backcolor="#FAD5D9">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>11 &&
+    ((Integer)$F{tiposAsociaciones}.get(11)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue()]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="4" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{P_TITULO_COALICION}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center">
+				<reportElement key="image-11-2" x="518" y="9" width="40" height="18">
+					<printWhenExpression><![CDATA[$F{tiposAsociaciones}.size()>11 &&
+((Integer)$F{tiposAsociaciones}.get(11)).intValue()==$P{P_TIPO_ASOCIACION_COALICION}.intValue() &&
+$F{emblemasAsociaciones}.get(11)!=null]]></printWhenExpression>
+				</reportElement>
+				<imageExpression class="java.lang.String"><![CDATA[$F{emblemasAsociaciones}.get(11)]]></imageExpression>
+			</image>
+			<textField pattern="##,###,###" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" x="516" y="32" width="44" height="15" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{totalesVotos}.size()>11]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25" lineColor="#EFADB6"/>
+					<leftPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<bottomPen lineWidth="0.75" lineColor="#EFADB6"/>
+					<rightPen lineWidth="0.75" lineColor="#EFADB6"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{totalesVotos}.get(11)]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+</jasperReport>

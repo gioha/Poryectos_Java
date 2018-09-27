@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sec="http://www.springframework.org/security/tags">
+
+
+	<!-- Acciones para el Documento -->
+
+	<div id="div_row_acciones" class="row">
+
+
+		<div id="icon_acciones" class="col-xs-1" style="width: 40px; padding-left: 5px;">
+			
+			<h:graphicImage rendered="#{mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma ne 0 and mbBorradores.dtoBorradorSeleccionado.numEnviadoValidacion ne 0 and mbBorradores.dtoBorradorSeleccionado.documento.tipoCaptura ne 3}" 
+							name="bo_negro.png" library="img/bandeja" class="pull-center img-responsive" />
+			<h:graphicImage rendered="#{mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma eq 0 and mbBorradores.dtoBorradorSeleccionado.documento.tipoCaptura ne 3}" 
+							name="bo_firma.png" library="img/bandeja" class="pull-center img-responsive" />
+			<h:graphicImage rendered="#{mbBorradores.dtoBorradorSeleccionado.numEnviadoValidacion eq 0 and mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma ne 0 and mbBorradores.dtoBorradorSeleccionado.documento.tipoCaptura ne 3}" 
+							name="bo_valida.png" library="img/bandeja" class="pull-center img-responsive" />
+			<h:graphicImage rendered="#{mbBorradores.dtoBorradorSeleccionado.documento.tipoCaptura eq 3}" name="iconos_adjunto.png" library="img/bandeja" class="pull-center img-responsive" />
+			
+		</div>
+
+		<div id="acciones_nombre" class="col-xs-5">
+			<div class="contenido_acciones_nombre">
+			<h:outputLabel value="#{mbBorradores.dtoBorradorSeleccionado.documento.noDocumento}" />	
+			</div>
+		</div>
+
+		<div id="acciones_menu" class="col-xs-2" style="width: 100px;">
+			
+			 <p:commandButton 	id="listaAcciones" value="#{messageSource['mensaje_menu_acciones']}" type="button"
+								styleClass="menu_acciones menu_acciones_der"
+								disabled="#{mbBorradores.dtoBorradorSeleccionado == null}"
+								style="font-size:12px;height:30px !important;" />
+			
+
+			<p:tieredMenu 		overlay="true" trigger="listaAcciones" my="top"
+								at="left bottom" styleClass="menu_acciones_der" style="width:150px;">
+
+					<p:menuitem value="#{messageSource['mensaje_menu_enviar_validacion']}"
+								actionListener="#{mbBorradores.mostrarDialogEnviarValidar}"
+								rendered="#{mbBorradores.dtoBorradorSeleccionado.documento.tipoCaptura ne 3}"
+								disabled="#{(mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma ne null) or (mbBorradores.dtoBorradorSeleccionado.numEnviadoValidacion ne 0 and mbBorradores.dtoBorradorSeleccionado.numEnviadoValidacion ne null)}"
+								update=":formBorradores:dialog_enviar_fv" />
+					
+					<p:menuitem value="#{messageSource['mensaje_menu_enviar_destinatario']}"
+								disabled="#{(mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma ne 0) and (mbBorradores.dtoBorradorSeleccionado.documento.tipoCaptura ne 3)}"
+								update=":formBorradores:panelIzq, :formBorradores:panelCentro, :formBorradores:panelDer,:formBorradores:mensaje_general_exito">
+						<f:actionListener binding="#{mbBorradores.enviarADestinatarios()}"/>
+						<f:actionListener binding="#{mbBandejaMenu.consultarMenu()}"/>
+					</p:menuitem>
+
+					<p:menuitem value="#{messageSource['mensaje_menu_enviar_firma']}" ajax="true"
+								actionListener="#{mbBorradores.mostrarDialogEnviarFirmar}"
+								rendered="#{mbBorradores.dtoBorradorSeleccionado.documento.tipoCaptura ne 3}"
+								disabled="#{(mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma ne null and mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma ne 0) or (mbBorradores.dtoBorradorSeleccionado.numEnviadoValidacion ne 0 and mbBorradores.dtoBorradorSeleccionado.numEnviadoValidacion ne null)}"
+								update=":formBorradores:dialog_enviar_fv" />
+
+					<p:menuitem value="#{messageSource['mensaje_menu_editar']}" action="modificar"
+								disabled="#{mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma ne null or mbBorradores.dtoBorradorSeleccionado.numEnviadoValidacion ne null}" />
+
+					<p:menuitem value="#{messageSource['mensaje_menu_elimiar']}"
+								actionListener="#{mbBorradores.mostrarConfirmacionEliminarBorrador}"
+								disabled="#{(mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma ne 0 and mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma ne null) or (mbBorradores.dtoBorradorSeleccionado.numEnviadoValidacion ne 0 and mbBorradores.dtoBorradorSeleccionado.numEnviadoValidacion ne null)}"
+								update=":formBorradores:panelIzq,:formBorradores:tablaBorradores,:formBorradores:mensaje_general_info" />
+				</p:tieredMenu>
+		</div>
+		
+		<div id="acciones_historial" class="col-xs-2"  style="width: 120px;">
+			<!-- <p:commandLink title="#{messageSource['mensaje_ver_historial_borrador']}"
+						   actionListener="#{mbHistorial.consultarHistorial(mbBorradores.dtoBorradorSeleccionado.documento.idDocumento)}"
+						   update="formBorradores:dialogHistorial" style="text-decoration: none"> -->
+			<div class="contenido_historial">
+			<!-- <p:commandLink styleClass="fa fa-clock-o" value="&nbsp;#{messageSource['mensaje_ver_historial_borrador']}" title="#{messageSource['mensaje_ver_historial_borrador']}"
+				actionListener="#{mbHistorial.consultarHistorial(mbBandejaEnviados.enviadoSeleccionado.dtoDocumento.idDocumento)}"
+				update="formBorradores:dialogHistorial" /> -->
+			<p:commandLink styleClass="fa fa-sticky-note-o link_detalle" value="&nbsp; Detalle documento" title="&nbsp; Detalle documento"
+							actionListener="#{mbBorradores.mostrarDialogDetalle}"
+							update=":formBorradores:dialogDetalleDoc" />
+			</div>
+			<!-- <p:commandLink title="#{messageSource['mensaje_ver_historial_borrador']}"
+						   actionListener="#{mbBorradores.mostrarDialogDetalle}"
+						   update=":formBorradores:dialogDetalleDoc" >
+				
+				<i class="fa fa-clock-o" style="font-size: 18px; "/><h:outputText value="&nbsp;" style="text-decoration: none"/><h:outputText value="Detalle Documento" style="text-decoration: underline;"/> -->
+				
+			
+				
+		</div>
+
+
+	</div>
+	<div id="row_anexo" class="row">
+		<div id="anexo" class="col-xs-1" style="#{mbBorradores.dtoBorradorSeleccionado.documento.contieneAnexos ne 0 ? 'background-color: #e2e2e2;' : ''} width: 100px;">
+			<c:if test="#{mbBorradores.dtoBorradorSeleccionado.documento.contieneAnexos ne 0}">
+				<span>
+					<i class="fa fa-paperclip" style="font-size: 18px; color:#000000 !important"/><h:outputText value="&nbsp;" style="text-decoration: none"/>
+					<h:outputText value="#{messageSource['mensaje_ver_anexos']}" style="color:#000000 !important"/>
+				</span>
+			</c:if>
+			
+			
+		</div>
+		<div id="anexoBoton" class="col-xs-1" style="width: 30px; text-align: center;">
+			<c:if test="#{mbBorradores.dtoBorradorSeleccionado.documento.contieneAnexos ne 0}">
+				<p:commandButton value="&#xF00e;"
+								 actionListener="#{mbBorradores.mostrarDialogAnexos}"
+								 update=":formBorradores:dialogVerAnexos" style="width: 30px; height: 30px !important;"/>
+			</c:if>
+			
+		</div>
+		
+		<div id="div_estatus" class="col-xs-6">
+			
+			<h:outputText 	value="#{messageSource['mensaje_estatus_envio_firmar']}" styleClass="estatus"
+							rendered="#{mbBorradores.dtoBorradorSeleccionado.fechaEnvio ne null and (mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma ne null and mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma ne 0)}"/>
+			<h:outputText 	value="#{mbBorradores.dtoBorradorSeleccionado.fechaEnvio}" 
+							styleClass="estatus"
+							rendered="#{mbBorradores.dtoBorradorSeleccionado.fechaEnvio ne null and (mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma ne null and mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma ne 0)}">
+						<f:convertDateTime pattern="dd/MM/yy " />
+			</h:outputText>
+			
+			<h:outputText 	value="#{messageSource['mensaje_estatus_envio_validar']}" styleClass="estatus"
+							rendered="#{mbBorradores.dtoBorradorSeleccionado.fechaEnvio ne null and (mbBorradores.dtoBorradorSeleccionado.numEnviadoValidacion ne null and mbBorradores.dtoBorradorSeleccionado.numEnviadoValidacion ne 0)}"/>
+			<h:outputText 	value="#{mbBorradores.dtoBorradorSeleccionado.fechaEnvio}"
+							styleClass="estatus" 
+							rendered="#{mbBorradores.dtoBorradorSeleccionado.fechaEnvio ne null and (mbBorradores.dtoBorradorSeleccionado.numEnviadoValidacion ne null and mbBorradores.dtoBorradorSeleccionado.numEnviadoValidacion ne 0)}">
+						<f:convertDateTime pattern="dd/MM/yy " />
+			</h:outputText>
+			
+			<h:outputText 	value="#{messageSource['mensaje_estatus_regreso_firmar']}" styleClass="estatus"
+							rendered="#{mbBorradores.dtoBorradorSeleccionado.fechaRegreso ne null and mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma eq 0}"/>
+			<h:outputText 	value="#{mbBorradores.dtoBorradorSeleccionado.fechaRegreso}"
+							styleClass="estatus" 
+							rendered="#{mbBorradores.dtoBorradorSeleccionado.fechaRegreso ne null and mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma eq 0}">
+						<f:convertDateTime pattern="dd/MM/yy " />
+			</h:outputText>
+			
+			<h:outputText 	value="#{messageSource['mensaje_estatus_regreso_validar']}" styleClass="estatus"
+							rendered="#{mbBorradores.dtoBorradorSeleccionado.fechaRegreso ne null and mbBorradores.dtoBorradorSeleccionado.numEnviadoValidacion eq 0 and mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma eq null}"/>
+			<h:outputText 	value="#{mbBorradores.dtoBorradorSeleccionado.fechaRegreso}"
+							styleClass="estatus" 
+							rendered="#{mbBorradores.dtoBorradorSeleccionado.fechaRegreso ne null and mbBorradores.dtoBorradorSeleccionado.numEnviadoValidacion eq 0 and mbBorradores.dtoBorradorSeleccionado.numEnviadoFirma eq null}">
+						<f:convertDateTime pattern="dd/MM/yy " />
+			</h:outputText>
+			
+		</div>
+	</div>
+
+	<!-- Notoficaciones Documentos-->
+	<div id="div_row_notificaciones" class="row">
+		
+		<div id="div_notificaciones_opciones" class="col-xs-12">
+
+			<c:if test="#{mbBorradores.dtoBorradorSeleccionado ne null}">
+				<c:if test="#{mbBorradores.dtoBorradorSeleccionado.conComentarios eq 0 and mbBorradores.dtoBorradorSeleccionado.conModificaciones eq 0 and mbBorradores.dtoBorradorSeleccionado.conFirma eq 0 and mbBorradores.dtoBorradorSeleccionado.conValidacion eq 0}">
+					<h:outputText styleClass="titulo_instrucciones" value="No tiene notificaciones"/>
+				</c:if>
+
+				<!-- Notificación Comentario -->
+				<c:if
+					test="#{mbBorradores.dtoBorradorSeleccionado.conComentarios ne 0}">
+					<div class="row margen_fondo">
+						<div id="fondo_notificacion_comentarios" class="row">
+							
+								<div id="row_notificacion_comentarios" class="row" style="font-family: Roboto">
+
+									<span class="nombre_notificacion"> 
+										<i class="fa fa-commenting" aria-hidden="true"></i>&nbsp;#{messageSource['mensaje_notificacion_comentado']} | 
+									</span>
+									<p:commandLink value="#{messageSource['mensaje_revisar_comentarios']}" 
+												   actionListener="#{mbBorradores.mostrarDialogComentarios}" 
+												   update=":formBorradores:dialog_revisar_comentarios, :formBorradores:panelDer" 
+												   style="color: #E30613; text-decoration: none"/>
+												   
+									<p:commandLink 	value="&#xf00d;" style="color:#E30613;" styleClass="tache_cerrar" 
+												actionListener="#{mbBorradores.quitarNotificacionComentado}"
+												update=":formBorradores:panelCentro, :formBorradores:panelDer"  />
+									
+								</div>
+						</div>
+					</div>
+				</c:if>
+
+
+				<!-- Notificación Modificación -->
+				<c:if
+					test="#{mbBorradores.dtoBorradorSeleccionado.conModificaciones ne 0}">
+					<div class="row margen_fondo">
+						<div id="fondo_notificacion_editado" class="row">
+
+							<div id="row_notificacion_editado" class="row" style="font-family: Roboto">
+
+								<span class="nombre_notificacion"><i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;#{messageSource['mensaje_notificacion_editado']} | </span> 
+								<p:commandLink value="#{messageSource['mensaje_revisar_modificaciones']}" 
+											   actionListener="#{mbBorradores.mostrarDialogEdiciones}" update=":formBorradores:dialog_revisar_ediciones,:formBorradores:panelDer" 
+											   style="color: #82368C; text-decoration: none"/>
+											   
+								<p:commandLink 	value="&#xf00d;" style="color:#82368C;" styleClass="tache_cerrar" 
+												actionListener="#{mbBorradores.quitarNotificacionEditado}"
+												update=":formBorradores:panelCentro, :formBorradores:panelDer"  />
+							</div>
+
+						</div>
+					</div>
+				</c:if>
+
+				<!-- Notificación Firma -->
+				<c:if test="#{mbBorradores.dtoBorradorSeleccionado.conFirma ne 0}">
+					<div class="row margen_fondo">
+						<div id="fondo_notificacion_firmado" class="row">
+							<div id="row_notificacion_firmado" class="row" style="font-family: Roboto">
+
+								<span class="nombre_notificacion"> <h:graphicImage  name="icono_firma.png" library="img/bandeja" />&nbsp;#{messageSource['mensaje_notificacion_firmado']} | </span>
+								<p:commandLink value="#{messageSource['mensaje_revisar_firma']}" 
+											   actionListener="#{mbBorradores.quitarNotificacionFirmado}" 
+											   update=":formBorradores:panelCentro, :formBorradores:panelDer"  
+											   style="color: #1D71B8; text-decoration: none"/>
+											   
+								<p:commandLink 	value="&#xf00d;" style="color:#1D71B8;" styleClass="tache_cerrar" 
+												actionListener="#{mbBorradores.quitarNotificacionFirmado}"
+												update=":formBorradores:panelCentro, :formBorradores:panelDer"  />
+
+							</div>
+						</div>
+					</div>
+				</c:if>
+
+				<!-- Notificación Validacion  -->
+				<!-- -->
+				<c:if test="#{mbBorradores.dtoBorradorSeleccionado.conValidacion ne 0}">
+					<div class="row margen_fondo">
+						<div id="fondo_notificacion_validado" class="row">
+							<div id="row_notificacion_validado" class="row" style="font-family: Roboto">
+
+								<span class="nombre_notificacion"><i class="fa fa-check" aria-hidden="true"/>&nbsp;#{messageSource['mensaje_notificacion_validado']} | </span>
+								
+								<p:commandLink value="#{messageSource['mensaje_revisar_validacion']}" 
+											   actionListener="#{mbBorradores.quitarNotificacionValidado}" 
+											   update=":formBorradores:panelCentro, :formBorradores:panelDer"  
+											   style="color: #3AAA35; text-decoration: none"/>
+											   
+								<p:commandLink 	value="&#xf00d;" style="color:#3AAA35;" styleClass="tache_cerrar" 
+												actionListener="#{mbBorradores.quitarNotificacionValidado}"
+												update=":formBorradores:panelCentro, :formBorradores:panelDer"  />
+
+							</div>
+						</div>
+					</div>
+				</c:if>
+			</c:if>
+
+		</div>
+	</div>
+
+
+
+</ui:composition>

@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sec="http://www.springframework.org/security/tags">
+	
+
+			<p:dataTable id="tablaRecibidos" styleClass="tabla_bandeja"
+						 var="recibido" value="#{mbBHistorico.listaRecibidosLazy}" lazy="true"
+						 paginator="true" paginatorPosition="top" rows="10"
+						 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						 selectionMode="single" selection="#{mbBHistorico.recibidoSeleccionado}"
+						 
+						 emptyMessage="#{messageSource['mensaje_tabla_borradores_vacia']}">
+
+				 <p:ajax event="rowSelect" listener="#{mbBHistorico.seleccionarFilaRecibido}" 
+				 			update=":formBorradores:panelCentro, :formBorradores:panelDer, :formBorradores:panelIzq, menu_formulario"/>
+				 <p:ajax event="contextMenu" listener="#{mbBHistorico.seleccionarFilaRecibido}"
+						update="formBorradores:acordion_principal:menuAccionesRecibidos, :formBorradores:panelDer, :formBorradores:panelCentro, :formBorradores:panelIzq, menu_formulario" oncomplete="PF('menuAccionesRecibidos').show(currentEvent);"/>
+				
+				<p:column styleClass="#{recibido.noLeido eq messageSource['constante_documento_noLeido'] ? 'columna_franja_nuevo_noleidos':'columna_franja_nuevo'}" />
+				
+				<p:column styleClass="columna_icono" >
+
+					<h:graphicImage rendered="#{recibido.documento.tipoCaptura ne 3}" 
+									name="bo_negro.png" library="img/bandeja" class="pull-center img-responsive" />
+						
+					<h:graphicImage rendered="#{recibido.documento.tipoCaptura eq 3}" name="iconos_adjunto.png" library="img/bandeja"
+									class="pull-center img-responsive" />
+
+				</p:column>
+				
+				<p:column styleClass="#{recibido.noLeido eq messageSource['constante_documento_noLeido'] ? 'columna_bandeja_noleido':'columna_bandeja'}" >
+
+					<span class="tabla_siglas">
+						 <h:outputText value="#{recibido.documento.noDocumento}" />
+						<i class="#{recibido.documento.contieneAnexos eq 1 ? 'fa fa-paperclip':'sin_adjunto' }" aria-hidden="true"></i><br />
+					</span>
+					
+					<span class="asunto">
+						 <h:outputText value="#{recibido.documento.asunto}" /> 
+						 <!-- <br/><h:outputText value="#{recibido.idDocumento}" /> -->
+					</span>
+					
+				</p:column>
+
+				<p:column styleClass="#{recibido.noLeido eq messageSource['constante_documento_noLeido'] ? 'columna_bandeja_noleido columna_fecha':'columna_bandeja columna_fecha'}" >
+
+					<h:outputText value="#{recibido.fechaRecepcion}" >
+						<f:convertDateTime pattern="dd/MM/yy " />
+					</h:outputText>
+					
+					<h:outputText value="#{recibido.fechaRecepcion}">
+						<f:convertDateTime pattern="hh:mm aa" />
+					</h:outputText>
+
+				</p:column>
+				
+			</p:dataTable>
+			
+	<p:contextMenu id="menuAccionesRecibidos" widgetVar="menuAccionesRecibidos" for="tablaRecibidos">
+		<p:menuitem value="#{messageSource['mensaje_menu_turnar']}"
+					actionListener="#{mbTurnado.abrirTurnadoHistorico(mbBHistorico.recibidoSeleccionado)}"
+					disabled="#{mbBHistorico.recibidoSeleccionado.enAtencion eq messageSource['id_estatus_concluido'] or mbBHistorico.recibidoSeleccionado.enAtencion eq messageSource['id_estatus_rechazado'] or mbBHistorico.recibidoSeleccionado.enAtencion eq messageSource['id_estatus_reasignado']}"
+					update=":formBorradores:dialogTurnadoHistorico" />
+							
+		<p:menuitem value="#{messageSource['mensaje_menu_responder']}" 
+					actionListener="#{mbBHistorico.mostrarDialogResponder}"
+					disabled="#{mbBHistorico.recibidoSeleccionado.tieneRespuesta eq messageSource['estatus_con_respuesta'] or mbBHistorico.recibidoSeleccionado.enAtencion eq messageSource['id_estatus_concluido'] or mbBHistorico.recibidoSeleccionado.enAtencion eq messageSource['id_estatus_rechazado'] or mbBHistorico.recibidoSeleccionado.enAtencion eq messageSource['id_estatus_reasignado']}"
+					update=":formBorradores:dialogResponder" />
+					
+		<p:menuitem value="#{messageSource['mensaje_menu_registrar_atencion']}"
+					actionListener="#{mbBHistorico.mostrarDialogRegistrarAtencion}"
+					disabled="#{mbBHistorico.recibidoSeleccionado.enAtencion eq messageSource['id_estatus_concluido'] or mbBHistorico.recibidoSeleccionado.enAtencion eq messageSource['id_estatus_rechazado'] or mbBHistorico.recibidoSeleccionado.enAtencion eq messageSource['id_estatus_reasignado']}"
+					update=":formBorradores:dialogRegistrarAtencion, :formBorradores:acordion_principal:tablaRecibidos,:formBorradores:mensaje_general_exito" />
+	</p:contextMenu>
+
+</ui:composition>

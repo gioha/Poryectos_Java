@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:ine="http://www.ine.mx/ui" xmlns:deceyec="http://ine.mx/ui">
+
+	<div class="ui-g" style="margin-top: 0px;">
+	
+			<!-- Growl informativos -->
+			 <p:growl id="growlMsj" life="5000" showDetail="true" sticky="false" for="growl" />
+			 <div id="growl" /> 
+	
+			<!-- Mensajes -->
+			<p:messages id="msj" closable="false" for="mensaje" styleClass="ui-g-12" style="margin-top: 0px;" />
+			<div id="mensaje" />
+			
+			<!-- <p:messages id="msjs" autoUpdate="true" closable="true" /> -->
+		
+			<!-- Block UI -->
+			<pe:blockUI id="idProgress" target="formActa"
+				content="blockUIContent" widgetVar="progress" />
+			<!-- 			BLOCKUICONTENT -->
+			<h:panelGrid id="blockUIContent" columns="2" style="display:none;">
+				<h:graphicImage library="img" name="loader.gif" width="70" />
+				<h:outputText
+					value="#{messageSource['mensaje_generales_procesando']}"
+					style="white-space: nowrap;" />
+			</h:panelGrid>
+
+		<!-- Inicia contenido de pantalla titulo y mensaje de campos requeridos -->
+		<div class="card ui-g-12">
+			<ui:include src="../titulo.xhtml" />
+
+			<ui:include src="../requerido.xhtml" />
+
+			<ui:include src="../seleccionGeografica.xhtml" />
+		</div>
+
+		<p:outputPanel id="panelGeneral">
+			<p:outputPanel
+				rendered="#{mbGeneradorActa.muestraFormulario == true}">
+				<!-- Información de cómputo: Fecha y hora, condiciones y lugar -->
+				<div class="card ui-g-12">
+					<ui:include src="../informacionComputo.xhtml" />
+				</div>
+
+
+				<!-- Sección para la conformación del consejo -->
+				<div class="card ui-g-12">
+					<c:if
+						test="#{mbGeneradorActa.tipoAccion eq 'C' or mbGeneradorActa.tipoAccion eq 'M'}">
+						<ui:include src="../informacionConsejeros.xhtml" />
+					</c:if>
+					<c:if test="#{mbGeneradorActa.tipoAccion eq 'Q'}">
+						<ui:include src="../informacionConsejerosConsultar.xhtml" />
+					</c:if>
+				</div>
+
+				<!-- Sección para los representantes de los partidos políticos/candidatura independientes-->
+				<div class="card ui-g-12">
+					<c:if
+						test="#{mbGeneradorActa.tipoAccion eq 'C' or mbGeneradorActa.tipoAccion eq 'M'}">
+						<ui:include src="../informacionRepresentantes.xhtml" />
+					</c:if>
+					<c:if test="#{mbGeneradorActa.tipoAccion eq 'Q'}">
+						<ui:include src="../informacionRepresentantesConsultar.xhtml" />
+					</c:if>
+				</div>
+
+			</p:outputPanel>
+		</p:outputPanel>
+
+		<p:outputPanel id="btnsGenerales" styleClass="ui-g-12">
+			<p:outputPanel
+				rendered="#{mbGeneradorActa.muestraFormulario == true}">
+				<center>
+					<div class="center-block">
+						<!-- Botones de gurdar o cancelar -->
+						<ui:include src="../botonGuaCan.xhtml" />
+
+						<!-- Botones de imprimir y editar -->
+						<ui:include src="../botonImprimirActa.xhtml" />
+					</div>
+				</center>
+			</p:outputPanel>
+		</p:outputPanel>
+
+	</div>
+
+</ui:composition>

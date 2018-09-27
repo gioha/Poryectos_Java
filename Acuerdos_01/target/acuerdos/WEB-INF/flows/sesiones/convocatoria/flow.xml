@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+
+	start-state="validarRolUsuario" parent="parent-flow">
+	<var name="mbConvocatoria" class="mx.ine.acuerdos.mb.MBConvocatoria" />
+
+
+	<!-- validamos que sea un usario valido -->
+	<decision-state id="validarRolUsuario">
+		<if test="mbConvocatoria.esRolValido()" then="validarCapturaConsulta"
+												else="accesoDenegado" />
+	</decision-state>
+
+	<!-- si es un usuario valido, vemos si es de captura o consulta -->
+	<decision-state id="validarCapturaConsulta">
+		<if test="mbConvocatoria.esCaptura()" then="validarMiembroComision"
+											  else="consultaConvocatoria" />
+	</decision-state>
+
+	<decision-state id="validarMiembroComision">
+		<if test="mbConvocatoria.esMiembroDeComision()" then="idConvocatoria"
+												  		else="accesoDenegado" />
+	</decision-state>
+
+	<!-- Pantalla de convocatoria -->
+	<view-state id="idConvocatoria" view="convocatoria.xhtml">
+		<on-entry>
+			<evaluate expression="mbConvocatoria.init()"></evaluate>
+		</on-entry>
+ 		<transition on="btnAgregarConvocatoria" to="idConvocatoria" />
+	</view-state>
+
+	<view-state id="consultaConvocatoria"        
+			view="externalRedirect:servletRelative:/sesiones/convocatoria/consulta"/>
+
+	<view-state id="accesoDenegado"        
+			view="externalRedirect:servletRelative:/acceso_denegado"/>
+
+</flow>

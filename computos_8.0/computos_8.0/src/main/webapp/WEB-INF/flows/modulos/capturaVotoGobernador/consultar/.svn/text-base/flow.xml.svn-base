@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+	  start-state="consultar" parent="parent-flow">
+	
+	
+	<secured attributes="ROLE_COMPUTOS.ADMIN.PARAM.CAPTURA.OC, 
+						 ROLE_COMPUTOS.ADMIN.CAPTURA.OC, 
+						 ROLE_COMPUTOS.CONSEJERO.OC, 
+						 ROLE_COMPUTOS.CONSULTA.OC, 
+						 ROLE_COMPUTOS.CAU.OC, 
+						 ROLE_COMPUTOS.CAPTURA.JL, 
+						 ROLE_COMPUTOS.CONSULTA.JL, 
+						 ROLE_COMPUTOS.ADMIN.EXT.OPLE.JL,  
+						 ROLE_COMPUTOS.CAPTURA.JM, 
+						 ROLE_COMPUTOS.CONSULTA.JM,
+						 ROLE_COMPUTOS.PARTIDO.CONSULTA.JL, 
+						 ROLE_COMPUTOS.PARTIDO.CONSULTA.JM" match="any"/>
+						 
+	  	
+ 	<var name="constantes" class="mx.ine.computosINE.util.Constantes"/>
+	
+	
+	<view-state id="consultar" view="consultar.xhtml">
+
+ 	  	<on-entry> 
+ 	  		<evaluate expression="mbCapturaVotos.setCandidatura(constantes.GOBERNADOR)" />
+			<evaluate expression="mbCapturaVotos.setAccion(constantes.ACCION_CONSULTA)" />
+ 	  	 			
+ 	  	 	<evaluate expression="mbCapturaVotos.initConsultar()" />
+ 	  	 			
+			<evaluate expression="mbAdmin.dto.setIdModulo(5)"></evaluate>
+            <evaluate expression="mbAdmin.dto.setIdAccion(2)"></evaluate>
+ 		</on-entry> 
+
+	 	<transition on="success"  to="consultar" />
+		<transition on="error"  to="consultar" />
+		<!-- <transition on="cancelar" to="consultar" /> --> 
+	
+		<transition on="captura" to="capturar" />
+		<transition on="modifica" to="modificar" />
+	
+	</view-state>
+		
+ 	<view-state id="capturar"
+		view="externalRedirect:servletRelative:/modulos/capturaVotoGobernador/capturar"/>
+	<view-state id="modificar"
+		view="externalRedirect:servletRelative:/modulos/capturaVotoGobernador/modificar" /> 
+	  
+</flow>

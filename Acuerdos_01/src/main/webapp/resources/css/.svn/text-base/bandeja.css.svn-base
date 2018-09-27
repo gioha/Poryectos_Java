@@ -1,0 +1,395 @@
+.ui-dialog {
+    border-radius: 10px;
+    border: 2px solid #B0B0B0;
+}
+.ui-dialog .ui-dialog-titlebar-close {
+	background-color: transparent;
+	box-shadow: none;
+	border-color: #ffffff;
+}
+.lblElemAcuerdo{
+	font-size: 13px;
+	color:  #4E4E4E;
+	font-weight: bold;
+}
+.lblContmAcuerdo{
+	font-size: 13px;
+	color:  #4E4E4E;	
+}
+.Cumplido{
+	height: 20px; 
+	width: 60px; 		 
+	display: block; 
+	margin: 0px auto;	
+	color: #62CA93;
+}
+.Pendiente{
+	height: 20px; 
+	width: 60px; 		 
+	display: block; 
+	margin: 0px auto;
+	color: #9D679D;	
+}
+.Parcialmente{
+	height: 40px; 
+	width: 70px; 		 
+	display: block; 
+	margin: 0px auto;
+	color: #1889B5;	
+}
+.Sin{
+	height: 40px; 
+	width: 70px; 
+	margin: 0px auto;
+	color: #b7b7b7;
+}
+
+.lblLiga{
+	font-size: 12px; 	color:  #0080ff; 	text-decoration: underline red; 	
+}
+	 /* Etilo para eliminar las bordes de las celdas-->*/		
+    .columnas{
+    	background-color: white;
+    	border-top-style: hidden;    			    	
+    	border-right-style: solid;	    	    	
+    }
+     /* Estilo cuando una fila es seleccionada-->*/
+    .ui-state-highlight,.ui-widget-content .ui-state-highlight,.ui-widget-header .ui-state-highlight{
+     	background-color: #EFD3EB !important;
+     	border-top-style: hidden;
+    	border-left-style: hidden;		    	
+    	border-right-style: solid;    	
+    	  	
+    }		    
+    /* Etilo para el hover de las fila-->*/
+	.ui-datatable tr.ui-datatable-even:hover, .ui-datatable tr.ui-datatable-odd:hover {
+	    background: #EFD3EB;
+	    border: hidden;	
+	    box-shadow: none;		    
+	}		
+	/* Etilo de letra para las filas-->*/
+	.ui-datatable tr{
+	    font-family: 'Roboto Regular', arial;
+	    font-size: 14px;			    
+	}
+	.botonEditar {      
+        margin: 0px auto;
+        float: left;
+        width: 20px !important;
+        height: 20px !important;       
+    }
+    .botonAgregar{
+        width: 25px !important;
+        height: 25px !important;
+        margin-left: 10px;
+    }   
+	.subtitulo > hr {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border-top: 3px solid #B0B0B0;
+	}
+    .estatusAcuerdo{     
+		height: 25px; 
+		width: 25px; 
+		display: block; 
+		margin: 0px auto;
+    }
+	.cabeceras{
+		margin-left:30px; 
+		margin-right:30px; 
+		margin-top:25px;
+	}	
+	#cabecera{
+		background: #932C60; 
+		height:35px;		
+	}
+	.labelsCabecera{
+		font-family:'Roboto Regular', arial; 
+	  	font-size: 21px; 
+	  	color: #932C60;
+	  	font-weight: bold;
+	 	/* margin-left:30px; */
+	}
+	.tabla{
+		/* border: 2px solid #A09F9F; */
+		margin-top: 6px;
+	}
+	.headerTabla{
+		font-family:'Roboto light', arial; 
+		font-size: 10px;
+		text-align: center;
+		border: none !important;
+	}
+	.colEstatus{
+		font-family:'Roboto light', arial; 
+		font-size: 12px;
+		text-align: center;
+		font-weight: bold;
+	}
+	.contenedorModal {
+		background-color: #FFFFFF;
+		/* height: 450px; */
+		width: 100%;
+		border-radius: 10px;
+		border: 2px solid #A09F9F;			
+	}
+	.contenModalElimAcu {
+		background-color: #FFFFFF;
+		height: 85px;
+		width: 100%;
+		border-radius: 10px;
+		/* border: 2px solid #A09F9F;*/
+		position: relative;
+		text-align:center;		
+	}
+	.separador{		
+		background-color: #932C60;
+		height: 30px;
+		margin-top: 60px;
+	}
+	.divTextoSeparador{
+		margin-top: -25px;
+		margin-left: 40px;
+	}
+	.tituloModal {
+		padding-bottom: 30px;
+	}
+	#detalleConsulta .tituloModal {
+		margin-left: 40px;
+	}
+	.cerrarModal{
+		float: right;
+		margin-right: 20px;		
+	}
+	#detalleConsulta .cerrarModal{
+		margin: 10px 10px 0px 185px;
+	}
+	.imgCerrarModal{
+		  display: block;
+		  width: 30px !important;
+          height: 30px !important;	 
+		  background-repeat: no-repeat;	
+	}
+	.contenedorModalHeader{		
+		 margin-top: 10px;
+	}	
+	.nombreAcuerdo{
+		width: 100%;
+		margin-left: 40px;
+		margin-top: 30px;
+		color: #4E4E4E;
+		font-size: 12px;		
+		text-align: justify;
+	}	
+	.desAcu{
+		width: 100%;
+		margin-left: 40px;
+		margin-top: 10px;
+		font-size: 12px;
+	}
+	.desAcu:last-child {
+		margin-bottom: 20px;
+	}
+	.desEng{
+		margin-left: 80px;
+		margin-top: 10px;
+		color: #4E4E4E;
+		font-size: 12px;	
+	}
+	.textoSeparador{		
+		color: #FFFFFF;		    
+		font-size: 18px;
+		font-weight: bold;								    
+	}	
+	.textoPunto{
+		text-align: justify;
+		font-size: 12px;
+	}
+	.cabeceraAcuerdos {
+		border-top: 1px solid #000000;
+		border-bottom: 1px solid #000000;
+		padding-left: 10px;
+	}
+	.titulocabeceraAcuerdos {
+		/* margin-left: 10px; */	
+	}
+	.contenTituloBusqueda{
+		position: relative;	
+	}
+	.busqueda{	
+		display: block;
+        margin: 0px auto;
+        float: left;        
+        width: 30px !important;
+        height: 30px !important;
+        background-image: url('#{request.contextPath}/resources/img/seguimiento/busqueda.png') !important;	
+        background-repeat: no-repeat;	
+	}
+	.imgBusqueda{
+		float: right;
+		margin-right: 20px;		
+	}
+	.reloj{
+		height: 15px; 
+		width: 15px; 
+		display: block; 
+		margin: 0px auto;
+	}
+	.estatusGeneral{
+		height: 20px; 
+		width: 60px; 		 
+		display: block; 
+		margin: 0px auto;
+	}
+	.ui-growl{
+    position:fixed;
+    top:35%;
+    right:40%;
+    width:301px;
+	}
+	@media (max-width: 1200px) {
+	  .lblTituloForm {
+			font-size: 20px;
+			color: #1b7986;
+		}
+  }
+#busqueda-bandeja {
+    background: #f5f5f5;
+    padding: 5px 15px;
+}
+#busqueda-bandeja > table {
+    display: inline;
+    bottom: -9px;
+    position: relative;
+    margin-left: 18px;
+}
+#busqueda-bandeja > table .ui-radiobutton {
+	margin-right: 6px;
+}
+#busqueda-bandeja > table td:nth-child(2) > label {
+	margin-right: 40px;
+}
+#busqueda-bandeja > div {
+	display: inline-block;
+	width: 270px;
+}
+#busqueda-bandeja input,
+span.inputsForm {
+	width: 100%;
+}
+input.inputsForm {
+	width: 62%;
+}
+.inputsForm input {
+	width: 62%;
+}
+#radios-tipo-documento {
+	margin-top: 30px;
+	margin-bottom: 20px;
+}
+#radios-tipo-documento > table {
+	margin: 0 auto;
+}
+#radios-tipo-documento > table .ui-radiobutton {
+	margin-right: 6px;
+}
+#radios-tipo-documento > table td:nth-child(2) > label {
+	margin-right: 40px;
+}
+#consultaDetalleDialog .ui-dialog-content {
+    padding: 0 .7em .8em .7em;
+}
+#consultaDetalleDialog .ui-dialog-titlebar {
+    padding: 0 .4em .4em 1em;
+}
+.acciones-modal {
+	margin-top: 25px;
+	width: 100%;
+}
+.acciones-modal > form, #acciones-modal > button {
+	display: inline-block;
+}
+.acciones-modal > button {
+	color: #932C60 !important;
+	border-color: #932C60 !important;
+	border-width: 2px !important;
+}
+.acciones-modal > form > button > span {
+	padding: .3em 1.3em !important;
+	box-shadow: none !important;
+	border-width: 2px !important;
+	border-color: #932C60 !important;
+	background-color: #932C60 !important;
+	color: #ffffff !important;
+}
+.extracto-texto-punto {
+	font-weight: bold;
+}
+#contenedor-menu-lateral .ui-menu {
+	width: 100%;
+	background: none;
+	border: none;
+	padding: 0;
+}
+#contenedor-menu-lateral .ui-menu .ui-menuitem-link {
+	width: 100%;
+	font-size: 19px;
+	color: #000000;
+	border-radius: 0;
+	margin: 10px 0;
+}
+#contenedor-menu-lateral .ui-menu .ui-menuitem-link.ui-state-hover {
+	box-shadow: none;
+	background: #FDD6FD;
+	font-weight: bold;
+	color: #932C60;
+}
+#contenedor-tabs .ui-tabmenu {
+	border: none;
+	border-bottom: 4px solid #932C60;
+}
+#contenedor-tabs .ui-tabmenu > .ui-tabmenu-nav {
+	background: none;
+}
+#contenedor-tabs .ui-tabmenu > .ui-tabmenu-nav > .ui-tabmenuitem {
+	background: #EE99CC;
+	border: none;
+	border-radius: 0;
+}
+#contenedor-tabs .ui-tabmenu > .ui-tabmenu-nav > .ui-tabmenuitem:first-child {
+	margin-left: 10px;
+}
+#contenedor-tabs .ui-tabmenu > .ui-tabmenu-nav > .ui-tabmenuitem.ui-state-hover,
+#contenedor-tabs .ui-tabmenu > .ui-tabmenu-nav > .ui-tabmenuitem.ui-state-active {
+	background: #932C60;
+	box-shadow: none;
+}
+#contenedor-tabs .ui-tabmenu > .ui-tabmenu-nav > .ui-tabmenuitem > .ui-menuitem-link {
+	color: #FFFFFF;
+}
+.pr-0 {
+	padding-right: 0;
+}
+.pl-0 {
+	padding-left: 0;
+}
+.bb {
+	border-bottom: 1px solid #000000;
+}
+.bl {
+	border-left: 1px solid #000000;
+}
+.tabla .ui-widget-content {
+	border: none;
+}
+.tabla.ui-datatable tbody td {
+	border-style: none;
+}
+.titulo-menu-lateral {
+	font-size: 20px;
+	font-weight: bold;
+	color: #1B7986;
+	padding-left: 5px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}

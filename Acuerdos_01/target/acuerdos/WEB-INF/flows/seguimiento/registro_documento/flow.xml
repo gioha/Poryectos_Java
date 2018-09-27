@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/webflow
+                          http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+    start-state="creaDocumento" parent="parent-flow">
+    <!-- <var name="mbRegDocumentos" class="mx.ine.acuerdos.mb.MBRegistroDocumentos" /> -->
+    <view-state id="creaDocumento" view="crea_Documento_Sivople.xhtml">
+    	<on-entry>
+			<evaluate expression="mbRegDocumentos.init()"></evaluate>
+		</on-entry>
+    </view-state>
+</flow>

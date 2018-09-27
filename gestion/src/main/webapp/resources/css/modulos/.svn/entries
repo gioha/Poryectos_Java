@@ -1,0 +1,91 @@
+10
+
+dir
+365080
+svn+ssh://giovanni.hernandez@10.0.1.85/repositorio/DIS-UNICOM/Codigo/2017/Gestion_Inst/Gestion_4.0/trunk/src/main/webapp/resources/css/modulos
+svn+ssh://giovanni.hernandez@10.0.1.85/repositorio/DIS-UNICOM
+
+
+
+2018-04-11T01:09:10.465231Z
+365080
+josemiguel.ortiz
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+b6cf43f3-9c2e-435a-add6-29cfb2289967
+
+acronimos
+dir
+
+apartado_folios
+dir
+
+bandeja
+dir
+
+bandeja_oficialia
+dir
+
+captura_documento
+dir
+
+corresponsable
+dir
+
+detalle_documento
+dir
+
+error
+dir
+
+estructura
+dir
+
+firma
+dir
+
+historial_creacion
+dir
+
+inicio_sistema
+dir
+
+instrucciones
+dir
+
+menu
+dir
+
+oficialia_partes
+dir
+
+plantillas
+dir
+
+remitentes_externos
+dir
+
+reportes_oficialia
+dir
+
+seleccion_rol
+dir
+
+turnado
+dir
+
+validacion
+dir
+

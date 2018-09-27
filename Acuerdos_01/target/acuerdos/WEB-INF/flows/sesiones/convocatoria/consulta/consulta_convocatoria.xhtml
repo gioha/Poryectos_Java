@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sf="http://www.springframework.org/tags/faces"
+				xmlns:sec="http://www.springframework.org/security/tags"
+				template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+		<h:outputStylesheet library="css" name="estilosConvocatoria.css" />
+		<style>
+			.inputsForm {
+				width: 60%;
+			}
+			.ancho-campo {
+				width: 60%;
+				margin: 0 auto;
+			}
+			.ui-datatable tr.ui-datatable-even:hover, .ui-datatable tr.ui-datatable-odd:hover {
+			    background: #EFD3EB;
+			    border: hidden;	
+			    box-shadow: none;		    
+			}
+			.ui-datatable-scrollable-header-box > table > thead {
+			    border: 2px solid #d84a9f !important;
+			}
+		</style>
+
+		<div class="container">
+			
+			<div class="row">
+				<div class="col-xs-12">
+					<!-- #################### COMIENZA CAMINO DE MIGAJAS #################### -->
+					<ol class="breadcrumb">
+						<li>
+							<a href="${request.contextPath}/app/home"> 
+								<h:outputText value="#{messageSource['lbl_home']}" />
+							</a>
+						</li>
+						<li class="active">#{messageSource['lbl_sesionCCC']}</li>
+						<li class="active">#{messageSource['lbl_convocatoriaCCC']} - #{messageSource['lbl_consultarCCC']}</li>
+					</ol>
+				</div>
+				<div class="col-xs-12">
+					<!-- #################### ENCABEZADO DE LA VISTA #################### -->
+					<div class="lblTituloForm">
+						<span>#{messageSource['lbl_convocatoriaCCC']}</span>
+					</div>
+				</div>
+				<div class="col-xs-12">
+					<div style="text-align: right; font-size: 25px; color: #932C60;">
+						<c:if test="#{mbConsultaConvocatoria.esCaptura()}">
+							<div style="display: inline-block; padding-right: 50px;">
+								<a href="${request.contextPath}/app/sesiones/convocatoria"
+							       style="color: #932C60; text-decoration: none;"> 
+									<h:outputText value="#{messageSource['lbl_capturarCCC']}" />
+								</a>
+							</div>
+						</c:if>
+						<div style="display: inline-block; padding-right: 50px;">
+							<h:outputText value="#{messageSource['lbl_consultarCCC']}" />
+							<p style="height: 4px; margin-bottom: -1px; background-color: darkslategray;"></p>
+						</div>
+					</div>
+
+					<div>
+						<p style="height: 3px; background-color: darkgray;"></p>
+					</div>
+				</div>
+			</div>
+
+				<!-- #################### COMIENZA BÚSQUEDA #################### -->
+				<h:form id="form">
+					<div class="row">
+						<div class="col-xs-12 espaciador-top">
+							<div style="font-size: 18px; color: #932C60;">
+								<h:outputLabel>#{messageSource['lbl_busquedaCCC']}</h:outputLabel>
+							</div>
+	
+							<div>
+								<p style="height: 2px; background-color: darkgray;"></p>
+							</div>
+						</div>
+						<div class="col-xs-12 col-md-4">
+							<!-- #################### CAMPO AÑO #################### -->
+							<div class="ancho-campo espaciador-xs-top">
+								<div>
+									<h:outputText value="#{messageSource['etiqueta_simbolo_asterisco']}"
+												  style="color: #d50080;; font-size: 17px;" />
+									<h:outputText value="&nbsp;#{messageSource['lbl_anioCCC']}" 
+												  style="font-size: 15px;" />
+								</div>
+		
+								<p:selectOneMenu id="idAnio"
+												 value="#{mbConsultaConvocatoria.helpConvocatoria.idAnio}"
+												 requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+												 required="true"
+												 styleClass="inputsForm"
+												 style="width:220px; font-size: 13px;"
+												 onchange="setTimeout(function() { $('[id$=msgAnio]').hide(1000); }, 500);"
+												 >
+									<f:selectItem itemLabel="#{messageSource['lbl_selecciona_anioCCC']}"
+												  itemValue=""
+												  noSelectionOption="true" />
+									<f:selectItems 	value="#{mbConsultaConvocatoria.helpConvocatoria.listaAnios}" 
+													var="anio" 
+													itemValue="#{anio}" 
+													itemLabel="#{anio}"/>
+									<p:ajax listener="#{mbConsultaConvocatoria.determinarMesesAnio(mbConsultaConvocatoria.helpConvocatoria.idAnio)}"
+											update="idPanelMes idPanelTiposSesion idTablaConvocatorias idPanelArbolC"/>
+								</p:selectOneMenu>
+		
+								<div style="width: 125%;">
+									<div class="row">
+										<div class="col-md-9">
+											<p:messages id="msgAnio" for="idAnio" autoUpdate="true" closable="false" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-12 col-md-4">
+							<div class="ancho-campo espaciador-xs-top">
+								<!-- #################### CAMPO MES #################### -->
+								<p:outputPanel id="idPanelMes">
+									<c:if test="#{mbConsultaConvocatoria.helpConvocatoria.listaMesesAnio.size() > 0}">
+										<div>
+											<h:outputText value="#{messageSource['etiqueta_simbolo_asterisco']}"
+														  style="color: #d50080;; font-size: 15px;" />
+											<h:outputText value="&nbsp;#{messageSource['lbl_mesCCC']}" 
+														  style="font-size: 15px;" />
+										</div>
+					
+										<p:selectOneMenu id="idMes"
+														 value="#{mbConsultaConvocatoria.helpConvocatoria.mes}"
+														 requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+														 required="true"
+														 styleClass="inputsForm"
+														 style="width:220px; font-size: 13px;"
+														 onchange="setTimeout(function() { $('[id$=msgMes]').hide(1000); }, 500);"
+														 >
+											<f:selectItem itemLabel="#{messageSource['lbl_selecciona_mesCCC']}"
+														  itemValue=""
+														  noSelectionOption="true" />
+											<f:selectItems 	value="#{mbConsultaConvocatoria.helpConvocatoria.listaMesesAnio}" 
+															var="mes" 
+															itemValue="#{mes.idMes}" 
+															itemLabel="#{mes.descMes}"/>
+											<p:ajax listener="#{mbConsultaConvocatoria.determinarTiposSesion(mbConsultaConvocatoria.helpConvocatoria.mes)}"
+													update="idPanelTiposSesion idTablaConvocatorias idPanelArbolC"/>
+										</p:selectOneMenu>
+					
+										<div style="width: 125%;">
+											<div class="row">
+											  	<div class="col-md-9">
+													<p:messages id="msgMes" for="idMes" autoUpdate="true" closable="false" />
+												</div>
+											</div>
+										</div>
+									</c:if>
+								</p:outputPanel>
+							</div>
+						</div>
+						<div class="col-xs-12 col-md-4">
+							<div class="ancho-campo espaciador-xs-top">
+								<!-- #################### MENÚ DE TIPO DE SESIÓN #################### -->
+								<p:outputPanel id="idPanelTiposSesion">
+									<c:if test="#{mbConsultaConvocatoria.helpConvocatoria.tiposDeSesionesAux.size() > 0}">
+										<div>
+											<h:outputText value="#{messageSource['etiqueta_simbolo_asterisco']}"
+														  style="color: #d50080;; font-size: 17px;" />
+											<h:outputText value="&nbsp;#{messageSource['lbl_tipo_sesionCCC']}" 
+														  style="font-size: 15px;" />
+										</div>
+					
+										<p:selectOneMenu id="idTiposSesion"
+														 value="#{mbConsultaConvocatoria.helpConvocatoria.tipoSesion}"
+														 requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+														 required="true"
+														 styleClass="inputsForm"
+														 style="width:220px; font-size: 13px;"
+														 onchange="setTimeout(function() { $('[id$=msgTiposSesion]').hide(1000); }, 500);"
+														 >
+											<f:selectItem itemLabel="#{messageSource['lbl_selecciona_opcionCCC']}"
+														  itemValue=""
+														  noSelectionOption="true" />
+											<f:selectItems 	value="#{mbConsultaConvocatoria.helpConvocatoria.tiposDeSesionesAux}" 
+															var="tipoSesion" 
+															itemValue="#{tipoSesion.idTipoSesion}" 
+															itemLabel="#{tipoSesion.descripcion}"/>
+										</p:selectOneMenu>
+
+										<div style="width: 125%;">
+											<div class="row">
+											  	<div class="col-md-9">
+													<p:messages id="msgTiposSesion" for="idTiposSesion" autoUpdate="true" closable="false" />
+												</div>
+											</div>
+										</div>
+									</c:if>
+								</p:outputPanel>
+							</div>
+						</div>
+
+ 						<div class="col-xs-12 espaciador-top">
+ 							<!-- #################### BOTÓN DE BUSCAR #################### -->
+							<div class="text-center">
+								<p:commandButton value="#{messageSource['etiqueta_boton_buscar']}"
+								   			 	 action="#{mbConsultaConvocatoria.recuperarConvocatorias(mbConsultaConvocatoria.helpConvocatoria.tipoSesion)}"
+									   			 update="idTablaConvocatorias idPanelArbolC"
+									   			 styleClass="btnAC robotoBold" />
+							</div>
+ 						</div>
+					</div>
+					<!-- #################### TERMINA BÚSQUEDA #################### -->
+					
+
+					<!-- #################### TABLA DE CONVOCATORIAS #################### -->
+					<p:outputPanel id="idTablaConvocatorias">
+						<c:if test="#{(mbConsultaConvocatoria.helpConvocatoria.mes ne null) and (mbConsultaConvocatoria.helpConvocatoria.tipoSesion ne null)}">
+							<div class="row">
+								<div class="col-xs-12 col-xs-offset-0 col-md-10 col-md-offset-1 espaciador-top">
+									<p:dataTable styleClass="vistaArea" style="text-align: center;"
+								    			 var="convoc" value="#{mbConsultaConvocatoria.helpConvocatoria.listaConvocFiltro}"
+								    			 scrollable="true" emptyMessage="No hay convocatorias"
+								    			 selectionMode="single" selection="#{mbConsultaConvocatoria.helpConvocatoria.convocatoria}"
+								    			 rowKey="#{convoc.id.numSesion}">
+								        <p:column headerText="#{messageSource['lbl_fechaCCC']}" style="width: 20%;">
+								            <h:outputText value="#{convoc.fechaSesion}">
+									            <f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
+								            </h:outputText>
+								        </p:column>
+								        <p:column headerText="#{messageSource['lbl_horaCCC']}" style="width: 15%;">
+								            <h:outputText value="#{convoc.hora}">
+								            	<f:convertDateTime type="date" pattern="HH:mm"/>
+								            </h:outputText>
+								        </p:column>
+								        <p:column headerText="#{messageSource['lbl_tipo_sesionCCC']}" style="width: 30%;">
+								            <h:outputText value="#{mbConsultaConvocatoria.getDescTipoDeSesion(convoc.tipoSesion)}" />
+								        </p:column>
+								        <p:column headerText="#{messageSource['lbl_lugarCCC']}" style="width: 35%;">
+								            <h:outputText value="#{convoc.lugar}" />
+								        </p:column>
+								        <p:ajax event="rowSelect"
+								        		listener="#{mbConsultaConvocatoria.seleccionarConvocatoria}"
+								        		update="idPanelArbolC"/>
+								    </p:dataTable>
+								</div>
+							</div>
+					    </c:if>
+				    </p:outputPanel>
+				</h:form>
+				
+				<!-- ################### COMIENZA INFORMACIÓN RELATIVA #################### -->
+				<p:outputPanel id="idPanelArbolC">
+					<c:if test="#{mbConsultaConvocatoria.helpConvocatoria.convocatoria ne null}">
+						<div class="row">
+							<div class="col-xs-12 espaciador-lg-top" style="font-size: 18px; color: #932C60;">
+								<h:outputLabel>#{messageSource['lbl_info_relativaCCC']}</h:outputLabel>
+								<div>
+									<p style="height: 2px; background-color: darkgray;"></p>
+								</div>
+							</div>
+							<div class="col-xs-12">
+								<div style="margin-left: 25px;">
+									<h:outputLabel>#{messageSource['lbl_asunto_relevanteCCC']}:&nbsp;&nbsp;</h:outputLabel>
+									<h:outputText value="#{mbConsultaConvocatoria.helpConvocatoria.convocatoria.asunto}" />
+								</div>
+							</div>
+							<div class="col-xs-12 espaciador-top">
+								<!-- ################### COMIENZA DESTINATARIOS #################### -->
+								<div style="font-size: 18px; color: #932C60;">
+									<h:outputLabel>#{messageSource['lbl_destinatariosCCC']}</h:outputLabel>
+								</div>
+			
+								<div>
+									<p style="height: 2px; background-color: darkgray;"></p>
+								</div>
+							</div>
+							<div class="col-xs-12">
+								<!-- #################### ÁRBOL DE COMISIONES #################### -->
+								<div style="margin-left: 35px; margin-top: 5px;">
+									<p:tree var="arbolComisiones" value="#{mbConsultaConvocatoria.helpConvocatoria.arbolComisiones}"
+											style="width: 100%; border: none;">
+										<p:treeNode>
+											<h:outputText value="#{arbolComisiones}" />
+										</p:treeNode>
+									</p:tree>
+								</div>
+							</div>
+							<div class="col-xs-12 espaciador-top">
+								<!-- ################### COMIENZA ORDEN DEL DÍA #################### -->
+								<div style="font-size: 18px; color: #932C60;">
+									<h:outputLabel>#{messageSource['lbl_orden_del_diaCCC']}</h:outputLabel>
+								</div>
+			
+								<div>
+									<p style="height: 3px; background-color: darkgray;"></p>
+								</div>
+
+								<c:if test="#{mbConsultaConvocatoria.helpConvocatoria.convocatoria.ordenDiaAdj ne null}">			
+									<div style="margin-left: 25px; margin-top: 15px;">
+										<h:outputLabel>#{messageSource['lbl_orden_del_dia_adjuntaCCC']}:</h:outputLabel>
+										<br />
+									    <a style="margin-left: 20px;"
+									       href="${request.contextPath}/#{mbConsultaConvocatoria.recuperarRutaVisualizacion(mbConsultaConvocatoria.helpConvocatoria.convocatoria.ordenDiaAdj)}" target="_blank" class="archivo-decarga robotoRegular">
+											<h:outputText value="#{mbConsultaConvocatoria.recuperarNombreOrdenDia(mbConsultaConvocatoria.helpConvocatoria.convocatoria.ordenDiaAdj)}" />
+										</a>
+									</div>
+
+									<c:if test="#{mbConsultaConvocatoria.helpConvocatoria.convocatoria.docAnexoAdj ne null}">
+										<div style="margin-left: 25px; margin-top: 15px;">
+											<h:outputLabel>#{messageSource['lbl_documentacion_anexaCCC']}:</h:outputLabel>
+											<br />
+											<a style="margin-left: 20px;"
+											   href="${request.contextPath}/#{mbConsultaConvocatoria.recuperarRutaVisualizacion(mbConsultaConvocatoria.helpConvocatoria.convocatoria.docAnexoAdj)}" target="_blank" class="archivo-decarga robotoRegular">
+												<h:outputText value="#{mbConsultaConvocatoria.recuperarNombreOrdenDia(mbConsultaConvocatoria.helpConvocatoria.convocatoria.docAnexoAdj)}" />
+											</a>
+										</div>
+									</c:if>
+								</c:if>
+
+<!-- 
+								<div style="text-align: -webkit-center; margin-top: 20px;">
+									#################### ENCABEZADO DE TABLA ####################
+									<div style="background-color: #932C60; width: 100%; height: 45px;">
+										<span style="float: left; font-size: 25px; color: #FFFFFF; margin-left: 30px; margin-top: 5px;">
+											<h:outputText value="#{messageSource['lbl_puntosCCC']}" />
+										</span>
+									</div>
+			
+									#################### TABLA DE ORDEN DEL DÍA ####################
+								    <p:dataTable styleClass="claseConvocatoria" style="width: 100%; text-align: center;"
+								    			 var="ordenDelDia" value="#{mbConsultaConvocatoria.helpConvocatoria.ordenDelDia}"
+								    			 scrollable="true" emptyMessage="No hay puntos a tratar">
+								        <p:column style="width: 7.5%; font-size: 28px; color: #1b7986;">
+								            <h:outputText value="#{ordenDelDia.id.numPunto}" />
+								        </p:column>
+								        <p:column style="width: 92.5%;">
+								            <h:outputText value="#{ordenDelDia.descripcionPunto}" />
+								        </p:column>
+								    </p:dataTable>
+								</div>
+ -->
+							</div>
+						</div>
+					</c:if>
+				</p:outputPanel>
+
+		</div>
+
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,1314 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:c="http://java.sun.com/jsp/jstl/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:p="http://primefaces.org/ui"
+				xmlns:pe="http://primefaces.org/ui/extensions"
+				xmlns:sf="http://www.springframework.org/tags/faces"
+				xmlns:sec="http://www.springframework.org/security/tags"
+				template="/templates/template.xhtml">
+				
+	<ui:define name="CONTENT">
+
+		<h:outputStylesheet library="css" name="modulos/captura_documento/captura_documento.css" />
+		
+		<h:form id="formCapturaDocumento" onkeypress="if (window.event.which == 13 ) {return false;}" enctype="multipart/form-data">
+		
+			<script type="text/javascript">  
+				function focusPorRoberto(xhr, status, args) {  
+
+					if (args != undefined) {
+
+						if (args.validationFailed != undefined) {
+							
+							if(args.validationFailed) {
+
+								console.log(args); 
+								
+								PrimeFaces.focus('formCapturaDocumento:asunto');
+							}
+						}
+				    }
+				}  
+			</script>
+
+			<!-- Modal que se ejecuta al haber un evento en ajax -->
+			<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+					  closable="false" resizable="false" showHeader="false">
+				<p:graphicImage name="/img/estructura/loader.gif" />
+			</p:dialog>
+
+			<p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" onerror="PF('statusDialog').hide()"/>
+			
+			<!-- Growls -->
+			<p:growl id="mensaje_general_info" showDetail="true" sticky="true" globalOnly="true" severity="info"/>
+			<p:growl id="mensaje_general_advertencia" showDetail="true" sticky="true" globalOnly="true" severity="warn"/>
+			<p:growl id="mensaje_general_exito" showDetail="true" sticky="true" globalOnly="true" severity="fatal"/>
+			
+			<div class="container">
+				
+				<h2>
+					<h:outputText value="Inicio" style="color: #999999"/>&nbsp;&nbsp;
+					<i class="fa fa-angle-right" aria-hidden="true" style="font-size: 18px; color: #999999"/>&nbsp;&nbsp;
+					<h:outputText value="#{messageSource['etiqueta_captura_documento_migasMenu']}" style="color: #999999"/>&nbsp;&nbsp;
+					<i class="fa fa-angle-right" aria-hidden="true" style="font-size: 18px; color: #999999"/>&nbsp;&nbsp;
+					<h:outputText value="#{messageSource['etiqueta_miga_tipoPantallaCaptura']}" style="font-weight: bold"/>
+				</h2>
+				<h3>
+					<h:outputLabel value="#{messageSource['etiqueta_captura_documento']}" />
+				</h3>
+				<h4>
+					<h:outputLabel id="infoDoc" value="#{messageSource['etiqueta_informacion_documento']}" />
+				</h4>
+				<h5>
+					Los datos con (<span style="color:red">*</span>) son requeridos
+				</h5>
+
+				<!-- INFORMACIÓN BÁSICA DEL DOCUMENTO -->
+				<p:outputPanel id="panelInformacionDocumento">
+				
+					<!-- <p:focus 	context="panelInformacionDocumento" 
+      							rendered="#{facesContext.validationFailed}" /> -->
+				
+					<section>
+
+						<!-- TIPO DOCUMENTO -->
+						<div class="row">
+							<div class="col-md-6">
+								<h:outputLabel style="color:red">*</h:outputLabel><h:outputLabel value="#{messageSource['etiqueta_lista_tipoDocs']}" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<p:selectOneMenu id="tipoDocumento" value="#{mbCapturaDoc.filtros.idTipoDocumento}" style="width:100%;"
+												 required="true" requiredMessage="Dato querido">
+									
+									<f:selectItem itemLabel="#{messageSource['mensaje_general_selecciona']}" itemValue="#{null}" noSelectionOption="true" />
+									<f:selectItems  value="#{mbCapturaDoc.filtros.listaTiposDocumentos}" 
+													var="tipoDoc" 
+													itemValue="#{tipoDoc.idTipoDocumento}" 
+													itemLabel="#{tipoDoc.descripcion}" />
+
+									<p:ajax event="change" listener="#{mbCapturaDoc.consultarAcronimos}" process="@this" update="@form"/>
+	
+								</p:selectOneMenu>
+							</div>
+						</div>
+						<div class="row mensajesPorCampo">
+							<div class="col-md-4">
+								<p:message id="mensaje_tipoDocumento" for="tipoDocumento" display="text"/>
+							</div> 
+						</div>
+
+						<!-- ÁCRONIMOS -->
+						<div class="row" style="padding-top: 20px;">
+							<div class="col-md-6">
+								<p:outputLabel style="color:red">*</p:outputLabel> <h:outputLabel value="#{messageSource['etiqueta_lista_acronimos']}" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<p:selectOneMenu id="acronimo" value="#{mbCapturaDoc.filtros.idAcronimo}" style="width:100%;" 
+												 required="true" requiredMessage="Dato requerido">
+									
+									<f:selectItem itemLabel="#{messageSource['mensaje_general_selecciona']}" itemValue="#{null}"/>
+									<f:selectItems  value="#{mbCapturaDoc.filtros.listaAcronimos}" 
+													var="acronimo" 
+													itemLabel="#{acronimo.descripcion}"
+													itemValue="#{acronimo.idAcronimo}"/>
+
+									<p:ajax event="change" listener="#{mbCapturaDoc.consultarPlantillas}" update="@form"  process="@this" />
+
+								</p:selectOneMenu>
+							</div>
+						</div>
+						<div class="row mensajesPorCampo">
+							<div class="col-md-4">
+								<p:message id="mensaje_acronimo" for="acronimo" display="text" />
+							</div> 
+						</div>
+						
+						<!-- ASUNTO -->
+						<div class="row" style="padding-top: 20px;">
+							<div class="col-md-6">
+								<p:outputLabel style="color:red">*</p:outputLabel> <h:outputLabel value="#{messageSource['etiqueta_asunto']}" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-9">
+						
+								<p:inputText id="asunto" maxlength="400" style="width: 100%"  value="#{mbCapturaDoc.filtros.asunto}" 
+											 required="true" requiredMessage="Dato requerido"
+											 validatorMessage="#{messageSource['mensaje_regex_solo_letras_acentos_espacios']}">
+									<f:validateRegex pattern = "#{messageSource['regex_solo_letras_acentos_espacios_numeros']}" />
+								</p:inputText> 
+							
+							</div>
+						</div>
+						<div class="row mensajesPorCampo">
+							<div class="col-md-9">
+								<p:message id="mensaje_asunto" for="asunto" display="text"/>
+							</div> 
+						</div>
+					
+					</section>
+				
+				</p:outputPanel>
+
+				<!-- REMITENTE -->
+				<p:outputPanel id="panelRemitente">
+					
+					<!-- <p:focus 	context="panelRemitente" 
+      							rendered="#{facesContext.validationFailed}" /> -->
+					
+					<h4>
+						<h:outputLabel value="#{messageSource['etiqueta_remitente']}" />
+					</h4>
+					<h5>
+						Ingresa datos en cualquiera de los campos
+					</h5>
+					<section>
+						
+						<!-- NOMBRE Y APELLIDOS -->
+						<div class="row">
+							<div class="col-md-5">
+								
+								<div class="row">
+									<h:outputLabel value="#{messageSource['etiqueta_nombre']}" style="font-size: 14px; font-family:roboto;"/>
+								</div>
+								
+								<div class="row">
+							
+									<p:inputText 	id="nombreRemitente" value="#{mbCapturaDoc.filtros.nombreRemitente}" style="width: 100%" >
+										 <p:ajax event="change" listener="#{mbCapturaDoc.validaLetrasAcentosEsp( mbCapturaDoc.filtros.nombreRemitente, 1 )}" 
+										 		 update="dialogo_personasRemitente nombreRemitente mensaje_general_advertencia mensaje_general_info "  />
+									</p:inputText>			
+										
+								</div>
+															
+							</div>
+							<div class="col-md-1"/>
+							<div class="col-md-6">
+								<div class="row">
+									<h:outputLabel value="Apellidos" style="font-size: 14px; font-family:roboto;"/>
+								</div>
+								<div class="row">
+								
+									<p:inputText 	id="apellidoRemitente" value="#{mbCapturaDoc.filtros.apellidoRemitente}" style="width: 100%" >
+										 <p:ajax event="change" listener="#{mbCapturaDoc.validaLetrasAcentosEsp( mbCapturaDoc.filtros.apellidoRemitente, 2 )}" 
+										 		 update="dialogo_personasRemitente apellidoRemitente mensaje_general_advertencia mensaje_general_info "  />
+									</p:inputText>
+								</div>
+		
+							</div>
+						</div>
+						
+						<!-- TIPO DE AREA Y ENTIDAD -->
+						<div class="row">
+							<div class="col-md-5">
+								<div class="row">
+									<h:outputLabel value="Tipo de área" style="font-size: 14px; font-family:roboto;"/>
+								</div>
+								<div class="row">
+									<p:selectOneMenu id="tipoAreaRemitente"
+									 				 value="#{mbCapturaDoc.filtros.tipoAreaRemitente}" style="width: 100%">
+	
+										<f:selectItem itemValue="${null}" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+										<f:selectItems value="#{mbCapturaDoc.filtros.listaTiposAreaRemitentes}" var="tipoArea"
+													   itemValue="#{tipoArea.idTipoArea}"
+													   itemLabel="#{tipoArea.descripcion}" />
+										
+										<p:ajax event="valueChange" listener="#{mbCapturaDoc.seleccionarTipoAreaRemitente}"
+												update="entidadRemitente areaRemitente" process="@this"/>
+
+									</p:selectOneMenu>
+								</div>
+							</div>
+							<div class="col-md-1"/>
+							<div class="col-md-6">
+								
+								<div class="row">
+									<h:outputLabel value="Entidad" style="font-size: 14px; font-family:roboto;"/> 
+								</div>
+								<div class="row">
+									<p:selectOneMenu id="entidadRemitente" value="#{mbCapturaDoc.filtros.idEntidadRemitente}" style="width: 100%" 
+													 disabled="#{mbCapturaDoc.filtros.tipoAreaRemitente ne 2}">
+	
+										<f:selectItem itemValue="" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+										<f:selectItems value="#{mbCapturaDoc.filtros.listaEstadosRemitentes}" var="entidadR"
+													   itemValue="#{entidadR.idEstado}"
+													   itemLabel="#{entidadR.nombreEstado}" />
+										
+										<p:ajax event="change" listener="#{mbCapturaDoc.consultarAreasRemitente}" 
+												update="tipoAreaRemitente areaRemitente" process="@this" />
+	
+									</p:selectOneMenu>
+								</div>
+								
+							</div>
+						</div>
+						
+						<!-- AREA -->
+						<div class="row">
+							<div class="col-md-5">
+								
+								<div class="row">
+									<h:outputLabel value="&Aacute;rea" style="font-size: 14px; font-family:roboto;"/>
+								</div>
+								<div class="row">
+									<p:selectOneMenu id="areaRemitente" value="#{mbCapturaDoc.filtros.idAreaRemitente}" style="width: 100%">
+										<f:selectItem itemLabel="#{messageSource['mensaje_general_selecciona']}" itemValue="#{null}" noSelectionOption="true" />
+										<f:selectItems  value="#{mbCapturaDoc.filtros.listaAreasRemitentes}" 
+														var="areaR" 
+														itemValue="#{areaR.idArea}" 
+														itemLabel="#{areaR.descripcion}" />
+									</p:selectOneMenu>
+								</div>
+							
+							</div>
+						</div>
+						
+						<!-- BOTON BUSCAR -->
+						<div class="row botonesAcomodo">
+							<div class="col-md-12">
+								<p:commandButton value="Buscar" ajax="false"
+												 process="@this panelRemitente"
+												 update="dialogo_personasRemitente mensaje_general_advertencia mensaje_general_info " 
+												 action= "#{mbCapturaDoc.consultarRemitentes}" 
+												 oncomplete="focusPorRoberto(xhr, status, args)"/>
+												 
+												 <!-- -->
+												 <!-- -->
+	
+							</div>
+						</div>
+						
+						<!-- TABLA CON LOS REMITENTES -->
+						<div class="row">
+							<div class="col-md-12">
+	
+								<p:dataTable id="tablaRemitentes" var="remitenteASeleccionar"
+											 value="#{mbCapturaDoc.filtros.remitentes}" 
+											 emptyMessage=""
+											 styleClass="personasEncontradas" >
+								    
+								    <p:column>
+								    	<div class="row" style="padding: 3px 0px 0px 0px">
+								    		
+								    		<h:outputText styleClass="ui-treetable-toggler ui-icon ui-icon-bullet ui-c" style="float:left; font-family: Roboto"/>
+											<h:outputText value="#{remitenteASeleccionar.nombreCompleto} " style="font-weight: bold; font-size: 13px; font-family: Roboto" />
+	
+		        						</div>
+		        						<div class="row" style="padding: 0px 0px 3px 0px">
+		        							&nbsp;&nbsp;&nbsp;&nbsp;<h:outputText value="#{remitenteASeleccionar.puesto}" style="font-size: 13px;"/>
+		        						</div>
+		    						</p:column>
+
+		    						 <p:column>
+		    						 	
+		    						 	
+		    						 	<p:commandLink action="#{mbCapturaDoc.setPersonaDetalle(remitenteASeleccionar)}"
+		    						 				   process="@this" update="formCapturaDocumento:detalle_estructura"
+		    						 				   oncomplete="PF('detalle_estructura').show();" styleClass="linksPersonasEncontradas" >
+	
+		    						 		<i class="fa fa-search" aria-hidden="true" />&nbsp;<h:outputText value="Detalle" style="text-decoration: underline;"/>
+		    						 		
+		    						 	</p:commandLink>
+		        						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		        						<p:commandLink action="#{mbCapturaDoc.eliminarRemitente(remitenteASeleccionar)}"
+		        									   update="tablaRemitentes" process="@this"
+		        									   styleClass="linksPersonasEncontradas">
+		        							
+		        							<i class="fa fa-user-times" aria-hidden="true"/>&nbsp;<h:outputText value="Eliminar" style="text-decoration: underline;"/>		   
+		        							
+		        						</p:commandLink>
+		    						 
+		    						 </p:column>
+		    						
+								</p:dataTable>
+	
+							</div>
+
+						</div>
+											
+					</section>
+				
+				</p:outputPanel>
+				<!-- /REMITENTE -->
+				
+				<!-- DESTINATARIO -->
+				<p:outputPanel id="panelDestinatario">
+
+					<h4>
+						<h:outputLabel value="#{messageSource['etiqueta_destinatario']}" />
+					</h4>
+					<h5>
+						Ingrese datos en cualquiera de los campos
+					</h5>
+					<section>
+						
+						<!-- SWITCH BUSQUEDA POR ÁREA RELACIONADA -->
+						<div class="row">
+							<div class="col-md-1">
+								<div class="row">
+									
+									<p:inputSwitch value="#{mbCapturaDoc.filtros.busquedaPorArea}" onLabel=" " offLabel=" ">
+							            <p:ajax update="pnlTextoSwitch pnlDestinatarioPorPersona pnlDestinatarioPorArea" /> 
+							        </p:inputSwitch>
+									
+								</div>
+							</div>
+							<div class="col-md-10">
+							
+							<p:outputPanel id="pnlTextoSwitch" >
+							
+								<c:if test="#{!mbCapturaDoc.filtros.busquedaPorArea}">
+									<div class="row">
+										<h:outputLabel  value="#{messageSource['etiqueta_area_activar']}" style="font-size: 14px; font-family:roboto; color:#d5007f;" ></h:outputLabel> 
+									</div>
+								</c:if>
+								
+								<c:if test="#{mbCapturaDoc.filtros.busquedaPorArea}">
+									<div class="row">
+										<h:outputLabel  value="#{messageSource['etiqueta_area_desactivar']}" style="font-size: 14px; font-family:roboto; color:#d5007f;" ></h:outputLabel> 
+									</div>
+								</c:if>
+								
+							</p:outputPanel>
+							
+							</div>
+						</div>
+						
+						<!--  Controles de la sección de Destinatarios cuando la busqueda es por persona  -->
+						<p:outputPanel id="pnlDestinatarioPorPersona" >
+						
+							<c:if test="#{!mbCapturaDoc.filtros.busquedaPorArea}" >
+							
+								<!-- NOMBRE Y APELLIDOS -->
+								<div class="row">
+									<div class="col-md-5">
+										<div class="row">
+											<h:outputLabel value="#{messageSource['etiqueta_nombre']}" style="font-size: 14px; font-family:roboto;"/>
+										</div>
+										
+										<div class="row">
+										
+											<p:inputText id="nombreDestinatario" value="#{mbCapturaDoc.filtros.nombreDestinatario}" style="width: 100%" >
+												 <p:ajax event="change" listener="#{mbCapturaDoc.validaLetrasAcentosEsp( mbCapturaDoc.filtros.nombreDestinatario, 3 )}" 
+												 		 update="dialogo_personasDestinatarios nombreDestinatario mensaje_general_advertencia mensaje_general_info "  />
+											</p:inputText>
+										
+										</div>
+									</div>
+									<div class="col-md-1"/>
+									<div class="col-md-6">
+										<div class="row">
+											<h:outputLabel value="Apellidos" style="font-size: 14px; font-family:roboto;"/>
+										</div>
+										<div class="row">
+										
+											<p:inputText id="apellidoDestinatario" value="#{mbCapturaDoc.filtros.apellidoDestinatario}" style="width: 100%" >
+												 <p:ajax event="change" listener="#{mbCapturaDoc.validaLetrasAcentosEsp( mbCapturaDoc.filtros.apellidoDestinatario, 4 )}" 
+												 		 update="dialogo_personasDestinatarios apellidoDestinatario mensaje_general_advertencia mensaje_general_info "  />
+											</p:inputText>
+										
+										</div>
+									</div>
+								</div>
+							
+								<!-- TIPO DE AREA Y ENTIDAD -->
+								<div class="row">
+									<div class="col-md-5">
+										<div class="row">
+											<h:outputLabel value="Tipo de área" style="font-size: 14px; font-family:roboto;"/>
+										</div>
+										<div class="row">
+											<p:selectOneMenu id="tipoAreaDest" style="width: 100%"
+															 value="#{mbCapturaDoc.filtros.tipoAreaDestinatario}">
+												
+												<f:selectItem itemValue="" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+												<f:selectItems value="#{mbCapturaDoc.filtros.listaTiposAreaDestinatarios}" 
+															   var="tipoAreaD"
+															   itemValue="#{tipoAreaD.idTipoArea}"
+															   itemLabel="#{tipoAreaD.descripcion}" />
+		
+												<p:ajax event="valueChange" listener="#{mbCapturaDoc.seleccionarTipoAreaDestinatario}"
+														update="entidadDest areaDestinatario" process="@this"/>
+		
+											</p:selectOneMenu>
+										</div>
+									</div>
+									<div class="col-md-1"/>
+									<div class="col-md-6">
+										<div class="row">
+											<h:outputLabel value="Entidad" style="font-size: 14px; font-family:roboto;"/> 
+										</div>
+										<div class="row">
+											<p:selectOneMenu id="entidadDest" value="#{mbCapturaDoc.filtros.idEntidadDestinatario}" style="width: 100%" 
+														 	 disabled="#{mbCapturaDoc.filtros.tipoAreaDestinatario ne 2}">
+												
+												<f:selectItem itemValue="" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+												<f:selectItems value="#{mbCapturaDoc.filtros.listaEstadosDestinatarios}" var="entidadD"
+															   itemValue="#{entidadD.idEstado}"
+															   itemLabel="#{entidadD.nombreEstado}" />
+												
+												<p:ajax event="change" listener="#{mbCapturaDoc.consultarAreasDestinatario}" 
+														update="tipoAreaDest areaDestinatario" process="@this" />
+														
+											</p:selectOneMenu>
+										</div>
+									</div>
+								</div>
+								
+								<!-- AREA -->
+								<div class="row">
+									<div class="col-md-5">
+										<div class="row">
+											<h:outputLabel value="&Aacute;rea" style="font-size: 14px; font-family:roboto;"/>
+										</div>
+										<div class="row">
+											<p:selectOneMenu id="areaDestinatario" value="#{mbCapturaDoc.filtros.idAreaDestinatario}" style="width: 100%">
+												<f:selectItem itemLabel="#{messageSource['mensaje_general_selecciona']}" itemValue="#{null}" />
+												<f:selectItems value="#{mbCapturaDoc.filtros.listaAreasDestinatarios}" 
+															   var="areaD" 
+															   itemValue="#{areaD.idArea}" 
+															   itemLabel="#{areaD.descripcion}" />
+											</p:selectOneMenu>
+										</div>
+									</div>
+								</div>
+							
+								<!-- BOTON BUSCAR -->
+								<div class="row botonesAcomodo">
+									<div class="col-md-12">
+										<p:commandButton value="Buscar"
+														 process="@this panelDestinatario"
+														 update="dialogo_personasDestinatarios mensaje_general_advertencia mensaje_general_info"
+														 action= "#{mbCapturaDoc.consultarDestinatarios}" 
+														 oncomplete="focusPorRoberto(xhr, status, args)"/>
+			
+									</div>
+								</div>	
+							
+							</c:if>
+						
+						</p:outputPanel>
+						
+						<!--  Controles de la sección de Destinatarios cuando la busqueda es por Área  -->
+						<p:outputPanel id="pnlDestinatarioPorArea" >
+						
+							<c:if test="#{mbCapturaDoc.filtros.busquedaPorArea}" >
+
+								<div class="row">
+									
+									<!-- AREA -->
+									<div class="col-md-5">
+										<div class="row">
+											<h:outputLabel value="&Aacute;rea" style="font-size: 14px; font-family:roboto;"/>
+										</div>
+										<div class="row">
+										
+											<p:inputText id="areaDestinatario" value="#{mbCapturaDoc.filtros.nombreAreaDestinatario}" style="width: 100%" />
+											
+											<!-- <p:inputText id="areaDestinatario" value="#{mbCapturaDoc.filtros.nombreAreaDestinatario}" style="width: 100%" >
+												 <p:ajax event="change" listener="#{mbCapturaDoc.validaLetrasAcentosEsp( mbCapturaDoc.filtros.nombreRemitente, 1 )}" 
+												 		 update="formCapturaDocumento:pnlDestinatarioPorArea mensaje_general_advertencia mensaje_general_info "  />
+											</p:inputText> -->
+										
+										</div>
+									</div>
+								
+									<!-- BOTON BUSCAR -->	
+									<div class="col-md-2">
+										<div class="row"></div>
+										<div class="row botonesAcomodo" style="padding-top:24px;" >
+											
+											<p:commandButton value="Buscar"
+														 process="@this panelDestinatario"
+														 update="dialogo_areasDestinatarios mensaje_general_advertencia mensaje_general_info"
+														 action= "#{mbCapturaDoc.consultarDestinatarioPorArea}" 
+														 oncomplete="focusPorRoberto(xhr, status, args)"/>
+										
+										</div>
+									</div>
+									
+								</div>
+
+							</c:if>
+							
+						</p:outputPanel>
+						
+
+						<!-- TABLA CON LOS DESTINATARIOS -->
+						<div class="row">
+							<div class="col-md-12">
+	
+								<p:dataTable id="tablaDestinatario" styleClass="personasEncontradas"
+											 var="destinatarioASeleccionar"
+											 value="#{mbCapturaDoc.filtros.destinatarios}" 
+											 emptyMessage="">
+								    
+								    <p:column>
+								    	<div class="row" style="padding: 3px 0px 0px 0px">
+								    		
+								    		<h:outputText styleClass="ui-treetable-toggler ui-icon ui-icon-bullet ui-c" style="float:left; font-family: Roboto"/>
+											<h:outputText value="#{destinatarioASeleccionar.nombreCompleto} " style="font-weight: bold; font-size: 13px; font-family: Roboto" />
+	
+		        						</div>
+		        						<div class="row" style="padding: 0px 0px 3px 0px">
+		        							&nbsp;&nbsp;&nbsp;&nbsp;<h:outputText value="#{destinatarioASeleccionar.puesto}" style="font-size: 13px;"/>
+		        						</div>
+		    						</p:column>
+
+		    						 <p:column>
+		    						 	
+		    						 	
+		    						 	<p:commandLink action="#{mbCapturaDoc.setPersonaDetalle(destinatarioASeleccionar)}"
+		    						 				   process="@this" update="formCapturaDocumento:detalle_estructura"
+		    						 				   oncomplete="PF('detalle_estructura').show();" styleClass="linksPersonasEncontradas" >
+	
+		    						 		<i class="fa fa-search" aria-hidden="true" />&nbsp;<h:outputText value="Detalle" style="text-decoration: underline;"/>
+		    						 		
+		    						 	</p:commandLink>
+		        						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		        						<p:commandLink action="#{mbCapturaDoc.eliminarDestinatario(destinatarioASeleccionar)}"
+		        									   update="tablaDestinatario" process="@this"
+		        									   styleClass="linksPersonasEncontradas">
+		        							
+		        							<i class="fa fa-user-times" aria-hidden="true"/>&nbsp;<h:outputText value="Eliminar" style="text-decoration: underline;"/>		   
+		        							
+		        						</p:commandLink>
+		    						 
+		    						 </p:column>
+		    						
+								</p:dataTable>
+	
+							</div>
+
+						</div>
+						
+						<!-- TABLA CON LAS AREAS DESTINATARIAS -->
+ 						<div class="row">
+							<div class="col-md-12">
+	
+								<p:dataTable id="tablaAreasDestinatario" styleClass="personasEncontradas"
+											 var="destinatarioAreaASeleccionar"
+											 value="#{mbCapturaDoc.filtros.destinatariosComoArea}" 
+											 emptyMessage="">
+								    
+								    <p:column>
+								    	<div class="row" style="padding: 3px 0px 0px 0px">
+								    		
+								    		<h:outputText styleClass="ui-treetable-toggler ui-icon ui-icon-bullet ui-c" style="float:left; font-family: Roboto"/>
+											<h:outputText value="#{destinatarioAreaASeleccionar.descripcion} " style="font-weight: bold; font-size: 13px; font-family: Roboto" />
+	
+		        						</div>
+		        						<div class="row" style="padding: 0px 0px 3px 0px">
+		        							&nbsp;&nbsp;&nbsp;&nbsp;<h:outputText value="#{destinatarioAreaASeleccionar.siglas}" style="font-size: 13px;"/>
+		        						</div>
+		    						</p:column>
+
+		    						 <p:column>
+		    						 	
+		    						 	
+		    						 	<p:commandLink action="#{mbCapturaDoc.setAreaDetalle(destinatarioAreaASeleccionar)}"
+		    						 				   process="@this" update="formCapturaDocumento:detalle_area"
+		    						 				   oncomplete="PF('detalle_area').show();" styleClass="linksPersonasEncontradas" >
+	
+		    						 		<i class="fa fa-search" aria-hidden="true" />&nbsp;<h:outputText value="Detalle" style="text-decoration: underline;"/>
+		    						 		
+		    						 	</p:commandLink>
+		        						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+		        						<p:commandLink action="#{mbCapturaDoc.eliminarAreaDestinatario(destinatarioAreaASeleccionar)}"
+		        									   update="tablaAreasDestinatario" process="@this"
+		        									   styleClass="linksPersonasEncontradas">
+		        							
+		        							<i class="fa fa-user-times" aria-hidden="true"/>&nbsp;<h:outputText value="Eliminar" style="text-decoration: underline;"/>		   
+		        							
+		        						</p:commandLink> 
+		    						 
+		    						 </p:column>
+		    						
+								</p:dataTable>
+	
+							</div>
+
+						</div> 
+
+					</section>
+				
+				</p:outputPanel>
+				<!-- /DESTINATARIO -->
+
+				<!-- SELECCION TIPO CAPTURA -->
+				<p:outputPanel id="panelCapturaDoc">
+					
+					<h4>
+						<h:outputLabel styleClass="titulo" id="genDoc" value="Generar documento" />
+					</h4>
+					<section>
+						<div class="row" >
+							<div class="col-md-12">
+								
+								<p:selectOneRadio id="customRadio" value="#{mbCapturaDoc.filtros.tipoCapturaDocumento}" layout="custom"  
+												  disabled="#{mbCapturaDoc.filtros.idAcronimo == null or mbCapturaDoc.filtros.idAcronimo == 0}" >
+
+						            <f:selectItem itemLabel="Documento en Blanco" itemValue="1" />
+						            <f:selectItem itemLabel="Plantilla" itemValue="2" />
+						            <f:selectItem itemLabel="Adjuntar documento" itemValue="3" />
+
+						            <p:ajax event="valueChange" listener="#{mbCapturaDoc.seleccionarOpcionTipoDocumento}"
+						            		update="panelCapturaDoc mensaje_general_advertencia" process="@this"/>
+
+					        	</p:selectOneRadio>
+					        	
+					        	<p:remoteCommand name="abreWord" action="#{mbCapturaDoc.abrirWord}" immediate="true"/>
+
+								<!-- DOCUMENTO BLANCO -->
+					        	<div class="row" style="padding-top: 20px;">
+									
+									<div class="col-md-4" style="padding-left: 0px;">
+						            	<p:radioButton id="opt1" for="customRadio" itemIndex="0" />
+						            	<h:outputLabel for="opt1" value="Documento en Blanco" />
+						            </div>
+						            
+						            <div class="col-md-3" style="padding-top: 2px; padding-right: 0px;">
+						            	<h:outputLabel value="&#xf1c2; Documento_nuevo.docx"
+						            				   rendered="#{mbCapturaDoc.filtros.tipoCapturaDocumento == 1}"
+						            				   style="font-family: Roboto, FontAwesome; font-size: 13px; color:#d5007f;"/>
+									</div>
+									
+									<div class="col-md-5" style="padding-top: 3px; padding-left: 0px;">
+										<p:link href="#{mbCapturaDoc.filtros.hyperLinkWord}" styleClass="linkEditar" rendered="#{mbCapturaDoc.filtros.tipoCapturaDocumento == 1}">
+											<i class="fa fa-pencil" aria-hidden="true"/>&nbsp;<h:outputText value="Editar" style="text-decoration: underline;"/>
+										</p:link>
+									</div>
+									
+					            </div>
+					            <!-- / DOCUMENTO BLANCO -->
+
+								<!-- PLANTILLAS -->
+					            <div class="row ">
+									
+									<div class="col-md-4" style="padding-left: 0px;">
+							            <p:radioButton id="opt2" for="customRadio" itemIndex="1" />
+							            <h:outputLabel for="opt2" value="Plantilla" />
+							        </div>
+							       	
+							       	<div class="col-md-3" style="padding-top: 2px; padding-right: 0px;">
+							       		<h:outputLabel value="&#xf1c2; #{mbCapturaDoc.filtros.idPlantilla.nombrePlantilla}.docx"
+							       					   rendered="#{mbCapturaDoc.filtros.idPlantilla != null}" 
+							       					   style="font-family: Roboto, FontAwesome; font-size: 13px; color:#d5007f;"/>
+							       	</div>
+							       	
+							       	<div class="col-md-5" style="padding-top: 3px; padding-left: 0px;">
+										<p:link href="#{mbCapturaDoc.filtros.hyperLinkWord}" styleClass="linkEditar" 
+												rendered="#{mbCapturaDoc.filtros.idPlantilla != null}">
+											<i class="fa fa-pencil" aria-hidden="true"/>&nbsp;<h:outputText value="Editar" style="text-decoration: underline;"/>
+										</p:link>
+									</div>
+							       	
+					            </div>
+					            <div class="row " style="padding-left: 25px;"> 
+									<p:selectOneMenu id="plantilla" value="#{mbCapturaDoc.filtros.idPlantilla}" 
+													 converter="selectOneMenuConverter"
+									 				 disabled="#{mbCapturaDoc.filtros.tipoCapturaDocumento != 2}" style="width:200px">
+	
+										<f:selectItem itemLabel="#{messageSource['mensaje_general_selecciona']}" itemValue="" />
+							            <f:selectItems value="#{mbCapturaDoc.filtros.listaPlantillas}" 
+							            			   var="plantillaC" 
+							            			   itemLabel="#{plantillaC.nombrePlantilla}"
+							            			   itemValue="#{plantillaC}"/>
+
+							            <p:ajax event="change" listener="#{mbCapturaDoc.seleccionarTipoDocumentoPlantilla}" update="panelCapturaDoc mensaje_general_advertencia"  process="@this" />
+	
+						            </p:selectOneMenu>
+								</div>
+								<!-- / PLANTILLAS -->
+
+								<!-- ADJUNTAR DOCUMENTOS -->
+								<div class="row" style="padding: 3px 0px 0px 0px"> 
+					        	
+					        		<div class="col-md-4" style="padding-left: 0px;">
+						            	<p:radioButton id="opt3" for="customRadio" itemIndex="2" />
+						            	<h:outputLabel for="opt3" value="Adjuntar documento firmado" style="margin-bottom: 2px;"/>
+						            </div>
+						            
+						            <div class="col-md-3" style="padding-top: 2px; padding-right: 0px;">
+										<h:outputLabel id="lblDocAdjunto" value="&#xf0c6; #{mbCapturaDoc.filtros.nombreOriginalPdf}" 
+													   rendered="#{mbCapturaDoc.filtros.nombreOriginalPdf != null and !mbCapturaDoc.filtros.nombreOriginalPdf.isEmpty()}" 
+													   style="font-family: Roboto, FontAwesome; font-size: 13px; color:#d5007f;"/>
+									</div>
+						            
+					            </div>
+					            <div class="row" style="padding: 0px 0px 3px 25px"> 
+									<h:outputText id="lblmenAdjunto" value="Formatos validos: *.pdf con el tamaño de hasta 50MB" styleClass="instruccionesRedaccion"/>
+								</div>
+								<div class="row" style="padding-left: 20px;"> 
+								
+									<div class="col-md-8" style="padding-right: 0px; padding-left: 3px;">
+										<p:fileUpload id="fileUploadAdjuntar"   disabled="#{mbCapturaDoc.filtros.tipoCapturaDocumento != 3}"
+													  fileUploadListener="#{mbCapturaDoc.adjuntarDocumento}" allowTypes="/(\.|\/)(pdf)$/"
+													  invalidFileMessage="Formato inválido, favor de verificar el archivo"
+													  invalidSizeMessage="Tamaño inválido, favor de verificar el archivo"
+													  process="@this" update="@form" sizeLimit="50000000" 
+													  label="Seleccionar archivo" styleClass="boton" auto="true" >
+										</p:fileUpload>
+									</div>
+									
+								</div>
+								<!-- / ADJUNTAR DOCUMENTOS -->
+								
+							</div>
+						</div>
+					</section>
+				
+				</p:outputPanel>
+				<!-- /SELECCION TIPO CAPTURA -->
+				
+				<!-- ANEXOS -->
+				<p:outputPanel id="panelAnexos">
+
+					<h4>
+						<h:outputLabel value="Anexos" />
+					</h4>
+					<h5>
+						Formatos válidos: *.pdf, *.xls, *.doc, *.ppt, *.xlsx, *.docx, *.pptx, *.txt y *.zip con un tamaño máximo de 50 MB
+					</h5>
+					<section>
+								
+						<div class="row" >
+							
+							<div class="col-md-12" style="padding-right: 0px; padding-rigth: 50px; padding-left: 40px;">
+								<p:fileUpload id="fileUploadAdjuntarAnexo" 
+											  fileUploadListener="#{mbCapturaDoc.adjuntarAnexo}"  allowTypes="/(\.|\/)(xls|doc|ppt|xlsx|docx|pptx|txt|zip|pdf)$/"
+													  invalidFileMessage="Formato inválido, favor de verificar el archivo"
+													  invalidSizeMessage="Tamaño inválido, favor de verificar el archivo"
+											  process="@this" update="@form" sizeLimit="50000000" 
+											  label="Seleccionar archivo" styleClass="boton" auto="true" >
+								</p:fileUpload>
+							</div>
+						</div>
+						
+						<div class="row">
+						
+							<div class="col-md-12" align="center"> 
+								
+								<p:dataTable styleClass="tablaAnexos" 
+											 value="#{mbCapturaDoc.filtros.anexos}"
+											 var="anexo" 
+											 emptyMessage="" 
+											 style="width: 500px;">
+								
+								    <p:column headerText="Nombre documento" style="width: 50%">
+		        						<h:outputText value="#{anexo.nombreOriginal}" />
+		    						</p:column>
+	
+		    						<p:column headerText="Tamaño" style="width: 25%">
+		    						
+		    							<h:outputText value="#{ mbCapturaDoc.df.format(anexo.size) } MB" />
+		    						</p:column>
+	
+		    						<p:column headerText="Eliminar" style="text-align: center; width: 25%">
+		        					
+		        						<p:commandLink 	value="&#xf00d;" style="text-decoration: none" 
+		        										action="#{mbCapturaDoc.eliminarAnexo(anexo)}" immediate="true"
+		        										update="@form" />
+		    						 
+		    						</p:column>
+	
+								</p:dataTable>
+							</div>	
+						</div>
+						
+						
+					</section>
+				
+				</p:outputPanel>
+				<!-- / ANEXOS -->
+				
+				<!-- CCP -->
+				<p:outputPanel id="panelCCP">
+
+					<h4>
+						<h:outputLabel value="CCP" />
+					</h4>
+					<h5>
+						Ingrese datos en cualquiera de los campos
+					</h5>
+					<section>
+						
+						<!-- NOMBRE Y APELLIDOS -->
+						<div class="row">
+							<div class="col-md-5">
+								<div class="row">
+									<h:outputLabel value="#{messageSource['etiqueta_nombre']}" style="font-size: 14px; font-family:roboto;"/>
+								</div>
+								<div class="row">
+									<p:inputText id="nombreccp" value="#{mbCapturaDoc.filtros.nombreCCP}" style="width: 100%" />
+								</div>
+							</div>
+							<div class="col-md-1"/>
+							<div class="col-md-6">
+								<div class="row">
+									<h:outputLabel value="Apellidos" style="font-size: 14px; font-family:roboto;"/>
+								</div>
+								<div class="row">
+									<p:inputText id="apellidoccp" value="#{mbCapturaDoc.filtros.apellidoCCP}" style="width: 100%"/>
+								</div>
+							</div>
+						</div>
+						
+						<!-- TIPO DE AREA Y ENTIDAD -->
+						<div class="row">
+							<div class="col-md-5">
+								<div class="row">
+									<h:outputLabel value="Tipo de área" style="font-size: 14px; font-family:roboto;"/>
+								</div>
+								<div class="row">
+									<p:selectOneMenu id="tipoAreaCCP" style="width: 100%"
+													 value="#{mbCapturaDoc.filtros.tipoAreaCCP}">
+										
+										<f:selectItem itemValue="" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+										<f:selectItems value="#{mbCapturaDoc.filtros.listaTiposAreaCCP}" 
+													   var="tipoAreaC"
+													   itemValue="#{tipoAreaC.idTipoArea}"
+													   itemLabel="#{tipoAreaC.descripcion}" />
+
+										<p:ajax event="valueChange" listener="#{mbCapturaDoc.seleccionarTipoAreaCCP}"
+												update="entidadCCP areaCCP" process="@this"/>
+
+									</p:selectOneMenu>
+								</div>
+							</div>
+							<div class="col-md-1"/>
+							<div class="col-md-6">
+								<div class="row">
+									<h:outputLabel value="Entidad" style="font-size: 14px; font-family:roboto;"/> 
+								</div>
+								<div class="row">
+									<p:selectOneMenu id="entidadCCP" value="#{mbCapturaDoc.filtros.idEntidadCCP}" style="width: 100%" 
+												 	 disabled="#{mbCapturaDoc.filtros.tipoAreaCCP ne 2}">
+										
+										<f:selectItem itemValue="" itemLabel="#{messageSource['mensaje_general_selecciona']}" />
+										<f:selectItems value="#{mbCapturaDoc.filtros.listaEstadosCCP}" var="entidadC"
+													   itemValue="#{entidadC.idEstado}"
+													   itemLabel="#{entidadC.nombreEstado}" />
+										
+										<p:ajax event="change" listener="#{mbCapturaDoc.consultarAreasCCP}" 
+												update="tipoAreaCCP areaCCP" process="@this" />
+												
+									</p:selectOneMenu>
+								</div>
+							</div>
+						</div>
+					
+						<!-- AREA -->
+						<div class="row">
+							<div class="col-md-5">
+								<div class="row">
+									<h:outputLabel value="&Aacute;rea" style="font-size: 14px; font-family:roboto;"/>
+								</div>
+								<div class="row">
+									<p:selectOneMenu id="areaCCP" value="#{mbCapturaDoc.filtros.idAreaCCP}" style="width: 100%">
+										<f:selectItem itemLabel="#{messageSource['mensaje_general_selecciona']}" itemValue="#{null}" />
+										<f:selectItems value="#{mbCapturaDoc.filtros.listaAreasCCP}" 
+													   var="areaC" 
+													   itemValue="#{areaC.idArea}" 
+													   itemLabel="#{areaC.descripcion}" />
+									</p:selectOneMenu>
+								</div>
+							</div>
+						</div>
+					
+						<!-- BOTON BUSCAR -->
+						<div class="row botonesAcomodo">
+							<div class="col-md-12">
+								<p:commandButton value="Buscar"
+												 process="@this panelCCP"
+												 update="dialogo_personasCCP mensaje_general_advertencia mensaje_general_info"
+												 action= "#{mbCapturaDoc.consultarCCP}" 
+												 oncomplete="focusPorRoberto(xhr, status, args)"/>
+	
+							</div>
+						</div>
+						
+						<!-- TABLA CON LOS CCP -->
+						<div class="row">
+							<div class="col-md-12">
+	
+								<p:dataTable id="tablaCCP" styleClass="personasEncontradas"
+											 var="ccpASeleccionar"
+											 value="#{mbCapturaDoc.filtros.ccp}" 
+											 emptyMessage="">
+								    
+								     <p:column>
+								    	<div class="row" style="padding: 3px 0px 0px 0px">
+								    		
+								    		<h:outputText styleClass="ui-treetable-toggler ui-icon ui-icon-bullet ui-c" style="float:left; font-family: Roboto"/>
+											<h:outputText value="#{ccpASeleccionar.nombreCompleto} " style="font-weight: bold; font-size: 13px; font-family: Roboto" />
+	
+		        						</div>
+		        						<div class="row" style="padding: 0px 0px 3px 0px">
+		        							&nbsp;&nbsp;&nbsp;&nbsp;<h:outputText value="#{ccpASeleccionar.puesto}" style="font-size: 13px;"/>
+		        						</div>
+		    						</p:column>
+
+		    						 <p:column>
+		    						 	
+		    						 	
+		    						 	<p:commandLink action="#{mbCapturaDoc.setPersonaDetalle(ccpASeleccionar)}"
+		    						 				   process="@this" update="formCapturaDocumento:detalle_estructura"
+		    						 				   oncomplete="PF('detalle_estructura').show();" styleClass="linksPersonasEncontradas" >
+	
+		    						 		<i class="fa fa-search" aria-hidden="true" />&nbsp;<h:outputText value="Detalle" style="text-decoration: underline;"/>
+		    						 		
+		    						 	</p:commandLink>
+		        						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		        						<p:commandLink action="#{mbCapturaDoc.eliminarCCP(ccpASeleccionar)}"
+		        									   update="tablaCCP" process="@this"
+		        									   styleClass="linksPersonasEncontradas">
+		        							
+		        							<i class="fa fa-user-times" aria-hidden="true"/>&nbsp;<h:outputText value="Eliminar" style="text-decoration: underline;"/>		   
+		        							
+		        						</p:commandLink>
+		    						 
+		    						 </p:column>
+		    						
+								</p:dataTable>
+	
+							</div>
+
+						</div>
+					
+					</section>
+				
+				</p:outputPanel>
+				<!-- / CCP -->
+				
+				<section>
+
+					<div class="row botonesAcomodo">
+						<p:outputPanel id="botonfin">
+							<div class="col-md-12">
+								
+								<p:commandButton value="Aceptar"  
+												 process="@this panelInformacionDocumento"
+												 actionListener= "#{mbCapturaDoc.guadarDocumento}"
+												 action="capturaExitosa"
+												 update="@form" 
+												 oncomplete="focusPorRoberto(xhr, status, args)"/>
+								
+							</div>
+						</p:outputPanel>
+					</div>
+
+				</section>
+			
+			</div>
+			
+			
+			<!-- ********************************************************************** DIALOGOS ********************************************************************************* -->
+			
+			<!-- REMITENTES -->
+			<p:dialog id="dlgbuscarPersonaRemitente" widgetVar="dlgbuscarPersonaRemitente" modal="true" resizable="false" styleClass="ventanaPersonaBusqueda">
+
+				<p:outputPanel id="dialogo_personasRemitente">
+					
+					<div class="row">
+
+						<p:dataTable id="tabla_personasRemitente" var="empleado" paginator="true" rows="10"
+									 selection="#{mbCapturaDoc.filtros.remitentesSeleccionados}"
+									 value="#{mbCapturaDoc.filtros.personasBusquedasEncontradas}" 
+									 rowKey="#{empleado.idPersona}"
+									 scrollable="true" paginatorPosition="bottom">
+
+							<f:facet name="header">
+						        Remitente
+						    </f:facet>
+
+							<p:column selectionMode="multiple"
+								style="width:35px;text-align:center" />
+	
+							<p:column headerText="Nombre">
+								<h:outputText value="#{empleado.nombre}" />
+							</p:column>
+							<p:column headerText="Apellidos">
+								<h:outputText value="#{empleado.apellidos}" />
+							</p:column>
+							<p:column headerText="Puesto">
+								<h:outputText value="#{empleado.puesto}" />
+							</p:column>
+							<p:column headerText="Área" rendered="#{mbCapturaDoc.filtros.idAreaRemitente == null or mbCapturaDoc.filtros.idAreaRemitente == 0}">
+								<h:outputText value="#{empleado.area.descripcion}" />
+							</p:column>
+						</p:dataTable>
+
+					</div>
+
+					<div class="row">
+						<div class="col-md-12 botonesAcomodo">
+							
+							<p:commandButton value="Cancelar" type="button"
+											 onclick="PF('dlgbuscarPersonaRemitente').hide();" />
+							&nbsp;	
+							<p:commandButton value="Agregar"
+											 process="@this dialogo_personasRemitente"
+											 update="panelRemitente dialogo_personasRemitente mensaje_general_info mensaje_general_advertencia"
+											 actionListener="#{mbCapturaDoc.agregarRemitente}" />
+						</div>
+					</div>
+	
+				</p:outputPanel>
+
+			</p:dialog>
+			<!-- / REMITENTES -->
+
+			<!-- DESTINATARIOS -->
+			<p:dialog id="dlgbuscarPersonaDestinatario" widgetVar="dlgbuscarPersonaDestinatario" modal="true" resizable="false" styleClass="ventanaPersonaBusqueda">
+
+				<p:outputPanel id="dialogo_personasDestinatarios">
+					<div class="row">
+						<p:dataTable id="tabla_personasDestinatarios" var="empleadoD" paginator="true" rows="10"
+									 selection="#{mbCapturaDoc.filtros.destinatariosSeleccionados}"
+									 value="#{mbCapturaDoc.filtros.personasBusquedasEncontradas}" 
+									 rowKey="#{empleadoD.idPersona}"
+									 scrollable="true" paginatorPosition="bottom">
+
+							<f:facet name="header">
+						        Destinatario
+						    </f:facet>
+
+							<p:column selectionMode="multiple"
+								style="width:35px;text-align:center" />
+	
+							<p:column headerText="Nombre">
+								<h:outputText value="#{empleadoD.nombre}" />
+							</p:column>
+							<p:column headerText="Apellidos">
+								<h:outputText value="#{empleadoD.apellidos}" />
+							</p:column>
+							<p:column headerText="Puesto">
+								<h:outputText value="#{empleadoD.puesto}" />
+							</p:column>
+							<p:column headerText="Área" rendered="#{mbCapturaDoc.filtros.idAreaDestinatario == null or mbCapturaDoc.filtros.idAreaDestinatario == 0}">
+								<h:outputText value="#{empleadoD.area.descripcion}" />
+							</p:column>
+	
+						</p:dataTable>
+
+					</div>
+
+					<div class="row ">
+						<div class="col-md-12 botonesAcomodo">
+							
+							<p:commandButton value="Cancelar" type="button"
+											 onclick="PF('dlgbuscarPersonaDestinatario').hide();" />
+							&nbsp;	
+							<p:commandButton value="Agregar" id="btn_agregar_persona"
+											 process="@this dlgbuscarPersonaDestinatario"
+											 update="panelDestinatario dialogo_personasDestinatarios mensaje_general_info mensaje_general_advertencia"
+											 actionListener="#{mbCapturaDoc.agregarDestinatario}" />
+						</div>
+					</div>
+				</p:outputPanel>
+			</p:dialog>
+			<!-- / DESTINATARIOS -->
+
+
+			<!-- AREAS DESTINATARIOS -->
+			<p:dialog id="dlgbuscarAreasDestinatario" widgetVar="dlgbuscarAreasDestinatario" modal="true" resizable="false" styleClass="ventanaPersonaBusqueda">
+
+				<p:outputPanel id="dialogo_areasDestinatarios">
+					<div class="row">
+						<p:dataTable id="tabla_areasDestinatarios" var="areaD" paginator="true" rows="10"
+									 selection="#{mbCapturaDoc.filtros.areasDestinatariosSeleccionados}"
+									 value="#{mbCapturaDoc.filtros.areasBusquedaEncontradas}" 
+									 rowKey="#{areaD.idArea}"
+									 scrollable="true" paginatorPosition="bottom">
+
+							<f:facet name="header">
+						        Destinatario
+						    </f:facet>
+
+							<p:column selectionMode="multiple"
+								style="width:35px;text-align:center" />
+
+							<p:column headerText="Área" >
+								<h:outputText value="#{areaD.descripcion}" />
+							</p:column>
+	
+						</p:dataTable>
+
+					</div>
+
+					<div class="row ">
+						<div class="col-md-12 botonesAcomodo">
+							
+							<p:commandButton value="Cancelar" type="button"
+											 onclick="PF('dlgbuscarAreasDestinatario').hide();" />
+							&nbsp;	
+							<p:commandButton value="Agregar" id="btn_agregar_area"
+											 process="@this dlgbuscarAreasDestinatario"
+											 update="panelDestinatario dialogo_areasDestinatarios mensaje_general_info mensaje_general_advertencia"
+											 actionListener="#{mbCapturaDoc.agregarAreaDestinatario}" />
+						</div>
+					</div>
+				</p:outputPanel>
+			</p:dialog>
+			<!-- / AREAS DESTINATARIOS -->
+
+
+			<!-- CCP -->
+			<p:dialog id="dlgbuscarPersonaCCP" widgetVar="dlgbuscarPersonaCCP" modal="true" resizable="false" styleClass="ventanaPersonaBusqueda">
+
+				<p:outputPanel id="dialogo_personasCCP">
+					<div class="row">
+						<p:dataTable id="tabla_personasCCP" var="empleadoC" paginator="true" rows="10"
+									 selection="#{mbCapturaDoc.filtros.ccpSeleccionados}"
+									 value="#{mbCapturaDoc.filtros.personasBusquedasEncontradas}" 
+									 rowKey="#{empleadoC.idPersona}"
+									 scrollable="true" paginatorPosition="bottom">
+
+							<f:facet name="header">
+						        CCP
+						    </f:facet>
+
+							<p:column selectionMode="multiple"
+								style="width:35px;text-align:center" />
+	
+							<p:column headerText="Nombre">
+								<h:outputText value="#{empleadoC.nombre}" />
+							</p:column>
+							<p:column headerText="Apellidos">
+								<h:outputText value="#{empleadoC.apellidos}" />
+							</p:column>
+							<p:column headerText="Puesto">
+								<h:outputText value="#{empleadoC.puesto}" />
+							</p:column>
+							<p:column headerText="Área" rendered="#{mbCapturaDoc.filtros.idAreaCCP == null or mbCapturaDoc.filtros.idAreaCCP == 0}">
+								<h:outputText value="#{empleadoC.area.descripcion}" />
+							</p:column>
+	
+						</p:dataTable>
+
+					</div>
+
+					<div class="row ">
+						<div class="col-md-12 botonesAcomodo">
+							
+							<p:commandButton value="Cancelar" type="button"
+											 onclick="PF('dlgbuscarPersonaCCP').hide();" />
+							&nbsp;	
+							<p:commandButton value="Agregar"
+											 process="@this dlgbuscarPersonaCCP"
+											 update="panelCCP dialogo_personasCCP mensaje_general_info mensaje_general_advertencia"
+											 actionListener="#{mbCapturaDoc.agregarCCP}" />
+						</div>
+					</div>
+				</p:outputPanel>
+			</p:dialog>
+			<!-- / CCP -->
+			
+			<!-- DIALOG DE DETALLE PARA PERSONAS -->
+			<p:dialog id="detalle_estructura" widgetVar="detalle_estructura" modal="true" styleClass="detallePersona">
+				
+				<div class="row tituloDetalle">
+					
+					Datos funcionario
+				
+				</div>
+				
+				<div class="row">
+					<div class="col-md-5">
+						<div class="row">
+							<c:if test="#{mbCapturaDoc.personaDetalle.genero eq 'H'}">
+								<h:graphicImage style="width:100%;" name="#{messageSource['ruta_imagen_hombre']}" />
+							</c:if>
+							<c:if test="#{mbCapturaDoc.personaDetalle.genero eq 'M'}">
+								<h:graphicImage style="width:100%;" name="#{messageSource['ruta_imagen_mujer']}" />
+							</c:if>
+							<c:if test="#{empty mbCapturaDoc.personaDetalle.genero}">
+								<h:graphicImage style="width:100%;" name="#{messageSource['ruta_imagen_generica']}" />
+							</c:if>
+						</div>
+					</div>
+					<div class="col-md-7">
+						<div class="row" style="margin-bottom:10px;font-weight: bold;color:#d5007f;">
+							<!-- <h:outputText value=" #{mbCapturaDoc.personaDetalle.tratamiento != null ? mbCapturaDoc.personaDetalle.tratamiento : ''}
+							 #{mbCapturaDoc.personaDetalle.nombreCompleto}"/> -->
+							
+							<h:outputText value="#{mbCapturaDoc.personaDetalle.nombreCompleto}"/>
+							
+						</div>
+						<div class="row" style="font-weight: bold;">
+							<h:outputText value="Puesto o cargo"/>
+						</div>
+						<div class="row" style="margin-bottom:10px;">
+							<h:outputText value="#{mbCapturaDoc.personaDetalle.puesto}"/>
+						</div>
+						
+						<div class="row" style="font-weight: bold;">
+							<h:outputText value="Área de adscripción"/>
+						</div>
+						<div class="row" style="margin-bottom:10px;">
+							<h:outputText value="#{mbCapturaDoc.personaDetalle.area.descripcion}"/>
+						</div>
+						<div class="row" style="font-weight: bold;">
+							<h:outputText value="Correo electrónico"/>
+						</div>
+						<div class="row" style="margin-bottom:10px;">
+							<h:outputText value="#{mbCapturaDoc.personaDetalle.cuentaLDAP}@ine.mx"/>
+						</div>
+						<div class="row" style="font-weight: bold;">
+							<h:outputText value="Extensión"/>
+						</div>
+						<div class="row" style="margin-bottom:10px;">
+							<h:outputText value="#{mbCapturaDoc.personaDetalle.extensionTel != null ? mbCapturaDoc.personaDetalle.extensionTel : 'Sin extensión'}"/>
+						</div>
+					</div>
+				</div>
+
+			</p:dialog>
+
+
+			<!-- DIALOG DE DETALLE PARA AREAS -->
+			<p:dialog id="detalle_area" widgetVar="detalle_area" modal="true" styleClass="detallePersona">
+				
+				<div class="row tituloDetalle">
+					
+					Datos área
+				
+				</div>
+				
+				<div class="row">
+					<div class="col-md-12">
+						<div class="row" style="margin-bottom:10px;font-weight: bold;color:#d5007f;">
+							<h:outputText value="#{mbCapturaDoc.areaDetalle.descripcion}"/>
+						</div>
+						<div class="row" style="font-weight: bold;">
+							<h:outputText value="Siglas"/>
+						</div>
+						<div class="row" style="margin-bottom:10px;">
+							<h:outputText value="#{mbCapturaDoc.areaDetalle.siglas}"/>
+						</div>
+						
+						<div class="row" style="font-weight: bold;">
+							<h:outputText value="Tipo área"/>
+						</div>
+						<div class="row" style="margin-bottom:10px;">
+							<h:outputText value="#{mbCapturaDoc.areaDetalle.dtoTipoArea.descripcion}"/>
+						</div> 
+					</div>
+				</div>
+
+			</p:dialog>
+
+		</h:form>
+
+	</ui:define>
+
+</ui:composition>

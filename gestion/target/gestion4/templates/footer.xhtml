@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<ui:composition>
+
+	<!--   INICIO FOOTER   -->
+	<footer>
+	
+	<c:if test="#{SPRING_SECURITY_CONTEXT == null}">
+		
+		<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" />
+	
+		<div id="footer_contenedor_gris"
+			class="#{SPRING_SECURITY_CONTEXT == null? 'container-full' : 'footer_contenedor_gris_oculto'}">
+	
+			<div id="footer_row_link" class="row text-center">
+	
+				<h:outputLink id="footer_link_cau" value="http://cau.ife.org.mx/"
+					target="_blank">
+					<span>CAU</span>
+				</h:outputLink>
+	
+				<span id="footer_linea_gris">|</span>
+	
+				<h:outputLink id="footer_link_datos"
+					value="https://intranet.ife.org.mx/unicom/DiS/SSW/sistemas/AvisoProteccionDatos.html"
+					target="_blank">
+					<span>Protección de datos</span>
+				</h:outputLink>
+	
+			</div>
+	
+			<div id="footer_row_compatibilidad" class="row text-center">
+	
+				<span>Gestión INE versión 1.0 Compatibilidad óptima con <h:outputLink
+						value="https://www.google.com/chrome/browser/privacy/eula_text.html"
+						target="_blank">
+						<span>Google Chrome </span>
+					</h:outputLink> © Derechos Reservados, Instituto Nacional Electoral
+				</span>
+	
+			</div>
+		</div>
+	</c:if>
+
+	<div id="footer_contenedor_negro" class="container-full">
+
+		<div class="row">
+
+			<div id="footer_div_imagen" class="col-xs-3">
+				<h:graphicImage name="svg_pegado_11428x34_poster_.png" width="135px"
+					height="42px" styleClass="" library="img"
+					class="pull-right img-responsive" />
+			</div>
+
+			<div id="footer_linea_blanca" class="col-xs-1 footer_div_negro_texto">
+				<span>|</span>
+			</div>
+
+			<div class="col-xs-4 footer_div_negro_texto">
+				<span>© INE México 2017.</span>
+			</div>
+
+			
+			<div class="col-xs-4 footer_div_negro_texto text-right">
+
+				<span>Versión del sistema 4.0</span>&nbsp;&nbsp;<span style="color:black" class="footerVersion">V.DESA.57.48 0705181625</span>
+
+			</div>
+
+		</div>
+
+	</div>
+
+	</footer>
+	<!--   FIN FOOTER   -->
+</ui:composition>
+</html>

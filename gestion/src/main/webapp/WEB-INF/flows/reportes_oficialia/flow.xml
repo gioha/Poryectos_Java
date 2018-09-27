@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+	  start-state="validaRegistroEnGestion" parent="parent-flow">
+
+	<var name="mbReportesOf" class="mx.ine.gestion.mb.MBReportesOficialia" />
+
+	<!-- Flujos Internos -->
+	<view-state id="reportes_view" view="reportes_oficialia.xhtml">
+		<!-- Método que se ejecuta al iniciar -->
+		<on-entry>
+			<evaluate expression="mbReportesOf.init()" />
+		</on-entry>
+		<transition on="btnRecuperarReporte" to="reporte_generado" />
+		<transition on="btnRegresar" to="reportes_view" />
+	</view-state>
+
+	<!-- Validación para revisar que el usuario con el que se esté accediendo ya 
+		 se encuentre registrado en el Organigrama -->
+	<decision-state id="validaRegistroEnGestion">
+		<on-entry>
+			<set name="mbAdministrador.menuSelecionado" value="resourceBundle['id_modulo_reporte_oficialia']" />
+		</on-entry>
+
+		<if test="currentUser.principal.usuarioNoRegistradoEnGestion" then="vsErrorNoRegistrado" else="reportes_view" />
+	</decision-state>
+
+	<!-- Vista de reporte generado -->
+	<view-state id="reporte_generado" view="reporte_generado.xhtml">
+		<transition on="btnRegresar" to="reportes_view" />
+	</view-state>
+</flow>

@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui" 
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:ine="http://ine.mx/ui" xmlns:deceyec="http://ine.mx/ui"
+	template="/templates/template.xhtml">
+	
+
+	<ui:define name="CONTENT">
+	
+	<!-- ############SCRIPT PARA EL TEMPORIZADOR DE DESCARGA -->
+		<script type="text/javascript">
+			function start() {
+				PF('statusDialog').show();
+			}
+
+			function stop() {
+				PF('statusDialog').hide();
+			}
+		</script>
+
+		<!-- <h:form id="reporte_seg	uimiento" style="margin-left:40px"> -->
+	<h:form id="reporte_seguimiento" styleClass="container-fluid">
+		<!--  -->
+		<!-- <p:panelGrid columns="1" columnClasses="ui-grid-col-50" layout="grid" styleClass="ui-panelgrid-blank"> -->
+		<!-- <h:outputStylesheet library="css" name="layout.css"/> -->
+		 <h:outputStylesheet library="css" name="tablas-estilo-reportes.css"/>
+	 	<p:growl 
+		for="growl" 
+		autoUpdate="true" 
+		redisplay="true" 
+		showDetail="true" 
+		showSummary="true"/>
+				<div id="div_card" class="card">				
+					<!-- <p:outputPanel id="panelSeg" style="border-width: 1px;
+                                                   border-radius: 13px;
+                                                   border-style: double; 
+                                                   margin: 11px;   
+                                                   padding: 15px;"/>
+                  -->
+				
+				<h3></h3>
+                 <!-- <div class="col-md-6" align="right">
+									 <label for="usr">#{messageSource['lbl_reporte_seguimiento_consejo_general']}</label> 
+				 </div> -->
+				 
+				 
+				 <ol class="breadcrumb" style="margin-top: -20px; background-color: #FFFFFF;">
+					<li>
+						<a href="${request.contextPath}/app/home"> 
+							<h:outputText value="#{messageSource['lbl_home']}" />
+						</a>
+					</li>
+					<li>
+						<a href="${request.contextPath}/app/reportes">
+							<h:outputText value = "#{messageSource['lbl_reportes']}"/>						
+						</a>
+					</li>
+					 <li class="active">#{messageSource['lbl_seguimiento_consejo_general']}</li>
+					 
+				</ol>
+				
+                <div class="lblTituloForm robotoRegular">
+					<span>#{messageSource['lbl_reporte_seguimiento_consejo_general']}</span> 
+				</div> 
+				
+				<div class="row">			
+					
+						<!-- <div class="col-md-4 col-sm-3 col-xs-3 robotoRegular"> -->
+							<!-- <font color="red">* </font> 
+							<h:outputLabel for="paneltablas"
+								value="#{messageSource['lbl_seleccion_reporte']}" />
+							<br></br>
+							
+							style="width:600px"
+							<h:selectOneMenu id="menu" value="#{mbSeguimientoCG.menu}"
+								styleClass="inputsForm">
+								<p:ajax listener="#{mbSeguimientoCG.escuchando}"
+									update="panelTablas" />
+								<f:selectItems value="#{mbSeguimientoCG.reporteList}"></f:selectItems>
+							</h:selectOneMenu> -->
+							
+						<!-- </div> -->
+						<!-- <f:selectItem
+									itemLabel="#{messageSource['lbl_reporte_selecciona_opcion']}"
+									itemvalue="desactivar"/> -->
+
+				
+					
+						<p:growl id="msgs" showDetail="true" />
+
+						<!--style="width:600px"  -->
+						<!-- <div class="row"> -->
+<!-- ######################################################CODIGO PARA SELECCIONAR EL AÑO QUE SE DESEA FILTRAR######################## -->
+							<!-- <div class="col-md-4"> -->
+							<div class="col-md-4 col-sm-3 col-xs-3 robotoRegular espaciador-xs-top">
+										<font color="red">* </font> 
+										<h:outputLabel for="paneltablas"  value="#{messageSource['lbl_ingresa_anio_reporte']} " />
+											<h:graphicImage id="ayuda4"
+											                name="ayuda01.png"
+											                styleClass=""
+												            library="img"
+										    />
+											<p:tooltip id="toolTipFade1" 
+											           for="ayuda4"
+												       value="#{messageSource['lbl_reporte_anio_resol_acuerdos']}"
+												       position="left" 
+										    />
+											<br></br>
+											<!-- #####  SE SELECCIONA  EL AÑO QUE SE DESEA VISUAALIZAR ####### -->
+											<p:selectOneMenu id="anio" 
+											                 value="#{mbSeguimientoCG.anio}"
+												             styleClass="inputsForm reducido">
+													
+													<f:selectItem itemLabel="#{messageSource['lbl_reporte_selecciona_anio']}" itemValue=""
+														          noSelectionOption="true" />
+														          
+													<f:selectItems value="#{mbSeguimientoCG.listAnio}">
+													</f:selectItems>
+													
+													<p:ajax listener="#{mbSeguimientoCG.getRango}"
+															onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"
+														    update="tipoReporte panelTablas"/>
+			
+											</p:selectOneMenu>
+							</div>
+
+						<!-- </div> -->
+						
+						
+<!-- #############################################CODIGO PARA SELECCIONAR EL TIPO DE REPORTE QUE SE DESEA VISUALIZAR#################-->
+						
+						<!-- <div class="row"> -->
+							<div class="col-md-4 col-sm-3 col-xs-3 robotoRegular espaciador-xs-top">
+							<p:outputPanel id="tipoReporte" layout="inline" value="tipoReporte">
+							<c:if test="#{mbSeguimientoCG.aux eq '1'}">
+								<font color="red">* </font>
+									<h:outputLabel for="panelTablas"
+									value="#{messageSource['lbl_reporte_seleccion']}"/>
+									<br></br>
+									<p:selectOneMenu id= "tipoAcuerdo" value="#{mbSeguimientoCG.tipoDocumento}"
+									styleClass="inputsForm reducido">
+									<p:ajax listener="#{mbSeguimientoCG.getDocumento}"
+										onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"
+										update="panelTablas"/>
+										<f:selectItem itemLabel="#{messageSource['lbl_reporte_selecciona_opcion']}"  itemValue="" noSelectionOption="true"/>
+										<f:selectItems value= "#{mbSeguimientoCG.tipoDocumentoList}"></f:selectItems>
+									</p:selectOneMenu>
+									</c:if>
+							</p:outputPanel>
+							</div>
+						
+						</div>
+						
+						<div class="row">	
+<!-- ########################################################CODIGO PARA MOSTRAR ICONO DE ESTATUS MIENTRAS SE ACTUALIZA LA TABLA############## -->
+						
+						<p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false" header="cargando">
+						    <p:graphicImage name="/img/loader.gif" />
+						</p:dialog>
+					
+<!--########################################################TITULO DE  LA TABLA############################################################### -->
+						<p:outputPanel id="panelTablas" layout="inline" value="panelTablas">
+							<c:if test="#{mbSeguimientoCG.tabla eq '1'}">
+						<div class="cabeceraAcuerdos">
+								<span class="titulocabeceraAcuerdos">
+								 <h:outputText
+										value="#{messageSource['lbl_reporte_seguimiento_consejo_general']}"
+										class="labelsCabecera" />
+								</span> <span class="cerrarModal"> 
+<!-- #####################################################BOTONES PARA LA DESCARGA DE LOS ARCHIVOS EXCEL Y PDF ##################################-->																	
+										<p:menuButton value="#{messageSource['etiqueta_menu_accion_descargar']}">								
+											<p:menuitem value="#{messageSource['lbl_descargar_pdf']}"
+															ajax="false"
+															styleClass="#{kkcIncomingErrorBean.buttonStyle}"
+															onclick="PrimeFaces.monitorDownload(start, stop);"
+															icon="ui-icon-document"
+															disabled="#{mbSeguimientoCG.filterLista.size() == 0}"
+															actionListener= "#{mbSeguimientoCG.getReportePDF()}" 
+											>
+										    	<p:fileDownload value="#{mbSeguimientoCG.getReportePDF()}" />
+											</p:menuitem>
+										
+											<p:menuitem value="#{messageSource['lbl_descargar_excel']}" ajax = "false"
+												styleClass="#{kkcIncomingErrorBean.buttonStyle}"
+												onclick="PrimeFaces.monitorDownload(start, stop);"
+												icon="ui-icon-calculator"
+												disabled="#{mbSeguimientoCG.filterLista.size() == 0}"												
+											>
+											  <p:fileDownload value="#{mbSeguimientoCG.getReporteXls()}" />											 
+										    </p:menuitem>
+										</p:menuButton>								
+																
+								</span>
+							</div>
+
+<!-- #################################################TABLA CON  EL RESULTADO DE LOS FILTROS DEL REPORTE DE SEGUIMIENTO ##############################################  style="center"  -->
+							<p:dataTable var="seguimiento" 
+										value="#{mbSeguimientoCG.lista}"
+										id="tablaDatos" multiViewState="true"
+										widgetVar="seguimientoTabla"
+										emptyMessage="#{messageSource['lbl_reporte_no_hay_datos']}"
+										filteredValue="#{mbSeguimientoCG.filterLista}" paginator="true"
+										rows="7" rowsPerPageTemplate="7,10,15,20"
+										paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+										currentPageReportTemplate=" {startRecord}-{endRecord} de {totalRecords}"
+										tableStyle="table-layout: auto;"
+										styleClass="tablaCentro"
+										paginatorPosition="top"
+										responsive="true"
+										
+																	
+							>
+							<p:column headerText="#{messageSource['lbl_anio']}"
+									  filterMatchMode="contains" id="anio"
+									  style="white-space : normal ; width: 15px"
+									  >
+					            	  <h:outputText value="#{seguimiento.anio}" 
+													/>
+					        </p:column>						
+							<p:column filterBy="#{seguimiento.acuerdo}"
+										   headerText="#{messageSource['lbl_reporte_numero_de']} #{mbSeguimientoCG.tipoDocumento}"	
+										   filterMatchMode="contains"							
+										   filterFunction="#{mbSeguimientoCG.filtroAcuerdo}"
+										   styleClass="watermark"
+										   filterStyle="width: 150px;"
+										   
+										    >
+										   <p:watermark for="@(.watermark)" value="#{messageSource['lbl_reporte_ingresa_numero']}"></p:watermark>
+										
+						            	<div style="text-align: center"><h:outputText value="#{seguimiento.acuerdo}"/></div>								 
+						    </p:column>
+							
+						
+							<p:column filterBy="#{seguimiento.punto}"
+								  	  headerText="#{messageSource['lbl_reporte_punto']}"								
+								      filterMatchMode="contains"
+								      filterFunction="#{mbSeguimientoCG.filtroPunto}"
+								      styleClass="watermark1"
+								      filterStyle="width: 150px;"
+								      >
+								      <p:watermark for="@(.watermark1)" value="#{messageSource['lbl_reporte_ingresa_punto']}"></p:watermark>
+					                  <div style="text-align: center"><h:outputText value="#{seguimiento.punto.trim()}"/></div>
+					        </p:column>
+
+							<p:column filterBy="#{seguimiento.estatus}"
+								      headerText="#{messageSource['lbl_reporte_seguimiento_estatus']}"
+							          filterMatchMode="exact"
+								      filterFunction="#{mbSeguimientoCG.filtroEstatus}"
+								      					
+								>
+								<f:facet name="filter">
+									<p:selectOneMenu onchange="PF('seguimientoTabla').filter()">
+										<f:selectItem itemLabel="Seleccionar" 
+										              itemValue="#{null}"
+											          noSelectionOption="true" />
+										<f:selectItems value="#{mbSeguimientoCG.helper.estatusList}" />
+									</p:selectOneMenu>
+								</f:facet>
+								<div style="text-align:center"><h:outputText value="#{seguimiento.estatus}" /></div> 	
+					        </p:column>
+
+							<p:column filterBy="#{seguimiento.area}"
+								      headerText="#{messageSource['lbl_reporte_area']}"
+								      filterMatchMode="exact"
+								      filterFunction="#{mbSeguimientoCG.filtroArea}"
+								>
+								<f:facet name="filter">
+									<p:selectOneMenu style="width: 100%;" onchange="PF('seguimientoTabla').filter()">
+										<f:selectItem itemLabel="Seleccionar" itemValue="#{null}"
+										              noSelectionOption="true" />
+										<f:selectItems value="#{mbSeguimientoCG.helper.areaList}" />
+									</p:selectOneMenu>
+								</f:facet>
+								<div style="text-align:center"><h:outputText value="#{seguimiento.area}"/></div> 	
+					        </p:column>
+
+							<p:column filterBy="#{seguimiento.tematica}"
+								      headerText="#{messageSource['lbl_reporte_clasificacion']}"
+								      filterMatchMode="exact"
+								      filterFunction="#{mbSeguimientoCG.filtroClasificacion}">
+								<f:facet name="filter">
+									     <p:selectOneMenu onchange="PF('seguimientoTabla').filter()">
+										    <f:selectItem itemLabel="Seleccionar" itemValue="#{null}"
+											              noSelectionOption="true" />
+										    <f:selectItems value="#{mbSeguimientoCG.helper.tematicaList}" />
+									      </p:selectOneMenu>
+								</f:facet>
+								<div style="text-align:center"><h:outputText value="#{seguimiento.tematica}"/></div>
+					        </p:column>
+
+						</p:dataTable>
+
+					</c:if>
+					 </p:outputPanel> 
+					</div>
+					
+                    </div>
+                    <!-- </p:panelGrid> -->
+						</h:form>
+		   <h:outputScript library="js" name="verificaPalabras.js" />
+
+			<p:dialog modal="true" widgetVar="statusDialog" header="Cargando..."
+					  draggable="false" closable="false" resizable="false">
+				<p:graphicImage name="/img/loader.gif"/>
+			</p:dialog>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+	start-state="validaRegistroEnGestion" parent="parent-flow">
+	
+	<secured attributes="ROLE_GESTION4.ADMIN.OC, ROLE_GESTION4.ADMIN_AREA.OC, ROLE_GESTION4.SEGUIMIENTO.OC, ROLE_GESTION4.SEGUIMIENTO_REST.OC, ROLE_GESTION4.CONSULTA_CAU.OC, ROLE_GESTION4.OFICIALIA.OC" match="any"/>
+	
+	<var name="mbFirma" class="mx.ine.gestion.mb.MBFirma"/>
+	
+	<!-- Flujos Internos -->
+		
+	<view-state id="administracion_firma" view="administracion_firma.xhtml">
+		<on-entry>
+			<evaluate expression="mbFirma.iniciar()"/>
+		</on-entry>
+	</view-state>
+
+	<!-- Validación para revisar que el usuario con el se este accediendo ya se encuentre registrado en el Organigrama -->
+	<decision-state id="validaRegistroEnGestion">
+		
+		<on-entry>
+			<set name="mbAdministrador.menuSelecionado" value="resourceBundle['id_modulo_firma']"/>
+		</on-entry>
+		
+		<if test="currentUser.principal.usuarioNoRegistradoEnGestion" then="vsErrorNoRegistrado" else="administracion_firma"/>
+	
+	</decision-state>
+
+</flow>

@@ -1,0 +1,46 @@
+10
+
+dir
+334341
+svn+ssh://giovanni.hernandez@10.0.1.85/repositorio/DIS-UNICOM/Codigo/2017/Gestion_Inst/Acuerdos_1.0/trunk/src/main/webapp/resources/img/infografias
+svn+ssh://giovanni.hernandez@10.0.1.85/repositorio/DIS-UNICOM
+
+
+
+2018-01-05T01:43:11.134880Z
+326632
+jair.lopezj
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+b6cf43f3-9c2e-435a-add6-29cfb2289967
+
+bandejaAcuerdos
+dir
+
+catalogos
+dir
+
+convocatoria
+dir
+
+registroAcuerdo
+dir
+
+registroPunto
+dir
+
+seguimiento
+dir
+

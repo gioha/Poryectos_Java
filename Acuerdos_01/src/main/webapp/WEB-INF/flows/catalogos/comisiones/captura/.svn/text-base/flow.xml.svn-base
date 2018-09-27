@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+	  start-state="validaRolUsuario" parent="parent-flow">	
+	<!-- Flujos Internos -->
+	
+	 <!-- Validamos los roles del usuario del lado del MB -->
+ 	 <decision-state id="validaRolUsuario">
+ 		
+		<if test="mbConformacion.validaRoles()" then="cap_comisiones_view"
+										else="home_view" 		/>
+														
+	</decision-state> 
+	 
+	<view-state id="cap_comisiones_view" view="conformacion_comisiones.xhtml"> 	
+	
+	 <on-entry>  		
+			<evaluate expression="mbConformacion.init()"></evaluate>
+		<!-- 	<evaluate expression="mbAdmin.setImgsInfografias(mbBandeja.recuperaImgsInfografias())"></evaluate>	 -->	  
+ 	 </on-entry>
+ 		 
+ 	</view-state> 	
+    
+   <subflow-state id="home_view" subflow="home">   
+    </subflow-state> 
+ 		  
+</flow>

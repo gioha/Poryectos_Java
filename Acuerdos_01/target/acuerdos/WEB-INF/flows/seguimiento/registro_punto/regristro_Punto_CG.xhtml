@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/templates/template.xhtml">
+	<ui:define name="CONTENT">
+		<h:outputStylesheet library="css" name="acuerdos-regPuntos.css" />
+		<h:form id="formRegPunto" onsubmit="return false;" class="formRegPunto" style="margin-top:20px;">
+			<div class="container">
+				<div class="row">
+					<!-- ##################################### CAMINO DE MIGAJAS  ##################################### -->
+					<div class="col-xs-12">
+						<ol class="breadcrumb migaja" style="margin-top: 4px; background-color: #FFFFFF;">
+							<li>
+								<a href="${request.contextPath}/app/home"> 
+									<h:outputText value="#{messageSource['lbl_home']}" />
+								</a>
+							</li>
+							<li>
+								<a href="${request.contextPath}/app/seguimiento/bandeja_cg"> 
+									<h:outputText value="#{messageSource['lbl_acuerdo_migaja']}" />
+								</a>
+							</li>
+							<li class="active">#{messageSource['lbl_titulo_reg_punto']}</li>
+						</ol>
+					</div>
+					<div class="col-xs-12">
+						<p:growl for="mensajesError" autoUpdate="false" />
+		 				<p:growl for="mensajesInfo" showDetail="false"  />
+						<p:growl for="growl" autoUpdate="true" redisplay="true"
+							showDetail="true" showSummary="true" /> 
+					</div>
+					<div class="col-xs-12 lblTituloForm" id="divTitle">
+						<span>#{messageSource['lbl_titulo_reg_punto']}</span>
+					</div>
+					<div class="col-xs-12 lblNotas robotoRegular text-right">
+						<span>#{messageSource['lbl_dato_req1']}</span> <span class="colorRojo">*</span>
+						<span>#{messageSource['lbl_dato_req2']}</span>
+					</div>
+				</div>
+				<div class="row" id="divNombreAc">
+					<div class="col-xs-12 col-md-6 espaciador-top">
+						<h:outputLabel value="Tipo de documento">:</h:outputLabel>&nbsp;
+						<c:if test="#{mbRegPuntos.acuerdo.idTipoDocumento eq 1}">
+								<h:outputText value="#{messageSource['lbl_acuerdo']}" />
+						</c:if>	
+						<c:if test="#{mbRegPuntos.acuerdo.idTipoDocumento eq 6}">
+							<h:outputText value="#{messageSource['lbl_resoluc']}" />
+						</c:if>	
+					</div>
+					<div class="col-xs-12 col-md-6 espaciador-top">
+						<c:if test="#{mbRegPuntos.acuerdo.idTipoDocumento eq 1}">
+						<h:outputLabel value="#{messageSource['lbl_num_acuerdo']}">:</h:outputLabel>&nbsp;
+						</c:if>
+						<c:if test="#{mbRegPuntos.acuerdo.idTipoDocumento eq 6}">
+						<h:outputLabel value="#{messageSource['lbl_num_Resolicion']}">:</h:outputLabel>&nbsp;
+						</c:if>
+						<h:outputText value="#{mbRegPuntos.form.pkPunto.idNumAcuerdo}" />
+					</div>
+				</div>	
+				<p:outputPanel id="pnlMain" rendered="true" >
+					<div id="divBody">
+						<div class="row">
+							<div class="col-xs-12 col-md-6 espaciador-top">
+								<div class="lblInputs">
+									<span class="colorRojo">*</span> <span>#{messageSource['lbl_identificador_punto']}</span>
+								</div>
+								<!-- INE/CG001 -->
+								<div>
+									<p:inputText 	size="25" 
+													id="txtNumeralia" 
+													maxlength="3"
+													styleClass="inputsForm reducido"
+													value="#{mbRegPuntos.form.pkPunto.numeralia}"
+													onkeypress="if (event.keyCode == 13) { return false; }"
+													required="true" requiredMessage="#{messageSource['lbl_requerido']}"
+													onblur="this.value=verificarPalabras(this.value); setTimeout(function() { $('[id$=msjNumeralia]').hide(1000); }, 500);">
+										<pe:keyFilter regEx="/[0-9]/" />
+										<p:ajax 	event="blur"
+													listener="#{mbRegPuntos.obtenerNumeraliaCardinal}"
+													update="lblTextoNumeral" />
+									</p:inputText>
+								</div>
+								<div>
+									<h:outputLabel  id="lblTextoNumeral"
+													styleClass="espaciador-xs-top"
+													value="#{mbRegPuntos.form.numOrdinal}"/>
+								</div>
+								<div>
+									<p:messages for="txtNumeralia" id="msjNumeralia"
+												style="width:40%; height:9%; font-size:12px;" autoUpdate="true"
+												closable="false" 
+												size="10" />
+								</div>
+							</div>
+							<div class="col-xs-12 col-md-6 espaciador-top">
+								<div class="lblInputs">
+									<span class="colorRojo">*</span> <span>#{messageSource['lbl_texto_punto']}</span>
+								</div>
+								<div>
+									<p:inputTextarea 	id="txtPunto" 
+														styleClass="inputsForm" 
+														rows="4"
+														cols="55" 
+														size="25" 
+														autoResize="false" 
+														rendered="true"
+														requiredMessage="#{messageSource['lbl_requerido']}" 
+														required="true"
+														value="#{mbRegPuntos.form.punto.textoPunto}"
+														onblur="this.value=verificarPalabras(this.value); setTimeout(function() { $('[id$=msjTexto]').hide(1000); }, 500);"/>
+	
+								</div>
+								<div>
+									<p:messages for="txtPunto"
+												id="msjTexto"
+												style="width:80%; 
+												height:9%; 
+												font-size:12px;" 
+												autoUpdate="true"
+												closable="false" 
+												size="10" />
+								</div>
+							</div>
+	
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-md-6 espaciador-top">
+								<div class="lblInputs">
+									<span class="colorRojo">*</span> <span>#{messageSource['lbl_clasificacion']}</span>
+								</div>
+								<div>
+									<p:selectOneMenu 	id="clasificaciones"
+														value="#{mbRegPuntos.form.punto.idClasificacion}"
+														requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+														required="true" 
+														styleClass="inputsForm reducido"
+														onstart="PF('progress').block()"
+														onsuccess="PF('progress').unblock()" 
+														onchange="setTimeout(function() { $('[id$=msjClasif]').hide(1000); }, 500);">
+	
+										<f:selectItem 	itemLabel="Seleccione una clasificación"
+														itemValue="" />
+										<f:selectItems 	value="#{mbRegPuntos.form.clasificaciones}"
+														var="clasificacion"
+														itemValue="#{clasificacion.idClasificacion}"
+														itemLabel="#{clasificacion.descripcion}" />
+										
+									</p:selectOneMenu>								  	 
+								</div>
+								<div>
+									<p:messages for="clasificaciones"
+												id="msjClasif"
+												style="width:47%; 
+												height:9%; 
+												font-size:12px;" 
+												autoUpdate="true"
+												closable="false" 
+												size="10" />
+												
+								</div>
+							</div>
+							<div class="col-xs-12 col-md-6 espaciador-top">
+								<div class="espaciador-top">
+									<p:selectBooleanCheckbox value="#{mbRegPuntos.form.notificacion}">
+										  <p:ajax  listener="#{mbRegPuntos.form.cambiaNotificacion}" />
+								    </p:selectBooleanCheckbox>     
+							         <h:outputText value="      #{messageSource['lbl_es_notific']} " />
+								</div>
+							</div>
+						</div>				
+					</div>
+				</p:outputPanel>
+				<p:outputPanel id="pnlFechNoti">
+					<div style="display:#{mbRegPuntos.responsConjunta eq 'false' ?'block':'none'}">			
+						<div class="row lblInputs">
+									<c:if test="#{mbRegPuntos.responsConjunta eq 'false'}">							
+										<h:form id="formSelect" >
+											<div class="col-xs-12 espaciador-top lblInputs">
+												<span class="colorRojo">*</span> <span>#{messageSource['lbl_asig_resp']}</span>
+											</div>
+											<div class="col-xs-12">
+												<p:dataTable var="area" 
+														 value="#{mbRegPuntos.areas}" 
+														 styleClass="myTable"
+										            	 selection="#{mbRegPuntos.seleccionados}" 
+										            	 rowKey="#{area.id.idArea}" 
+										            	 scrollable="true" 
+										            	 required="true"
+										            	 scrollHeight="200">
+														      	<p:ajax event="rowSelectCheckbox" 
+							                                            listener="#{mbRegPuntos.rowSelected}" 
+							                                            process="@this"
+							                                            update=":formRegPunto:responsables "/>
+							                                    <p:ajax event="rowUnselectCheckbox"
+							                                            listener="#{mbRegPuntos.rowUnselected}"
+							                                            process="@this"
+							                                            update=":formRegPunto:responsables "/> 
+							                                	<p:ajax event="rowSelect" 
+							                                            listener="#{mbRegPuntos.rowSelect}" 
+							                                            process="@this"
+							                                            update=":formRegPunto:responsables :formRegPunto:pnlFechNoti"/>
+							                                    <!-- <p:ajax event="rowUnselect"
+							                                            listener="#{mbRegPuntos.rowUnselect}"
+							                                            update=":formRegPunto"/>  -->                			                                    
+							                                           
+													<p:column 	selectionMode="multiple" 
+																style="width:8%;text-align:center"/>											
+												    <p:column>
+												        <h:outputText value="#{area.descripcion}" />
+												    </p:column>								    
+												</p:dataTable>
+											</div>
+										</h:form>
+									</c:if>							
+						</div>
+					</div>
+					<div style="display:#{mbRegPuntos.responsConjunta eq 'false' ?'block':'none'}">
+						<div class="row">
+							<h:form id="responsables" style="display:#{mbRegPuntos.responsConjunta eq 'false' ?'block':'none'}">										
+								<c:if test="#{mbRegPuntos.seleccionados.size() > 0}">
+									<div class="col-xs-12 espaciador-top">
+										<c:forEach items="#{mbRegPuntos.seleccionados}" var="sel">		     
+												    <i class="fa fa-chevron-down"></i>												
+										      		  <h:outputLabel value="#{sel.descripcion}" class="lblInputs"/> <br/>                    
+											   			<c:forEach items="#{mbRegPuntos.responsables}" var="resp">								   				 
+									   				  		<c:if test="#{mbRegPuntos.esResponsableArea(resp.idArea, sel.id.idArea)}">
+									   				  			<c:if test="#{resp.tipoResponsable eq 1}">
+										   				 		  <i class="fa fa-chevron-right lblInputs" style="margin-left:50px;">
+											   				 		 <h:outputLabel value="#{resp.nombre}" style="margin-left:5px;" class="lblInputs"/>&nbsp;
+											   				 		 <h:outputLabel value="#{resp.apellidos}" class="lblInputs"/></i><br/>
+										   				 		</c:if>	  	
+										   				 	</c:if>	  	
+											   			</c:forEach>
+										</c:forEach>
+									</div>
+								</c:if>
+								
+								<c:if test="#{mbRegPuntos.seleccionados.size() > 1}">
+									<div class="col-xs-12 espaciador-top">
+										<p:selectBooleanCheckbox value="#{mbRegPuntos.responsConjunta}">		
+					        		   		<p:ajax  listener="#{mbRegPuntos.responsabilidad}" update=":formRegPunto:carForm :formRegPunto:pnlFechNoti"/>						 
+									    </p:selectBooleanCheckbox>     
+								        <h:outputText value="     #{messageSource['lbl_resp_conj']} " />
+									</div>
+								</c:if> 					  
+							</h:form> 
+						</div>
+					</div>				
+					<div class="row">
+						<h:form id="carForm" >
+						   <c:if test="#{mbRegPuntos.responsConjunta == 'true'}">
+						   			<p:growl for="mensajesInfo" showDetail="false"  />
+						  			<div class="col-xs-12 espaciador-top">
+										<p:commandButton styleClass="btnAC" 
+											value="#{messageSource['lbl_edit_responsables']}"
+											id="ntn_modif_resp"	
+											ajax="true"
+											process="@this"		
+											actionListener="#{mbRegPuntos.modResponsabilidad}"
+											update=":formRegPunto:carForm :formRegPunto:pnlFechNoti"
+											style="display:#{mbRegPuntos.responsConjunta =='true' ?'inital':'none'};"/>
+									</div>
+								   <div id="picklist-registro-puntos" class="col-xs-12 espaciador-xs-top">
+								   			<p:pickList id="pickList" value="#{mbRegPuntos.seleccionables}" responsive="true"
+											   var="cities" itemLabel="#{cities}" itemValue="#{cities}" itemDisabled="#{cities eq 'Seleccione para agrupar'}"
+											   style="display:#{mbRegPuntos.seleccionables.getSource().size() > 0 ?'block':'none'};">
+											   			<p:ajax event="transfer" listener="#{mbRegPuntos.handleTransfer}" />
+											   			
+											   			<f:facet name="sourceCaption">#{messageSource['lbl_responsablesCSP']}</f:facet>
+			      											<f:facet name="targetCaption">#{messageSource['lbl_resp_conj']}</f:facet>
+										   </p:pickList>
+								   </div>
+									<div class="col-xs-6 espaciador-top text-center separa-botones"
+										style="display:#{mbRegPuntos.seleccionables.getSource().size() > 0 ?'initial':'none'};">
+									   <p:commandButton styleClass="btnAC" 
+							   						value="#{messageSource['lbl_grd_indv']}"
+													id="Aepta"	
+													process="@this"		
+													ajax="true"									
+													actionListener="#{mbRegPuntos.guardaResponsabilidadSuelta}"
+													update="formRegPunto:pnlFechNoti"/>
+								     </div> 
+								     <div class="col-xs-6 espaciador-top text-center"
+								     	style="display:#{mbRegPuntos.seleccionables.getSource().size() > 1 ?'initial':'none'};">
+									   <p:commandButton 	styleClass="btnAC" 
+									   						value="#{messageSource['lbl_grd_grupo']}"
+															id="Aeptaa"	
+															process="@this"		
+															ajax="true"									
+															actionListener="#{mbRegPuntos.guardaResponsabilidadConjunta}"
+															update="formRegPunto:pnlFechNoti carForm">
+								        </p:commandButton>	
+								      </div>
+						        				        
+						 
+						   </c:if>
+						   <c:if test="#{mbRegPuntos.respConjunta.size() > 0}">
+						   		<div class="col-xs-12 espaciador-xs-top">
+						   			<c:forEach items="#{mbRegPuntos.respConjunta}" var="responsa">
+								   		 <c:choose>
+								   			 <c:when test="#{responsa.contains('Responsabilidad')}">	     
+											    <i class="fa fa-chevron-down"></i>												
+									      		  <h:outputLabel value="#{responsa}" class="lblInputs"/> <br/>
+									      	</c:when>									      	
+									      	<c:otherwise>
+											   	<i class="fa fa-chevron-right lblInputs" style="margin-left:50px;">											
+									      		  <h:outputLabel value="#{responsa}" class="lblInputs"/> </i><br/>
+											 </c:otherwise>
+									     </c:choose>  	  
+								    </c:forEach>
+						   		</div>
+						   </c:if>	
+						    <c:if test="#{mbRegPuntos.respSuelta.size() > 0}">
+						   		<div class="col-xs-12 espaciador-xs-top">
+						   			<c:forEach items="#{mbRegPuntos.respSuelta}" var="resp">								   		 
+										   	<i class="fa fa-chevron-right lblInputs">											
+								      		  <h:outputLabel value="#{resp}" class="lblInputs"/> </i><br/>											 	  
+							    	</c:forEach>
+						   		</div>
+						   </c:if>				
+						</h:form>
+					</div>
+					<c:if test="#{mbRegPuntos.responsConjunta eq 'false'}">													   
+							<div class="row">
+								<div class="col-xs-12 espaciador-top text-center separa-botones">
+									<p:commandButton styleClass="btnAC" 
+													 value="Cancelar"
+													 action="irLista" 
+													 id="btn_cancelar" 
+													 immediate="true" />
+									<p:commandButton styleClass="btnAC" value="Aceptar"
+													id="ntn_Aceptar" 
+													action="#{mbRegPuntos.registrarPunto}"
+													actionListener="#{mbRegPuntos.agregaAdjuntos}"
+													update="formRegPunto" />
+								</div>						
+							</div>
+					</c:if>	
+					<c:if test="#{mbRegPuntos.responsConjunta eq 'true'}">													   
+							<div class="row">		
+								<div class="col-xs-12 espaciador-top text-center separa-botones">
+									<p:commandButton styleClass="btnAC" 
+													 value="Cancelar"
+													 action="irLista" 
+													 id="btn_cancelar2" 
+													 immediate="true" />
+									  <c:choose>
+										 <c:when test="#{mbRegPuntos.seleccionables.getSource().size() > 0}">
+											<p:commandButton 	styleClass="btnAC" value="Aceptar"
+																id="ntn_Aceptar2" 
+																onclick = "PF('dialogMensaje').show();"														
+																update="formRegPunto">
+											</p:commandButton>
+										</c:when>
+										<c:otherwise>
+											<p:commandButton 	styleClass="btnAC" value="Aceptar"
+																id="ntn_Aceptar4" 
+																action="#{mbRegPuntos.registrarPunto}"
+																actionListener="#{mbRegPuntos.agregaAdjuntos}"
+																update="formRegPunto">
+										    </p:commandButton>
+										</c:otherwise>
+									</c:choose>	
+							   </div>					
+							</div>
+					</c:if>
+						
+					</p:outputPanel>
+			</div>
+				
+				<p:dialog modal="true" position="center" showEffect="fade" hideEffect="fade" widgetVar="dialogMensaje" draggable="false" width="400px" resizable="false">
+				        <h:panelGrid id="displayThemes" >
+				            <h:outputText value="#{messageSource['lbl_msg_resp_conjunta']}" style="font-weight:bold" />			            			            
+				        		<h:form><br/><br/>
+				        			<span class="tituloModal">
+						        		<p:commandButton styleClass="btnAC" 
+														 value="Cancelar"											 
+														 id="btn_cancelar3" 
+														 onclick = "PF('dialogMensaje').hide();"		
+														 immediate="true" />
+									</span>		
+									<span class="cerrarModal">			 
+						        		<p:commandButton 	styleClass="btnAC" value="Aceptar"
+															id="ntn_Aceptar3" 
+															ajax="true"
+															process="@form"
+															actionListener="#{mbRegPuntos.registrarPunto}"
+															onclick="PF('dialogMensaje').hide();"															
+															update="formRegPunto">
+										</p:commandButton>
+									</span>
+								</h:form>
+				        </h:panelGrid>
+	    			</p:dialog>
+					
+				
+		</h:form>
+	<!-- Scripts  -->
+		<h:outputScript library="js" name="verificaPalabras.js" />	
+		<script>
+        PrimeFaces.locales['es'] = {
+                closeText: 'Cerrar',
+                prevText: 'Anterior',
+                nextText: 'Siguiente',
+                monthNames: ['Enero','Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+                dayNames: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
+                dayNamesShort: ['Dom','Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+                dayNamesMin: ['D','L','M','M','J','V','S'],
+                weekHeader: 'Semana',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: false,
+                yearSuffix: '',
+                timeOnlyTitle: 'Sólo hora',
+                timeText: 'Tiempo',
+                hourText: 'Hora',
+                minuteText: 'Minuto',
+                secondText: 'Segundo',
+                currentText: 'Fecha actual',
+                ampm: false,
+                month: 'Mes',
+                week: 'Semana',
+                day: 'Día',
+                allDayText : 'Todo el día'
+        };
+        </script>
+        <script type="text/javascript">
+			function handleTransfer(e) {
+			item = e.item
+			fromList = e.from
+			toList = e.toList
+			type = e.type (type of transfer; command, dblclick or dragdrop)
+			}
+		</script>
+       
+	</ui:define>
+</ui:composition>

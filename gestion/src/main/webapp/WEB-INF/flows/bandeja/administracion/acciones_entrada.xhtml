@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sec="http://www.springframework.org/security/tags">
+
+
+	<!-- Acciones para el Documento -->
+	
+ 	<div id="div_row_acciones" class="row">
+
+		<div id="icon_acciones" class="col-xs-1" style="width: 40px; padding-left: 5px;">
+			<c:if test="#{mbBEntrada.indicaSeleccionado eq messageSource['recibido_seleccionado']}">
+				<h:graphicImage rendered="#{mbBEntrada.recibidoSeleccionado.documento.tipoCaptura ne 3}" 
+								name="bo_negro.png" library="img/bandeja" class="pull-center img-responsive" />
+						
+				<h:graphicImage rendered="#{mbBEntrada.recibidoSeleccionado.documento.tipoCaptura eq 3}" name="iconos_adjunto.png" library="img/bandeja"
+								class="pull-center img-responsive" />
+			</c:if>
+			
+			<c:if test="#{mbBEntrada.indicaSeleccionado eq messageSource['ccp_seleccionado']}">
+				<h:graphicImage rendered="#{mbBEntrada.ccpSeleccionado.documento.tipoCaptura ne 3}" 
+								name="bo_negro.png" library="img/bandeja" class="pull-center img-responsive" />
+						
+				<h:graphicImage rendered="#{mbBEntrada.ccpSeleccionado.documento.tipoCaptura eq 3}" name="iconos_adjunto.png" library="img/bandeja"
+								class="pull-center img-responsive" />
+			</c:if>
+			
+			<c:if test="#{mbBEntrada.indicaSeleccionado eq messageSource['atencion_seleccionado']}">
+				<h:graphicImage rendered="#{mbBEntrada.atencionSeleccionado.documento.tipoCaptura ne 3}" 
+								name="bo_negro.png" library="img/bandeja" class="pull-center img-responsive" />
+						
+				<h:graphicImage rendered="#{mbBEntrada.atencionSeleccionado.documento.tipoCaptura eq 3}" name="iconos_adjunto.png" library="img/bandeja"
+								class="pull-center img-responsive" />
+			</c:if>
+			
+			<c:if test="#{mbBEntrada.indicaSeleccionado eq messageSource['info_seleccionado']}">
+				<h:graphicImage rendered="#{mbBEntrada.infoSeleccionado.documento.tipoCaptura ne 3}" 
+								name="bo_negro.png" library="img/bandeja" class="pull-center img-responsive" />
+						
+				<h:graphicImage rendered="#{mbBEntrada.infoSeleccionado.documento.tipoCaptura eq 3}" name="iconos_adjunto.png" library="img/bandeja"
+								class="pull-center img-responsive" />
+			</c:if>
+		</div>
+
+		<div id="acciones_nombre" class="col-xs-5">
+			<div class="contenido_acciones_nombre">
+			<c:if test="#{mbBEntrada.indicaSeleccionado eq messageSource['recibido_seleccionado']}">
+				<h:outputLabel value="#{mbBEntrada.recibidoSeleccionado.documento.noDocumento}" /> 
+			</c:if>
+			
+			<c:if test="#{mbBEntrada.indicaSeleccionado eq messageSource['ccp_seleccionado']}">
+				<h:outputLabel value="#{mbBEntrada.ccpSeleccionado.documento.noDocumento}" /> 
+			</c:if>
+			
+			<c:if test="#{mbBEntrada.indicaSeleccionado eq messageSource['atencion_seleccionado']}">
+				<h:outputLabel value="#{mbBEntrada.atencionSeleccionado.documento.noDocumento}" /> 
+			</c:if>
+			
+			<c:if test="#{mbBEntrada.indicaSeleccionado eq messageSource['info_seleccionado']}">
+				<h:outputLabel value="#{mbBEntrada.infoSeleccionado.documento.noDocumento}" /> 
+			</c:if>
+			</div>
+		</div>
+
+		<div id="acciones_menu" class="col-xs-2" style="width: 100px;">
+
+			<c:if test="#{mbBEntrada.indicaSeleccionado eq messageSource['recibido_seleccionado']}">
+				<p:commandButton 	id="listaAcciones" value="#{messageSource['mensaje_menu_acciones']}" type="button"
+									styleClass="menu_acciones menu_acciones_der"
+									style="font-size:12px;height:30px !important;" />
+					<p:tieredMenu 	overlay="true" trigger="listaAcciones" my="top"
+									at="left bottom" styleClass="menu_acciones_der" style="width:150px;">
+
+						<p:menuitem value="#{messageSource['mensaje_menu_turnar']}" 
+							disabled="#{mbBEntrada.recibidoSeleccionado.enAtencion eq messageSource['id_estatus_concluido'] or mbBEntrada.recibidoSeleccionado.enAtencion eq messageSource['id_estatus_rechazado'] or mbBEntrada.recibidoSeleccionado.enAtencion eq messageSource['id_estatus_reasignado']}"
+							actionListener="#{mbTurnado.abrirTurnado(mbBEntrada.recibidoSeleccionado)}"
+							update=":formBorradores:dialogTurnado" />
+							
+				<p:menuitem value="#{messageSource['mensaje_menu_responder']}" 
+							disabled="#{mbBEntrada.recibidoSeleccionado.tieneRespuesta eq messageSource['estatus_con_respuesta'] or mbBEntrada.recibidoSeleccionado.enAtencion eq messageSource['id_estatus_concluido'] or mbBEntrada.recibidoSeleccionado.enAtencion eq messageSource['id_estatus_rechazado'] or mbBEntrada.recibidoSeleccionado.enAtencion eq messageSource['id_estatus_reasignado']}"
+							actionListener="#{mbBEntrada.mostrarDialogResponder}"
+							update=":formBorradores:dialogResponder" />
+											
+				<p:menuitem value="#{messageSource['mensaje_menu_registrar_atencion']}"
+							disabled="#{mbBEntrada.recibidoSeleccionado.enAtencion eq messageSource['id_estatus_concluido'] or mbBEntrada.recibidoSeleccionado.enAtencion eq messageSource['id_estatus_rechazado'] or mbBEntrada.recibidoSeleccionado.enAtencion eq messageSource['id_estatus_reasignado']}"
+							actionListener="#{mbBEntrada.mostrarDialogRegistrarAtencion}"
+							update=":formBorradores:dialogRegistrarAtencion, :formBorradores:dialogReasignar, :formBorradores:acordion_principal:tablaRecibidos,:formBorradores:mensaje_general_exito" />
+					</p:tieredMenu>
+			</c:if>
+			
+			<c:if test="#{mbBEntrada.indicaSeleccionado eq messageSource['ccp_seleccionado']}">
+				<p:commandButton 	id="listaAcciones" value="#{messageSource['mensaje_menu_acciones']}" type="button"
+									styleClass="menu_acciones menu_acciones_der"
+									style="font-size:12px;height:30px !important;" />
+					
+					<p:tieredMenu 	overlay="true" trigger="listaAcciones" my="top"
+									at="left bottom" styleClass="menu_acciones_der" style="width:150px;">
+
+						<p:menuitem value="#{messageSource['mensaje_menu_turnar']}"
+									actionListener="#{mbTurnado.abrirTurnado(mbBEntrada.ccpSeleccionado)}" 
+									update=":formBorradores:dialogTurnado" />
+									
+					</p:tieredMenu>
+								
+			</c:if>
+			
+			<c:if test="#{mbBEntrada.indicaSeleccionado eq messageSource['atencion_seleccionado']}">
+				<p:commandButton 	id="listaAcciones" value="#{messageSource['mensaje_menu_acciones']}" type="button"
+									styleClass="menu_acciones menu_acciones_der"
+									style="font-size:12px;height:30px !important;" />
+					
+					<p:tieredMenu 	overlay="true" trigger="listaAcciones" my="top"
+									at="left bottom" styleClass="menu_acciones_der" style="width:150px;">
+
+						<p:menuitem value="#{messageSource['mensaje_menu_turnar']}"
+									disabled="#{mbBEntrada.atencionSeleccionado.enAtencion eq messageSource['id_estatus_concluido'] or mbBEntrada.atencionSeleccionado.enAtencion eq messageSource['id_estatus_rechazado'] or mbBEntrada.atencionSeleccionado.enAtencion eq messageSource['id_estatus_reasignado']}"
+									actionListener="#{mbTurnado.abrirTurnado(mbBEntrada.atencionSeleccionado)}" 
+									update=":formBorradores:dialogTurnado" />
+									
+						<p:menuitem value="#{messageSource['mensaje_menu_responder']}"
+									disabled="#{mbBEntrada.atencionSeleccionado.tieneRespuesta eq messageSource['estatus_con_respuesta'] or mbBEntrada.atencionSeleccionado.enAtencion eq messageSource['id_estatus_concluido'] or mbBEntrada.atencionSeleccionado.enAtencion eq messageSource['id_estatus_rechazado'] or mbBEntrada.atencionSeleccionado.enAtencion eq messageSource['id_estatus_reasignado']}" 
+									actionListener="#{mbBEntrada.mostrarDialogResponder}"
+									update=":formBorradores:dialogResponder" />
+						
+						<p:menuitem value="#{messageSource['mensaje_menu_registrar_atencion']}"
+									disabled="#{mbBEntrada.atencionSeleccionado.enAtencion eq messageSource['id_estatus_concluido'] or mbBEntrada.atencionSeleccionado.enAtencion eq messageSource['id_estatus_rechazado'] or mbBEntrada.atencionSeleccionado.enAtencion eq messageSource['id_estatus_reasignado']}"
+									actionListener="#{mbBEntrada.mostrarDialogRegistrarAtencion}"
+									update=":formBorradores:dialogRegistrarAtencion,:formBorradores:acordion_turnados:tablaAtencion,:formBorradores:mensaje_general_exito" />
+					
+					</p:tieredMenu>
+								
+			</c:if>
+			
+			<c:if test="#{mbBEntrada.indicaSeleccionado eq messageSource['info_seleccionado']}">
+				<p:commandButton 	id="listaAcciones" value="#{messageSource['mensaje_menu_acciones']}" type="button"
+									styleClass="menu_acciones menu_acciones_der"
+									style="font-size:12px;height:30px !important;" />
+					
+					<p:tieredMenu 	overlay="true" trigger="listaAcciones" my="top"
+									at="left bottom" styleClass="menu_acciones_der" style="width:150px;">
+
+						<p:menuitem value="#{messageSource['mensaje_menu_turnar']}"
+									actionListener="#{mbTurnado.abrirTurnado(mbBEntrada.infoSeleccionado)}"
+									update=":formBorradores:dialogTurnado" />
+					</p:tieredMenu>
+								
+			</c:if>
+		
+		</div>
+		
+		<div id="acciones_historial" class="col-xs-2"  style="width: 120px;">
+		<div class="contenido_historial">
+			<c:if test="#{mbBEntrada.indicaSeleccionado eq messageSource['recibido_seleccionado']}">
+				<!-- <p:commandLink 	value="&nbsp; Historico del Turnado" 
+								actionListener="#{mbBEntrada.mostrarDialogHistoricoTurnado}"
+								styleClass="fa fa-clock-o" title="#{messageSource['mensaje_ver_historial_borrador']}"
+								update=":formBorradores:dialogHistoricoTurnado" /> -->
+				<p:commandLink 	value="&nbsp; Detalle documento" 
+								actionListener="#{mbBEntrada.mostrarDialogDetalle}"
+								styleClass="fa fa-sticky-note-o link_detalle" title="#{messageSource['mensaje_ver_historial_borrador']}"
+								update=":formBorradores:dialogDetalleDoc" />
+
+			</c:if>
+			
+			<c:if test="#{mbBEntrada.indicaSeleccionado eq messageSource['ccp_seleccionado']}">
+				<!-- <p:commandLink 	value="&nbsp; Historico del Turnado}"
+								actionListener="#{mbBEntrada.mostrarDialogHistoricoTurnado}"
+								styleClass="fa fa-clock-o" title="#{messageSource['mensaje_ver_historial_borrador']}"
+								update=":formBorradores:dialogHistoricoTurnado" /> -->
+				<p:commandLink 	value="&nbsp; Detalle Documento" 
+								actionListener="#{mbBEntrada.mostrarDialogDetalle}"
+								styleClass="fa fa-sticky-note-o link_detalle" title="#{messageSource['mensaje_ver_historial_borrador']}"
+								update=":formBorradores:dialogDetalleDoc" />
+			</c:if>
+			
+			<c:if test="#{mbBEntrada.indicaSeleccionado eq messageSource['atencion_seleccionado']}">
+				<!-- <p:commandLink 	value="&nbsp; Historico del Turnado"
+								actionListener="#{mbBEntrada.mostrarDialogHistoricoTurnado}"
+								styleClass="fa fa-clock-o" title="#{messageSource['mensaje_ver_historial_borrador']}"
+								update=":formBorradores:dialogHistoricoTurnado" /> -->
+				<p:commandLink 	value="&nbsp; Detalle Documento" 
+								actionListener="#{mbBEntrada.mostrarDialogDetalle}"
+								styleClass="fa fa-sticky-note-o link_detalle" title="#{messageSource['mensaje_ver_historial_borrador']}"
+								update=":formBorradores:dialogDetalleDoc" />
+			</c:if>
+			
+			<c:if test="#{mbBEntrada.indicaSeleccionado eq messageSource['info_seleccionado']}">
+				<!-- <p:commandLink 	value="&nbsp;#{messageSource['mensaje_ver_historial_borrador']}" 
+								actionListener="#{mbBEntrada.mostrarDialogHistoricoTurnado}"
+								styleClass="fa fa-clock-o" title="#{messageSource['mensaje_ver_historial_borrador']}"
+								update=":formBorradores:dialogHistoricoTurnado" /> -->
+				<p:commandLink 	value="&nbsp; Detalle Documento" 
+								actionListener="#{mbBEntrada.mostrarDialogDetalle}"
+								styleClass="fa fa-sticky-note-o link_detalle" title="#{messageSource['mensaje_ver_historial_borrador']}"
+								update=":formBorradores:dialogDetalleDoc" />
+			</c:if>
+		</div>
+		</div>
+
+	</div>
+	
+	<div id="row_anexo" class="row">
+		<c:if test="#{mbBEntrada.indicaSeleccionado eq messageSource['recibido_seleccionado']}">
+			<div id="anexo" class="col-xs-1" style="#{mbBEntrada.recibidoSeleccionado.documento.contieneAnexos ne 0 ? 'background-color: #e2e2e2;' : ''} width: 100px;">
+				<c:if test="#{mbBEntrada.recibidoSeleccionado.documento.contieneAnexos ne 0}">
+					<span>
+						<i class="fa fa-paperclip" style="font-size: 18px; color:#000000 !important"/><h:outputText value="&nbsp;" style="text-decoration: none"/>
+						<h:outputText value="#{messageSource['mensaje_ver_anexos']}" style="color:#000000 !important"/>
+					</span>
+				</c:if>
+			</div>
+			
+			<div id="anexo" class="col-xs-1" style="#{mbBEntrada.recibidoSeleccionado.documento.contieneAnexos ne 0 ? 'background-color: #cccccc;' : ''} width: 30px; text-align: center; padding-top: 9px;">
+				<c:if test="#{mbBEntrada.recibidoSeleccionado.documento.contieneAnexos ne 0}">
+					<p:commandLink 	actionListener="#{mbBEntrada.mostrarDialogAnexos}"
+									update="formBorradores:dialogVerAnexosEntrada" style="text-decoration: none">
+					
+						<i class="fa fa-download" style="color: black !important;"/>
+				
+					</p:commandLink>
+				</c:if>
+			</div>
+
+		</c:if>
+			
+		<c:if test="#{mbBEntrada.indicaSeleccionado eq messageSource['ccp_seleccionado']}">
+			
+			<div id="anexo" class="col-xs-1" style="#{mbBEntrada.ccpSeleccionado.documento.contieneAnexos  ne 0 ? 'background-color: #e2e2e2;' : ''} width: 100px;">
+				<c:if test="#{mbBEntrada.ccpSeleccionado.documento.contieneAnexos ne 0}">
+					<span>
+						<i class="fa fa-paperclip" style="font-size: 18px; color:#000000 !important"/><h:outputText value="&nbsp;" style="text-decoration: none"/>
+						<h:outputText value="#{messageSource['mensaje_ver_anexos']}" style="color:#000000 !important"/>
+					</span>
+				</c:if>
+			</div>
+			
+			<div id="anexo" class="col-xs-1" style="#{mbBEntrada.ccpSeleccionado.documento.contieneAnexos ne 0 ? 'background-color: #cccccc;' : ''} width: 30px; text-align: center; padding-top: 9px;">
+				<c:if test="#{mbBEntrada.ccpSeleccionado.documento.contieneAnexos ne 0}">
+					<p:commandLink 	id="linkAnexos"
+									actionListener="#{mbBEntrada.mostrarDialogAnexos}"
+									update="formBorradores:dialogVerAnexosEntrada" style="text-decoration: none">
+					
+						<i class="fa fa-download" style="color: black !important;"/>
+				
+					</p:commandLink>
+					<!-- <p:tooltip id="tooltipAnexos" for="linkAnexos" value="Descargar Anexossss" position="top"/> -->
+				</c:if>
+			
+			</div>
+			
+		</c:if>
+		
+		<c:if test="#{mbBEntrada.indicaSeleccionado eq messageSource['atencion_seleccionado']}">
+			
+			<div id="anexo" class="col-xs-1" style="#{mbBEntrada.atencionSeleccionado.documento.contieneAnexos  ne 0 ? 'background-color: #e2e2e2;' : ''} width: 100px;">
+				<c:if test="#{mbBEntrada.atencionSeleccionado.documento.contieneAnexos ne 0}">
+					<span>
+						<i class="fa fa-paperclip" style="font-size: 18px; color:#000000 !important"/><h:outputText value="&nbsp;" style="text-decoration: none"/>
+						<h:outputText value="#{messageSource['mensaje_ver_anexos']}" style="color:#000000 !important"/>
+					</span>
+				</c:if>
+			</div>
+			
+			<div id="anexo" class="col-xs-1" style="#{mbBEntrada.atencionSeleccionado.documento.contieneAnexos ne 0 ? 'background-color: #cccccc;' : ''} width: 30px; text-align: center; padding-top: 9px;">
+				<c:if test="#{mbBEntrada.atencionSeleccionado.documento.contieneAnexos ne 0}">
+					<p:commandLink 	id="linkAnexos"
+									actionListener="#{mbBEntrada.mostrarDialogAnexos}"
+									update="formBorradores:dialogVerAnexosEntrada" style="text-decoration: none">
+					
+						<i class="fa fa-download" style="color: black !important;"/>
+				
+					</p:commandLink>
+					<!-- <p:tooltip id="tooltipAnexos" for="linkAnexos" value="Descargar Anexossss" position="top"/> -->
+				</c:if>
+			
+			</div>
+			
+		</c:if>
+		
+		<c:if test="#{mbBEntrada.indicaSeleccionado eq messageSource['info_seleccionado']}">
+			
+			<div id="anexo" class="col-xs-1" style="#{mbBEntrada.infoSeleccionado.documento.contieneAnexos  ne 0 ? 'background-color: #e2e2e2;' : ''} width: 100px;">
+				<c:if test="#{mbBEntrada.infoSeleccionado.documento.contieneAnexos ne 0}">
+					<span>
+						<i class="fa fa-paperclip" style="font-size: 18px; color:#000000 !important"/><h:outputText value="&nbsp;" style="text-decoration: none"/>
+						<h:outputText value="#{messageSource['mensaje_ver_anexos']}" style="color:#000000 !important"/>
+					</span>
+				</c:if>
+			</div>
+			
+			<div id="anexo" class="col-xs-1" style="#{mbBEntrada.atencionSeleccionado.documento.contieneAnexos ne 0 ? 'background-color: #cccccc;' : ''} width: 30px; text-align: center; padding-top: 9px;">
+				<c:if test="#{mbBEntrada.infoSeleccionado.documento.contieneAnexos ne 0}">
+					<p:commandLink 	id="linkAnexos"
+									actionListener="#{mbBEntrada.mostrarDialogAnexos}"
+									update="formBorradores:dialogVerAnexosEntrada" style="text-decoration: none">
+					
+						<i class="fa fa-download" style="color: black !important;"/>
+				
+					</p:commandLink>
+					<!-- <p:tooltip id="tooltipAnexos" for="linkAnexos" value="Descargar Anexossss" position="top"/> -->
+				</c:if>
+			
+			</div>
+			
+		</c:if>
+			
+		<div id="estatus" class="col-xs-6">
+			<!-- <span> El documento fue enviado el día 21/10/2017 </span> -->
+		</div>
+	</div>
+
+	<!-- Instrucciones Documentos -->
+	<div id="div_row_notificaciones" class="row">
+		<div id="div_notificaciones_opciones" class="col-xs-12">
+			<c:if test="#{mbBEntrada.indicaSeleccionado eq messageSource['info_seleccionado'] or mbBEntrada.indicaSeleccionado eq messageSource['atencion_seleccionado'] or mbBEntrada.indicaSeleccionado eq messageSource['recibido_seleccionado']}">
+				<h:outputText styleClass="titulo_instrucciones" value="No tiene instrucciones"  rendered="#{mbBEntrada.listaInstrucciones eq null}"/>
+				
+				<h:outputText styleClass="titulo_instrucciones titulo_atencion" value="Instrucciones de Atención"  rendered="#{mbBEntrada.atencionSeleccionado ne null and mbBEntrada.listaInstrucciones ne null}"/>
+				
+				<h:outputText styleClass="titulo_instrucciones titulo_info" value="Instrucciones de Información"  rendered="#{mbBEntrada.infoSeleccionado ne null and mbBEntrada.listaInstrucciones ne null}"/>
+				<br/>
+				
+				<c:if test="#{mbBEntrada.listaInstrucciones ne null}">
+					<c:forEach items="#{mbBEntrada.listaInstrucciones}" step="1" var="instruccion">
+						<h:outputText styleClass="instrucciones" value="#{instruccion.ordenamiento} . #{instruccion.descripcion}" />
+						<br/>
+					</c:forEach>
+				</c:if>
+			</c:if>
+		</div>
+	</div>
+
+</ui:composition>

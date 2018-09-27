@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sf="http://www.springframework.org/tags/faces"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	template="/templates/template.xhtml">
+
+	<ui:define name="CONTENT">
+		<style>
+			#form_crea_documento label {
+				font-weight: normal;
+				color: #4E4E4E;
+			}
+			
+			.espaciador {
+				margin-top: 30px;
+				margin-bottom: 30px;
+			}
+			
+			.espaciador-top {
+				margin-top: 20px;
+			}
+			
+			.espaciador-bottom {
+				margin-bottom: 25px;
+			}
+			
+			.espaciador-lg-top {
+				margin-top: 50px;
+			}
+			
+			.asterisco-requerido {
+				color: red;
+			}
+			
+			.asterisco-requerido+label {
+				padding-left: 3px;
+			}
+			
+			.inputsForm {
+				width: 100%;
+			}
+			
+			span.inputsForm {
+				border-bottom: none;
+			}
+			
+			.ui-message.ui-message-error {
+				margin: 5px 0 0 0;
+			}
+			
+			.inputsForm.ui-selectonemenu {
+				border-bottom: none;
+			}
+			
+			.inputsForm.ui-selectonemenu label {
+				border-bottom: 2px solid #d5007f;
+			}
+			
+			.inputsForm.ui-selectonemenu .ui-selectonemenu-trigger {
+				witdh: auto;
+				-webkit-box-sizing: unset;
+				-moz-box-sizing: unset;
+				box-sizing: unset;
+			}
+			
+			.formato-archivo {
+				color: #7f7f7f;
+				font-size: 10px;
+			}
+		</style>
+
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12">
+					<p:growl for="growl" autoUpdate="true" redisplay="true"
+						showDetail="true" showSummary="true" />
+					<ol class="breadcrumb" style="background-color: #FFFFFF;">
+						<li><a href="${request.contextPath}/app/home"> <h:outputText
+									value="Home" />
+						</a></li>
+						<li class="inactive">Seguimiento - Bandeja de Documentos</li>
+						<li class="active">#{messageSource['lbl_modificacion_documento_titulo']}</li>
+					</ol>
+				</div>
+				<div class="col-xs-12">
+					<h1 class="lblTituloForm robotoRegular">#{messageSource['lbl_modificacion_documento_titulo']}</h1>
+				</div>
+				<div class="col-xs-12">
+					<div class="text-right">
+						#{messageSource['etiqueta_generales_requerido_0']} (<span
+							class="asterisco-requerido">#{messageSource['etiqueta_generales_requerido_1']}</span>)
+						#{messageSource['etiqueta_generales_requerido_2']}
+					</div>
+				</div>
+				<h:form id="form_crea_documento">
+					<div class="col-xs-6 espaciador-bottom">
+						<div>
+							<span class="asterisco-requerido">#{messageSource['etiqueta_simbolo_asterisco']}</span>
+							<h:outputLabel for="tipo-documento"
+								value="#{messageSource['lbl_tipo_documento']}" />
+						</div>
+						<p:selectOneMenu id="tipo-documento"
+							value="#{mbModDocumentos.formDocumentos.documento.idTipoDocumento}"
+							required="true"
+							requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+							styleClass="inputsForm">
+							<f:selectItem
+								itemLabel="#{messageSource['lbl_selecciona_opcion']}"
+								itemValue="" />
+							<f:selectItems
+								value="#{mbModDocumentos.formDocumentos.tiposDocumentos}"
+								var="tipoDocumento" itemValue="#{tipoDocumento.idTipoDocumento}"
+								itemLabel="#{tipoDocumento.tipo}" />
+						</p:selectOneMenu>
+						<p:message for="tipo-documento" display="text" />
+					</div>
+					<div class="col-xs-6 espaciador-bottom">
+						<div>
+							<h:outputLabel for="nombre-documento"
+								value="#{messageSource['lbl_nombre_documento']}" />
+						</div>
+						<p:inputTextarea rows="3" cols="50" id="nombre-documento"
+							value="#{mbModDocumentos.formDocumentos.documento.nombreDocumento}"
+							styleClass="inputsForm"
+							placeholder="#{messageSource['phr_ingresa_texto']}" />
+					</div>
+					<div class="clearfix"></div>
+					<div class="col-xs-6 espaciador-bottom">
+						<div>
+							<span class="asterisco-requerido">#{messageSource['etiqueta_simbolo_asterisco']}</span>
+							<h:outputLabel for="numero-documento"
+								value="#{messageSource['lbl_numero_documento']}" />
+						</div>
+						<p:inputText id="numero-documento"
+							value="#{mbModDocumentos.formDocumentos.documento.id.idNumDocumento}"
+							required="true"
+							requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+							styleClass="inputsForm"
+							onkeyup="this.value=this.value.toUpperCase();">
+							<pe:keyFilter regEx="/[0-9A-Za-zÑñáéíóúÁÉÍÓÚüÜ/]/"
+								preventPaste="true" />
+							<f:validateLength maximum="30" />
+						</p:inputText>
+						<p:message for="numero-documento" display="text" />
+					</div>
+					<div class="col-xs-6 espaciador-bottom">
+						<div>
+							<span class="asterisco-requerido">#{messageSource['etiqueta_simbolo_asterisco']}</span>
+							<h:outputLabel for="numero-periodos"
+								value="#{messageSource['lbl_numero_actividades']}" />
+						</div>
+						<p:inputText id="numero-periodos"
+							value="#{mbModDocumentos.formDocumentos.documento.numPeriodo}"
+							required="true"
+							requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+							maxlength="2" placeholder="00" styleClass="inputsForm">
+							<pe:keyFilter regEx="/[0-9]/" />
+							<p:ajax event="change" update="periodos-atencion"
+								listener="#{mbModDocumentos.generaPeriodosAtencion()}" />
+						</p:inputText>
+						<p:message for="numero-periodos" display="text" />
+					</div>
+					<div class="clearfix"></div>
+					<div class="col-xs-6">
+						<div>
+							<span class="asterisco-requerido">#{messageSource['etiqueta_simbolo_asterisco']}</span>
+							<h:outputLabel for="instancia"
+								value="#{messageSource['lbl_instancia_atiende']}" />
+						</div>
+						<p:selectOneRadio id="instancia"
+							value="#{mbModDocumentos.formDocumentos.documento.id.tipoArea}"
+							required="true"
+							requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}">
+							<f:selectItem itemLabel="#{messageSource['lbl_instancia_opl']}"
+								itemValue="3" />
+							<f:selectItem itemLabel="#{messageSource['lbl_instancia_ine']}"
+								itemValue="1" />
+							<p:ajax update="panel-instancia" />
+						</p:selectOneRadio>
+						<p:message for="instancia" display="text" />
+						<p:outputPanel id="panel-instancia">
+							<c:if
+								test="#{mbModDocumentos.formDocumentos.documento.id.tipoArea== '1'}">
+								<p:selectOneMenu id="area"
+									value="#{mbModDocumentos.formDocumentos.documento.id.idArea}"
+									required="true"
+									requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+									styleClass="inputsForm">
+									<f:selectItem
+										itemLabel="#{messageSource['lbl_selecciona_opcion']}"
+										itemValue="" />
+									<f:selectItems value="#{mbModDocumentos.formDocumentos.areas}"
+										var="area" itemValue="#{area.id.idArea}"
+										itemLabel="#{area.descripcion}" />
+								</p:selectOneMenu>
+								<p:message for="area" display="text" />
+							</c:if>
+							<c:if
+								test="#{mbModDocumentos.formDocumentos.documento.id.tipoArea == '3'}">
+								<p:selectOneMenu id="opl"
+									value="#{mbModDocumentos.formDocumentos.documento.id.idArea}"
+									required="true"
+									requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+									styleClass="inputsForm">
+									<f:selectItem
+										itemLabel="#{messageSource['lbl_selecciona_opcion']}"
+										itemValue="" />
+									<f:selectItems
+										value="#{mbModDocumentos.formDocumentos.listaOPL}" var="opl"
+										itemValue="#{opl.id.idArea}" itemLabel="#{opl.descripcion}" />
+								</p:selectOneMenu>
+								<p:message for="opl" display="text" />
+							</c:if>
+						</p:outputPanel>
+					</div>
+					<div class="col-xs-6">
+						<div>
+							<span class="asterisco-requerido">#{messageSource['etiqueta_simbolo_asterisco']}</span>
+							<h:outputLabel for="archivo"
+								value="#{messageSource['lbl_adjuntar_documento']}" />
+						</div>
+						<div>
+							<p:fileUpload id="archivo" auto="true" required="true"
+								label="#{messageSource['lbl_select_archivo']}"
+								dragDropSupport="false" sizeLimit="52428800"
+								allowTypes="/(\.|\/)(pdf)$/" multiple="false"
+								invalidSizeMessage="#{messageSource['lbl_tam_arc_no_valido']}"
+								invalidFileMessage="#{messageSource['lbl_archivo_no_valido']}"
+								messageTemplate=" "
+								fileUploadListener="#{mbModDocumentos.agregaDocumentoAdjunto}"
+								mode="advanced"
+								requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+								update="nombre-archivo" styleClass="inputsForm" />
+							<h:outputLabel styleClass="formato-archivo">#{messageSource['lbl_leyenda_adjuntar_documento']}</h:outputLabel>
+							<p:message for="archivo" display="text" />
+						</div>
+						<h:outputText id="nombre-archivo"
+							value="Archivo adjunto: #{mbModDocumentos.formDocumentos.getDocumentoFile().getFileName()}" />
+					</div>
+					<div class="clearfix"></div>
+					<div class="col-xs-12">
+						<div class="row espaciador-lg-top espaciador-bottom">
+							<div class="col-xs-10 col-xs-offset-1">
+								<p:outputPanel id="periodos-atencion">
+									<c:if
+										test="#{mbModDocumentos.formDocumentos.periodos.size() > 0}">
+										<table class="table table-striped table-bordered table-hover">
+											<tr>
+												<th class="text-center">#{messageSource['lbl_numero_actividad']}</th>
+												<th class="text-center">#{messageSource['lbl_fecha_inicio']}</th>
+												<th class="text-center">#{messageSource['lbl_fecha_termino']}</th>
+												<th class="text-center">#{messageSource['lbl_descripcion_actividad']}</th>
+											</tr>
+											<c:forEach var="i" begin="0"
+												end="#{mbModDocumentos.formDocumentos.periodos.size() - 1}">
+												<tr>
+													<td class="text-center">#{i + 1}</td>
+													<td class="text-center"><p:calendar
+															id="inicio-periodo-#{i}" locale="es" navigator="true"
+															value="#{mbModDocumentos.formDocumentos.periodos[i].inicioPeriodo}"
+															showOn="button" styleClass="inputsForm"
+															pattern="dd/MM/yyyy" readonlyInput="true"
+															style="font-size: small;"
+															placeholder="#{messageSource['txt_fondo_calendario']}"
+															required="true"
+															requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}" />
+														<p:message for="inicio-periodo-#{i}" display="text" /></td>
+													<td class="text-center"><p:calendar
+															id="termino-periodo-#{i}" locale="es" navigator="true"
+															value="#{mbModDocumentos.formDocumentos.periodos[i].terminoPeriodo}"
+															showOn="button" styleClass="inputsForm"
+															pattern="dd/MM/yyyy" readonlyInput="true"
+															style="font-size: small;"
+															placeholder="#{messageSource['txt_fondo_calendario']}"
+															required="true"
+															requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}" />
+														<p:message for="termino-periodo-#{i}" display="text" /></td>
+													<td class="text-center"><p:inputTextarea
+															id="descripcion-#{i}" rows="2" cols="25"
+															value="#{mbModDocumentos.formDocumentos.periodos[i].descripcion}"
+															maxlength="800" required="true"
+															requiredMessage="#{messageSource['validacion_mensajes_generales_dato_requerido']}"
+															styleClass="inputsForm"
+															placeholder="#{messageSource['phr_ingresa_texto']}" />
+														<p:message for="descripcion-#{i}" display="text" /></td>
+												</tr>
+											</c:forEach>
+										</table>
+									</c:if>
+								</p:outputPanel>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 espaciador-top">
+						<div class="text-center">
+							<!-- <p:commandButton id="btn_cancelar"
+	                     value="#{messageSource['etiqueta_boton_cancelar']}" 
+ 			 			         ajax="false" 
+ 			 			         immediate="true" 
+ 			 			         action="regresa" 
+ 			 			         styleClass="btnAC robotoBold" />&nbsp;&nbsp;&nbsp; -->
+
+							<p:commandButton id="btnAceptar"
+								action="#{mbModDocumentos.modificaDocumento}"
+								value="#{messageSource['etiqueta_boton_aceptar']}" ajax="false"
+								styleClass="btnAC robotoBold"
+								actionListener="#{mbModDocumentos.adjuntaDocumento}" />
+						</div>
+					</div>
+				</h:form>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

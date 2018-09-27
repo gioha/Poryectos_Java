@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xsi:schemaLocation="http://www.springframework.org/schema/webflow
+        				  http://www.springframework.org/schema/webflow/spring-webflow.xsd"
+	start-state="validaRegistroEnGestion" parent="parent-flow">
+
+	<secured attributes="ROLE_GESTION4.OFICIALIA.OC, ROLE_GESTION4.CONSULTA_CAU.OC" match="any" />
+	<var name="mbOficialiaPartesFisicos" class="mx.ine.gestion.mb.MBOficialiaPartesFisicos" />
+
+	<view-state id="oficialiaPartes" view="oficialia_partes.xhtml">
+		<on-entry>
+			<evaluate expression="mbOficialiaPartesFisicos.iniciar()" />
+		</on-entry>
+		<transition on="regresarBandeja" to="bandejaOficialia" />
+	</view-state>
+
+	<decision-state id="validaRegistroEnGestion">
+		<on-entry>
+			<set name="mbAdministrador.menuSelecionado" value="resourceBundle['id_modulo_clasificacion_oficialia']" />
+		</on-entry>
+
+		<if test="mbOficialiaPartesFisicos.consultarFolioPendiente()" then="oficialiaPartes" else="terminarFolio" />
+	</decision-state>
+
+	<view-state id="terminarFolio" view="flowRedirect:oficialia_partes/documentos_electronicos">
+	</view-state>
+
+	<subflow-state id="bandejaOficialia" subflow="bandeja_oficialia/administracion">
+		<input name="mostrarMensaje" value="mbOficialiaPartesFisicos.documentoCargado" />
+	</subflow-state>
+
+</flow>

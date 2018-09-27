@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:sec="http://www.springframework.org/security/tags">
+
+	<p:dialog 	id="dialog_revisar_comentarios" widgetVar="dialog_revisar_comentarios"  
+				styleClass="dialog_comentarios"
+				modal="true"
+				height="340" width="600" >
+				
+		<c:if test="#{mbBandejaMenu.menuBandejaSeleccionado eq messageSource['vista_entrada'] and mbBEntrada.indicaSeleccionado ne null}">
+			<p:ajax event="close" listener="#{mbBEntrada.leerComentarios}" 
+					update=":formBorradores:dialog_revisar_comentarios, :formBorradores:panelCentro, :formBorradores:panelDer"/>
+		</c:if>
+					
+		<c:if test="#{mbBandejaMenu.menuBandejaSeleccionado eq messageSource['vista_borradores'] and mbBorradores.dtoBorradorSeleccionado ne null}">
+			<p:ajax event="close" listener="#{mbBorradores.leerComentarios}" 
+					update=":formBorradores:dialog_revisar_comentarios, :formBorradores:panelCentro, :formBorradores:panelDer"/>
+		</c:if>
+							
+		<c:if test="#{mbBandejaMenu.menuBandejaSeleccionado eq messageSource['vista_historico'] and mbBHistorico.indicaSeleccionado ne null}">
+			<p:ajax event="close" listener="#{mbBHistorico.leerComentarios}" 
+					update=":formBorradores:dialog_revisar_comentarios, :formBorradores:panelCentro, :formBorradores:panelDer"/>
+		</c:if>
+					
+		<c:if test="#{mbBandejaMenu.menuBandejaSeleccionado eq messageSource['vista_enviados'] and mbBandejaEnviados.enviadoSeleccionado ne null}">
+			<p:ajax event="close" listener="#{mbBandejaEnviados.leerComentarios}" 
+					update=":formBorradores:dialog_revisar_comentarios, :formBorradores:panelCentro, :formBorradores:panelDer"/>
+		</c:if>
+
+		<p:outputPanel id="panelComentarios">
+
+			<div class="container">
+
+				
+				<c:if test="#{mbBandejaMenu.menuBandejaSeleccionado eq messageSource['vista_entrada']}">
+					<ui:include src="comentarios_entrada.xhtml" />
+				</c:if>
+					
+				<c:if test="#{mbBandejaMenu.menuBandejaSeleccionado eq messageSource['vista_historico']}">
+					<ui:include src="comentarios_historico.xhtml" />
+				</c:if>
+				
+				<c:if test="#{mbBandejaMenu.menuBandejaSeleccionado eq messageSource['vista_borradores']}">
+					<ui:include src="comentarios_borradores.xhtml" />
+				</c:if>
+				
+				<c:if test="#{mbBandejaMenu.menuBandejaSeleccionado eq messageSource['vista_enviados']}">
+					<ui:include src="comentarios_enviados.xhtml" />
+				</c:if>
+
+			</div>
+		</p:outputPanel>
+
+	</p:dialog>
+</ui:composition>

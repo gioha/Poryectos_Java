@@ -1,0 +1,95 @@
+/*-------------------------------------------------*/
+/* Hoja de Estilos para los Sistemas               */
+/*       	Institucinales                         */
+/*  v1.1.5 Release Date 05 de septiembre de 2014rs   */
+/*-------------------------------------------------*/
+
+/** ******************************* GENERALES ******************************* **/
+
+@media (max-width: 1142px) {
+	h3 {
+		font-size: 22px;
+		padding: 30px 10px 33px 40px !important;
+	}
+}
+
+@media (max-width: 1080px) {
+	h3 {
+		font-size: 18px;
+		padding: 30px 10px 38px 40px !important;
+	}
+}
+
+@media (max-width: 1000px) {
+	.tituloOrgaHidden {
+		display: none;
+	}
+	h3 {
+		padding: 30px 10px 57px 40px !important;
+	}
+}
+
+input[type="text"] {
+	width: 100%;
+}
+
+.ui-selectonemenu {
+	width: 100%;
+}
+
+.form_tabla_oficialia .ui-datatable thead th, .form_tabla_oficialia .ui-datatable tbody td, 
+.form_tabla_oficialia .ui-datatable tfoot td, .form_tabla_oficialia .ui-datatable tfoot th, 
+.form_tabla_oficialia .ui-widget-content{
+	border: none !important;
+}
+
+.linksPersonasEncontradas.ui-commandlink  {
+	color: #706f6f;
+	text-decoration: none;
+}
+
+.linksPersonasEncontradas:hover {
+	color: #d6007e !important;
+}
+
+/*************************** TREETABLE *********************************/
+.ui-treetable table {
+	table-layout: auto;
+}
+
+/*************************** GROWL *********************************/
+div[id="formEstructura:mensaje_general_info_container"] > div {
+
+	background: #29abe2 !important;
+}
+
+div[id="formEstructura:mensaje_general_advertencia_container"] > div {
+
+	background: #fcee21 !important;
+	color: black; 
+}
+
+div[id="formEstructura:mensaje_general_advertencia_container"] > div .ui-growl-item {
+	border-bottom: 2px solid black!important;
+	border-top: 2px solid black!important;
+}
+
+div[id="formEstructura:mensaje_general_exito_container"] > div {
+
+	background: #7ac943 !important;
+}
+
+/*************************** TREETABLE *********************************/
+.detallePersona.ui-dialog .ui-dialog-content {
+	overflow: initial;
+}
+
+/*********************** LISTA OFICIALÃ�AS ******************************/
+
+.ui-datatable-even {
+	background-color: #ffffff;
+}
+
+.ui-datatable-odd {
+	background-color: #ffffff;
+}
